@@ -1,6 +1,12 @@
 <?= $pagination ?>
 <?= $showing_statement ?><br>
-<?= $keywords ?>
+<?php
+if (isset($keywords)) {
+  $keywords;
+  ?>
+  <?php
+}
+ ?>
 <div class="row">
   <?php
   $this->load->module('store_categories');

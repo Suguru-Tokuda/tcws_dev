@@ -1,5 +1,19 @@
 <ul class="nav navbar-nav">
-  <?php
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Trading Post<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="<?= base_url().'trading_post/all_items'?>">Browse for Sale</a></li>
+      <li><a href="<?= base_url().'trading_post/post_item'?>">Post for Sale</a></li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lessons<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="<?= base_url().'lessons/reserve'?>">Reserve Lessons</a></li>
+      <!-- <li><a href="<?= base_url().'trading_post/post_item'?>">Post for Sale</a></li> -->
+    </ul>
+  </li>
+  <!-- <?php
   $this->load->module('store_categories');
   foreach ($parent_categories as $key => $value) {
     $parent_cat_id = $key;
@@ -18,5 +32,5 @@
     </li>
     <?php
   }
-  ?>
+  ?> -->
 </ul>

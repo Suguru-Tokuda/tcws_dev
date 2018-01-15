@@ -152,6 +152,8 @@ class Youraccount extends MX_Controller {
     } else {
       // set a session variable
       $this->session->set_userdata('user_id', $user_id);
+      $userName = $this->getUserNameById($user_id);
+      $this->session->set_userdata('userName', $userName);
     }
     // send the user to the private page
     redirect('youraccount/welcome');
@@ -217,20 +219,20 @@ class Youraccount extends MX_Controller {
   }
 
   function userName_existence_check($str) {
-  $this->load->module('store_accounts');
+    $this->load->module('store_accounts');
 
-  $error_msg = "$str already exists";
+    $error_msg = "$str already exists";
 
-  $query = $this->store_accounts->get_where_custom('userName', $str);
-  $num_rows = $query->num_rows();
-  if ($num_rows == 0) {
-    return true;
-  } else if ($num_rows == 1) {
-    $this->form_validation->set_message('userName_existence_check', $error_msg);
-    return false;
+    $query = $this->store_accounts->get_where_custom('userName', $str);
+    $num_rows = $query->num_rows();
+    if ($num_rows == 0) {
+      return true;
+    } else if ($num_rows == 1) {
+      $this->form_validation->set_message('userName_existence_check', $error_msg);
+      return false;
+    }
+
   }
-
-}
 
   // a method to check if the userName exists.
   function userName_check($str) {
@@ -264,6 +266,20 @@ class Youraccount extends MX_Controller {
       $this->form_validation->set_message('userName_check', $error_msg);
       return false;
     }
+  }
+
+  // method to get userid by user_id
+  function getUserNameById($user_id) {
+    $this->load->module('store_accounts');
+
+    $query = $this->store_accounts->get_where($user_id);
+    foreach ($query->result() as $row) {
+      $userName = $row->userName;
+    }
+    if (!isset($userName)) {
+      $userName = "";
+    }
+    return $userName;
   }
 
 }

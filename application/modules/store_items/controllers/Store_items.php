@@ -27,7 +27,6 @@ class Store_items extends MX_Controller {
       }
 
       $storeItemsQuery = $this->_custom_query($mysqlQuery);
-
       $total_items = $storeItemsQuery->num_rows();
 
       $pagination_data['template'] = "public_bootstrap";
@@ -55,6 +54,36 @@ class Store_items extends MX_Controller {
       $this->load->module('templates');
       $this->templates->public_bootstrap($data);
     }
+  }
+
+  // a function that shows all items in database.
+  function view_all_items() {
+    $this->load->module('site_security');
+    $this->load->module('site_settings');
+
+    $mysqlQuery = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN small_pics sp ON si.id = sp.item_id";
+
+    $storeItemsQuery = $this->_custom_query($mysqlQuery);
+    $total_items = $storeItemsQuery->num_rows();
+
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_items;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_limit();
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $showing_statement_data['limit'] = $this->get_limit();
+    $showing_statement_data['offset'] = $this->_get_offset();
+    $showing_statement_data['total_rows'] = $total_items;
+    $data['showing_statement'] = $this->custom_pagination->get_showing_statement($showing_statement_data);
+
+    $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
+    $data['view_module'] = "store_categories";
+    $data['view_file'] = "search_view";
+    $data['query'] = $storeItemsQuery;
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
   }
 
   // method for pagination

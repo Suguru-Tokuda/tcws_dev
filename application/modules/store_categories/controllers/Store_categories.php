@@ -72,7 +72,7 @@ class Store_categories extends MX_Controller {
       redirect('site_security/not_allowed');
     }
     $this->load->module('site_settings');
-    
+
     // fetch the category details
     $data = $this->fetch_data_from_db($update_id);
 
@@ -91,7 +91,6 @@ class Store_categories extends MX_Controller {
     $pagination_data['total_rows'] = $total_items;
     $pagination_data['offset_segment'] = 4;
     $pagination_data['limit'] = $this->get_limit();
-
 
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
