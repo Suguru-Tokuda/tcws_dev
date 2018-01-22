@@ -46,7 +46,6 @@ if (isset($keywords)) {
           <?php
       }
        ?>
-
       <h6><a href="<?= $item_page ?>" ><?= $item_title ?></a></h6>
       <div style="clear: both; color: red; font-weight: bold;">$<?= number_format($item_price, 2) ?>
         <?php

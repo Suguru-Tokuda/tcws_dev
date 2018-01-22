@@ -29,7 +29,7 @@ class Templates extends MX_Controller {
     if (!isset($data['view_module'])) {
       $data['view_module'] = $this->uri->segment(1);
     }
-
+    
     $this->load->module('site_security');
     $this->load->module('site_settings');
     $data['customer_id'] = $this->site_security->_get_user_id();

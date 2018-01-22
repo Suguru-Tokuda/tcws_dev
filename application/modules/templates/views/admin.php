@@ -61,7 +61,7 @@ $our_company = $this->site_settings->_get_our_company_name();
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </a>
-        <a class="brand" href="index.html"><span><?= $our_company ?> Admin</span></a>
+        <a class="brand" href="<? base_url().'dashboard/home' ?>"><span><?= $our_company ?> Admin</span></a>
 
         <!-- start: Header Menu -->
         <div class="nav-no-collapse header-nav">
