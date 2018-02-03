@@ -16,8 +16,8 @@ if (is_numeric($update_id)) { ?>
         </div>
       </div>
       <div class="box-content">
-        <a href="<?= base_url() ?>store_accounts/update_password/<?= $update_id ?>" ><button type="button" class="btn btn-primary">Update Password</button></a>
-        <a href="<?= base_url() ?>store_accounts/deleteconf/<?= $update_id ?>" ><button type="button" class="btn btn-danger">Delete Account</button></a>
+        <a href="<?= base_url() ?>users/update_password/<?= $update_id ?>" ><button type="button" class="btn btn-primary">Update Password</button></a>
+        <a href="<?= base_url() ?>users/deleteconf/<?= $update_id ?>" ><button type="button" class="btn btn-danger">Delete Account</button></a>
       </div>
     </div><!--/span-->
   </div><!--/row-->
@@ -36,7 +36,7 @@ if (is_numeric($update_id)) { ?>
     </div>
     <div class="box-content">
       <?php
-      $form_location = base_url()."store_accounts/create/".$update_id
+      $form_location = base_url()."users/create/".$update_id
       ?>
       <form class="form-horizontal" method="post" action="<?= $form_location ?>">
         <fieldset>

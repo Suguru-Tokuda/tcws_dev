@@ -18,7 +18,7 @@ if (isset($flash)) {
     </div>
     <div class="box-content">
       <?php
-      $form_location = base_url()."store_accounts/update_password/".$update_id
+      $form_location = base_url()."users/update_password/".$update_id
       ?>
       <form class="form-horizontal" method="post" action="<?= $form_location ?>">
         <fieldset>

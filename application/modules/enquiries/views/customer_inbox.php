@@ -29,7 +29,7 @@ if ($num_row > 0) {
     <tbody>
       <?php
       $this->load->module('site_settings');
-      $this->load->module('store_accounts');
+      $this->load->module('users');
       $this->load->module('timedate');
       $team_name = $this->site_settings->_get_support_team_name();
 
@@ -51,7 +51,7 @@ if ($num_row > 0) {
         if ($row->sent_by == 0) {
           $sent_by = $team_name;
         } else {
-          $sent_by = $this->store_accounts->_get_customer_name($row->sent_by);
+          $sent_by = $this->users->_get_customer_name($row->sent_by);
           // $sent_by = $firstName." ".$lastName;
         }
         ?>

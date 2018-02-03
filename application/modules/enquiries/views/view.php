@@ -7,7 +7,7 @@ if (isset($flash)) {
 }
 $form_location = base_url().'comments/submit';
 $this->load->module('timedate');
-$this->load->module('store_accounts');
+$this->load->module('users');
 foreach($query->result() as $row) {
   $view_url = base_url()."enquiries/view/".$row->id;
   $open = $row->opened;
@@ -20,7 +20,7 @@ foreach($query->result() as $row) {
   if ($row->sent_by == 0) {
     $sent_by = "Admin";
   } else {
-    $sent_by = $this->store_accounts->_get_customer_name($row->sent_by);
+    $sent_by = $this->users->_get_customer_name($row->sent_by);
   }
   $subject = $row->subject;
   $message = $row->message;

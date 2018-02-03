@@ -38,7 +38,7 @@ $create_message_url = base_url()."enquiries/create";
           <tbody>
             <?php
             $this->load->module('timedate');
-            $this->load->module('store_accounts');
+            $this->load->module('users');
             foreach($query->result() as $row) {
               $view_url = base_url()."enquiries/view/".$row->id;
 
@@ -57,7 +57,7 @@ $create_message_url = base_url()."enquiries/create";
               if ($row->sent_by == 0) {
                 $sent_by = "Admin";
               } else {
-                $sent_by = $this->store_accounts->_get_customer_name($row->sent_by);
+                $sent_by = $this->users->_get_customer_name($row->sent_by);
                 // $sent_by = $firstName." ".$lastName;
               }
               ?>

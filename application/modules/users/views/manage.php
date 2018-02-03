@@ -3,7 +3,7 @@
 if (isset($flash)) {
   echo $flash;
 }
-$create_account_url = base_url()."store_accounts/create";
+$create_account_url = base_url()."users/create";
 ?><p style="margin-top: 30px;">
   <a href="<?= $create_account_url ?>"><button class="btn btn-primary" type="submit">Add New Account</button></a>
 
@@ -35,8 +35,8 @@ $create_account_url = base_url()."store_accounts/create";
             <?php
             $this->load->module('timedate');
             foreach($query->result() as $row) {
-              $edit_account_url = base_url()."store_accounts/create/".$row->id;
-              $view_account_url = base_url()."store_accounts/view".$row->id;
+              $edit_account_url = base_url()."users/create/".$row->id;
+              $view_account_url = base_url()."users/view".$row->id;
               $date_created = $this->timedate->get_date($row->date_made, 'datepicker_us');
               ?>
               <tr>

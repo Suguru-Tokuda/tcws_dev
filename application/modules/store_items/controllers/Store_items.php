@@ -666,7 +666,7 @@ class Store_items extends MX_Controller {
     // this means order by item_title
     // $data['query'] = $this->get('item_title');
     $mysql_query = "SELECT si.*, sa.userName  FROM store_items si
-    LEFT JOIN store_accounts sa ON si.user_id = sa.id;
+    LEFT JOIN users sa ON si.user_id = sa.id;
     ";
     $data['query'] = $this->_custom_query($mysql_query);
 
@@ -877,7 +877,7 @@ class Store_items extends MX_Controller {
 
   function get_user_by_use_id($item_id) {
     $mysql_query = "
-    SELECT sa.id as user_id, sa.userName as userName, sa.email as email FROM store_accounts sa
+    SELECT sa.id as user_id, sa.userName as userName, sa.email as email FROM users sa
     JOIN store_items si on sa.id = si.user_id
     WHERE si.id = ?
     ";

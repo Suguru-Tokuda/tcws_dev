@@ -1,12 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Mdl_store_accounts extends CI_Model {
+class Mdl_users extends CI_Model {
 
   function __construct() {
     parent::__construct();
   }
 
   function get_table() {
-    $table = "store_accounts";
+    $table = "users";
     return $table;
   }
 

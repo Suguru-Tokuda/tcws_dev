@@ -14,7 +14,7 @@ class Listed_items extends MX_Controller {
 
       $mysql_query = "
       SELECT si.item_title, si.id, si.item_url, si.item_price, si.status FROM
-      store_items si JOIN store_accounts sa ON si.user_id = sa.id
+      store_items si JOIN users sa ON si.user_id = sa.id
       WHERE user_id = $user_id
       ";
 
@@ -61,7 +61,7 @@ class Listed_items extends MX_Controller {
 
       $mysql_query = "
       SELECT si.item_title, si.id, si.item_url, si.item_price, si.status FROM
-      store_items si JOIN store_accounts sa ON si.user_id = sa.id
+      store_items si JOIN users sa ON si.user_id = sa.id
       WHERE user_id = $user_id
       ";
 
@@ -97,7 +97,7 @@ class Listed_items extends MX_Controller {
       // NOTE: use_limit can be true or false
       $mysql_query = "
       SELECT si.item_title, si.id, si.item_url, si.item_price, si.status FROM
-      store_items si JOIN store_accounts sa ON si.user_id = sa.id
+      store_items si JOIN users sa ON si.user_id = sa.id
       WHERE user_id = $user_id
       ";
       if ($use_limit == true) {

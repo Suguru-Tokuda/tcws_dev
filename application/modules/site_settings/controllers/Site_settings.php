@@ -42,8 +42,8 @@ class Site_settings extends MX_Controller {
   }
 
   function _get_welcome_msg($customer_id) {
-    $this->load->module('store_accounts');
-    $customer_name = $this->store_accounts->_get_customer_name($customer_id);
+    $this->load->module('users');
+    $customer_name = $this->users->_get_customer_name($customer_id);
 
     $msg = "Hello ".$customer_name.",<br><br>";
     $msg.= "Thank you for creating an account with Twin Cities Calbe Park";

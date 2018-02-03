@@ -120,7 +120,7 @@ class Youraccount extends MX_Controller {
         $value1 = $this->input->post('userName', true);
         $col2 = 'email';
         $value2 = $this->input->post('userName', true);;
-        $query = $this->store_accounts->get_with_double_condition($col1, $value1, $col2, $value2);
+        $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
         foreach ($query->result() as $row) {
           $user_id = $row->id;
         }
@@ -133,7 +133,7 @@ class Youraccount extends MX_Controller {
         }
 
         $data['last_login'] = time();
-        $this->store_accounts->_update($user_id, $data);
+        $this->users->_update($user_id, $data);
 
         // send them to the private page
         $this->_in_you_go($user_id, $login_type);
@@ -182,7 +182,7 @@ class Youraccount extends MX_Controller {
   }
 
   function _process_create_account() {
-    $this->load->module('store_accounts');
+    $this->load->module('users');
     $data = $this->fetch_data_from_post();
     unset($data['confirmPassword']);
 
@@ -191,7 +191,7 @@ class Youraccount extends MX_Controller {
     $data['password'] = $this->site_security->_hash_string($password);
     $data['date_made'] = time();
 
-    $this->store_accounts->_insert($data);
+    $this->users->_insert($data);
   }
 
   function start() {
@@ -219,11 +219,11 @@ class Youraccount extends MX_Controller {
   }
 
   function userName_existence_check($str) {
-    $this->load->module('store_accounts');
+    $this->load->module('users');
 
     $error_msg = "$str already exists";
 
-    $query = $this->store_accounts->get_where_custom('userName', $str);
+    $query = $this->users->get_where_custom('userName', $str);
     $num_rows = $query->num_rows();
     if ($num_rows == 0) {
       return true;
@@ -237,7 +237,7 @@ class Youraccount extends MX_Controller {
   // a method to check if the userName exists.
   function userName_check($str) {
 
-    $this->load->module('store_accounts');
+    $this->load->module('users');
     $this->load->module('site_security');
 
     $error_msg = "You did not enter a correct username and/or password.";
@@ -246,7 +246,7 @@ class Youraccount extends MX_Controller {
     $value1 = $str;
     $col2 = 'email';
     $value2 = $str;
-    $query = $this->store_accounts->get_with_double_condition($col1, $value1, $col2, $value2);
+    $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
     $num_rows = $query->num_rows();
     if ($num_rows < 1) {
       $this->form_validation->set_message('userName_check', $error_msg);
@@ -270,9 +270,9 @@ class Youraccount extends MX_Controller {
 
   // method to get userid by user_id
   function getUserNameById($user_id) {
-    $this->load->module('store_accounts');
+    $this->load->module('users');
 
-    $query = $this->store_accounts->get_where($user_id);
+    $query = $this->users->get_where($user_id);
     foreach ($query->result() as $row) {
       $userName = $row->userName;
     }

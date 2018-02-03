@@ -351,7 +351,7 @@ $our_company = $this->site_settings->_get_our_company_name();
                   <li><a href="<?= base_url() ?>homepage_blocks/manage"><i class="icon-star"></i><span class="hidden-tablet"> Homepage Offers</span></a></li>
                   <li><a href="<?= base_url() ?>webpages/manage"><i class="icon-file"></i><span class="hidden-tablet"> CMS</span></a></li>
                   <li><a href="<?= base_url() ?>blog/manage"><i class="icon-file"></i><span class="hidden-tablet"> Manage Blog</span></a></li>
-                  <li><a href="<?= base_url() ?>store_accounts/manage"><i class="icon-briefcase"></i><span class="hidden-tablet"> Accounts</span></a></li>
+                  <li><a href="<?= base_url() ?>users/manage"><i class="icon-briefcase"></i><span class="hidden-tablet"> Accounts</span></a></li>
 
                   <li><a href="tasks.html"><i class="icon-tasks"></i><span class="hidden-tablet"> Tasks</span></a></li>
                   <li><a href="ui.html"><i class="icon-eye-open"></i><span class="hidden-tablet"> UI Features</span></a></li>

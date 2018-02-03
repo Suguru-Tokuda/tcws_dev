@@ -14,7 +14,7 @@ class Yourmessages extends MX_Controller {
 
   function create() {
     $this->load->module('site_security');
-    $this->load->module('store_accounts');
+    $this->load->module('users');
     $this->load->module('enquiries');
     $this->site_security->_make_sure_logged_in();
 
@@ -80,7 +80,7 @@ class Yourmessages extends MX_Controller {
     $data['message'] = $this->_format_msg($data['message']);
     $data['code'] = $code;
     $this->site_security->_make_sure_logged_in();
-    $data['token'] = $this->store_accounts->_generate_token($customer_id);
+    $data['token'] = $this->users->_generate_token($customer_id);
     $data['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "create";
     $this->load->module('templates');

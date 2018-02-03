@@ -124,8 +124,8 @@ class Enquiries extends MX_Controller {
   function _fetch_customers_as_options() {
     // for the dropdown menu
     $options[''] = "Select Customer...";
-    $this->load->module('store_accounts');
-    $query = $this->store_accounts->get('lastName');
+    $this->load->module('users');
+    $query = $this->users->get('lastName');
     foreach ($query->result() as $row) {
       $customer_name = $row->firstName." ".$row->lastName;
       $company_length = strlen($row->company);
@@ -208,7 +208,7 @@ class Enquiries extends MX_Controller {
     // $mysql_query = "SELECT * FROM enquiries WHERE sent_to = 0 ORDER BY date_created DESC";
     $mysql_query = "
     SELECT e.*, sa.firstName, sa.lastName, sa.company
-    FROM enquiries e LEFT JOIN store_accounts sa ON e.sent_by = sa.id
+    FROM enquiries e LEFT JOIN users sa ON e.sent_by = sa.id
     WHERE e.sent_to = 0
     ORDER BY e.date_created DESC
     ";
@@ -219,7 +219,7 @@ class Enquiries extends MX_Controller {
   function _fetch_customer_enquiries($folder_type, $customer_id) {
     $mysql_query = "
     SELECT e.*, sa.firstName, sa.lastName, sa.company
-    FROM enquiries e JOIN store_accounts sa ON e.sent_to = sa.id
+    FROM enquiries e JOIN users sa ON e.sent_to = sa.id
     WHERE e.sent_to = $customer_id
     ORDER BY e.date_created DESC
     ";

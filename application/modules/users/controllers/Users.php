@@ -1,5 +1,5 @@
 <?php
-class Store_accounts extends MX_Controller {
+class Users extends MX_Controller {
 
   function __construct() {
     parent::__construct();
@@ -28,7 +28,7 @@ class Store_accounts extends MX_Controller {
     $date_made = substr($token, 6, 10);
     $last_login = substr($token, 16, 10);
 
-    $sql = "SELECT * FROM store_accounts WHERE date_made = ? AND password LIKE ? AND last_login = ?";
+    $sql = "SELECT * FROM users WHERE date_made = ? AND password LIKE ? AND last_login = ?";
     $query = $this->db->query($sql, array($date_made, '%'.$last_six_chars, $last_login));
 
     foreach ($query->result() as $row) {
@@ -52,7 +52,7 @@ class Store_accounts extends MX_Controller {
     $data['query'] = $this->get('lastName');
 
     // create a view file. Putting a php (html) into the admin template.
-    $data['view_module'] = "store_accounts";
+    $data['view_module'] = "users";
     // store_Accounts.php
     $data['view_file'] = "manage"; // manage.php
     $this->load->module('templates');
@@ -94,9 +94,9 @@ class Store_accounts extends MX_Controller {
     $submit = $this->input->post('submit', true);
 
     if (!is_numeric($update_id)) {
-      redirect('store_accounts/manage');
+      redirect('users/manage');
     } elseif ($submit == "Cancel") {
-      redirect('store_accounts/create/'.$update_id);
+      redirect('users/create/'.$update_id);
     } elseif ($submit == "Submit") {
       // process the form
       $this->load->library('form_validation');
@@ -116,7 +116,7 @@ class Store_accounts extends MX_Controller {
         $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
         $this->session->set_flashdata('account', $value);
         // add the update data into the URL
-        redirect('store_accounts/create/'.$update_id);
+        redirect('users/create/'.$update_id);
       }
     }
 
@@ -142,7 +142,7 @@ class Store_accounts extends MX_Controller {
     $submit = $this->input->post('submit', true);
 
     if ($submit == "Cancel") {
-      redirect('store_accounts/manage');
+      redirect('users/manage');
     } else if ($submit == "Submit") {
       // process the form
       $this->load->library('form_validation');
@@ -168,7 +168,7 @@ class Store_accounts extends MX_Controller {
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
           $this->session->set_flashdata('account', $value);
           // add the update data into the URL
-          redirect('store_accounts/create/'.$update_id);
+          redirect('users/create/'.$update_id);
         } else {
           // insert a new account into DB
           $data['date_made'] = time();
@@ -181,7 +181,7 @@ class Store_accounts extends MX_Controller {
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
           $this->session->set_flashdata('account', $value);
           // add the update data into the URL
-          redirect('store_accounts/create/'.$update_id);
+          redirect('users/create/'.$update_id);
         }
       }
     }
@@ -258,8 +258,8 @@ class Store_accounts extends MX_Controller {
 
   function get($order_by)
   {
-    $this->load->model('mdl_store_accounts');
-    $query = $this->mdl_store_accounts->get($order_by);
+    $this->load->model('mdl_users');
+    $query = $this->mdl_users->get($order_by);
     return $query;
   }
 
@@ -269,8 +269,8 @@ class Store_accounts extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_store_accounts');
-    $query = $this->mdl_store_accounts->get_with_limit($limit, $offset, $order_by);
+    $this->load->model('mdl_users');
+    $query = $this->mdl_users->get_with_limit($limit, $offset, $order_by);
     return $query;
   }
 
@@ -280,29 +280,29 @@ class Store_accounts extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_store_accounts');
-    $query = $this->mdl_store_accounts->get_where($id);
+    $this->load->model('mdl_users');
+    $query = $this->mdl_users->get_where($id);
     return $query;
   }
 
   function get_where_custom($col, $value)
   {
-    $this->load->model('mdl_store_accounts');
-    $query = $this->mdl_store_accounts->get_where_custom($col, $value);
+    $this->load->model('mdl_users');
+    $query = $this->mdl_users->get_where_custom($col, $value);
     return $query;
   }
 
   function get_with_double_condition($col1, $value1, $col2, $value2)
   {
-    $this->load->model('mdl_store_accounts');
-    $query = $this->mdl_store_accounts->get_with_double_condition($col1, $value1, $col2, $value2);
+    $this->load->model('mdl_users');
+    $query = $this->mdl_users->get_with_double_condition($col1, $value1, $col2, $value2);
     return $query;
   }
 
   function _insert($data)
   {
-    $this->load->model('mdl_store_accounts');
-    $this->mdl_store_accounts->_insert($data);
+    $this->load->model('mdl_users');
+    $this->mdl_users->_insert($data);
   }
 
   function _update($id, $data)
@@ -311,8 +311,8 @@ class Store_accounts extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_store_accounts');
-    $this->mdl_store_accounts->_update($id, $data);
+    $this->load->model('mdl_users');
+    $this->mdl_users->_update($id, $data);
   }
 
   function _delete($id)
@@ -321,28 +321,28 @@ class Store_accounts extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_store_accounts');
-    $this->mdl_store_accounts->_delete($id);
+    $this->load->model('mdl_users');
+    $this->mdl_users->_delete($id);
   }
 
   function count_where($column, $value)
   {
-    $this->load->model('mdl_store_accounts');
-    $count = $this->mdl_store_accounts->count_where($column, $value);
+    $this->load->model('mdl_users');
+    $count = $this->mdl_users->count_where($column, $value);
     return $count;
   }
 
   function get_max()
   {
-    $this->load->model('mdl_store_accounts');
-    $max_id = $this->mdl_store_accounts->get_max();
+    $this->load->model('mdl_users');
+    $max_id = $this->mdl_users->get_max();
     return $max_id;
   }
 
   function _custom_query($mysql_query)
   {
-    $this->load->model('mdl_store_accounts');
-    $query = $this->mdl_store_accounts->_custom_query($mysql_query);
+    $this->load->model('mdl_users');
+    $query = $this->mdl_users->_custom_query($mysql_query);
     return $query;
   }
 
