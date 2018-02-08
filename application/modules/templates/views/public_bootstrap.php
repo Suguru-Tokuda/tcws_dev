@@ -21,20 +21,15 @@
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <link href="<?php echo base_url(); ?>css/ie10-viewport-bug-workaround.css" rel="stylesheet">
   <!-- Custom styles for this template -->
+  <!-- will be removed -->
   <link href="<?php echo base_url(); ?>assets/css/jumbotron.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/panel.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/custom.css" rel="stylesheet">
-  <link href="<?php echo base_url(); ?>assets/css/Footer-with-button-logo.css" rel="stylesheet">
+  <!-- will be removed -->
   <link href="<?php echo base_url(); ?>assets/fonts/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/main.css" rel="stylesheet">
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
-  <script src="<?php echo base_url() ?>assets/js/jquery.js"></script>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script> -->
-  <script src="<?php echo base_url() ?>assets/js/jquery-ui.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/modernizr.min.js"></script>
-
 </head>
 
 <body>
@@ -114,7 +109,7 @@
   </div>
 </div>
 
-<footern class="site-footer">
+<footer class="site-footer">
   <div class="container">
     <div class="row">
       <div class="col-lg-3 col-md-6">
