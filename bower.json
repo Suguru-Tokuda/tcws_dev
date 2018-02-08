@@ -1,0 +1,21 @@
+{
+  "name": "twincitywatersports",
+  "description": "What is CodeIgniter ###################",
+  "main": "index.js",
+  "authors": [
+    "Suguru Tokuda"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/Suguru-Tokuda/twincitywatersports",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.6",
+    "jquery-ui": "^1.12.1"
+  }
+}

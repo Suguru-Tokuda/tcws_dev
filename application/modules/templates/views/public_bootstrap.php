@@ -26,10 +26,14 @@
   <link href="<?php echo base_url(); ?>assets/css/custom.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/Footer-with-button-logo.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/fonts/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+  <link href="<?php echo base_url(); ?>assets/css/main.css" rel="stylesheet">
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+  <script src="<?php echo base_url() ?>assets/js/jquery.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script> -->
+  <script src="<?php echo base_url() ?>assets/js/jquery-ui.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/modernizr.min.js"></script>
 
 </head>
 
@@ -40,33 +44,30 @@
     // Whenever there is a change in sorting, this gets kicked on.
     require_once('sort_pictures_code.php');
   }
+  $form_location = base_url().'store_items/search';
   ?>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="<?= base_url() ?>">Home</a>
+  <!-- nav bar starts -->
+  <!-- <nav class="navbar navbar-inverse navbar-fixed-top"> -->
+  <header class="navbar navbar-sticky">
+    <form class="site-search" action="<?= $form_location ?>" method="post">
+      <input type="text" name="searchKeywords" placeholder="Type to search...">
+      <div class="search-tools"><span class="clear-search">Clear</span><span class="close-search"><i class="icon-cross"></i></span></div>
+      <button class="btn btn-default" name="submit" type="submit" value="submit"><i class="glyphicon glyphicon-search"></i></button>
+    </form>
+    <div class="site-branding">
+      <div class="inner">
+        <!-- Off-Canvas Toggle (#shop-categories)--><a class="offcanvas-toggle cats-toggle" href="#shop-categories" data-toggle="offcanvas"></a>
+        <!-- Off-Canvas Toggle (#mobile-menu)--><a class="offcanvas-toggle menu-toggle" href="#mobile-menu" data-toggle="offcanvas"></a>
+        <!-- Site Logo--><a class="site-logo" href="<?= base_url() ?>"><img src="img/logo/logo.png" alt="TWC"></a>
       </div>
-      <div id="navbar" class="navbar-collapse collapse">
+    </div>
+  <nav class="site-menu">
+    <ul>
+      <li class="has-megamenu active"><a href="<?= base_url() ?>"><span>Home</span></a>
+      </li>
         <?php
         echo Modules::run('store_categories/_draw_top_nav');
-        $form_location = base_url().'store_items/search';
         ?>
-        <div class="col-sm-3 col-md-3">
-          <form class="navbar-form" role="search" action="<?= $form_location ?>" method="post">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search" name="searchKeywords" >
-              <div class="input-group-btn">
-                <button class="btn btn-default" name="submit" type="submit" value="submit"><i class="glyphicon glyphicon-search"></i></button>
-              </div>
-            </div>
-          </form>
-        </div>
         <?php
         $signup_url = base_url()."youraccount/start";
         $login_url = base_url()."youraccount/login";
@@ -74,18 +75,19 @@
         $user_id = $this->site_security->_get_user_id();
         if ($user_id == "") {
           ?>
-          <ul class="nav navbar-nav navbar-right">
+          <li><a href="#"><span>Account Menu</span></a>
+          <ul class="sub-menu">
             <li><a href="<?= $signup_url ?>"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
             <li><a href="<?= $login_url ?>"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
           </ul>
+        </li>
           <?php
         } else if ($user_id > 0) {
           include('customer_dropdown.php');
         }
         ?>
-      </div>
-    </div>
-  </nav><?php
+  </ul>
+</nav><!--Nav bar ends--></header><?php
   if (isset($page_content)) {
     if ($page_url == "") { // means it's in homepage
       require_once('carousel.php');
@@ -112,56 +114,65 @@
   </div>
 </div>
 
-<footer id="myFooter" style="position: relative;">
+<footern class="site-footer">
   <div class="container">
     <div class="row">
-      <div class="col-sm-3">
-        <h2 class="logo"><a href="#"> LOGO </a></h2>
-      </div>
-      <div class="col-sm-2">
-        <h5>Navigation</h5>
-        <ul>
-          <li><a href="<?= base_url() ?>">Home</a></li>
-          <?php
-          if ($user_id == 0) {
-            ?>
-            <li><a href="<?= base_url()?>youraccount/start">Sign up</a></li>
-            <?php
-          }
-          ?>
-        </ul>
-      </div>
-      <div class="col-sm-2">
-        <h5>About us</h5>
+      <div class="col-lg-3 col-md-6">
+        <section class="widget widget-light-skin">
+            <h3 class="widget-title">Get In Touch With Us</h3>
+            <p class="text-white">Phone: 123 456 7890</p>
+            <ul class="list-unstyled text-sm text-white">
+              <li><span class="opacity-50">Monday-Friday:</span>9:00 am - 5:00 pm</li>
+              <li><span class="opacity-50">Saturday-Sunday:</span>10.00 am - 5.00 pm</li>
+            </ul>
+        <p><a class="navi-link-light" href="#">support@unishop.com</a></p><a class="social-button shape-circle sb-facebook sb-light-skin" href="#"><i class="socicon-facebook"></i></a><a class="social-button shape-circle sb-twitter sb-light-skin" href="#"><i class="socicon-twitter"></i></a><a class="social-button shape-circle sb-instagram sb-light-skin" href="#"><i class="socicon-instagram"></i></a><a class="social-button shape-circle sb-google-plus sb-light-skin" href="#"><i class="socicon-googleplus"></i></a>
+      </section>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <!-- About Us-->
+      <section class="widget widget-links widget-light-skin">
+        <h3 class="widget-title">About Us</h3>
         <ul>
           <li><a href="<?= base_url()."aboutus" ?>">Company Information</a></li>
           <li><a href="<?= base_url()."contactus" ?>">Contact us</a></li>
+          <li><a href="#">Our Team</a></li>
+          <li><a href="#">Our Blog</a></li>
         </ul>
+      </section>
+    </div>
+    <?php
+    if ($user_id == 0) {
+      ?>
+      <div class="col-lg-3 col-md-6">
+        <section class="widget widget-links widget-light-skin">
+          <h3 class="widget-title">Account</h3>
+        <ul>
+      <li><a href="<?= base_url()?>youraccount/start">Sign up</a></li>
+        </ul>
+      </section>
+    </div>
+      <?php
+    }
+    ?>
       </div>
-      <div class="col-sm-3">
-        <div class="social-networks">
-          <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
-          <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-          <a href="#" class="google"><i class="fa fa-google-plus"></i></a>
-        </div>
-        <!-- <button type="button" class="btn btn-default">Contact us</button> -->
-      </div>
+          <p class="footer-copyright">© <?= $our_company ?></p>
     </div>
   </div>
-  <div class="footer-copyright">
-    <p>© <?= $our_company ?> </p>
-  </div>
+
 </footer>
 
-
-
+<!-- Back To Top Button--><a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+<!-- Backdrop-->
+<div class="site-backdrop"></div>
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="<?php echo base_url(); ?>assets/js/jquery.min.js"><\/script>')</script>
-<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="<?php echo base_url(); ?>assets/js/ie10-viewport-bug-workaround.js"></script>
+<!-- <script>window.jQuery || document.write('<script src="<?php echo base_url(); ?>assets/js/jquery.min.js"><\/script>')</script> -->
+<!-- <script src="<?php echo base_url(); ?>assets/js/bootstrap.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/ie10-viewport-bug-workaround.js"></script> -->
+<script src="<?php echo base_url(); ?>assets/js/vendor.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/card.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/scripts.min.js"></script>
 </body>
 </html>

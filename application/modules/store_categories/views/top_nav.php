@@ -1,27 +1,11 @@
-<ul class="nav navbar-nav">
-  <li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Trading Post<span class="caret"></span></a>
-    <ul class="dropdown-menu">
-      <li><a href="<?= base_url().'trading_post/all_items'?>">Browse for Sale</a></li>
-      <li><a href="<?= base_url().'trading_post/post_item'?>">Post for Sale</a></li>
-    </ul>
-  </li>
-  <li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lessons<span class="caret"></span></a>
-    <ul class="dropdown-menu">
-      <li><a href="<?= base_url().'lessons/reserve'?>">Reserve Lessons</a></li>
-      <!-- <li><a href="<?= base_url().'trading_post/post_item'?>">Post for Sale</a></li> -->
-    </ul>
-  </li>
-  <!-- <?php
+<?php
   $this->load->module('store_categories');
   foreach ($parent_categories as $key => $value) {
     $parent_cat_id = $key;
     $parent_cat_title = $value;
     ?>
-    <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= $parent_cat_title ?> <span class="caret"></span></a>
-      <ul class="dropdown-menu">
+    <li><a href="#"><span><?= $parent_cat_title ?> </span></a>
+      <ul class="sub-menu">
         <?php
         $query = $this->store_categories->get_where_custom('parent_cat_id', $parent_cat_id);
         foreach ($query->result() as $row) {
@@ -32,5 +16,15 @@
     </li>
     <?php
   }
-  ?> -->
-</ul>
+  ?>
+<li><a href="#"><span>Trading Post</span></a>
+  <ul class="sub-menu">
+      <li><a href="<?= base_url().'trading_post/all_items'?>">Browse for Sale</a></li>
+      <li><a href="<?= base_url().'trading_post/post_item'?>">Post for Sale</a></li>
+  </ul>
+</li>
+<li><a href="#"><span>Lessons</span></a>
+  <ul class="sub-menu">
+    <li><a href="<?= base_url().'lessons/reserve'?>">Reserve Lessons</a></li>
+  </ul>
+</li>
