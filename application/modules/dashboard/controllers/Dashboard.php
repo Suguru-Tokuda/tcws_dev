@@ -12,6 +12,7 @@ class Dashboard extends MX_Controller {
     $data['flash'] = $this->session->flashdata('item');
 
     $data['view_file'] = "home";
+
     $this->load->module('templates');
     $this->templates->admin($data);
   }

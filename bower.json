@@ -16,6 +16,16 @@
   ],
   "dependencies": {
     "bootstrap": "v4.0.0-alpha.6",
-    "jquery-ui": "^1.12.1"
+    "jquery-ui": "^1.12.1",
+    "jquery.gritter": "^1.7.4",
+    "zabuto_calendar": "^1.2.2",
+    "fullcalendar": "^3.8.2",
+    "bootstrap-datepicker": "^1.7.1",
+    "bootstrap-daterangepicker": "^2.1.27",
+    "jquery.fancybox": "^1.3.4",
+    "dcjqaccordion": "^2.7.1",
+    "jquery.scrollTo": "^2.1.2",
+    "jquery.nicescroll": "^3.7.6",
+    "jquery.sparkline": "^2.1.2"
   }
 }
