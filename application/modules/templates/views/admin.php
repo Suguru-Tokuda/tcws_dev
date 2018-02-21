@@ -15,11 +15,19 @@
   <!-- end: Mobile Specific -->
 
   <!-- start: CSS -->
-  <link id="bootstrap-style" href="<?php echo base_url(); ?>adminfiles/css/bootstrap.min.css" rel="stylesheet">
-  <link href="<?php echo base_url(); ?>adminfiles/css/bootstrap-responsive.min.css" rel="stylesheet">
-  <link id="base-style" href="<?php echo base_url(); ?>adminfiles/css/style.css" rel="stylesheet">
-  <link id="base-style-responsive" href="<?php echo base_url(); ?>adminfiles/css/style-responsive.css" rel="stylesheet">
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+  <!-- dashgum css -->
+  <link href="<?php echo base_url(); ?>assets/css/admin_vendor_style.css" rel="stylesheet">
+  <link href="<?php echo base_url(); ?>assets/css/admin_custom_style.css" rel="stylesheet">
+  <!-- dashgum css -->
+
+
+  <!-- old theme -->
+  <!-- <link id="bootstrap-style" href="<?php echo base_url(); ?>adminfiles/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!-- <link href="<?php echo base_url(); ?>adminfiles/css/bootstrap-responsive.min.css" rel="stylesheet"> -->
+  <!-- <link id="base-style" href="<?php echo base_url(); ?>adminfiles/css/style.css" rel="stylesheet"> -->
+  <!-- <link id="base-style-responsive" href="<?php echo base_url(); ?>adminfiles/css/style-responsive.css" rel="stylesheet"> -->
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'> -->
+  <!-- old theme -->
   <!-- end: CSS -->
 
 
@@ -32,6 +40,8 @@
   <!--[if IE 9]>
   <link id="ie9style" href="<?php echo base_url(); ?>adminfiles/js/ie9.css" rel="stylesheet">
   <![endif]-->
+
+  <script src="<?php echo base_url(); ?>admin_header.js"></script>
 
   <!-- start: Favicon -->
   <link rel="shortcut icon" href="<?php echo base_url(); ?>adminfiles/img/favicon.ico">

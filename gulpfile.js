@@ -18,8 +18,10 @@ var paths = {
   dashgumFooterJSSource: 'src/assets/js/dashgum_js/footer/*.js',
   dashgumHeaderJSSource: 'src/assets/js/dashgum_js/header/*.js',
   dashgumFontsSource: 'src/assets/fonts/dashgum_fonts/',
+  dashgumImgSorce: 'src/assets/img/dashgum_img/*',
   jsDest: './assets/js',
   cssDest: './assets/css',
+  imageDest: './assets/images',
   dashgumLineconsDest: './assets/css/fonts',
   dashgumFontsDest: './assets/fonts'
 };
@@ -68,16 +70,36 @@ gulp.task('compress-dashgum-footer-js', function() {
   .pipe(order([
     'jquery.js',
     'jquery-1.8.3.min.js',
+    'jquery.fancybox.js',
     'bootstrap.min.js',
     'jquery.dcjqaccordion.2.7.js',
     'jquery.scrollTo.min.js',
     'jquery.nicescroll.js',
     'jquery.sparkline.js',
-    'dashgum_custom.js',
-    '*.js',
+    'common-scripts.js',
+    'jquery.gritter.js',
+    'calendar-conf-events.js',
+    'jquery-ui.js',
+    'tasks.js',
+    'jquery-ui-1.9.2.custom.min.js',
+    'bootstrap-switch.js',
+    'jquery.transinput.js',
+    'daterangepicker.js',
+    'jquery.backstretch.min.js',
+    'rapahel-min.js',
+    'morris.min.js',
+    'Chart.js',
+    'chartjs-conf.js',
+    'zabuto_calendar.js',
   ]))
   .pipe(concat('admin_footer.js'))
   .pipe(gulp.dest(paths.jsDest));
+  return stream;
+});
+
+gulp.task('publish-dashgum-images', function() {
+  var stream = gulp.src(paths.dashgumImgSorce)
+  .pipe(gulp.dest(paths.imageDest))
   return stream;
 });
 
