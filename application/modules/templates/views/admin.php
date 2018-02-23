@@ -22,11 +22,11 @@
 
 
   <!-- old theme -->
-  <!-- <link id="bootstrap-style" href="<?php echo base_url(); ?>adminfiles/css/bootstrap.min.css" rel="stylesheet"> -->
-  <!-- <link href="<?php echo base_url(); ?>adminfiles/css/bootstrap-responsive.min.css" rel="stylesheet"> -->
-  <!-- <link id="base-style" href="<?php echo base_url(); ?>adminfiles/css/style.css" rel="stylesheet"> -->
-  <!-- <link id="base-style-responsive" href="<?php echo base_url(); ?>adminfiles/css/style-responsive.css" rel="stylesheet"> -->
-  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'> -->
+  <!-- <link id="bootstrap-style" href="<?php echo base_url(); ?>adminfiles/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo base_url(); ?>adminfiles/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link id="base-style" href="<?php echo base_url(); ?>adminfiles/css/style.css" rel="stylesheet">
+  <link id="base-style-responsive" href="<?php echo base_url(); ?>adminfiles/css/style-responsive.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'> -->
   <!-- old theme -->
   <!-- end: CSS -->
 
@@ -442,8 +442,11 @@ $our_company = $this->site_settings->_get_our_company_name();
 
         </footer>
 
+        <script src="<?php echo base_url(); ?>assets/js/admin_footer.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/dashgum_custom.js"></script>
+
         <!-- start: JavaScript-->
-        <script src="<?php echo base_url(); ?>adminfiles/js/jquery-1.9.1.min.js"></script>
+        <!-- <script src="<?php echo base_url(); ?>adminfiles/js/jquery-1.9.1.min.js"></script>
         <script src="<?php echo base_url(); ?>adminfiles/js/jquery-migrate-1.0.0.min.js"></script>
         <script src="<?php echo base_url(); ?>adminfiles/js/jquery-ui-1.10.0.custom.min.js"></script>
         <script src="<?php echo base_url(); ?>adminfiles/js/jquery.ui.touch-punch.js"></script>
@@ -472,7 +475,7 @@ $our_company = $this->site_settings->_get_our_company_name();
         <script src="<?php echo base_url(); ?>adminfiles/js/jquery.sparkline.min.js"></script>
         <script src="<?php echo base_url(); ?>adminfiles/js/counter.js"></script>
         <script src="<?php echo base_url(); ?>adminfiles/js/retina.js"></script>
-        <script src="<?php echo base_url(); ?>adminfiles/js/custom.js"></script>
+        <script src="<?php echo base_url(); ?>adminfiles/js/custom.js"></script> -->
         <!-- end: JavaScript-->
 
       </body>
