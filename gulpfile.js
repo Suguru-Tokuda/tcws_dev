@@ -12,7 +12,8 @@ var mainBowerFiles = require('main-bower-files'); // npm install --save-dev main
 
 var paths = {
   mainCSSSource: ['src/assets/css/unishop_css/vendor.min.css', 'src/assets/css/unishop_css/styles.min.css'],
-  unishopCSSSource: 'src/**/*.css',
+  unishopCSSSource: 'src/assets/css/unishop_css/*.css',
+  unishopFontsSource: 'src/assets/fonts/unishop_fonts/*',
   dashgumCustomCSSSource: 'src/assets/css/dashgum_css/custom/*.css',
   dashgumVendorCSSSource: 'src/assets/css/dashgum_css/vendor/*.css',
   dashgumFooterJSSource: 'src/assets/js/dashgum_js/footer/*.js',
@@ -22,6 +23,7 @@ var paths = {
   jsDest: './assets/js',
   cssDest: './assets/css',
   imageDest: './assets/images',
+  fontsDest: './assets/fonts',
   dashgumLineconsDest: './assets/css/fonts',
   dashgumFontsDest: './assets/fonts'
 };
@@ -36,12 +38,20 @@ gulp.task('compress-main-css', function() {
 gulp.task('compress-unishiop-css', function() {
   var stream = gulp.src(paths.unishopCSSSource)
   .pipe(order([
-    'vendor.*.css',
-    '*.min.css',
-    'styles.*.css'
+    "oldBootstrap.min.css",
+    "vendor.min.css",
+    "card.min.css",
+    "styles.min.css",
+    "main.css"
   ]))
   .pipe(concat('main.css'))
   .pipe(gulp.dest(paths.cssDest));
+  return stream;
+});
+
+gulp.task('publish-unishop-fonts', function() {
+  var stream = gulp.src(paths.unishopFontsSource)
+  .pipe(gulp.dest(paths.fontsDest));
   return stream;
 });
 
