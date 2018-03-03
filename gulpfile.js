@@ -18,6 +18,7 @@ var paths = {
   dashgumVendorCSSSource: 'src/assets/css/dashgum_css/vendor/*.css',
   dashgumFooterJSSource: 'src/assets/js/dashgum_js/footer/*.js',
   dashgumHeaderJSSource: 'src/assets/js/dashgum_js/header/*.js',
+  dashgumCustomJSSource: 'src/assets/js/dashgum_js/custom/*.js',
   dashgumFontsSource: 'src/assets/fonts/dashgum_fonts/',
   dashgumImgSorce: 'src/assets/img/dashgum_img/*',
   jsDest: './assets/js',
@@ -75,6 +76,12 @@ gulp.task('compress-dashgum-vendor-css', function() {
   return stream;
 });
 
+gulp.task('publish-dashgum-custom-js', function() {
+  var stream = gulp.src(paths.dashgumCustomJSSource)
+  .pipe(gulp.dest(paths.jsDest));
+  return stream;
+});
+
 gulp.task('compress-dashgum-footer-js', function() {
   var stream = gulp.src(paths.dashgumFooterJSSource)
   .pipe(order([
@@ -109,7 +116,7 @@ gulp.task('compress-dashgum-footer-js', function() {
 
 gulp.task('publish-dashgum-images', function() {
   var stream = gulp.src(paths.dashgumImgSorce)
-  .pipe(gulp.dest(paths.imageDest))
+  .pipe(gulp.dest(paths.imageDest));
   return stream;
 });
 
