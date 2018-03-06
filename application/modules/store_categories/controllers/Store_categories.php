@@ -21,13 +21,6 @@ class Store_categories extends MX_Controller {
   }
 
   function get_oldest_user($target_array) {
-    // $oldest = $target_array[0];
-    // for ($i = 1; $i < $target_array.count; $i++) {
-    //   if ($oldest < $target_array[$i]) {
-    //     $oldest == $target_array[$i];
-    //   }
-    // }
-    // return $oldest;
     foreach ($target_array as $key => $value) {
       if (!isset($key_with_highest_value)) {
         $key_with_highest_value = $key;
@@ -205,14 +198,6 @@ class Store_categories extends MX_Controller {
       $update_id = $_POST['order'.$i];
       $data['priority'] = $i;
       $this->_update($update_id, $data); // updating the DB
-      // $info = "The following was posted: ";
-      // foreach ($_POST as $key => $value) {
-      //   $info.= "key of $key with value of $value";
-      // }
-      // $data['posted_info'] = $info;
-      // $update_id = 10;
-      // $this->_update($update_id, $data);
-
     }
   }
 

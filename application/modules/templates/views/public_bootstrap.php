@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="icon" href="<?php echo base_url(); ?>/favicon.ico">
@@ -48,7 +47,6 @@
   $form_location = base_url().'store_items/search';
   ?>
   <!-- nav bar starts -->
-  <!-- <nav class="navbar navbar-inverse navbar-fixed-top"> -->
   <header class="navbar navbar-sticky">
     <form class="site-search" action="<?= $form_location ?>" method="post">
       <input type="text" name="searchKeywords" placeholder="Type to search...">
@@ -58,7 +56,7 @@
     <div class="site-branding">
       <div class="inner">
         <!-- Off-Canvas Toggle (#shop-categories)-->
-        <a class="offcanvas-toggle cats-toggle" href="#shop-categories" data-toggle="offcanvas"></a>
+        <!-- <a class="offcanvas-toggle cats-toggle" href="#shop-categories" data-toggle="offcanvas"></a> -->
         <!-- Off-Canvas Toggle (#mobile-menu)-->
         <a class="offcanvas-toggle menu-toggle" href="#mobile-menu" data-toggle="offcanvas"></a>
         <!-- Site Logo-->
@@ -119,6 +117,11 @@
     </div>
   </div>
 
+  <?php if ($page_url == "") {
+    echo Modules::run('store_items/_draw_new_items');
+  }
+    ?>
+
   <footer class="site-footer">
     <div class="container">
       <div class="row">
@@ -127,10 +130,10 @@
             <h3 class="widget-title">Get In Touch With Us</h3>
             <p class="text-white">Phone: 123 456 7890</p>
             <ul class="list-unstyled text-sm text-white">
-              <li><span class="opacity-50">Monday-Friday:</span>9:00 am - 5:00 pm</li>
-              <li><span class="opacity-50">Saturday-Sunday:</span>10.00 am - 5.00 pm</li>
+              <li><span class="opacity-50">Monday-Friday:</span> 9:00 am - 5:00 pm</li>
+              <li><span class="opacity-50">Saturday-Sunday:</span> 10.00 am - 5.00 pm</li>
             </ul>
-            <p><a class="navi-link-light" href="#">support@unishop.com</a></p><a class="social-button shape-circle sb-facebook sb-light-skin" href="#"><i class="socicon-facebook"></i></a><a class="social-button shape-circle sb-twitter sb-light-skin" href="#"><i class="socicon-twitter"></i></a><a class="social-button shape-circle sb-instagram sb-light-skin" href="#"><i class="socicon-instagram"></i></a><a class="social-button shape-circle sb-google-plus sb-light-skin" href="#"><i class="socicon-googleplus"></i></a>
+            <p><a class="navi-link-light" href="#">twincitywatersports@gmail.com</a></p><a class="social-button shape-circle sb-facebook sb-light-skin" href="#"><i class="socicon-facebook"></i></a><a class="social-button shape-circle sb-twitter sb-light-skin" href="#"><i class="socicon-twitter"></i></a><a class="social-button shape-circle sb-instagram sb-light-skin" href="#"><i class="socicon-instagram"></i></a><a class="social-button shape-circle sb-google-plus sb-light-skin" href="#"><i class="socicon-googleplus"></i></a>
           </section>
         </div>
         <div class="col-lg-3 col-md-6">
@@ -163,15 +166,11 @@
       <p class="footer-copyright">© <?= $our_company ?></p>
     </div>
   </div>
-
 </footer>
 
 <!-- Back To Top Button--><a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
 <!-- Backdrop-->
 <div class="site-backdrop"></div>
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- <script>window.jQuery || document.write('<script src="<?php echo base_url(); ?>assets/js/jquery.min.js"><\/script>')</script> -->
 <!-- <script src="<?php echo base_url(); ?>assets/js/bootstrap.js"></script>
