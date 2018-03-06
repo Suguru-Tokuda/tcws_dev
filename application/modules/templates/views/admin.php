@@ -20,7 +20,6 @@
   <link href="<?php echo base_url(); ?>assets/css/admin_custom_style.css" rel="stylesheet">
   <!-- dashgum css -->
 
-
   <!-- old theme -->
   <!-- <link id="bootstrap-style" href="<?php echo base_url(); ?>adminfiles/css/bootstrap.min.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>adminfiles/css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -29,7 +28,6 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'> -->
   <!-- old theme -->
   <!-- end: CSS -->
-
 
   <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -437,7 +435,6 @@ $our_company = $this->site_settings->_get_our_company_name();
 
           <p>
             <span style="text-align:left;float:left">&copy; 2013 <a href="http://themifycloud.com/downloads/janux-free-responsive-admin-dashboard-template/" alt="Bootstrap_Metro_Dashboard">JANUX Responsive Dashboard</a></span>
-
           </p>
 
         </footer>

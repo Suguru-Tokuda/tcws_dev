@@ -32,6 +32,7 @@
   <!-- will be removed -->
   <!-- <link href="<?php echo base_url(); ?>assets/fonts/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet"> -->
   <link href="<?php echo base_url(); ?>assets/css/main.css" rel="stylesheet">
+  <link href="<?php echo base_url(); ?>assets/css/customMain.css" rel="stylesheet">
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <script src="<?php echo base_url(); ?>assets/js/modernizr.min.js"></script>
 </head>
