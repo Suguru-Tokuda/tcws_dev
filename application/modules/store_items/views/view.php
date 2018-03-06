@@ -3,8 +3,6 @@ echo Modules::run('templates/_draw_breadcrumbs', $breadcrumbs_data);
 if (isset($flash)) {
   echo $flash;
 }
-
-
 ?>
 <div class="row">
   <div class="col-md-4" style="margin-top: 24px;">

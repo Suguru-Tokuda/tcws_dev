@@ -428,53 +428,7 @@ class Store_items extends MX_Controller {
         $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
         $this->session->set_flashdata('item', $value);
 
-        // $date['flash'] = $this->session->flashdata('item');
         redirect(base_url()."/store_items/upload_image/".$update_id);
-        // $data['view_file'] = "upload_success";
-        // $this->load->module('templates');
-        // $this->templates->public_bootstrap($data);
-
-
-        // $config['upload_path'] = './big_pics/';
-        // $config['allowed_types'] = 'gif|jpg|png';
-        // // $config['max_size'] = 100;
-        // $config['max_size'] = 200;
-        // // $config['max_width'] = 1024;
-        // $config['max_width'] = 2024;
-        // // $config['max_height'] = 768;
-        // $config['max_height'] = 1268;
-        //
-        // $this->load->library('upload', $config);
-        //
-        // if (!$this->upload->do_upload('userfile')) {
-        //   $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
-        //   $data['headline'] = "Upload Error";
-        //   $data['update_id'] = $update_id;
-        //   $date['flash'] = $this->session->flashdata('item');
-        //   $data['view_file'] = "upload_image";
-        //   $this->load->module('templates');
-        //   $this->templates->admin($data);
-        // } else {
-        //   // upload was successful
-        //
-        //   $data = array('upload_data' => $this->upload->data());
-        //
-        //   $upload_data = $data['upload_data'];
-        //   $file_name = $upload_data['file_name'];
-        //   $this->_genrate_thumbnail($file_name);
-        //
-        //   //update the database
-        //   // insde [] is the column name
-        //   $update_data['big_pic'] = $file_name;
-        //   $update_data['small_pic'] = $file_name;
-        //   $this->_update($update_id, $update_data);
-        //
-        //   $data['headline'] = "Upload Success";
-        //   $data['update_id'] = $update_id;
-        //   $date['flash'] = $this->session->flashdata('item');
-        //   $data['view_file'] = "upload_success";
-        //   $this->load->module('templates');
-        //   $this->templates->admin($data);
       }
     }
   }
@@ -548,20 +502,6 @@ class Store_items extends MX_Controller {
       }
     }
 
-    // $big_pic = $data['big_pic'];
-    // $small_pic = $data['small_pic'];
-    //
-    // $big_pic_path = './big_pics/'.$big_pic;
-    // $small_pic_path = './small_pics/'.$small_pic;
-    // // attemp to delete item small pics
-    // if (file_exists($big_pic_path)) {
-    //   unlink($big_pic_path);
-    // }
-    //
-    // if (file_exists($small_pic_path)) {
-    //   unlink($small_pic_path);
-    // }
-
     // delete the item record from store_items
     $this->_delete($update_id);
   }
@@ -626,12 +566,6 @@ class Store_items extends MX_Controller {
       unlink($small_pic_path);
     }
 
-    // // update the database
-    // unset($data);
-    // $data['big_pic'] = "";
-    // $data['small_pic'] = "";
-    // $this->_update($update_id, $data);
-
     // delete every big pic that is linked to a small pic
     $this->big_pics->_delete_where('small_pic_id', $small_pic_id);
 
@@ -664,7 +598,6 @@ class Store_items extends MX_Controller {
 
     // getting data from DB
     // this means order by item_title
-    // $data['query'] = $this->get('item_title');
     $mysql_query = "SELECT si.*, sa.userName  FROM store_items si
     LEFT JOIN users sa ON si.user_id = sa.id;
     ";
@@ -854,25 +787,6 @@ class Store_items extends MX_Controller {
     }
 
     return $data;
-    // if (!is_numeric($update_id)) {
-    //   redirect('site_security/not_allowed');
-    // }
-    //
-    // $query = $this->get_where($update_id);
-    // foreach($query->result() as $row) {
-    //   $data['item_title'] = $row->item_title;
-    //   $data['item_url'] = $row->item_url;
-    //   $data['item_price'] = $row->item_price;
-    //   $data['item_description'] = $row->item_description;
-    //   $data['big_pic'] = $row->big_pic;
-    //   $data['small_pic'] = $row->small_pic;
-    //   $data['was_price'] = $row->was_price;
-    //   $data['status'] = $row->status;
-    // }
-    // if (!isset($data)) {
-    //   $data = "";
-    // }
-    // return $data;
   }
 
   function get_user_by_use_id($item_id) {
@@ -908,6 +822,26 @@ class Store_items extends MX_Controller {
     $this->load->view('contact_seller', $data);
   }
 
+  function _draw_new_items() {
+    $this->load->module('site_settings');
+    // $mysql_query = "
+    // SELECT * FROM store_items si ORDER BY si.date_made LIMIT 6
+    // ";
+
+    $mysql_query = "
+    SELECT si.item_title, si.item_url, si.item_price, si.small_pic, si.was_price, sc.cat_url
+    FROM store_items si
+    JOIN store_cat_assign sca ON sca.item_id = si.id
+    JOIN store_categories sc ON sc.id = sca.cat_id
+    LIMIT 6
+    ";
+
+    $query = $this->_custom_query($mysql_query);
+    $data['item_segments'] = $this->site_settings->_get_item_segments();
+    $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
+    $data['query'] = $query;
+    $this->load->view('new_items', $data);
+  }
 
   function get($order_by)
   {
