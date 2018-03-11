@@ -12,7 +12,10 @@ var mainBowerFiles = require('main-bower-files'); // npm install --save-dev main
 
 var paths = {
   mainCSSSource: ['src/assets/css/unishop_css/vendor.min.css', 'src/assets/css/unishop_css/styles.min.css'],
-  unishopCSSSource: 'src/assets/css/unishop_css/*.css',
+  unishopVendorCSSSource: 'src/assets/css/unishop_css/vendor/*.css',
+  unishopCustomCSSSource: 'src/assets/css/unishop_css/custom/*.css',
+  unishopCustomJSSource: 'src/assets/js/unishop_js/custom/*.js',
+  unishopVendorJSSource: 'src/assets/js/unishop_js/vendor/*.js',
   unishopFontsSource: 'src/assets/fonts/unishop_fonts/*',
   dashgumCustomCSSSource: 'src/assets/css/dashgum_css/custom/*.css',
   dashgumVendorCSSSource: 'src/assets/css/dashgum_css/vendor/*.css',
@@ -29,24 +32,47 @@ var paths = {
   dashgumFontsDest: './assets/fonts'
 };
 
-gulp.task('compress-main-css', function() {
-  var stream = gulp.src(paths.mainCSSSource)
-  .pipe(concat('main.css'))
+gulp.task('compress-unishiop-vendor-css', function() {
+  var stream = gulp.src(paths.unishopVendorCSSSource)
+  .pipe(order([
+    "vendor.min.css",
+    "card.min.css"
+  ]))
+  .pipe(concat('unishop.vendor.min.css'))
   .pipe(gulp.dest(paths.cssDest));
   return stream;
 });
 
-gulp.task('compress-unishiop-css', function() {
-  var stream = gulp.src(paths.unishopCSSSource)
-  .pipe(order([
-    "oldBootstrap.min.css",
-    "vendor.min.css",
-    "card.min.css",
-    "styles.min.css",
-    "main.css"
-  ]))
-  .pipe(concat('main.css'))
+gulp.task('compress-unishiop-custom-css', function() {
+  var stream = gulp.src(paths.unishopCustomCSSSource)
+  .pipe(concat('unishop.custom.min.css'))
   .pipe(gulp.dest(paths.cssDest));
+  return stream;
+});
+
+gulp.task('compress-unishop-custom-js', function() {
+  var stream = gulp.src(paths.unishopCustomJSSource)
+  .pipe(concat('unishop.custom.min.js'))
+  .pipe(gulp.dest(paths.jsDest));
+  return stream;
+});
+
+gulp.task('compress-unishop-vendor-js', function() {
+  gulp.src(paths.unishopVendorJSSource)
+  .pipe(ignore('modernizr.min.js'))
+  .pipe(order([
+    "vendor.min.js",
+    "card.min.js"
+  ]))
+  .pipe(concat('unishop.vendor.min.js'))
+  .pipe(gulp.dest(paths.jsDest));
+
+  var stream = gulp.src(paths.unishopVendorJSSource)
+  .pipe(ignore(['card.min.js', 'vendor.min.js']))
+  .pipe(order([
+    "modernizr.min.js"
+  ]))
+  .pipe(gulp.dest(paths.jsDest));
   return stream;
 });
 

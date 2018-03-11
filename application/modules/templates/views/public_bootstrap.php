@@ -7,7 +7,6 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="icon" href="<?php echo base_url(); ?>/favicon.ico">
-
   <title><?php
   $signup_url = base_url()."youraccount/start";
   $login_url = base_url()."youraccount/login";
@@ -19,20 +18,9 @@
     echo "Twincity Water Sports";
   }
   ?></title>
-  <!-- Bootstrap core CSS -->
-  <link href="<?php echo base_url(); ?>dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <!-- <link href="<?php echo base_url(); ?>css/ie10-viewport-bug-workaround.css" rel="stylesheet"> -->
-  <!-- Custom styles for this template -->
-  <!-- will be removed -->
-  <!-- <link href="<?php echo base_url(); ?>assets/css/jumbotron.css" rel="stylesheet"> -->
-  <!-- <link href="<?php echo base_url(); ?>assets/css/panel.css" rel="stylesheet"> -->
-  <!-- <link href="<?php echo base_url(); ?>assets/css/custom.css" rel="stylesheet"> -->
-  <!-- will be removed -->
-  <!-- <link href="<?php echo base_url(); ?>assets/fonts/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet"> -->
-  <link href="<?php echo base_url(); ?>assets/css/main.css" rel="stylesheet">
+  <link href="<?php echo base_url(); ?>assets/css/unishop.vendor.min.css" rel="stylesheet">
+  <link id="mainStyles" href="<?php echo base_url(); ?>assets/css/unishop.custom.min.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/customMain.css" rel="stylesheet">
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <script src="<?php echo base_url(); ?>assets/js/modernizr.min.js"></script>
 </head>
 
@@ -117,8 +105,7 @@
       ?>
     </div>
   </div>
-
-  <?php if ($page_url == "") {
+  <?php if ($this->uri->segment(1) == "") {
     echo Modules::run('store_items/_draw_new_items');
   }
     ?>
@@ -172,12 +159,7 @@
 <!-- Back To Top Button--><a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
 <!-- Backdrop-->
 <div class="site-backdrop"></div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- <script>window.jQuery || document.write('<script src="<?php echo base_url(); ?>assets/js/jquery.min.js"><\/script>')</script> -->
-<!-- <script src="<?php echo base_url(); ?>assets/js/bootstrap.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/ie10-viewport-bug-workaround.js"></script> -->
-<script src="<?php echo base_url(); ?>assets/js/vendor.min.js"></script>
-<!-- <script src="<?php echo base_url(); ?>assets/js/card.min.js"></script> -->
-<script src="<?php echo base_url(); ?>assets/js/scripts.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/unishop.vendor.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/unishop.custom.min.js"></script>
 </body>
 </html>
