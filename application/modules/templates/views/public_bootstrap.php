@@ -20,7 +20,6 @@
   ?></title>
   <link href="<?php echo base_url(); ?>assets/css/unishop.vendor.min.css" rel="stylesheet">
   <link id="mainStyles" href="<?php echo base_url(); ?>assets/css/unishop.custom.min.css" rel="stylesheet">
-  <link href="<?php echo base_url(); ?>assets/css/customMain.css" rel="stylesheet">
   <script src="<?php echo base_url(); ?>assets/js/modernizr.min.js"></script>
 </head>
 
@@ -85,10 +84,8 @@
     //   }
     // }
     ?>
-    <div class="container">
-      <div class="container" style="min-height: 650px;"><?php
+  <?php
       if (isset($page_content)) {
-        // echo ($page_content);
         if (!isset($page_url)) {
           $page_url = 'homepage';
         }
@@ -103,8 +100,6 @@
         $this->load->view($view_module.'/'.$view_file);
       }
       ?>
-    </div>
-  </div>
   <?php if ($this->uri->segment(1) == "") {
     echo Modules::run('store_items/_draw_new_items');
   }
@@ -132,7 +127,7 @@
               <li><a href="<?= base_url()."aboutus" ?>">Company Information</a></li>
               <li><a href="<?= base_url()."contactus" ?>">Contact us</a></li>
               <li><a href="#">Our Team</a></li>
-              <li><a href="#">Our Blog</a></li>
+              <li><a href="#">Community</a></li>
             </ul>
           </section>
         </div>
@@ -156,8 +151,7 @@
   </div>
 </footer>
 
-<!-- Back To Top Button--><a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
-<!-- Backdrop-->
+<a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
 <div class="site-backdrop"></div>
 <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/unishop.custom.min.js"></script>
