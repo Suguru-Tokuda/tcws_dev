@@ -33,12 +33,14 @@ var paths = {
 };
 
 gulp.task('compress-unishiop-vendor-css', function() {
-  var stream = gulp.src(paths.unishopVendorCSSSource)
+  gulp.src(paths.unishopVendorCSSSource)
   .pipe(order([
     "vendor.min.css",
     "card.min.css"
   ]))
   .pipe(concat('unishop.vendor.min.css'))
+  .pipe(gulp.dest(paths.cssDest));
+  var stream = gulp.src('src/assets/css/unishop_css/vendor/styles.min.css.map')
   .pipe(gulp.dest(paths.cssDest));
   return stream;
 });
@@ -66,7 +68,8 @@ gulp.task('compress-unishop-vendor-js', function() {
   ]))
   .pipe(concat('unishop.vendor.min.js'))
   .pipe(gulp.dest(paths.jsDest));
-
+  gulp.src('src/assets/js/unishop_js/vendor/bootstrap.min.js.map')
+  .pipe(gulp.dest(paths.jsDest));
   var stream = gulp.src(paths.unishopVendorJSSource)
   .pipe(ignore(['card.min.js', 'vendor.min.js']))
   .pipe(order([

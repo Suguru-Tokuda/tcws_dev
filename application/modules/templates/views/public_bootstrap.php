@@ -19,7 +19,7 @@
   }
   ?></title>
   <link href="<?php echo base_url(); ?>assets/css/unishop.vendor.min.css" rel="stylesheet">
-  <link id="mainStyles" href="<?php echo base_url(); ?>assets/css/unishop.custom.min.css" rel="stylesheet">
+  <link id="mainStyles" rel="stylesheet" media-"screen" href="<?php echo base_url(); ?>assets/css/unishop.custom.min.css">
   <script src="<?php echo base_url(); ?>assets/js/modernizr.min.js"></script>
 </head>
 
