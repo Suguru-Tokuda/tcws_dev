@@ -10,6 +10,7 @@
   <link href="<?php echo base_url(); ?>assets/css/admin_vendor_style.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/admin_custom_style.css" rel="stylesheet">
   <script src="<?php echo base_url(); ?>assets/js/admin_header.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/dashgum_custom.js"></script>
 
   <!-- start: Favicon -->
   <link rel="shortcut icon" href="<?php echo base_url(); ?>adminfiles/img/favicon.ico">
@@ -44,6 +45,7 @@
                      <li><a class="logout" href="login.html">Logout</a></li>
                </ul>
              </div>
+             </header>
              <!--header end-->
 
              <!-- **********************************************************************************************************************************************************
@@ -109,8 +111,31 @@
                    </div>
                </aside>
                <!--sidebar end-->
+               <!-- **********************************************************************************************************************************************************
+               MAIN CONTENT
+               *********************************************************************************************************************************************************** -->
+               <!--main content start-->
+               <section id="main-content">
+                   <section class="wrapper">
+                     <div id="content" class="span10">
+                       <?php
+                       if (isset($view_file)) {
+                         $this->load->view($view_module.'/'.$view_file); // view_module = store_items.php, view_file = manage.php or create.php
+                       }
+                       ?>
+                     </div>
+                   </section>
+               </section>
 
-
+               <!--main content end-->
+               <!--footer start-->
+               <footer class="site-footer">
+                   <div class="text-center">
+                       Twincity Water Sports
+                   </div>
+               </footer>
+               <!--footer end-->
+           </section>
 
 </body>
 </html>
