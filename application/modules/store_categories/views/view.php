@@ -23,7 +23,6 @@
           <?php
       }
        ?>
-
       <h6><a href="<?= $item_page ?>" ><?= $row->item_title ?></a></h6>
       <div style="clear: both; color: red; font-weight: bold;">$<?= number_format($row->item_price, 2) ?>
         <?php

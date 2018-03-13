@@ -17,11 +17,10 @@ class Templates extends MX_Controller {
   }
 
   function login($data) {
-    // getting the module name from the URL
-    if (!isset($data['view_module'])) {
-      $data['view_module'] = $this->uri->segment(1);
-    }
-    $this->load->view('login_page', $data);
+    $data['view_module'] = "templates";
+    $data['view_file'] = "signin_signup";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
   }
 
   function public_bootstrap($data) {

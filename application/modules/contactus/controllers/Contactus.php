@@ -61,10 +61,11 @@ class Contactus extends MX_Controller {
     $this->load->module('site_settings');
     $data = $this->fetch_data_from_post();
     $data['our_company'] = $this->site_settings->_get_our_company_name();
+    $data['our_email'] = $this->site_settings->_get_email_for_admin_seller();
     $data['our_address'] = $this->site_settings->_get_our_address();
     $data['our_phone'] = $this->site_settings->_get_our_phone();
     $data['map_code'] = $this->site_settings->_get_map_code();
-    $data['form_location'] = base_url()."contactus/submit";
+    // $data['form_location'] = base_url()."contactus/submit";
     $data['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "contactus";
     $this->load->module('templates');

@@ -28,3 +28,4 @@
     <li><a href="<?= base_url().'lessons/reserve'?>">Reserve Lessons</a></li>
   </ul>
 </li>
+<li><a href="#"><span>Community</span></a></li>

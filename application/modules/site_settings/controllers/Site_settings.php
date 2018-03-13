@@ -11,7 +11,7 @@ class Site_settings extends MX_Controller {
   }
 
   function _get_our_company_name() {
-    $company = 'Twin City Cable Park Inc.';
+    $company = 'Twin City Watersports Inc.';
     return $company;
   }
 
@@ -32,7 +32,7 @@ class Site_settings extends MX_Controller {
   }
 
   function _get_email_for_admin_seller() {
-    $email = "auction@twincitywatersports.com";
+    $email = "twincitywatersports@gmail.com";
     return $email;
   }
 
