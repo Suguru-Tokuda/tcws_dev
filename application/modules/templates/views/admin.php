@@ -39,7 +39,7 @@
   <link id="ie9style" href="<?php echo base_url(); ?>adminfiles/js/ie9.css" rel="stylesheet">
   <![endif]-->
 
-  <script src="<?php echo base_url(); ?>admin_header.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/admin_header.js"></script>
 
   <!-- start: Favicon -->
   <link rel="shortcut icon" href="<?php echo base_url(); ?>adminfiles/img/favicon.ico">
