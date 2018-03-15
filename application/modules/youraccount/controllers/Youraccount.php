@@ -39,20 +39,6 @@ class Youraccount extends MX_Controller {
     }
   }
 
-  // function test() {
-  //   $name = "Suguru";
-  //   $this->load->module('site_security');
-  //   $hashed_name = $this->site_security->_hash_string($name);
-  //   echo "Name is $name<br>";
-  //   echo $hashed_name;
-  //   echo "<hr>";
-  //
-  //   $hashed_name_length = strlen($hashed_name);
-  //   $start_point = $hashed_name_length - 6;
-  //   $last_six_chars = substr($hashed_name, $start_point, 6);
-  //   echo $last_six_chars;
-  // }
-
   function logout() {
     unset($_SESSION['user_id']);
     $this->load->module('site_cookies');
@@ -69,38 +55,12 @@ class Youraccount extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  // function test1() {
-  //   $your_name = "David";
-  //   $this->session->set_userdata('your_name', $your_name);
-  //   echo "The session variable was set.";
-  //   echo "<hr>";
-  //   echo anchor('youraccount/test1', 'Set the session variable')."<br>";
-  //   echo anchor('youraccount/test2', 'Get (display) the session variable')."<br>";
-  //   echo anchor('youraccount/test3', 'Unset (destroy) the session variable')."<br>";
-  // }
-  //
-  // function test2() {
-  //   $your_name = $this->session->userdata('your_name');
-  //   if ($your_name != "") {
-  //     echo "<h1>Hello $your_name</h1>";
-  //   } else {
-  //     echo "No session variable has been set for your_name";
-  //   }
-  // }
-  //
-  // function test3() {
-  //   unset($_SESSION['your_name']);
-  //   echo "The session variable was unset.";
-  //
-  //   echo "<hr>";
-  //   echo anchor('youraccount/test1', 'Set the session variable')."<br>";
-  //   echo anchor('youraccount/test2', 'Get (display) the session variable')."<br>";
-  //   echo anchor('youraccount/test3', 'Unset (destroy) the session variable')."<br>";
-  // }
-
   // login function
   function login() {
     $data['userName'] = $this->input->post('userName', true);
+    $data['email'] = $this->input->post('email', true);
+    $data['password'] = $this->input->post('password', true);
+    $data['confirmPassword'] = $this->input->post('confirmPassword', true);
     $this->load->module('templates');
     $this->templates->login($data);
   }

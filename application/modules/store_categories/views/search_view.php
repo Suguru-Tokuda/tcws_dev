@@ -1,13 +1,13 @@
-<?= $pagination ?>
-<?= $showing_statement ?><br>
-<?php
-if (isset($keywords)) {
-  $keywords;
-  ?>
-  <?php
-}
-?>
 <div class="container padding-bottom-3x mb-1">
+  <?= $pagination ?>
+  <?= $showing_statement ?><br>
+  <?php
+  if (isset($keywords)) {
+    $keywords;
+    ?>
+    <?php
+  }
+  ?>
   <div class="row">
     <div class="col-xl-9 col-lg-8 order-lg-2">
       <div class="isotope-grid cols-3 mb-2">

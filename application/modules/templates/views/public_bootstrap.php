@@ -78,11 +78,11 @@
         ?>
       </ul>
     </nav><!--Nav bar ends--></header><?php
-    // if (isset($page_content)) {
-    //   if ($page_url == "") { // means it's in homepage
-    //     require_once('carousel.php');
-    //   }
-    // }
+    if (isset($page_content)) {
+      if ($page_url == "") { // means it's in homepage
+        require_once('carousel.php');
+      }
+    }
     ?>
   <?php
       if (isset($page_content)) {

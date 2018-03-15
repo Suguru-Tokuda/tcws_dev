@@ -30,5 +30,5 @@
     }
     ?>
   </div>
-  <div class="text-center"><a class="btn btn-outline-secondary margin-top-none" href="#">View All Items</a></div>
+  <div class="text-center"><a class="btn btn-outline-secondary margin-top-none" href="<?= base_url().'store_items/view_all_items'?>">View All Items</a></div>
 </section>
