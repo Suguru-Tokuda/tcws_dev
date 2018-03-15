@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
   $this->load->module('store_categories');
   foreach ($parent_categories as $key => $value) {
     $parent_cat_id = $key;
@@ -16,7 +16,7 @@
     </li>
     <?php
   }
-  ?>
+  ?> -->
 <li><a href="#"><span>Trading Post</span></a>
   <ul class="sub-menu">
       <li><a href="<?= base_url().'trading_post/all_items'?>">Browse for Sale</a></li>
