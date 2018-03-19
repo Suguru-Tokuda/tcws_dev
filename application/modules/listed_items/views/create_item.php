@@ -1,9 +1,9 @@
 <?php
 if (is_numeric($item_id)) {
-$item_url = $this->uri->segment(3);
-$form_location = base_url().'listed_items/create_item/'.$item_url;
+  $item_url = $this->uri->segment(3);
+  $form_location = base_url().'listed_items/create_item/'.$item_url;
 } else {
-$form_location = base_url().'listed_items/create_item';
+  $form_location = base_url().'listed_items/create_item';
 }
 ?>
 <h2><?= $headline ?></h2>
@@ -145,7 +145,7 @@ if (is_numeric($item_id)) { ?>
       <!-- <label class="col-md-4 control-label" for="singlebutton"></label> -->
       <div class="col-md-offset-3 col-md-4">
         <button id="singlebutton" name="submit" value="submit" class="btn btn-primary">Proceed</button>
-        <button name="submit" value="cancel" type="submit" class="btn btn-default">Cance</button>
+        <button name="submit" value="cancel" type="submit" class="btn btn-default">Cancel</button>
       </div>
     </div>
 
