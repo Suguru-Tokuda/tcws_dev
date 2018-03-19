@@ -1,23 +1,8 @@
-<!-- <?php
-$this->load->module('store_categories');
-foreach ($parent_categories as $key => $value) {
-$parent_cat_id = $key;
-$parent_cat_title = $value;
-?>
-<li><a href="#"><span><?= $parent_cat_title ?> </span></a>
-<ul class="sub-menu">
 <?php
-$query = $this->store_categories->get_where_custom('parent_cat_id', $parent_cat_id);
-foreach ($query->result() as $row) {
-$cat_url = $row->cat_url;
-echo '<li><a href="'.$target_url_start.$row->cat_url.'">'.$row->cat_title.'</a></li>';
-}
-?></ul>
-</li>
-<?php
-}
-?> -->
-<?php
+$this->load->module('site_security');
+$user_id = $this->site_security->_get_user_id();
+$signup_url = base_url()."youraccount/start";
+$login_url = base_url()."youraccount/login";
 $this->load->module('site_security');
 $user_id = $this->site_security->_get_user_id();
 ?>
@@ -39,3 +24,17 @@ $user_id = $this->site_security->_get_user_id();
   </ul>
 </li>
 <li><a href="#"><span>Community</span></a></li>
+<?php
+if ($user_id == "") {
+  ?>
+  <li><a href="#"><span>Account Menu</span></a>
+    <ul class="sub-menu">
+      <li><a href="<?= $signup_url ?>"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a href="<?= $login_url ?>"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </ul>
+  </li>
+  <?php
+} else if ($user_id > 0) {
+  include('customer_dropdown.php');
+}
+?>

@@ -4,6 +4,7 @@ class Listed_items extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->library('form_validation');
+    $this->load->module('custom_pagination');
     $this->load->library('upload');
     $this->load->library('image_lib');
     $this->form_validation->set_ci($this);

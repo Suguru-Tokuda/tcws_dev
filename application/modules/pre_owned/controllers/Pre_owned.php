@@ -16,25 +16,24 @@ class Pre_owned extends MX_Controller {
   }
 
   function big_boat() {
-    // echo "here";die();
     $item_url = $this->uri->segment(2);
     // $this->load->module('store_items');
     $cat_id = $this->store_items->_get_cat_id_from_cat_url($cat_url);
-    $this->store_items->view($cat_id);
+    $this->store_items->view_item($cat_id);
   }
 
   function big_boats() {
     $item_url = $this->uri->segment(3);
     // $this->load->module('store_items');
     $item_id = $this->store_items->_get_item_id_from_item_url($item_url);
-    $this->store_items->view($item_id);
+    $this->store_items->view_item($item_id);
   }
 
   function small_boats() {
     $item_url = $this->uri->segment(3);
     // $this->load->module('store_items');
     $item_id = $this->store_items->_get_item_id_from_item_url($item_url);
-    $this->store_items->view($item_id);
+    $this->store_items->view_item($item_id);
   }
 
 }

@@ -56,25 +56,7 @@
         <li class="has-megamenu active"><a href="<?= base_url() ?>"><span>Home</span></a>
         </li>
         <?php
-        echo Modules::run('store_categories/_draw_top_nav');
-        ?>
-        <?php
-        $signup_url = base_url()."youraccount/start";
-        $login_url = base_url()."youraccount/login";
-        $this->load->module('site_security');
-        $user_id = $this->site_security->_get_user_id();
-        if ($user_id == "") {
-          ?>
-          <li><a href="#"><span>Account Menu</span></a>
-            <ul class="sub-menu">
-              <li><a href="<?= $signup_url ?>"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-              <li><a href="<?= $login_url ?>"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            </ul>
-          </li>
-          <?php
-        } else if ($user_id > 0) {
-          include('customer_dropdown.php');
-        }
+        include('top_nav.php');
         ?>
       </ul>
     </nav><!--Nav bar ends--></header><?php

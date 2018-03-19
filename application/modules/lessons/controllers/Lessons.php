@@ -64,12 +64,12 @@ class Lessons extends MX_Controller {
   function _get_lesson_id_from_lesson_name($lesson_name) {
     $query = $this->get_where_custom('lesson_id', $lesson_name);
     foreach($query->result() as $row) {
-      $update_id = $row->id;
+      $lesson_id = $row->id;
     }
-    if (!isset($update_id)) {
-      $update_id = 0;
+    if (!isset($lesson_id)) {
+      $lesson_id = 0;
     }
-    return $update_id;
+    return $lesson_id;
   }
 
   function _get_picture_name_by_lesson_name($lesson_name) {
@@ -89,8 +89,8 @@ class Lessons extends MX_Controller {
     return $picture_name;
   }
 
-  function get_lesson_name_by_id($update_id) {
-    $query = $this->get_where_custom('id', $update_id);
+  function get_lesson_name_by_id($lesson_id) {
+    $query = $this->get_where_custom('id', $lesson_id);
     foreach($query->result() as $row) {
       $lesson_name = $row->lesson_name;
     }
@@ -113,26 +113,22 @@ class Lessons extends MX_Controller {
     return $lessons;
   }
 
-  function view($update_id) {
+  function view($lesson_id) {
     $this->load->module('timedate');
 
-    if (!is_numeric($update_id)) {
+    if (!is_numeric($lesson_id)) {
       redirect('site_security/not_allowed');
     }
     // fetch the lesson details
-    $data = $this->fetch_data_from_db($update_id);
+    $data = $this->fetch_data_from_db($lesson_id);
     $data['date_made'] = $this->timedate->get_date($data['date_made'], 'datepicker_us');
-    $data['update_id'] = $update_id;
-    $data['pics_query'] = $this->_get_pics_by_update_id($update_id);
-
-    // foreach ($data['pics_query']->result() as $row) {
-    //   echo "picture Name: $row->picture_name";
-    // }
+    $data['update_id'] = $lesson_id;
+    $data['pics_query'] = $this->_get_pics_by_update_id($lesson_id);
 
     // build the breadcrumbs data array
     $breadcrumbs_data['template'] = "public_bootstrap";
     $breadcrumbs_data['current_page_title'] = $data['lesson_name'];
-    $breadcrumbs_data['breadcrumbs_array'] = $this->_generate_breadcrumbs_array($update_id);
+    $breadcrumbs_data['breadcrumbs_array'] = $this->_generate_breadcrumbs_array($lesson_id);
     $data['breadcrumbs_data'] = $breadcrumbs_data;
 
     $data['flash'] = $this->session->flashdata('lesson');
@@ -146,13 +142,13 @@ class Lessons extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  function _get_pics_by_update_id($update_id) {
+  function _get_pics_by_update_id($lesson_id) {
     $mysql_query = "
     SELECT @counter := @counter + 1 as row_number, picture_name
     FROM lesson_picture WHERE lesson_id = ?
     ";
 
-    $query = $this->db->query($mysql_query, array($update_id));
+    $query = $this->db->query($mysql_query, array($lesson_id));
     return $query;
   }
 
@@ -182,10 +178,10 @@ function get_best_array_key($target_array) {
   }
 
   // This function displays the upload_image page
-  function upload_image($update_id) {
+  function upload_image($lesson_id) {
 
 
-    if (!is_numeric($update_id)) {
+    if (!is_numeric($lesson_id)) {
       redirect('site_security/not_allowed');
     }
     // security
@@ -193,12 +189,12 @@ function get_best_array_key($target_array) {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $mysql_query = "SELECT * FROM lesson_picture WHERE lesson_id = $update_id";
+    $mysql_query = "SELECT * FROM lesson_picture WHERE lesson_id = $lesson_id";
     $query = $this->_custom_query($mysql_query);
     $data['query'] = $query;
     $data['num_rows'] = $query->num_rows();
     $data['headline'] = "Manage Images";
-    $data['update_id'] = $update_id;
+    $data['update_id'] = $lesson_id;
     $date['flash'] = $this->session->flashdata('lesson');
     $data['view_file'] = "upload_image";
     $data['sort_this'] = true;
@@ -206,10 +202,10 @@ function get_best_array_key($target_array) {
     $this->templates->admin($data);
   }
 
-  function do_upload($update_id) {
+  function do_upload($lesson_id) {
 
 
-    if (!is_numeric($update_id)) {
+    if (!is_numeric($lesson_id)) {
       redirect('site_security/not_allowed');
     }
 
@@ -222,7 +218,7 @@ function get_best_array_key($target_array) {
     $submit = $this->input->post('submit', true);
 
     if ($submit == "cancel") {
-      redirect('lessons/create/'.$update_id);
+      redirect('lessons/create/'.$lesson_id);
     } else if ($submit == "upload") {
       $config['upload_path'] = './lesson_picture/';
       $config['allowed_types'] = 'gif|jpg|png';
@@ -234,13 +230,13 @@ function get_best_array_key($target_array) {
       $this->load->library('upload', $config);
 
       if (!$this->upload->do_upload('userfile')) {
-        $mysql_query = "SELECT * FROM lesson_picture WHERE lesson_id = $update_id";
+        $mysql_query = "SELECT * FROM lesson_picture WHERE lesson_id = $lesson_id";
         $query = $this->_custom_query($mysql_query);
         $data['query'] = $query;
         $data['num_rows'] = $query->num_rows();
         $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
         $data['headline'] = "Upload Error";
-        $data['_id'] = $update_id;
+        $data['_id'] = $lesson_id;
         $date['flash'] = $this->session->flashdata('lesson');
         $data['view_file'] = "upload_image";
         $this->load->module('templates');
@@ -257,72 +253,26 @@ function get_best_array_key($target_array) {
         $this->_genrate_thumbnail($file_name);
 
         //update the database
-        $mysql_query = "INSERT INTO lesson_picture (lesson_id, picture_name) VALUES ($update_id, '$file_name')";
+        $mysql_query = "INSERT INTO lesson_picture (lesson_id, picture_name) VALUES ($lesson_id, '$file_name')";
         $this->_custom_query($mysql_query);
 
-        $lesson_pic_id = $this->_get_lesson_pic_id($update_id);
+        $lesson_pic_id = $this->_get_lesson_pic_id($lesson_id);
         $mysql_query = "INSERT INTO lesson_picture (lesson_pic_id, picture_name) VALUES ($lesson_pic_id, '$file_name')";
         $this->_custom_query($mysql_query);
 
         $data['headline'] = "Upload Success";
-        $data['update_id'] = $update_id;
+        $data['update_id'] = $lesson_id;
         $flash_msg = "The picture was successfully uploaded.";
         $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
         $this->session->set_flashdata('lesson', $value);
 
-
-        redirect(base_url()."/lessons/upload_image/".$update_id);
-        // $data['view_file'] = "upload_success";
-        // $this->load->module('templates');
-        // $this->templates->public_bootstrap($data);
-
-
-        // $config['upload_path'] = './big_pics/';
-        // $config['allowed_types'] = 'gif|jpg|png';
-        // // $config['max_size'] = 100;
-        // $config['max_size'] = 200;
-        // // $config['max_width'] = 1024;
-        // $config['max_width'] = 2024;
-        // // $config['max_height'] = 768;
-        // $config['max_height'] = 1268;
-        //
-        // $this->load->library('upload', $config);
-        //
-        // if (!$this->upload->do_upload('userfile')) {
-        //   $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
-        //   $data['headline'] = "Upload Error";
-        //   $data['update_id'] = $update_id;
-        //   $date['flash'] = $this->session->flashdata('item');
-        //   $data['view_file'] = "upload_image";
-        //   $this->load->module('templates');
-        //   $this->templates->admin($data);
-        // } else {
-        //   // upload was successful
-        //
-        //   $data = array('upload_data' => $this->upload->data());
-        //
-        //   $upload_data = $data['upload_data'];
-        //   $file_name = $upload_data['file_name'];
-        //   $this->_genrate_thumbnail($file_name);
-        //
-        //   //update the database
-        //   // insde [] is the column name
-        //   $update_data['big_pic'] = $file_name;
-        //   $update_data['small_pic'] = $file_name;
-        //   $this->_update($update_id, $update_data);
-        //
-        //   $data['headline'] = "Upload Success";
-        //   $data['update_id'] = $update_id;
-        //   $date['flash'] = $this->session->flashdata('item');
-        //   $data['view_file'] = "upload_success";
-        //   $this->load->module('templates');
-        //   $this->templates->admin($data);
+        redirect(base_url()."/lessons/upload_image/".$lesson_id);
       }
     }
   }
 
-  function _get_lesson_pic_id($update_id) {
-    $mysql_query = "SELECT id FROM lesson_picture WHERE lesson_id = $update_id";
+  function _get_lesson_pic_id($lesson_id) {
+    $mysql_query = "SELECT id FROM lesson_picture WHERE lesson_id = $lesson_id";
     $query = $this->_custom_query($mysql_query);
     foreach($query->result() as $row) {
       $lesson_pic_id = $row->id;
@@ -330,10 +280,10 @@ function get_best_array_key($target_array) {
     return $lesson_pic_id;
   }
 
-  function deleteconf($update_id) {
+  function deleteconf($lesson_id) {
 
     // only those people with an update_id for an item can get in.
-    if (!is_numeric($update_id)) {
+    if (!is_numeric($lesson_id)) {
       redirect('site_security/not_allowed');
     }
 
@@ -343,7 +293,7 @@ function get_best_array_key($target_array) {
     $this->site_security->_make_sure_is_admin();
 
     $data['headline'] = "Delete Image";
-    $data['update_id'] = $update_id;
+    $data['update_id'] = $lesson_id;
     $date['flash'] = $this->session->flashdata('lesson');
     $data['view_file'] = "deleteconf";
     $this->load->module('templates');
@@ -466,10 +416,10 @@ function get_best_array_key($target_array) {
     $lesson_name = url_title($str);
     $mysql_query = "SELECT * FROM lesson WHERE lesson_name = '$str' AND  lesson_name = '$lesson_name'";
 
-    $update_id = $this->uri->segment(3);
-    if (is_numeric($update_id)) {
+    $lesson_id = $this->uri->segment(3);
+    if (is_numeric($lesson_id)) {
       // this is an update
-      $mysql_query .= "AND id != $update_id";
+      $mysql_query .= "AND id != $lesson_id";
     }
 
     $query = $this->_custom_query($mysql_query);

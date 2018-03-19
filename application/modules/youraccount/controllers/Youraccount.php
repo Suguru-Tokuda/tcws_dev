@@ -69,17 +69,17 @@ class Youraccount extends MX_Controller {
     $submit = $this->input->post('submit', true);
 
     if ($submit == "submit") {
+
       // process the form
-      $this->form_validation->set_rules('userName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_check');
-      $this->form_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
+      $this->form_validation->set_rules('loginUserName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_check');
+      $this->form_validation->set_rules('loginPassword', 'Password', 'required|min_length[7]|max_length[35]');
 
       if ($this->form_validation->run() == true) {
-
         // figure out the user_id
         $col1 = 'userName';
-        $value1 = $this->input->post('userName', true);
+        $value1 = $this->input->post('loginUserName', true);
         $col2 = 'email';
-        $value2 = $this->input->post('userName', true);;
+        $value2 = $this->input->post('loginUserName', true);;
         $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
         foreach ($query->result() as $row) {
           $user_id = $row->id;
