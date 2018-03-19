@@ -8,29 +8,6 @@ class Store_categories extends MX_Controller {
     $this->form_validation->set_ci($this);
   }
 
-  function text() {
-    $users['han'] = 42;
-    $users['luke'] = 32;
-    $users['yoda'] = 900;
-    $users['chewie'] = 200;
-    $users['zabadee'] = 12;
-
-    echo "<h1>Who is the oldeset?</h1>";
-    $oldest_user = $this->get_oldest_user($users);
-    echo $oldest_user;
-  }
-
-  function get_oldest_user($target_array) {
-    foreach ($target_array as $key => $value) {
-      if (!isset($key_with_highest_value)) {
-        $key_with_highest_value = $key;
-      } else if ($value > $target_array[$key_with_highest_value]) {
-        $key_with_highest_value = $key;
-      }
-    }
-    return $key_with_highest_value;
-  }
-
   function _get_cat_id_from_cat_url($cat_url) {
     $query = $this->get_where_custom('cat_url', $cat_url);
     foreach($query->result() as $row) {
@@ -42,14 +19,15 @@ class Store_categories extends MX_Controller {
     return $cat_id;
   }
 
-  function _get_full_cat_url($update_id) {
+  function _get_full_cat_url($cat_id) {
     $this->load->module('site_settings');
     $items_segments = $this->site_settings->_get_items_segments();
-    $data = $this->fetch_data_from_db($update_id);
+    $data = $this->fetch_data_from_db($cat_id);
     $cat_url = $data['cat_url'];
     $full_cat_url = base_url().$items_segments.$cat_url;
     return $full_cat_url;
   }
+
 
   function _get_parent_cat_url($cat_id) {
     $this->load->module('site_settings');
@@ -59,43 +37,43 @@ class Store_categories extends MX_Controller {
     return $parent_cat_url;
   }
 
-  function view($update_id) {
+  function view_items_by_category_id($cat_id) {
     // only those people with an update_id for an item can get in.
-    if (!is_numeric($update_id)) {
+    if (!is_numeric($cat_id)) {
       redirect('site_security/not_allowed');
     }
     $this->load->module('site_settings');
 
     // fetch the category details
-    $data = $this->fetch_data_from_db($update_id);
+    $data = $this->fetch_data_from_db($cat_id);
 
     // count the items that belong to this category
     $use_limit = false;
-    $mysql_query = $this->_generate_mysql_query($update_id, $use_limit);
+    $mysql_query = $this->_generate_mysql_query($cat_id, $use_limit);
     $query = $this->_custom_query($mysql_query);
     $total_items = $query->num_rows();
 
     // fetch the items for this page
     $use_limit = true;
-    $mysql_query = $this->_generate_mysql_query($update_id, $use_limit);
+    $mysql_query = $this->_generate_mysql_query($cat_id, $use_limit);
 
     $pagination_data['template'] = "public_bootstrap";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_items;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_limit();
+    $pagination_data['limit'] = $this->get_pagination_limit();
 
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
-    $showing_statement_data['limit'] = $this->get_limit();
-    $showing_statement_data['offset'] = $this->_get_offset();
+    $showing_statement_data['limit'] = $this->get_pagination_limit();
+    $showing_statement_data['offset'] = $this->_get_pagination_offset();
     $showing_statement_data['total_rows'] = $total_items;
     $data['showing_statement'] = $this->custom_pagination->get_showing_statement($showing_statement_data);
 
     $data['item_segments'] = $this->site_settings->_get_item_segments();
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $this->_custom_query($mysql_query);
-    $data['update_id'] = $update_id;
+    $data['update_id'] = $cat_id;
     $data['flash'] = $this->session->flashdata('item');
     // this module helps to make a friendly URL
     $data['view_module'] = "store_categories";
@@ -129,31 +107,31 @@ class Store_categories extends MX_Controller {
     return $picture_name;
   }
 
-  function _generate_mysql_query($update_id, $use_limit) {
+  function _generate_mysql_query($cat_id, $use_limit) {
     // NOTE: use_limit can be true or false
     $mysql_query = "
     SELECT si.item_title, si.item_url, si.item_price, si.small_pic, si.was_price, sc.cat_url
     FROM store_items si
     JOIN store_cat_assign sca ON sca.item_id = si.id
     JOIN store_categories sc ON sc.id = sca.cat_id
-    WHERE sca.cat_id = $update_id
+    WHERE sca.cat_id = $cat_id
     and si.status = 1
     ";
     if ($use_limit == true) {
-      $limit = $this->get_limit();
-      $offset = $this->_get_offset();
+      $limit = $this->get_pagination_limit();
+      $offset = $this->_get_pagination_offset();
       $mysql_query.= " LIMIT ".$offset.", ".$limit;
     }
     return $mysql_query;
   }
 
   // method for pagination
-  function get_limit() {
+  function get_pagination_limit() {
     $limit = 20;
     return $limit;
   }
 
-  function _get_offset() {
+  function _get_pagination_offset() {
     $offset = $this->uri->segment(4);
     if (!is_numeric($offset)) {
       $offset = 0;
@@ -211,7 +189,7 @@ class Store_categories extends MX_Controller {
     $items_segments = $this->site_settings->_get_items_segments();
     $data['target_url_start'] = base_url().$items_segments;
     $data['parent_categories'] = $parent_categories;
-    $this->load->view('top_nav', $data);
+    $this->load->view('category_top_nav', $data);
   }
 
   function _draw_sortable_list($parent_cat_id) {
@@ -234,8 +212,8 @@ class Store_categories extends MX_Controller {
     return $sub_categories;
   }
 
-  function _get_parent_cat_title($update_id) {
-    $data = $this->fetch_data_from_db($update_id);
+  function _get_parent_cat_title($cat_id) {
+    $data = $this->fetch_data_from_db($cat_id);
     $parent_cat_id = $data['parent_cat_id'];
     $parent_cat_title = $this->_get_cat_title($parent_cat_id);
     return $parent_cat_title;
@@ -311,27 +289,26 @@ class Store_categories extends MX_Controller {
     $this->templates->admin($data);
   }
 
-  function _get_cat_title($update_id) {
-    $data = $this->fetch_data_from_db($update_id);
+  function _get_cat_title($cat_id) {
+    $data = $this->fetch_data_from_db($cat_id);
     $cat_title = $data['cat_title'];
     return $cat_title;
   }
 
-  function _count_sub_cats($update_id) {
+  function _count_sub_cats($cat_id) {
     // return the number of sub categories, belonging to THIS category
-    $query = $this->get_where_custom('parent_cat_id', $update_id);
+    $query = $this->get_where_custom('parent_cat_id', $cat_id);
     $num_rows = $query->num_rows();
     return $num_rows;
   }
 
-  function _get_dropdown_options($update_id) {
+  function _get_dropdown_options($cat_id) {
     // build an array of all the parent categories
-    if (!is_numeric($update_id)) {
-      $update_id = 0;
+    if (!is_numeric($cat_id)) {
+      $cat_id = 0;
     }
     $options[''] = 'Please Select...';
-
-    $mysql_query = "SELECT * FROM store_categories WHERE parent_cat_id = 0 AND id != $update_id";
+    $mysql_query = "SELECT * FROM store_categories WHERE parent_cat_id = 0 AND id != $cat_id";
     $query = $this->_custom_query($mysql_query);
     foreach ($query->result() as $row) {
       $options[$row->id] = $row->cat_title;
@@ -361,7 +338,6 @@ class Store_categories extends MX_Controller {
 
   function parent_cat_url_by_cat_id($cat_id) {
     $mysql_query = "SELECT cat_url FROM store_categories WHERE id = ?";
-
     $query = $this->db->query($mysql_query, array($cat_id));
     $parent_cat_url = "";
     foreach($query->result() as $row) {
@@ -378,12 +354,12 @@ class Store_categories extends MX_Controller {
   }
 
   // get data from database
-  function fetch_data_from_db($update_id) {
-    if (!is_numeric($update_id)) {
+  function fetch_data_from_db($cat_id) {
+    if (!is_numeric($cat_id)) {
       redirect('site_security/not_allowed');
     }
 
-    $query = $this->get_where($update_id);
+    $query = $this->get_where($cat_id);
     foreach($query->result() as $row) {
       $data['cat_title'] = $row->cat_title;
       $data['cat_url'] = $row->cat_url;
@@ -395,8 +371,8 @@ class Store_categories extends MX_Controller {
     return $data;
   }
 
-  function _get_cat_title_by_id($id) {
-    $mysql_query = "SELECT cat_title FROM store_categories WHERE id = $id";
+  function _get_cat_title_by_id($cat_id) {
+    $mysql_query = "SELECT cat_title FROM store_categories WHERE id = $cat_id";
     $query = $this->_custom_query($mysql_query);
     foreach ($query->result() as $row) {
       $cat_title = $row->cat_title;

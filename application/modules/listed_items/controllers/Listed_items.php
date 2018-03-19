@@ -4,6 +4,7 @@ class Listed_items extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->library('form_validation');
+    $this->load->module('custom_pagination');
     $this->load->library('upload');
     $this->load->library('image_lib');
     $this->form_validation->set_ci($this);
@@ -143,7 +144,6 @@ class Listed_items extends MX_Controller {
       $this->site_security->_make_sure_logged_in();
 
       $item_id = $this->store_items->_get_item_id_from_item_url($item_url);
-      // code from store items
 
       // getting submit from the post
       $submit = $this->input->post('submit', true);
@@ -172,7 +172,6 @@ class Listed_items extends MX_Controller {
           $this->load->module('templates');
           $this->templates->public_bootstrap($data);
         } else {
-
           // upload was successful
           $data = array('upload_data' => $this->upload->data());
           $upload_data = $data['upload_data'];

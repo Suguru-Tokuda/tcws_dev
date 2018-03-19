@@ -116,7 +116,7 @@ if (isset($flash)) {
       <hr class="mb-3">
       <div class="d-flex flex-wrap justify-content-between">
         <div class="sp-buttons mt-2 mb-2">
-          <button class="btn btn-primary" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!"><i class="icon-bag"></i> Add to Cart</button>
+          <button class="btn btn-primary" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product"><i class="icon-mail"></i> Contact Seller</button>
         </div>
       </div>
     </div>
