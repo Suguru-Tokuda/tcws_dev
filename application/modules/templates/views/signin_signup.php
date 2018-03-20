@@ -15,7 +15,7 @@ if ($first_bit == "youraccount") {
       <form class="login-box" method="post" action="<?= $signin_form_location ?>">
         <h4 class="margin-bottom-1x"><?= $label ?></h4>
         <div class="form-group input-group">
-          <input class="form-control" type="text" id="userId "name="userId" placeholder="Username or Email" required><span class="input-group-addon"><i class="icon-mail"></i></span>
+          <input class="form-control" type="text" id="userId" name="userId" placeholder="Username or Email" required><span class="input-group-addon"><i class="icon-mail"></i></span>
         </div>
         <div class="form-group input-group">
           <input class="form-control" name="loginPassword" id="loginPassword" type="password" placeholder="Password" required><span class="input-group-addon"><i class="icon-lock"></i></span>

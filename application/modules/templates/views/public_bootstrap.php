@@ -20,6 +20,7 @@
   ?></title>
   <link href="<?php echo base_url(); ?>assets/css/unishop.vendor.min.css" rel="stylesheet">
   <link id="mainStyles" rel="stylesheet" media-"screen" href="<?php echo base_url(); ?>assets/css/unishop.custom.min.css">
+  <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.header.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/modernizr.min.js"></script>
 </head>
 
@@ -106,7 +107,6 @@
           <section class="widget widget-links widget-light-skin">
             <h3 class="widget-title">About Us</h3>
             <ul>
-              <li><a href="<?= base_url()."aboutus" ?>">Company Information</a></li>
               <li><a href="<?= base_url()."contactus" ?>">Contact us</a></li>
               <li><a href="#">Our Team</a></li>
               <li><a href="#">Community</a></li>
@@ -130,7 +130,6 @@
       </div>
       <p class="footer-copyright">© <?= $our_company ?></p>
     </div>
-  </div>
 </footer>
 
 <a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>

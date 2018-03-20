@@ -27,5 +27,8 @@
     "jquery.scrollTo": "^2.1.2",
     "jquery.nicescroll": "^3.7.6",
     "jquery.sparkline": "^2.1.2"
+  },
+  "devDependencies": {
+    "jquery-ui": "^1.12.1"
   }
 }

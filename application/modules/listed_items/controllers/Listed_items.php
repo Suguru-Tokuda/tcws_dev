@@ -152,12 +152,13 @@ class Listed_items extends MX_Controller {
       } else if ($submit == "upload") {
         $config['upload_path'] = './big_pics/';
         $config['allowed_types'] = 'gif|jpg|png';
-        $config['max_size'] = 300;
+        $config['max_size'] = 2048;
         $config['max_width'] = 3036;
         $config['max_height'] = 1902;
         $file_name = $this->site_security->generate_random_string(16);
         $config['file_name'] = $file_name;
         $this->load->library('upload', $config);
+        $this->upload->initialize($config);
 
         if (!$this->upload->do_upload('userfile')) {
           $mysql_query = "SELECT * FROM small_pics WHERE item_id = $item_id";
