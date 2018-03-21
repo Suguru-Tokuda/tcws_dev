@@ -72,7 +72,6 @@ class Youraccount extends MX_Controller {
 
   function submit_login() {
     $submit = $this->input->post('submit', true);
-
     if ($submit == "submit") {
 
       // process the form
