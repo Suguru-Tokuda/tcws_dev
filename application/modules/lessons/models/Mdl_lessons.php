@@ -6,7 +6,7 @@ class Mdl_lessons extends CI_Model {
   }
 
   function get_table() {
-    $table = "lesson";
+    $table = "lessons";
     return $table;
   }
 

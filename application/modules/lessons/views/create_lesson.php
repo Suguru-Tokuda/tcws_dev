@@ -1,5 +1,5 @@
 <?php
-if (is_numeric($item_id)) {
+if (is_numeric($lesson_id)) {
   $lesson_url = $this->uri->segment(3);
   $form_location = base_url().'lessons/create_lesson/'.$lesson_url;
 } else {
@@ -8,9 +8,15 @@ if (is_numeric($item_id)) {
 ?>
 <div class="form-panel">
   <h4 class="mb"><?= $headline ?></h4>
+  <?php
+  if (isset($lesson_url)) {
+   ?>
   <a href="<?= base_url() ?>lessons/upload_image/<?= $lesson_url ?>" ><button type="button" class="btn btn-primary">Manage Images</button></a>
-  <a href="<?= base_url() ?>lessons/deleteconf/<?= $lesson_url ?>" ><button type="button" class="btn btn-danger">Delete Item</button></a>
-  <a href="<?= base_url() ?>lessons/view/<?= $lesson_url?>" ><button type="button" class="btn btn-default">View Item In Shop</button></a>
+  <a href="<?= base_url() ?>lessons/deleteconf/<?= $lesson_url ?>" ><button type="button" class="btn btn-danger">Delete Lesson</button></a>
+  <a href="<?= base_url() ?>lessons/view/<?= $lesson_url?>" ><button type="button" class="btn btn-default">View Lesson In Shop</button></a>
+  <?php
+  }
+   ?>
   <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
     <?php
     echo validation_errors("<p style='color: red;'>", "</p>");
@@ -21,6 +27,14 @@ if (is_numeric($item_id)) {
         <input type="text" class="form-control" name="lesson_name" value="<?= $lesson_name ?>">
       </div>
     </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Lesson Description</label>
+      <div class="col-sm-5">
+        <textarea type="text" class="form-control" name="lesson_description" rows="10" placeholder="Write about the lesson" style="resize: none;"><?= $lesson_description; ?></textarea>
+      </div>
+    </div>
+
 
     <div class="form-group">
       <label class="col-sm-2 control-label">Capacity</label>

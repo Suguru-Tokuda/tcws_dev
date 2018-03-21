@@ -36,10 +36,6 @@ function saveChanges() {
     url: "<?php echo $start_of_target_url.$first_bit; ?>/sort",
     data: $dataString
   });
-  // $.ajax({
-  //   type: "GET",
-  //   url:
-  // });
   return false;
 }
 </script>

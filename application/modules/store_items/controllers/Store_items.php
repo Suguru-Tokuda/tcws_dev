@@ -6,6 +6,7 @@ class Store_items extends MX_Controller {
     // These two lines are needed to display custom validation messages
     $this->load->library('form_validation');
     $this->load->module('custom_pagination');
+    $this->load->library('image_lib');
     $this->form_validation->set_ci($this);
   }
 
@@ -325,12 +326,10 @@ class Store_items extends MX_Controller {
     $config['image_library'] = 'gd2';
     $config['source_image'] = './big_pics/'.$file_name;
     $config['new_image'] = './small_pics/'.$file_name;
-    // $config['craete_thumb'] = true;
     $config['maintain_ratio'] = true;
     $config['width'] = 200;
     $config['height'] = 200;
-
-    $this->load->library('image_lib', $config);
+    $this->image_lib->initialize($config);
     $this->image_lib->resize();
   }
 
@@ -375,7 +374,7 @@ class Store_items extends MX_Controller {
     } else if ($submit == "upload") {
       $config['upload_path'] = './big_pics/';
       $config['allowed_types'] = 'gif|jpg|png';
-      $config['max_size'] = 300;
+      $config['max_size'] = 2048;
       $config['max_width'] = 3036;
       $config['max_height'] = 1902;
       $file_name = $this->site_security->generate_random_string(16);
@@ -611,9 +610,9 @@ class Store_items extends MX_Controller {
     $item_id = $this->uri->segment(3);
     $submit = $this->input->post('submit', true);
 
-    if ($submit == "Cancel") {
+    if ($submit == "cancel") {
       redirect('store_items/manage');
-    } else if ($submit == "Submit") {
+    } else if ($submit == "submit") {
       // process the form
       $this->load->library('form_validation');
       $this->form_validation->set_rules('item_title', 'Item Title', 'required|max_length[240]|callback_item_check'); // callback is for checking if the item already exists
@@ -685,7 +684,7 @@ class Store_items extends MX_Controller {
       }
     }
 
-    if ((is_numeric($item_id)) && ($submit != "Submit")) {
+    if ((is_numeric($item_id)) && ($submit != "submit")) {
       $data = $this->fetch_data_from_db($item_id);
     } else {
       $data = $this->fetch_data_from_post();
