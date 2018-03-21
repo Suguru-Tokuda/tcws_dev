@@ -77,6 +77,12 @@
                              </a>
                          </li>
                          <li class="sub-menu">
+                             <a href="<?= base_url() ?>lessons/manage_lessons">
+                                 <i class="fa fa-anchor"></i>
+                                 <span>Manage Lessons</span>
+                             </a>
+                         </li>
+                         <li class="sub-menu">
                             <a href="<?= base_url() ?>store_categories/manage">
                                  <i class="fa fa-dashboard"></i>
                                  <span>Manage Categories</span>

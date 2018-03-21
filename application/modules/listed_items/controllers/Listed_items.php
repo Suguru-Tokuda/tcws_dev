@@ -79,7 +79,7 @@ class Listed_items extends MX_Controller {
 
       $data['item_segments'] = $this->site_settings->_get_item_segments();
       $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
-      $data['query'] = $this->_custom_query($mysql_query);
+      $data['query'] = $query;
       $data['flash'] = $this->session->flashdata('item');
       $data['view_file'] = "manage";
       $this->load->module('templates');
@@ -177,9 +177,7 @@ class Listed_items extends MX_Controller {
           $data = array('upload_data' => $this->upload->data());
           $upload_data = $data['upload_data'];
 
-          $file_ext = $upload_data['file_ext'];
-          $file_name = $file_name.$file_ext;
-          // $file_name = $upload_data['file_name'];
+          $file_name = $upload_data['file_name'];
           $this->_generate_thumbnail($file_name);
 
           //update the database
@@ -271,16 +269,13 @@ class Listed_items extends MX_Controller {
     }
 
     function _generate_thumbnail($file_name) {
-
       $config['image_library'] = 'gd2';
       $config['source_image'] = './big_pics/'.$file_name;
       $config['new_image'] = './small_pics/'.$file_name;
-      // $config['create_thumb'] = true;
       $config['maintain_ratio'] = true;
       $config['width'] = 200;
       $config['height'] = 200;
-
-      $this->load->library('image_lib', $config);
+      $this->image_lib->initialize($config);
       $this->image_lib->resize();
     }
 

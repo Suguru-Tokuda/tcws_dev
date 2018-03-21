@@ -58,8 +58,8 @@ gulp.task('compress-unishiop-custom-css', function() {
 gulp.task('compress-unishop-custom-js', function() {
   var stream = gulp.src(paths.unishopCustomJSSource)
   .pipe(order([
-    scripts.min.js,
-    customScripts.js
+    "scripts.min.js",
+    "customScripts.js"
   ]))
   .pipe(concat('unishop.custom.min.js'))
   .pipe(gulp.dest(paths.jsDest));
