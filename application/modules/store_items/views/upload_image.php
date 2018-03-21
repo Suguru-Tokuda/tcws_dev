@@ -25,15 +25,10 @@ img#blankImg {
 </style>
 
 <h1><?= $headline ?></h1>
-<div class="row-fluid sortable">
-  <div class="box span12">
-    <div class="box-header" data-original-title>
-      <h2><i class="halflings-icon white tag"></i><span class="break"></span>Upload Image</h2>
-      <div class="box-icon">
-        <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-        <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
-      </div>
-    </div>
+<div class="row mt">
+  <div class="col-lg-12">
+    <div class="form-panel">
+      <h4 class="mb"><i class="fa fas fa-tag"></i> Upload Image</h4>
 
     <div class="box-content">
       <?php
@@ -59,9 +54,12 @@ img#blankImg {
         </div>
         <?php echo form_open_multipart('store_items/do_upload/'.$update_id);?>
         <div class="form-group">
-          <label for="input">Image</label>
+          <label class="col-sm-2 col-sm-2 control-label" for="input">Image </label>
           <!-- <div class="uploadBtn"> -->
-          <input type="file" name="userfile" id="file">
+        
+          <input type="file" name="pic">
+        </div>
+        <!--  <input type="file" name="userfile" id="file">-->
           <!-- </div> -->
         </div>
         <div class="form-actions">

@@ -6,32 +6,23 @@ if (isset($flash)) {
   echo $flash;
 }
 ?>
-
-<div class="row-fluid sortable">
-  <div class="box span12">
-    <div class="box-header" data-original-title>
-      <h2><i class="halflings-icon white edit"></i><span class="break"></span>Message Details</h2>
-      <div class="box-icon">
-        <!-- <a href="#" class="btn-setting"><i class="halflings-icon white wrench"></i></a> -->
-        <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-        <!-- <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a> -->
-      </div>
-    </div>
-    <div class="box-content">
-
-      <?php
-      $form_location = base_url()."enquiries/create/".$update_id;
-      ?>
-      <form class="form-horizontal" method="post" action="<?= $form_location ?>">
-        <fieldset>
+<div class="row mt">
+  <div class="col-lg-12">
+      <div class="form-panel">
+          <h4 class="mb"><i class="fa fas fa-edit"></i> Message Details</h4>
           <?php
-          if (!isset($sent_by)) {
-            ?>
-            <div class="control-group">
-              <label class="control-label" for="typeahead">Recipient </label>
-              <div class="controls">
+          $form_location = base_url()."enquiries/create/".$update_id;
+          ?>
+          <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
+            <fieldset>
+              <?php
+              if (!isset($sent_by)) {
+                ?>
+            <div class="form-group">
+              <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Recipient</label>
+              <div class="col-sm-10">
                 <?php
-                $additional_dd_code = 'class="form-control span4"';
+                $additional_dd_code = 'class="form-control "';
                 echo form_dropdown('sent_to', $options, $sent_to, $additional_dd_code);
                 ?>
               </div>
@@ -39,36 +30,34 @@ if (isset($flash)) {
             <?php
           }
           ?>
-
-
-          <div class="control-group">
-            <label class="control-label" for="typeahead">Subject </label>
-            <div class="controls">
-              <input class="span6" type="text" name="subject" value="<?= $subject ?>">
-            </div>
+          <div class="form-group">
+              <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Subject</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="subject" value="<?= $subject ?>">
+              </div>
           </div>
-
-          <div class="control-group hidden_phone">
-            <label class="control-label" for="textarea3">Message</label>
-            <div class="controls">
-              <textarea class="cleditor" id="textarea3" rows="3" name="message"><?php
-              echo $message;
-              ?></textarea>
-            </div>
+          <div class="form-group">
+              <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Message</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" id="textarea3" rows="4" name="message"><?php
+                echo $message;
+                ?></textarea>
+              </div>
           </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary" name="submit" value="submit">Submit</button>
-            <button type="submit" class="btn" name="submit" value="cancel">Cancel</button>
-          </div>
-        </fieldset>
-        <?php
-        if (isset($sent_by)) {
-          echo form_hidden('sent_to', $sent_by);
-        }
-         ?>
-      </form>
+          <div class="form-group">
+            <label class="col-sm-2 col-sm-2 control-label"></label>
+              <div class="col-sm-10">
+                <button type="submit" class="btn btn-default" name="submit" value="submit">Submit</button>
+                <button type="submit" class="btn btn-primary" name="submit" value="cancel">Cancel</button>
+              </div>
+            </fieldset>
+            <?php
+            if (isset($sent_by)) {
+              echo form_hidden('sent_to', $sent_by);
+            }
+             ?>
+          </form>
+        </div>
+      </div>
     </div>
-  </div><!--/span-->
-
-</div><!--/row-->
+</div>
