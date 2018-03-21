@@ -8,17 +8,11 @@
   ?><p style="margin-top: 30px;">
     <a href="<?= $create_blog_url ?>"><button class="btn btn-primary" type="submit">Create New Blog Entry</button></a>
 
-    <div class="row-fluid sortable">
-      <div class="box span12">
-        <div class="box-header" data-original-title>
-          <h2><i class="halflings-icon white file"></i><span class="break"></span>Custom Blog</h2>
-          <div class="box-icon">
-            <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-            <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
-          </div>
-        </div>
-        <div class="box-content">
-          <table class="table table-striped table-bordered bootstrap-datatable datatable">
+    <div class="row mt">
+      <div class="col-lg-12">
+          <div class="form-panel">
+              <h4 class="mb"><i class="fa fas fa-file"></i> Custom Blog</h4>
+              <table class="table table-bordered table-striped table-condensed">
             <thead>
               <tr>
                 <th>Picture</th>
@@ -49,10 +43,10 @@
                   <td class="center"><?= $row->blog_title ?></td>
                   <td class="center">
                     <a class="btn btn-success" href="<?= $view_blog_url ?>">
-                      <i class="halflings-icon white zoom-in"></i>
+                      <i class="fa fas fa-search"></i>
                     </a>
                     <a class="btn btn-info" href="<?= $edit_blog_url ?>">
-                      <i class="halflings-icon white edit"></i>
+                      <i class="fa fas fa-edit"></i>
                     </a>
                   </td>
                 </tr>

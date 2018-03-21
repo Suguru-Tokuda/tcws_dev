@@ -7,72 +7,66 @@ if (isset($flash)) {
 }
 ?>
 
-<div class="row-fluid sortable">
-  <div class="box span12">
-    <div class="box-header" data-original-title>
-      <h2><i class="halflings-icon white edit"></i><span class="break"></span>Blog Entry Details</h2>
-      <div class="box-icon">
-        <!-- <a href="#" class="btn-setting"><i class="halflings-icon white wrench"></i></a> -->
-        <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-        <!-- <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a> -->
-      </div>
-    </div>
-    <div class="box-content">
-
+<div class="row mt">
+  <div class="col-lg-12">
+      <div class="form-panel">
+      <h4 class="mb"><i class="fa fas fa-edit"></i>Blog Entry Details</h4>
       <?php
       $form_location = base_url()."blog/create/".$update_id;
       ?>
       <form class="form-horizontal" method="post" action="<?= $form_location ?>">
         <fieldset>
-          <div class="control-group">
-            <label class="control-label" for="typeahead">Date published </label>
-            <div class="controls">
-              <input type="text" class="input-xlarge datepicker" name="date_published" value="<?= $date_published ?>" >
+          <div class="form-group">
+            <label class=" col-sm-2 col-sm-2 control-label" for="typeahead">Date published</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control has-toolbar fc" name="date_published" value="<?= $date_published ?>" >
             </div>
           </div>
 
-          <div class="control-group">
-            <label class="control-label" for="typeahead">Blog Entry Title </label>
-            <div class="controls">
-              <input type="text" class="span6 typeahead" name="blog_title" value="<?= $blog_title ?>">
+          <div class="form-group">
+            <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Blog Entry Title </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="blog_title" value="<?= $blog_title ?>">
             </div>
           </div>
 
-          <div class="control-group hidden_phone">
-            <label class="control-label" for="textarea">Blog Entry Keywords </label>
-            <div class="controls">
-              <textarea rows="3" class="span6" name="blog_keywords"><?php
+          <div class="form-group hidden_phone">
+            <label class="col-sm-2 col-sm-2 control-label" for="textarea">Blog Entry Keywords </label>
+            <div class="col-sm-10">
+              <textarea rows="3" class="form-control" name="blog_keywords"><?php
               echo $blog_keywords;
               ?></textarea>
             </div>
           </div>
 
-          <div class="control-group hidden_phone">
-            <label class="control-label" for="textarea2">Blog Entry Description</label>
-            <div class="controls">
-              <textarea class="span6" id="textarea2" rows="3" name="blog_description"><?php
+          <div class="form-group hidden_phone">
+            <label class="col-sm-2 col-sm-2 control-label" for="textarea2">Blog Entry Description</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="textarea2" rows="3" name="blog_description"><?php
               echo $blog_description;
               ?></textarea>
             </div>
           </div>
 
-          <div class="control-group hidden_phone">
-            <label class="control-label" for="textarea3">Blog Entry Content</label>
-            <div class="controls">
-              <textarea class="cleditor" id="textarea3" rows="3" name="blog_content"><?php
+          <div class="form-group hidden_phone">
+            <label class="col-sm-2 col-sm-2 control-label" for="textarea3">Blog Entry Content</label>
+            <div class="col-sm-10">
+              <textarea class="form-control cleditor" id="textarea3" rows="3" name="blog_content"><?php
               echo $blog_content;
               ?></textarea>
             </div>
           </div>
 
-          <div class="control-group">
-            <label class="control-label" for="typeahead">Author </label>
-            <div class="controls">
-              <input type="text" class="span6 typeahead" name="author" value="<?= $author ?>">
+          <div class="form-group hidden_phone">
+            <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Author </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control typeahead" name="author" value="<?= $author ?>">
             </div>
           </div>
 
-          <div class="form-actions">
+          <div class="form-group">
+            <label class="col-sm-2 col-sm-2 control-label"></label>
+              <div class="col-sm-10">
             <button type="submit" class="btn btn-primary" name="submit" value="Submit">Submit</button>
             <button type="submit" class="btn" name="submit" value="Cancel">Cancel</button>
           </div>
@@ -85,15 +79,11 @@ if (isset($flash)) {
 <?php
 // This section appears only there is an update_id
 if (is_numeric($update_id)) { ?>
-  <div class="row-fluid sortable">
-    <div class="box span12">
-      <div class="box-header" data-original-title>
-        <h2><i class="halflings-icon white edit"></i><span class="break"></span>Blog Options</h2>
-        <div class="box-icon">
-          <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-        </div>
-      </div>
-      <div class="box-content">
+  <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+          <h4 class="mb"><i class="fa fas fa-edit"></i>Blog Options </h4>
+
         <?php
         // Check if the item has an image. Upload image icon appears only there is NO image.
         if ($picture == "") {
@@ -120,17 +110,18 @@ if (is_numeric($update_id)) { ?>
 }
 if ($picture != "") {
   ?>
-  <div class="row-fluid sortable">
-    <div class="box span12">
-      <div class="box-header" data-original-title>
-        <h2><i class="halflings-icon white edit"></i><span class="break"></span>Blog Image</h2>
-        <div class="box-icon">
-          <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-        </div>
-      </div>
-      <div class="box-content">
-        <img src="<?= base_url() ?>blog_pics/<?= $picture ?>">
-      </div>
+  <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+          <h4 class="mb"><i class="fa fas fa-edit"></i>Blog Image </h4>
+          <form class="form-horizontal">
+              <div class="form-group">
+                <div class="col-sm-10">
+                  <img class="col-md-6" src="<?= base_url() ?>blog_pics/<?= $picture ?>">
+                </div>
+                </div>
+              </form>
+              </div>
     </div><!--/span-->
   </div><!--/row-->
   <?php
