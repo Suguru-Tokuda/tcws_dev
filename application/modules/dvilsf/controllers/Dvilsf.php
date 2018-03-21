@@ -15,14 +15,13 @@ class Dvilsf extends MX_Controller {
   }
 
   function submit_login() {
-
     $submit = $this->input->post('submit', true);
 
     if ($submit == "submit") {
       // process the form
       $this->load->library('form_validation');
-      $this->form_validation->set_rules('userName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_check');
-      $this->form_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
+      $this->form_validation->set_rules('userId', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_check');
+      $this->form_validation->set_rules('loginPassword', 'Password', 'required|min_length[7]|max_length[35]');
 
       if ($this->form_validation->run() == true) {
         $this->_in_you_go();
@@ -47,7 +46,7 @@ class Dvilsf extends MX_Controller {
   function userName_check($str) {
     $this->load->module('site_security');
     $error_msg = "You did not enter a correct username and/or password.";
-    $password = $this->input->post('password', true);
+    $password = $this->input->post('loginPassword', true);
 
     $result = $this->site_security->_check_admin_login_details($str, $password);
 

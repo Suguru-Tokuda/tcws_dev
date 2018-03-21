@@ -23,7 +23,7 @@ img#blankImg {
   max-width: 20%;
 }
 </style>
-
+<div class="container">
 <h1><?= $headline ?></h1>
 <div class="row mt">
   <div class="col-lg-12">
@@ -46,7 +46,7 @@ img#blankImg {
       }
       ?>
       <?php
-      if ($num_rows < 10) { // shows if the item has only less than 10 pictures
+      if ($num_rows < 5) { // shows if the item has only less than 10 pictures
         ?>
         <div class="imageUploadedOrNot">
           <h3>Here's the display of your image: </h3>
@@ -80,12 +80,11 @@ img#blankImg {
   <?php
 }
 ?>
-
 <?php
 if ($num_rows > 0) {
   ?>
   <h4>Uploaded Pictures</h4>
-  <p><?= $num_rows ?> pictures for the item (max 10 pictures) - <strong>You can drag and change the oder</strong></p>
+  <p><?= $num_rows ?> pictures for the item (max 5 pictures) - <strong>You can drag and change the oder</strong></p>
   <!-- pictures -->
   <ul id="sortlist" class="list-group" style="margin-top: 30px; list-style: none;">
     <?php
@@ -110,19 +109,3 @@ if ($num_rows > 0) {
 }
 ?>
 </div>
-</div>
-</div>
-
-
-<script>
-$(function() {
-  $("#file").change(function() {
-    var reader = new FileReader();
-    reader.onload = function(image) {
-      $('.imageUploadedOrNot').show(0);
-      $('#blankImg').attr('src', image.target.result);
-    }
-    reader.readAsDataURL(this.files[0]); // this refers to $('#file')
-  });
-});
-</script>

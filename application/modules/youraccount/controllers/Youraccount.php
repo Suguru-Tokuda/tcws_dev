@@ -57,29 +57,33 @@ class Youraccount extends MX_Controller {
 
   // login function
   function login() {
-    $data['userName'] = $this->input->post('userName', true);
-    $data['email'] = $this->input->post('email', true);
-    $data['password'] = $this->input->post('password', true);
-    $data['confirmPassword'] = $this->input->post('confirmPassword', true);
+    //Login params
+    $data['userId'] = $this->input->post('userId', true);
+    $data['loginPassword'] = $this->input->post('loginPassword', true);
+    //Sign up params
+    $data['signupUserName'] = $this->input->post('signupUserName', true);
+    $data['signUpEmail'] = $this->input->post('signUpEmail', true);
+    $data['signUpPassword'] = $this->input->post('signUpPassword', true);
+    $data['signUpconfirmPassword'] = $this->input->post('signUpconfirmPassword', true);
+
     $this->load->module('templates');
     $this->templates->login($data);
   }
 
   function submit_login() {
     $submit = $this->input->post('submit', true);
-
     if ($submit == "submit") {
 
       // process the form
-      $this->form_validation->set_rules('loginUserName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_check');
-      $this->form_validation->set_rules('loginPassword', 'Password', 'required|min_length[7]|max_length[35]');
+      $this->form_validation->set_rules('userId', 'User Id', 'required|min_length[5]|max_length[60]|callback_userName_check');
+      $this->form_validation->set_rules('loginPassword', 'password', 'required|min_length[7]|max_length[35]');
 
       if ($this->form_validation->run() == true) {
         // figure out the user_id
         $col1 = 'userName';
-        $value1 = $this->input->post('loginUserName', true);
+        $value1 = $this->input->post('userId', true);
         $col2 = 'email';
-        $value2 = $this->input->post('loginUserName', true);;
+        $value2 = $this->input->post('userId', true);;
         $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
         foreach ($query->result() as $row) {
           $user_id = $row->id;
@@ -164,10 +168,12 @@ class Youraccount extends MX_Controller {
   }
 
   function fetch_data_from_post() {
-    $data['userName'] = $this->input->post('userName', true);
-    $data['email'] = $this->input->post('email', true);
-    $data['password'] = $this->input->post('password', true);
-    $data['confirmPassword'] = $this->input->post('confirmPassword', true);
+    $data['userId'] = $this->input->post('userId', true);
+    $data['loginPassword'] = $this->input->post('loginPassword', true);
+    $data['signupUserName'] = $this->input->post('signupUserName', true);
+    $data['signUpEmail'] = $this->input->post('signUpEmail', true);
+    $data['signUpPassword'] = $this->input->post('signUpPassword', true);
+    $data['signUpconfirmPassword'] = $this->input->post('signUpconfirmPassword', true);
     return $data;
   }
 
@@ -218,7 +224,7 @@ class Youraccount extends MX_Controller {
       $password_on_table = $row->password;
     }
 
-    $password = $this->input->post('password', true);
+    $password = $this->input->post('loginPassword', true);
     $result = $this->site_security->_verify_hash($password, $password_on_table);
 
     if ($result == true) {

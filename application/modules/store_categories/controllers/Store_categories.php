@@ -26,6 +26,7 @@ class Store_categories extends MX_Controller {
     $cat_url = $data['cat_url'];
     $full_cat_url = base_url().$items_segments.$cat_url;
     return $full_cat_url;
+  }
 
 
   function _get_parent_cat_url($cat_id) {

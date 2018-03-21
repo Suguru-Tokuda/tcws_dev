@@ -15,10 +15,10 @@ if ($first_bit == "youraccount") {
       <form class="login-box" method="post" action="<?= $signin_form_location ?>">
         <h4 class="margin-bottom-1x"><?= $label ?></h4>
         <div class="form-group input-group">
-          <input class="form-control" type="text" id="inputEmail "name="loginUserName" placeholder="Username or Email" required><span class="input-group-addon"><i class="icon-mail"></i></span>
+          <input class="form-control" type="text" id="userId" name="userId" placeholder="Username or Email" required><span class="input-group-addon"><i class="icon-mail"></i></span>
         </div>
         <div class="form-group input-group">
-          <input class="form-control" name="loginPassword" id="inputPassword" type="password" placeholder="Password" required><span class="input-group-addon"><i class="icon-lock"></i></span>
+          <input class="form-control" name="loginPassword" id="loginPassword" type="password" placeholder="Password" required><span class="input-group-addon"><i class="icon-lock"></i></span>
         </div>
         <div class="d-flex flex-wrap justify-content-between padding-bottom-1x">
           <div class="custom-control custom-checkbox">
@@ -48,25 +48,25 @@ if ($first_bit == "youraccount") {
           <div class="col-sm-6">
             <div class="form-group">
               <label for="reg-email">Username</label>
-              <input class="form-control" name="userName" value="<?= $userName ?>" type="text" id="reg-email" required>
+              <input class="form-control" name="signupUserName" value="<?= $signupUserName ?>" type="text" id="reg-email" required>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label for="reg-email">E-mail Address</label>
-              <input class="form-control" name="email" value="<?= $email ?>" type="email" id="reg-email" required>
+              <input class="form-control" name="signUpEmail" value="<?= $signUpEmail ?>" type="email" id="reg-email" required>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label for="reg-pass">Password</label>
-              <input class="form-control" name="password" value="<?= $password ?>" type="password" id="reg-pass" required>
+              <input class="form-control" name="signUpPassword" value="<?= $signUpPassword ?>" type="password" id="reg-pass" required>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label for="reg-pass-confirm">Confirm Password</label>
-              <input class="form-control" name="confirmPassword" value="<?= $confirmPassword ?>" type="password" id="reg-pass-confirm" required>
+              <input class="form-control" name="signUpconfirmPassword" value="<?= $signUpconfirmPassword ?>" type="password" id="reg-pass-confirm" required>
             </div>
           </div>
           <div class="col-12 text-center text-sm-right">

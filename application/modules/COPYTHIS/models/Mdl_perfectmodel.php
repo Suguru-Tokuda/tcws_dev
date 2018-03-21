@@ -10,7 +10,7 @@ class Mdl_perfectmodel extends CI_Model {
     return $table;
   }
 
-  function get($order_by){
+  function get($order_by) {
     $table = $this->get_table();
     $this->db->order_by($order_by);
     $query=$this->db->get($table);
@@ -25,7 +25,7 @@ class Mdl_perfectmodel extends CI_Model {
     return $query;
   }
 
-  function get_where($id){
+  function get_where($id) {
     $table = $this->get_table();
     $this->db->where('id', $id);
     $query=$this->db->get($table);
@@ -39,18 +39,18 @@ class Mdl_perfectmodel extends CI_Model {
     return $query;
   }
 
-  function _insert($data){
+  function _insert($data) {
     $table = $this->get_table();
     $this->db->insert($table, $data);
   }
 
-  function _update($id, $data){
+  function _update($id, $data) {
     $table = $this->get_table();
     $this->db->where('id', $id);
     $this->db->update($table, $data);
   }
 
-  function _delete($id){
+  function _delete($id) {
     $table = $this->get_table();
     $this->db->where('id', $id);
     $this->db->delete($table);

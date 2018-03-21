@@ -128,8 +128,8 @@ if (is_numeric($update_id)) { ?>
             </div>
 
             <div class="form-actions">
-              <button type="submit" class="btn btn-primary" name="submit" value="Submit">Submit</button>
-              <button type="submit" class="btn" name="submit" value="Cancel">Cancel</button>
+              <button type="submit" class="btn btn-primary" name="submit" value="submit">Submit</button>
+              <button type="submit" class="btn" name="submit" value="cancel">Cancel</button>
             </div>
           </fieldset>
         </form>

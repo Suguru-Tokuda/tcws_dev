@@ -9,36 +9,143 @@ class Lessons extends MX_Controller {
     $this->form_validation->set_ci($this);
   }
 
-  function view_all_lessons() {
+  function manage_lessons() {
     $this->load->module('site_security');
     $this->load->module('site_settings');
+    $this->site_security->_make_sure_is_admin();
 
-    $mysqlQuery = "SELECT l.id, l.lesson_name, l.date, l.price, l.capacity from lesson l LEFT JOIN lesson_picture lp ON l.id = lp.lesson_id";
-
-    $lessonsQuery = $this->_custom_query($mysqlQuery);
-    $total_lessons = $lessonsQuery->num_rows();
+    $query = $this->get("lesson_name");
+    $total_lessons = $query->num_rows();
 
     $pagination_data['template'] = "public_bootstrap";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_lessons;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_limit();
+    $pagination_data['limit'] = $this->get_pagination_limit();
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
-    $showing_statement_data['limit'] = $this->get_limit();
-    $showing_statement_data['offset'] = $this->_get_offset();
-    $showing_statement_data['total_rows'] = $total_lessons;
-    $data['showing_statement'] = $this->custom_pagination->get_showing_statement($showing_statement_data);
-
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
-    $data['view_module'] = "lessons";
-    $data['view_file'] = "lessons_view";
-    $data['query'] = $lessonsQuery;
+    $data['query'] = $query;
+    $data['view_file'] = "manage_lessons";
     $this->load->module('templates');
-    $this->templates->public_bootstrap($data);
+    $this->templates->admin($data);
   }
 
-  // method for pagination
+  // need to pass $lesson_id or decide if it wants to take the lesson_url
+  function create_lesson() {
+    $this->load->module('site_security');
+    $this->load->module('site_settings');
+    $this->load->library('session');
+    $this->site_security->_make_sure_is_admin();
+
+    $submit = $this->input->post('submit', true);
+
+    $lesson_url = $this->uri->segment(3);
+    if (isset($lesson_url)) {
+      $lesson_id = $this->_get_lesson_id_from_lesson_url($lesosn_url);
+    } else {
+      $lesson_id = "";
+    }
+
+    if ($submit == "cancel") {
+      redirect('lessons/manage_lessons');
+    } else if ($submit == "submit") {
+      $status = $this->input->post('status', true);
+      $this->form_validation->set_rules('lesson_name', 'Lesson Name', 'required|max_length[240]');
+      $this->form_validation->set_rules('lesson_description', 'Lesson Description', 'required|max_length[240]');
+      $this->form_validation->set_rules('lesson_capacity', 'Lesson Capacity', 'required|numeric');
+      $this->form_validation->set_rules('lesson_fee', 'Lesson Fee', 'required|numeric');
+      $this->form_validation->set_rules('address', 'Address', 'required|max_length[240]');
+      $this->form_validation->set_rules('city', 'City', 'required|max_length[240]');
+      $this->form_validation->set_rules('state', 'State', 'required');
+      if (isset($lesson_id)) {
+        $this->form_validation->set_rules('status', 'Status', 'required');
+      }
+
+      if ($this->form_validation->run()) {
+        $data = $this->fetch_data_from_post();
+        if (is_numeric($lesson_id)) {
+          // update
+          $this->_update($lesson_id, $data);
+          $flash_msg = "The lesson details were successfully updatd.";
+          $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+          $this->session->set_flashdata('item', $value);
+          redirect('lessons/create_lesson'.$lesson_url); // sending back to create_lesson page
+        } else {
+          // inseting to DB
+          $code = $this->site_security->generate_random_string(6);
+          $lesson_url = url_title($data['lesson_name']).$code;
+          $data['lesson_url'] = $lesson_url;
+          $data['status'] = 1; // 1: active, 0: inactive
+          $data['date_made'] = time();
+          $this->_insert($data);
+          $flash_msg = "The Lesson was successfully added.";
+          $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
+          $this->session->set_flashdata('item', $value);
+          redirect('lessons/manage_lessons');
+        }
+      }
+    }
+
+    if ((is_numeric($lesson_id)) && ($submit != "submit")) {
+      $data = $this->fetch_data_from_db($lesson_id);
+    } else {
+      $data = $this->fetch_data_from_post();
+    }
+
+    if (!is_numeric($lesson_id)) {
+      $data['headline'] = "Add New Lesson";
+      $lesson_id = "";
+    } else {
+      $data['headline'] = "Update Lesson Details";
+    }
+
+    $data['lesson_id'] = $lesson_id;
+    $data['flash'] = $this->session->flashdata('item');
+
+    $data['states'] = $this->site_settings->_get_states_dropdown();
+    $data['view_file'] = "create_lesson";
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function fetch_data_from_post() {
+    $data['lesson_name'] = $this->input->post('lesson_name', true);
+    $data['lesson_description'] = $this->input->post('lesson_description', true);
+    $data['lesson_capacity'] = $this->input->post('lesson_capacity', true);
+    $data['lesson_fee'] = $this->input->post('lesson_fee', true);
+    $data['address'] = $this->input->post('address', true);
+    $data['city'] = $this->input->post('city', true);
+    $this->load->module('site_settings');
+    $states = $this->site_settings->_get_states_dropdown();
+    $state_index = $this->input->post('state', true);
+    $data['state'] = $states[$state_index];
+    return $data;
+  }
+
+  function fetch_data_from_db($lesson_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($lesson_id)) {
+      redirect(base_url());
+    }
+  }
+
+  // beginning of pagination methods
+  function get_pagination_limit() {
+    $limit = 20;
+    return $limit;
+  }
+
+  function _get_pagination_offset() {
+    $offset = $this->uri->segment(4);
+    if (!is_numeric($offset)) {
+      $offset = 0;
+    }
+    return $offset;
+  }
+
   function get_target_pagination_base_url() {
     $first_bit = $this->uri->segment(1);
     $second_bit = $this->uri->segment(2);
@@ -46,287 +153,9 @@ class Lessons extends MX_Controller {
     $target_base_url = base_url().$first_bit."/".$second_bit."/".$third_bit;
     return $target_base_url;
   }
+  // end of pagination methods
 
-  function get_limit() {
-    $limit = 20;
-    return $limit;
-  }
-
-  function _get_offset() {
-    $offset = $this->uri->segment(4);
-    if (!is_numeric($offset)) {
-      $offset = 0;
-    }
-    return $offset;
-  }
-  // method for pagination
-
-  function _get_lesson_id_from_lesson_name($lesson_name) {
-    $query = $this->get_where_custom('lesson_id', $lesson_name);
-    foreach($query->result() as $row) {
-      $lesson_id = $row->id;
-    }
-    if (!isset($lesson_id)) {
-      $lesson_id = 0;
-    }
-    return $lesson_id;
-  }
-
-  function _get_picture_name_by_lesson_name($lesson_name) {
-    $mysql_query = "
-    SELECT lp.picture_name AS picture_name FROM lesson_picture lp
-    JOIN lesson l ON lp.lesson_id = l.id
-    WHERE l.lesson_name = '$lesson_name'
-    LIMIT 1
-    ";
-    $query = $this->_custom_query($mysql_query);
-    foreach($query->result() as $row) {
-      $picture_name = $row->picture_name;
-    }
-    if (!isset($picture_name)) {
-      $picture_name = "";
-    }
-    return $picture_name;
-  }
-
-  function get_lesson_name_by_id($lesson_id) {
-    $query = $this->get_where_custom('id', $lesson_id);
-    foreach($query->result() as $row) {
-      $lesson_name = $row->lesson_name;
-    }
-    if (!isset($lesson_name)) {
-      $lesson_name = "";
-    }
-    return $lesson_name;
-  }
-
-  function _get_all_lessons_for_dropdown() {
-    // note: this gets used on store_cat_assign
-    $mysql_query = "SELECT * FROM lesson ORDER BY lesson_name";
-    $query = $this->_custom_query($mysql_query);
-    foreach($query->result() as $row) {
-      $lessons[$row->id] = $row->lesson_name;
-    }
-    if (!isset($lessons)) {
-      $lessons = "";
-    }
-    return $lessons;
-  }
-
-  function view($lesson_id) {
-    $this->load->module('timedate');
-
-    if (!is_numeric($lesson_id)) {
-      redirect('site_security/not_allowed');
-    }
-    // fetch the lesson details
-    $data = $this->fetch_data_from_db($lesson_id);
-    $data['date_made'] = $this->timedate->get_date($data['date_made'], 'datepicker_us');
-    $data['update_id'] = $lesson_id;
-    $data['pics_query'] = $this->_get_pics_by_update_id($lesson_id);
-
-    // build the breadcrumbs data array
-    $breadcrumbs_data['template'] = "public_bootstrap";
-    $breadcrumbs_data['current_page_title'] = $data['lesson_name'];
-    $breadcrumbs_data['breadcrumbs_array'] = $this->_generate_breadcrumbs_array($lesson_id);
-    $data['breadcrumbs_data'] = $breadcrumbs_data;
-
-    $data['flash'] = $this->session->flashdata('lesson');
-    $this->load->module('site_settings');
-    $currency_symbol = $this->site_settings->_get_currency_symbol();
-    $data['price'] = $currency_symbol.number_format($data['price'], 2);
-    // this module helps to make a friendly URL
-    $data['view_module'] = "lessons";
-    $data['view_file'] = "view";
-    $this->load->module('templates');
-    $this->templates->public_bootstrap($data);
-  }
-
-  function _get_pics_by_update_id($lesson_id) {
-    $mysql_query = "
-    SELECT @counter := @counter + 1 as row_number, picture_name
-    FROM lesson_picture WHERE lesson_id = ?
-    ";
-
-    $query = $this->db->query($mysql_query, array($lesson_id));
-    return $query;
-  }
-
-function get_best_array_key($target_array) {
-    foreach ($target_array as $key => $value) {
-      if (!isset($key_with_highest_value)) {
-        $key_with_highest_value = $key;
-      } else if ($value > $target_array[$key_with_highest_value]) {
-        $key_with_highest_value = $key;
-      }
-    }
-    return $key_with_highest_value;
-  }
-
-  // '_' means private
-  function _genrate_thumbnail($file_name) {
-    $config['image_library'] = 'gd2';
-    $config['source_image'] = './lesson_picture/'.$file_name;
-    $config['new_image'] = './lesson_picture/'.$file_name;
-    // $config['craete_thumb'] = true;
-    $config['maintain_ratio'] = true;
-    $config['width'] = 200;
-    $config['height'] = 200;
-
-    $this->load->library('image_lib', $config);
-    $this->image_lib->resize();
-  }
-
-  // This function displays the upload_image page
-  function upload_image($lesson_id) {
-
-
-    if (!is_numeric($lesson_id)) {
-      redirect('site_security/not_allowed');
-    }
-    // security
-    $this->load->library('session');
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_is_admin();
-
-    $mysql_query = "SELECT * FROM lesson_picture WHERE lesson_id = $lesson_id";
-    $query = $this->_custom_query($mysql_query);
-    $data['query'] = $query;
-    $data['num_rows'] = $query->num_rows();
-    $data['headline'] = "Manage Images";
-    $data['update_id'] = $lesson_id;
-    $date['flash'] = $this->session->flashdata('lesson');
-    $data['view_file'] = "upload_image";
-    $data['sort_this'] = true;
-    $this->load->module('templates');
-    $this->templates->admin($data);
-  }
-
-  function do_upload($lesson_id) {
-
-
-    if (!is_numeric($lesson_id)) {
-      redirect('site_security/not_allowed');
-    }
-
-    // security
-    $this->load->library('session');
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_is_admin();
-
-    // getting submit from the post
-    $submit = $this->input->post('submit', true);
-
-    if ($submit == "cancel") {
-      redirect('lessons/create/'.$lesson_id);
-    } else if ($submit == "upload") {
-      $config['upload_path'] = './lesson_picture/';
-      $config['allowed_types'] = 'gif|jpg|png';
-      $config['max_size'] = 300;
-      $config['max_width'] = 3036;
-      $config['max_height'] = 1902;
-      $file_name = $this->site_security->generate_random_string(16);
-      $config['file_name'] = $file_name;
-      $this->load->library('upload', $config);
-
-      if (!$this->upload->do_upload('userfile')) {
-        $mysql_query = "SELECT * FROM lesson_picture WHERE lesson_id = $lesson_id";
-        $query = $this->_custom_query($mysql_query);
-        $data['query'] = $query;
-        $data['num_rows'] = $query->num_rows();
-        $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
-        $data['headline'] = "Upload Error";
-        $data['_id'] = $lesson_id;
-        $date['flash'] = $this->session->flashdata('lesson');
-        $data['view_file'] = "upload_image";
-        $this->load->module('templates');
-        $this->templates->admin($data);
-      } else {
-
-        // upload was successful
-        $data = array('upload_data' => $this->upload->data());
-        $upload_data = $data['upload_data'];
-
-        $file_ext = $upload_data['file_ext'];
-        $file_name = $file_name.$file_ext;
-        // $file_name = $upload_data['file_name'];
-        $this->_genrate_thumbnail($file_name);
-
-        //update the database
-        $mysql_query = "INSERT INTO lesson_picture (lesson_id, picture_name) VALUES ($lesson_id, '$file_name')";
-        $this->_custom_query($mysql_query);
-
-        $lesson_pic_id = $this->_get_lesson_pic_id($lesson_id);
-        $mysql_query = "INSERT INTO lesson_picture (lesson_pic_id, picture_name) VALUES ($lesson_pic_id, '$file_name')";
-        $this->_custom_query($mysql_query);
-
-        $data['headline'] = "Upload Success";
-        $data['update_id'] = $lesson_id;
-        $flash_msg = "The picture was successfully uploaded.";
-        $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-        $this->session->set_flashdata('lesson', $value);
-
-        redirect(base_url()."/lessons/upload_image/".$lesson_id);
-      }
-    }
-  }
-
-  function _get_lesson_pic_id($lesson_id) {
-    $mysql_query = "SELECT id FROM lesson_picture WHERE lesson_id = $lesson_id";
-    $query = $this->_custom_query($mysql_query);
-    foreach($query->result() as $row) {
-      $lesson_pic_id = $row->id;
-    }
-    return $lesson_pic_id;
-  }
-
-  function deleteconf($lesson_id) {
-
-    // only those people with an update_id for an item can get in.
-    if (!is_numeric($lesson_id)) {
-      redirect('site_security/not_allowed');
-    }
-
-    // security
-    $this->load->library('session');
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_is_admin();
-
-    $data['headline'] = "Delete Image";
-    $data['update_id'] = $lesson_id;
-    $date['flash'] = $this->session->flashdata('lesson');
-    $data['view_file'] = "deleteconf";
-    $this->load->module('templates');
-    $this->templates->admin($data);
-  }
-
-  function manage() {
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_is_admin();
-
-    // gettinf flash data
-    $data['flash'] = $this->session->flashdata('lesson');
-
-    // getting data from DB
-    // this means order by item_title
-    // $data['query'] = $this->get('item_title');
-    $mysql_query = "SELECT l.*, sa.userName  FROM lesson_booking lb
-    LEFT JOIN users sa ON lb.user_id = sa.id;
-    ";
-    $data['query'] = $this->_custom_query($mysql_query);
-
-    // create a view file. Putting a php (html) into the admin template.
-    $data['view_module'] = "lessons";
-    // store_Items.php
-    $data['view_file'] = "manage"; // manage.php
-    $this->load->module('templates');
-    $this->templates->admin($data);
-  }
-
-  function create() {
-
-  }
-
+>>>>>>> e7335221a3f2d31f0a17922add51b85315154a46
   function get($order_by)
   {
     $this->load->model('mdl_lessons');

@@ -44,7 +44,7 @@
               <?php
               if ($index_pic_name != "") {
                 ?>
-                <a class="product-thumb" href="<?= $item_url ?>"><img src="<?= $small_pic_path ?>" alt="<?= $item_title ?>"></a>
+                <a class="product-thumb" href="<?= $item_page ?>"><img src="<?= $small_pic_path ?>" alt="<?= $item_title ?>"></a>
                 <?php
               } else {
                 ?>

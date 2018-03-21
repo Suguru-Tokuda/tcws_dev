@@ -1,10 +1,15 @@
 <!-- Off-Canvas Mobile Menu-->
 <div class="offcanvas-container" id="mobile-menu"><a class="account-link" href="account-orders.html">
-      <div class="user-ava"><img src="img/account/user-ava-md.jpg" alt="Daniel Adams">
-      </div>
+    <?php
+    if ($user_id > 0) {
+      $userName = $this->session->userdata('userName');
+    ?>
       <div class="user-info">
-        <h6 class="user-name">Daniel Adams</h6><span class="text-sm text-white opacity-60">290 Reward points</span>
+        <h6 class="user-name"><?= $userName ?></h6>
       </div></a>
+      <?php
+    }
+      ?>
     <nav class="offcanvas-menu">
       <ul class="menu">
         <li class="has-children active"><span><a href="index.html"><span>Home</span></a><span class="sub-menu-toggle"></span></span>
@@ -61,7 +66,18 @@
           </li>
           <?php
         } else if ($user_id > 0) {
-          include('customer_dropdown.php');
+
+           ?>
+          <li class="has-children"><span><a href="#"><?= $userName ?></a><span class="sub-menu-toggle"></span></span>
+            <ul class="offcanvas-submenu">
+              <li><a href="<?= base_url() ?>youraccount/welcome"><span class="glyphicon glyphicon-envelope"></span> Your Messages</a></li>
+              <li><a href="<?= base_url() ?>listed_items/manage"><span class="glyphicon glyphicon-tasks"></span> Your Items</a></li>
+              <li><a href="<?= base_url() ?>youraccount/manageaccount"><span class="glyphicon glyphicon-file"></span> Manage Profile</a></li>
+              <li class="divider"></li>
+              <li><a href="<?= base_url() ?>youraccount/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a><li>
+            </ul>
+          </li>
+          <?php
         }
         ?>
       </ul>
