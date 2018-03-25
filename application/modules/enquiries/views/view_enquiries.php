@@ -16,12 +16,8 @@ $create_message_url = base_url()."enquiries/create";
 
   <div class="row-fluid sortable">
     <div class="box span12">
-      <div class="box-header" data-original-title>
-        <h2><i class="halflings-icon white envelope"></i><span class="break"></span><?= $folder_type ?></h2>
-        <div class="box-icon">
-          <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-          <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
-        </div>
+      <div class="green-panel" data-original-title>
+        <h2><i class="fa fa-envelope "></i><?= $folder_type ?></h2>
       </div>
       <div class="box-content">
         <table class="table table-striped table-bordered bootstrap-datatable datatable">
@@ -49,9 +45,9 @@ $create_message_url = base_url()."enquiries/create";
               $urgent = $row->urgent;
               $ranking = $row->ranking;
               if ($open == 1) {
-                $icon = '<i class="icon-envelope"></i>';
+                $icon = '<i class="fa far fa-envelope"></i>';
               } else {
-                $icon = '<i class="icon-envelope-alt" style="color: orange;"></i>';
+                $icon = '<i class="fa fas fa-envelope" style="color: orange;"></i>';
               }
               $date_sent = $this->timedate->get_date($row->date_created, 'full');
               if ($row->sent_by == 0) {
@@ -80,7 +76,7 @@ $create_message_url = base_url()."enquiries/create";
                 <td><?= $sent_by ?></td>
                 <td><?= $row->subject ?></td>
                 <td class="span1">
-                  <a class="btn btn-info" href="<?= $view_url ?>">
+                  <a class="fa fas fa-edit" href="<?= $view_url ?>">
                     <i class="halflings-icon white edit"></i>
                   </a>
                 </td>
