@@ -120,9 +120,6 @@ class Listed_items extends MX_Controller {
       if (!is_numeric($item_id)) {
         redirect('site_security/not_allowed');
       }
-      // security
-      $this->load->module('site_security');
-      $this->site_security->_make_sure_logged_in();
 
       $mysql_query = "SELECT * FROM small_pics WHERE item_id = $item_id ORDER BY priority ASC";
       $query = $this->_custom_query($mysql_query);
@@ -182,8 +179,8 @@ class Listed_items extends MX_Controller {
 
           //update the database
           $priority = $this->_get_priority($item_id);
-          $mysql_query = "INSERT INTO small_pics (item_id, picture_name, priority) VALUES ($item_id, '$file_name', $priority)";
-          $this->_custom_query($mysql_query);
+          $insert_statement = "INSERT INTO small_pics (item_id, picture_name, priority) VALUES ($item_id, '$file_name', $priority)";
+          $this->_custom_query($insert_statement);
 
           $small_pic_id = $this->_get_small_pic_id($item_id, $priority);
           $mysql_query = "INSERT INTO big_pics (small_pic_id, picture_name) VALUES ($small_pic_id, '$file_name')";

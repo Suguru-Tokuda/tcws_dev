@@ -56,19 +56,19 @@ class Youraccount extends MX_Controller {
   }
 
   // login function
-  function login() {
-    //Login params
-    $data['userId'] = $this->input->post('userId', true);
-    $data['loginPassword'] = $this->input->post('loginPassword', true);
-    //Sign up params
-    $data['signupUserName'] = $this->input->post('signupUserName', true);
-    $data['signUpEmail'] = $this->input->post('signUpEmail', true);
-    $data['signUpPassword'] = $this->input->post('signUpPassword', true);
-    $data['signUpconfirmPassword'] = $this->input->post('signUpconfirmPassword', true);
-
-    $this->load->module('templates');
-    $this->templates->login($data);
-  }
+  // function login() {
+  //   //Login params
+  //   $data['userId'] = $this->input->post('userId', true);
+  //   $data['loginPassword'] = $this->input->post('loginPassword', true);
+  //   //Sign up params
+  //   $data['signupUserName'] = $this->input->post('signupUserName', true);
+  //   $data['signUpEmail'] = $this->input->post('signUpEmail', true);
+  //   $data['signUpPassword'] = $this->input->post('signUpPassword', true);
+  //   $data['signUpconfirmPassword'] = $this->input->post('signUpconfirmPassword', true);
+  //
+  //   $this->load->module('templates');
+  //   $this->templates->login($data);
+  // }
 
   function submit_login() {
     $submit = $this->input->post('submit', true);
