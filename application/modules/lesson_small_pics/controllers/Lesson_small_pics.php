@@ -5,6 +5,21 @@ class Lesson_small_pics extends MX_Controller {
     parent::__construct();
   }
 
+  function get_picture_name_by_lesson_small_pic_id($id) {
+    $mysql_query = "SELECT picture_name FROM lesson_small_pics WHERE id = $id";
+    $query = $this->_custom_query($mysql_query);
+    return $query->row()->picture_name();
+  }
+
+  function get_lesson_small_pic_ids_by_lesson_id($lesson_id) {
+    $query = $this->get_where($lesson_id);
+    $ids = [];
+    foreach($query->result() as $row) {
+      $ids[] = $row->id;
+    }
+    return $ids;
+  }
+
   function get_priority_for_lesson($lesson_small_pic_id, $lesson_id) {
     $mysql_query = "SELECT * FROM lesson_small_pics WHERE id = $lesson_small_pic_id AND lesson_id = $lesson_id";
     $query = $this->_custom_query($mysql_query);
@@ -64,6 +79,11 @@ class Lesson_small_pics extends MX_Controller {
 
     $this->load->model('mdl_lesson_small_pics');
     $this->mdl_lesson_small_pics->_delete($id);
+  }
+
+  function _delete_where($col, $value) {
+    $this->load->model('mdl_lesson_small_pics');
+    $this->mdl_lesson_small_pics->_delete_where($col, $value);
   }
 
   function count_where($column, $value) {

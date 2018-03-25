@@ -107,6 +107,65 @@ class Lessons extends MX_Controller {
     $this->templates->admin($data);
   }
 
+  function deleteconf($lesson_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($lesson_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $data['lesson_id'] = $lesson_id;
+    $data['headline'] = "Delete Lesson";
+    $data['flash'] = $this->session->flashdata('item');
+    $data['view_file'] = "lesson_deleteconf";
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function delete_lesson($lesson_id) {
+    if (!is_numeric($lesson_id)) {
+      redirect('site_security/not_allowed');
+    }
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $submit = $this->input->post('submit', true);
+
+    if ($submit == "cancel") {
+      redirect('lessons/create_lesson/'.$lesson_id);
+    } else if ($submit == "delete") {
+      $this->_process_delete_lesson($lesson_id);
+      $flash_msg = "The lesson was successfully deleted.";
+      $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
+      $this->session->set_flashdata('item', $value);
+      redirect('lessons/manage_lessons');
+    }
+  }
+
+  function _process_delete_lesson($lesson_id) {
+    $this->load->module('lesson_small_pics');
+    $this->load->module('lesson_big_pics');
+    $lesson_small_pic_ids = $this->lesson_small_pics->get_lesson_small_pic_ids_by_lesson_id($lesson_id);
+
+    foreach($lesson_small_pic_ids as $key => $value) {
+      $picture_name = $this->lesson_small_pics->get_picture_name_by_lesson_small_pic_id($value);
+      $big_pic_path = './lesson_big_pics'.$picture_name;
+      $small_pic_path = './lesson_small_pics'.$picture_name;
+      // attemp to delete item small pics
+      if (file_exists($big_pic_path)) {
+        unlink($big_pic_path);
+      }
+      if (file_exists($small_pic_path)) {
+        unlink($small_pic_path);
+      }
+      $this->lesson_big_pics->_delete_where('small_pic_id', $value);
+    }
+
+    $this->lesson_small_pics->_delete_where('lesson_id', $lesson_id);
+    $this->_delete($lesson_id);
+  }
+
   function upload_lesson_image($lesson_id) {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
