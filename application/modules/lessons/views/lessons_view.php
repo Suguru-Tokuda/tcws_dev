@@ -9,7 +9,7 @@
     ?>
     <div class="col-md-2 img-thumbnail" style="margin: 5px; height: 300px;" >
       <?php
-      if ($id != "") {
+      if ($id != 0) {
         ?>
         <a title="<?= $row->id ?>" ></a>
         <?php
