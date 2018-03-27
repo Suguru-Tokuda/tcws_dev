@@ -10,7 +10,12 @@
     <a href="<?= $create_lesson_url ?>"<button class="btn btn-primary" type="submit">Add New Lessons</button></a>
 
     <h4><i class="fa fa-ship"></i>Lessons</h4>
+
     <div class="content-panel">
+      <?php
+      $num_rows = $query->num_rows();
+      echo $pagination;
+      ?>
       <table class="table">
         <thead>
           <tr>
@@ -30,7 +35,7 @@
             $id = $row->id;
             $lesson_name = $row->lesson_name;
             $lesson_capacity = $row->lesson_capacity;
-            $lesson_fee = $row->lesson_fee;
+            $lesson_fee = $currency_symbol.$row->lesson_fee;
 
             $status = $row->status;
             $status_string = "";

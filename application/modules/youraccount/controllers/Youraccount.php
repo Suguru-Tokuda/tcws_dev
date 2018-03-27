@@ -55,21 +55,6 @@ class Youraccount extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  // login function
-  // function login() {
-  //   //Login params
-  //   $data['userId'] = $this->input->post('userId', true);
-  //   $data['loginPassword'] = $this->input->post('loginPassword', true);
-  //   //Sign up params
-  //   $data['signupUserName'] = $this->input->post('signupUserName', true);
-  //   $data['signUpEmail'] = $this->input->post('signUpEmail', true);
-  //   $data['signUpPassword'] = $this->input->post('signUpPassword', true);
-  //   $data['signUpconfirmPassword'] = $this->input->post('signUpconfirmPassword', true);
-  //
-  //   $this->load->module('templates');
-  //   $this->templates->login($data);
-  // }
-
   function submit_login() {
     $submit = $this->input->post('submit', true);
     if ($submit == "submit") {
@@ -128,10 +113,11 @@ class Youraccount extends MX_Controller {
 
     if ($submit == "submit") {
       // process the form
-      $this->form_validation->set_rules('userName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_existence_check');
-      $this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[120]');
-      $this->form_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
-      $this->form_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
+      $this->form_validation->set_rules('signupUserName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_existence_check');
+      $this->form_validation->set_rules('signUpEmail', 'Email', 'required|valid_email|max_length[120]|callback_email_existence_check');
+      $this->form_validation->set_rules('signUpPassword', 'Password', 'required|min_length[7]|max_length[35]');
+      $this->form_validation->set_rules('signUpconfirmPassword', 'Confirm Password', 'required|matches[signUpPassword]');
+      // $this->form_validation->set_rules($config);
 
       if ($this->form_validation->run() == true) {
         // insert a new account into DB
@@ -149,13 +135,15 @@ class Youraccount extends MX_Controller {
     $this->load->module('users');
     $data = $this->fetch_data_from_post();
     unset($data['confirmPassword']);
-
-    $password = $data['password'];
+    $password = $data['signUpPassword'];
+    $insertData['userName'] = $data['signupUserName'];
+    $insertData['email'] = $data['signUpEmail'];
+    $password = $data['signUpPassword'];
     $this->load->module('site_security');
-    $data['password'] = $this->site_security->_hash_string($password);
-    $data['date_made'] = time();
+    $insertData['password'] = $this->site_security->_hash_string($password);
+    $insetData['date_made'] = time();
 
-    $this->users->_insert($data);
+    $this->users->_insert($insertData);
   }
 
   function start() {
@@ -198,7 +186,21 @@ class Youraccount extends MX_Controller {
       $this->form_validation->set_message('userName_existence_check', $error_msg);
       return false;
     }
+  }
 
+  function email_existence_check($str) {
+    $this->load->module('users');
+
+    $error_msg = "$str already exists";
+
+    $query = $this->users->get_where_custom('email', $str);
+    $num_rows = $query->num_rows();
+    if ($num_rows == 0) {
+      return true;
+    } else if ($num_rows == 1) {
+      $this->form_validation->set_message('email_existence_check', $error_msg);
+      return false;
+    }
   }
 
   // a method to check if the userName exists.

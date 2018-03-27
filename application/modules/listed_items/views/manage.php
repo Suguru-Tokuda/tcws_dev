@@ -11,8 +11,6 @@ $create_item_url = base_url()."listed_items/create_item";
   $num_rows = $query->num_rows();
   echo $pagination;
   if ($num_rows > 0) {
-    ?>
-    <?php
     if ($num_rows == 1) {
       ?>
       <p style="margin-top: 34px;">You have <?= $num_rows ?> listed item.</p>
