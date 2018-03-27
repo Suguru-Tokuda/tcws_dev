@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 // $config['base_url'] = 'http://twincitywatersports.com';
-$config['base_url'] = 'http://localhost/twincitywatersports';
+$config['base_url'] = 'http://localhost/twincitywatersports/';
 
 /*
 |--------------------------------------------------------------------------

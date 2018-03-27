@@ -11,19 +11,17 @@ if (is_numeric($lesson_id)) {
   <?php
   if (!empty($lesson_id)) {
     ?>
-    <a href="<?= base_url() ?>lessons/manage_schedules/<?= $lesson_id ?>" ><button type="button" class="btn btn-warning">Manage Schedules for the Lesson</button></a>
+    <a href="<?= base_url() ?>lessons/manage_lesson_schedules/<?= $lesson_id ?>" ><button type="button" class="btn btn-warning">Manage Schedules for the Lesson</button></a>
     <a href="<?= base_url() ?>lessons/upload_lesson_image/<?= $lesson_id ?>" ><button type="button" class="btn btn-primary">Manage Images</button></a>
+    <a href="<?= base_url() ?>lessons/view_lesson/<?= $lesson_id?>" ><button type="button" class="btn btn-info">View Lesson On Main Page</button></a>
     <a href="<?= base_url() ?>lessons/deleteconf/<?= $lesson_id ?>" ><button type="button" class="btn btn-danger">Delete Lesson</button></a>
-    <a href="<?= base_url() ?>lessons/view_lesson/<?= $lesson_id?>" ><button type="button" class="btn btn-info">View Lesson In Main</button></a>
+    <a href="<?= base_url() ?>lessons/manage_lessons" ><button type="button" class="btn">Back to All Lessons</button></a>
     <p style="margin-top: 20px;"></p>
     <?php
   }
   ?>
   <?php validation_errors("<p style='color: red;'>", "</p>"); ?>
   <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
-    <?php
-    echo validation_errors("<p style='color: red;'>", "</p>");
-    ?>
     <div class="form-group">
       <label class="col-sm-2 control-label">Lesson Name</label>
       <div class="col-sm-5">
