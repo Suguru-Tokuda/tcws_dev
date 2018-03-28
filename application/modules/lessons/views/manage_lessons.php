@@ -6,18 +6,21 @@
   }
   $create_lesson_url = base_url()."lessons/create_lesson";
   ?>
-  <div class="form-panel">
+
     <a href="<?= $create_lesson_url ?>"<button class="btn btn-primary" type="submit">Add New Lessons</button></a>
 
-    <h4><i class="fa fa-ship"></i>Lessons</h4>
-
-    <div class="content-panel">
-      <?php
-      $num_rows = $query->num_rows();
-      echo $pagination;
-      ?>
-      <table class="table">
-        <thead>
+    <div class="row-fluid sortable">
+      <div class="box span12">
+        <div class="green-panel" data-original-title>
+          <h2><i class="fa fa-tag "></i>Lessons</h2>
+        </div>
+        <div class="box-content">
+          <table class="table table-striped table-bordered bootstrap-datatable datatable">
+            <thead>
+              <?php
+                $num_rows = $query->num_rows();
+                echo $pagination;
+                ?>
           <tr>
             <th>ID</th>
             <th>Name</th>

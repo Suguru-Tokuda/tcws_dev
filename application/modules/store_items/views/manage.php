@@ -5,15 +5,17 @@ if (isset($flash)) {
   echo $flash;
 }
 $create_item_url = base_url()."store_items/create";
-?><p style="margin-top: 30px;">
+?>
   <a href="<?= $create_item_url ?>"><button class="btn btn-primary" type="submit">Add New Item</button></a>
 
-  <div class="row mt">
-    <div class="col-lg-12">
-        <div class="form-panel">
-            <h4 class="mb"><i class="fa fas fa-tag"></i> Enquiry Ranking</h4>
-            <table class="table table-bordered table-striped table-condensed">
-          <thead>
+  <div class="row-fluid sortable">
+    <div class="box span12">
+      <div class="green-panel" data-original-title>
+            <h2><i class="fa fas fa-tag"></i> Items Inventory</h2>
+          </div>
+          <div class="box-content">
+            <table class="table table-striped table-bordered bootstrap-datatable datatable">
+              <thead>
             <tr>
               <th>Item Title</th>
               <th>User ID</th>
