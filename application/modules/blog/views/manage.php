@@ -12,6 +12,7 @@
       <div class="col-lg-12">
           <div class="form-panel">
               <h4 class="mb"><i class="fa fas fa-file"></i> Custom Blog</h4>
+              <input type= "search"/>
               <table class="table table-bordered table-striped table-condensed">
             <thead>
               <tr>
