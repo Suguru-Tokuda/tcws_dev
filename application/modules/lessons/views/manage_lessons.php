@@ -10,7 +10,12 @@
     <a href="<?= $create_lesson_url ?>"<button class="btn btn-primary" type="submit">Add New Lessons</button></a>
 
     <h4><i class="fa fa-ship"></i>Lessons</h4>
+
     <div class="content-panel">
+      <?php
+      $num_rows = $query->num_rows();
+      echo $pagination;
+      ?>
       <table class="table">
         <thead>
           <tr>
@@ -26,11 +31,11 @@
           <?php
           foreach($query->result() as $row) {
             $edit_lesson_url = base_url()."lessons/create_lesson/".$row->id;
-            $view_lesson_url = base_url()."lessons/view_lesson".$row->id;
+            $view_lesson_url = base_url()."lessons/view_lesson/".$row->id;
             $id = $row->id;
-            $lessoin_title = $row->lesson_title;
+            $lesson_name = $row->lesson_name;
             $lesson_capacity = $row->lesson_capacity;
-            $lesson_fee = $row->lesson_fee;
+            $lesson_fee = $currency_symbol.$row->lesson_fee;
 
             $status = $row->status;
             $status_string = "";
@@ -44,8 +49,8 @@
            ?>
            <tr>
              <td><?= $id ?></td>
-             <td><?= $lesson_title ?></td>
-             <td><?= $lesson_capacity ?>/td>
+             <td><?= $lesson_name ?></td>
+             <td><?= $lesson_capacity ?></td>
              <td><?= $lesson_fee ?></td>
              <td>
                <span class="label label-<?=$status_label ?>"><?= $status_desc ?></span>
