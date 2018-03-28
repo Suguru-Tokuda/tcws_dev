@@ -1,5 +1,5 @@
 <!-- Main Slider-->
-      <section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);">
+      <section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);" >
         <div class="owl-carousel large-controls dots-inside" data-owl-carousel="{ &quot;nav&quot;: true, &quot;dots&quot;: true, &quot;loop&quot;: true, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 7000 }">
           <div class="item">
             <!-- <div class="container padding-top-3x">
@@ -30,7 +30,7 @@
               </div>
             </div> -->
             <div class="container padding-top-3x">
-                <div class="padding-bottom-4x"><img class="d-block mx-auto" src="<?=base_url()."/img/ocean-7.jpg"?>" alt="Chuck Taylor All Star II" style="width:1600px; height:450px;"></div>
+                <div class="padding-bottom-4x"><img class="d-block mx-auto" src="<?=base_url()."/img/ocean-7.jpg"?>" alt="Chuck Taylor All Star II" style="width:1600px; height:450px; background-size:100% 100%"></div>
             </div>
           </div>
           <div class="item">
