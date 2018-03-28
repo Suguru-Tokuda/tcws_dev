@@ -47,6 +47,14 @@ class Mdl_users extends CI_Model {
     return $query;
   }
 
+  function get_with_double_and($col1, $value1, $col2, $value2) {
+    $table = $this->get_table();
+    $this->db->where($col1, $value1);
+    $this->db->where($col2, $value2);
+    $query=$this->db->get($table);
+    return $query;
+  }
+
   function _insert($data){
     $table = $this->get_table();
     $this->db->insert($table, $data);
@@ -62,6 +70,12 @@ class Mdl_users extends CI_Model {
     $table = $this->get_table();
     $this->db->where('id', $id);
     $this->db->delete($table);
+  }
+
+  function _update_email($userEmail, $data){
+    $table = $this->get_table();
+    $this->db->where('email', $userEmail);
+    $this->db->update($table, $data);
   }
 
   function count_where($column, $value) {

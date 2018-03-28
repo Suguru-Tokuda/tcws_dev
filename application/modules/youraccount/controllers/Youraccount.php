@@ -1,4 +1,8 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+define("PROJECT_HOME","http://localhost/twincitywatersports/youraccount/");
 class Youraccount extends MX_Controller {
 
   function __construct() {
@@ -55,6 +59,16 @@ class Youraccount extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
+  // login function
+  function login() {
+    $data['userName'] = $this->input->post('userName', true);
+    $data['email'] = $this->input->post('email', true);
+    $data['password'] = $this->input->post('password', true);
+    $data['confirmPassword'] = $this->input->post('confirmPassword', true);
+    $this->load->module('templates');
+    $this->templates->login($data);
+  }
+
   function submit_login() {
     $submit = $this->input->post('submit', true);
     if ($submit == "submit") {
@@ -88,6 +102,19 @@ class Youraccount extends MX_Controller {
         $this->_in_you_go($user_id, $login_type);
       } else {
         redirect('youraccount/login');
+      }
+    }
+  }
+
+  function forgotPass() {
+  $submit = $this->input->post('submit', true);
+  if ($submit == "submit") {
+    // process the form
+    $this->form_validation->set_rules('userName', 'Username', 'required|callback_userId_check');
+    if ($this->form_validation->run() == true) {
+        $this ->sendEmail();
+      }else{
+          $this->resetPass();
       }
     }
   }
@@ -129,6 +156,18 @@ class Youraccount extends MX_Controller {
         $this->start();
       }
     }
+  }
+
+  function resetPass(){
+    $data['view_file'] = "account-password-recovery";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
+
+  function sendEmail(){
+    $data['view_file'] = "sendEmail";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
   }
 
   function _process_create_account() {
@@ -251,4 +290,145 @@ class Youraccount extends MX_Controller {
     return $userName;
   }
 
+  function userId_check($str) {
+
+    $this->load->module('users');
+    $this->load->module('site_security');
+
+    $error_msg = "Please enter valid user id.";
+
+    $col1 = 'userName';
+    $value1 = $str;
+    $col2 = 'email';
+    $value2 = $str;
+    $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
+    $num_rows = $query->num_rows();
+    if ($num_rows < 1) {
+      $this->form_validation->set_message('userName', $error_msg);
+      return false;
+    }
+	else
+	{
+		foreach ($query->result() as $row) {
+		  $userEmail = $row->email;
+		}
+		if ($this->send_Email($userEmail) == false)
+		{
+		return false;
+		}
+    else{
+		return true;
+  }
+    }
+  }
+
+  function send_Email($userEmail){
+  $genString = $this->RandomString();
+	$mail = new PHPMailer();
+
+	$mail->isSMTP();
+	//$mail->SMTPDebug = 2;
+	$mail->Host = 'smtp.gmail.com';
+	$mail->SMTPAuth = true;
+	$mail->Username = 'fromadress@gmail.com';
+	$mail->Password = 'password@0@';
+	$mail->SMTPSecure = 'tls';
+	$mail->Port = 587;
+
+	$mail->smtpConnect([
+		'ssl' => [
+			'verify_peer' => false,
+			'verify_peer_name' => false,
+			'allow_self_signed' => true
+		]
+	]);
+
+	$mail->From = 'fromadress@gmail.com';
+	$mail->FromName = 'twincitywatersports';
+	$mail->addAddress($userEmail);
+
+	$mail->Subject = "Forgot Password Recovery";
+  $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='" . PROJECT_HOME . "reset_password/?email=" . $userEmail . "&genString=" .$genString. "'>" . "Click Here" . "</a><br><br></p>Regards,<br> Admin.</div>";
+	//$mail->Body = 'This is my message';
+  $mail->MsgHTML($emailBody);
+	$mail->isHTML(true);
+
+	if(!$mail->send()) {
+		return false;
+	} else {
+    $this->update_genString($userEmail,$genString);
+		return true;
+	}
+	}
+
+  function RandomString($length=32, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+  {
+      $str = '';
+      $max = mb_strlen($keyspace, '8bit') - 1;
+      for ($i = 0; $i < $length; ++$i) {
+          $str .= $keyspace[random_int(0, $max)];
+      }
+      return $str;
+  }
+
+  function update_genString($userEmail,$genString){
+    $data['genString'] = $genString;
+    $this->users->_update_email($userEmail,$data);
+  }
+
+  function reset_password(){
+    $data['view_file'] = "reset_password";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
+
+  function update_password() {
+  $submit = $this->input->post('submit', true);
+
+  if ($submit == "submit") {
+    // process the form
+    $this->form_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
+    $this->form_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
+    if ($this->form_validation->run() == true) {
+      // update password
+      if ($this->_process_update_password() == true)
+      {
+      $data['view_file'] = "password_reset_success";
+      $this->load->module('templates');
+      $this->templates->public_bootstrap($data);
+      }
+      else{
+      $error_message = "Gen Id Missing Something wrong";
+      $this->resetPass();
+    }
+    }
+    else{
+      $this->reset_password();
+    }
+  }
+}
+
+function _process_update_password() {
+  $this->load->module('users');
+  $email = $this->input->post('email', true);
+  $genString = $this->input->post('genString', true);
+  $password = $this->input->post('password', true);
+  $col1 = 'email';
+  $value1 = $this->input->post('email', true);
+  $col2 = 'genString';
+  $value2 = $this->input->post('genString', true);
+  $query = $this->users->get_with_double_and($col1, $value1, $col2, $value2);
+  $num_rows = $query->num_rows();
+  if ($num_rows < 1) {
+  return false;
+  }
+  else{
+  $this->load->module('site_security');
+  $data['password'] = $this->site_security->_hash_string($password);
+  $this->users-> _update_email($email,$data);
+  $data['genString'] = NULL;
+  $this->users-> _update_email($email,$data);
+  return true;
+}
+}
 }

@@ -299,6 +299,13 @@ class Users extends MX_Controller {
     return $query;
   }
 
+  function get_with_double_and($col1, $value1, $col2, $value2)
+  {
+    $this->load->model('mdl_users');
+    $query = $this->mdl_users->get_with_double_and($col1, $value1, $col2, $value2);
+    return $query;
+  }
+
   function _insert($data)
   {
     $this->load->model('mdl_users');
@@ -313,6 +320,12 @@ class Users extends MX_Controller {
 
     $this->load->model('mdl_users');
     $this->mdl_users->_update($id, $data);
+  }
+
+  function _update_email($userEmail, $data)
+  {
+    $this->load->model('mdl_users');
+    $this->mdl_users->_update_email($userEmail, $data);
   }
 
   function _delete($id)

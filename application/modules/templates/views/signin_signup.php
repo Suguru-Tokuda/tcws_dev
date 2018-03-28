@@ -2,6 +2,7 @@
 $first_bit = $this->uri->segment(1);
 $signin_form_location = base_url().$first_bit.'/submit_login';
 $signup_form_location = base_url().'youraccount/submit';
+$reset_form_location = base_url().'youraccount/resetPass';
 if ($first_bit == "youraccount") {
   $label = "Sign in";
 } else {
@@ -30,7 +31,7 @@ if ($first_bit == "youraccount") {
               <?php
             }
             ?>
-          </div><a class="navi-link" href="account-password-recovery.html">Forgot password?</a>
+          </div><a class="navi-link" href="<?= $reset_form_location ?>">Forgot password?</a>
         </div>
         <div class="text-center text-sm-right">
           <button class="btn btn-primary margin-bottom-none" name="submit" value="submit" type="submit">Sign In</button>
