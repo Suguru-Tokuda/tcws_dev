@@ -330,6 +330,7 @@ class Youraccount extends MX_Controller {
 	//$mail->SMTPDebug = 2;
 	$mail->Host = 'smtp.gmail.com';
 	$mail->SMTPAuth = true;
+  //Give sender email and password (account details) here
 	$mail->Username = 'fromadress@gmail.com';
 	$mail->Password = 'password@0@';
 	$mail->SMTPSecure = 'tls';
@@ -342,7 +343,7 @@ class Youraccount extends MX_Controller {
 			'allow_self_signed' => true
 		]
 	]);
-
+  //Give sender email here
 	$mail->From = 'fromadress@gmail.com';
 	$mail->FromName = 'twincitywatersports';
 	$mail->addAddress($userEmail);
