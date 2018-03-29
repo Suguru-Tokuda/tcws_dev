@@ -382,11 +382,6 @@ class Lessons extends MX_Controller {
   }
   // end of pagination methods
 
-  function _get_lesson_id_from_lesson_url($lesson_url) {
-    $query = $this->get_where_custom('lesson_url', $lesson_url);
-    return $query->row()->lesson_id;
-  }
-
   function get($order_by)
   {
     $this->load->model('mdl_lessons');

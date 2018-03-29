@@ -34,8 +34,8 @@
         $sub_cat_url = base_url()."store_categories/manage/".$row->id;
         $update_id = $row->id;
         ?>
-        <a class="btn btn-default" href="<?= $sub_cat_url ?>">
-          <i class="halflings-icon white edit"></i>
+        <a class="btn btn-default " href="<?= $sub_cat_url ?>">
+          <i class="fa fas fa-edit"></i>
           <?php
           echo $num_sub_cats." Sub ".$entity;
           ?>
@@ -44,7 +44,7 @@
       }
       ?>
       <a class="btn btn-info" href="<?= $edit_item_url ?>">
-        <i class="halflings-icon white edit"></i>
+        <i class="fa fas fa-edit"></i>
       </a>
     </li>
     <?php

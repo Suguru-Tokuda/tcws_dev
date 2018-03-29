@@ -7,52 +7,44 @@ if (isset($flash)) {
 }
 ?>
 
-<div class="row-fluid sortable">
-  <div class="box span12">
-    <div class="box-header" data-original-title>
-      <h2><i class="halflings-icon white edit"></i><span class="break"></span>Page Details</h2>
-      <div class="box-icon">
-        <!-- <a href="#" class="btn-setting"><i class="halflings-icon white wrench"></i></a> -->
-        <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-        <!-- <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a> -->
-      </div>
-    </div>
-    <div class="box-content">
-
+<div class="row mt">
+  <div class="col-lg-12">
+    <div class="form-panel">
+      <h4 class="mb"><i class="fa fas fa-edit"></i> Page Details</h4>
       <?php
       $form_location = base_url()."webpages/create/".$update_id
       ?>
       <form class="form-horizontal" method="post" action="<?= $form_location ?>">
         <fieldset>
-          <div class="control-group">
-            <label class="control-label" for="typeahead">Page Title </label>
-            <div class="controls">
-              <input type="text" class="span6 typeahead" name="page_title" value="<?= $page_title ?>">
+          <div class="form-group">
+            <label class="col-sm-2  control-label" for="typeahead">Page Title </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="page_title" value="<?= $page_title ?>">
             </div>
           </div>
 
-          <div class="control-group hidden_phone">
-            <label class="control-label" for="textarea">Page Keywords </label>
-            <div class="controls">
-              <textarea rows="3" class="span6" name="page_keywords"><?php
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="textarea">Page Keywords </label>
+            <div class="col-sm-10">
+              <textarea rows="3" class="form-control" name="page_keywords"><?php
               echo $page_keywords;
               ?></textarea>
             </div>
           </div>
 
-          <div class="control-group hidden_phone">
-            <label class="control-label" for="textarea2">Page Description</label>
-            <div class="controls">
-              <textarea class="span6" id="textarea2" rows="3" name="page_description"><?php
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="textarea2">Page Description</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="textarea2" rows="3" name="page_description"><?php
               echo $page_description;
               ?></textarea>
             </div>
           </div>
 
-          <div class="control-group hidden_phone">
-            <label class="control-label" for="textarea3">Page Content</label>
-            <div class="controls">
-              <textarea class="cleditor" id="textarea3" rows="3" name="page_content"><?php
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="textarea3">Page Content</label>
+            <div class="col-sm-10">
+              <textarea class="cleditor form-control" id="textarea3" rows="3" name="page_content"><?php
               echo $page_content;
               ?></textarea>
             </div>
@@ -71,14 +63,11 @@ if (isset($flash)) {
 <?php
 // This section appears only there is an update_id
 if (is_numeric($update_id)) { ?>
-  <div class="row-fluid sortable">
-    <div class="box span12">
-      <div class="box-header" data-original-title>
-        <h2><i class="halflings-icon white edit"></i><span class="break"></span>Item Options</h2>
-        <div class="box-icon">
-          <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-        </div>
-      </div>
+  <div class="row mt">
+    <div class="col-lg-12">
+      <div class="form-panel">
+        <h4><i class="fa fas fa-edit"></i>Item Options</h4>
+
       <div class="box-content">
       <?php
       if ($update_id > 2) { ?>

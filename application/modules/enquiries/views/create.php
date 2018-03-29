@@ -19,7 +19,7 @@ if (isset($flash)) {
               if (!isset($sent_by)) {
                 ?>
             <div class="form-group">
-              <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Recipient</label>
+              <label class="col-sm-2 control-label" for="typeahead">Recipient</label>
               <div class="col-sm-10">
                 <?php
                 $additional_dd_code = 'class="form-control "';

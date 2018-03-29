@@ -6,15 +6,11 @@ if (isset($flash)) {
   echo $flash;
 }
 if (is_numeric($update_id)) { ?>
-  <div class="row-fluid sortable">
-    <div class="box span12">
-      <div class="box-header" data-original-title>
-        <h2><i class="halflings-icon white edit"></i><span class="break"></span>Homepage Options</h2>
-        <div class="box-icon">
-          <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-        </div>
-      </div>
-      <div class="box-content">
+  <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+          <h4 class="mb"><i class="fa fas fa-edit"></i> Homepage Options</h4>
+
         <!-- Check if the item has an image. Upload image icon appears only there is NO image. -->
         <a href="<?= base_url() ?>homepage_blocks/manage" ><button type="button" class="btn btn-default">Previous Page</button></a>
         <a href="<?= base_url() ?>homepage_offers/update/<?= $update_id ?>" ><button type="button" class="btn btn-primary">Update Associated Offers</button></a>
@@ -26,27 +22,20 @@ if (is_numeric($update_id)) { ?>
 }
 ?>
 
-<div class="row-fluid sortable">
-  <div class="box span12">
-    <div class="box-header" data-original-title>
-      <h2><i class="halflings-icon white edit"></i><span class="break"></span>Homepage Offer Details</h2>
-      <div class="box-icon">
-        <!-- <a href="#" class="btn-setting"><i class="halflings-icon white wrench"></i></a> -->
-        <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-        <!-- <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a> -->
-      </div>
-    </div>
-    <div class="box-content">
-      <?php
+<div class="row mt">
+  <div class="col-lg-12">
+      <div class="form-panel">
+        <h4 class="mb"><i class="fa fas fa-edit"></i> Homepage Offer Details</h4>
+    <?php
       $form_location = base_url()."homepage_blocks/create/".$update_id
       ?>
       <form class="form-horizontal" method="post" action="<?= $form_location ?>">
         <fieldset>
-          <div class="control-group">
-          <div class="control-group">
-            <label class="control-label" for="typeahead">Offer Block Title </label>
-            <div class="controls">
-              <input type="text" class="span6 typeahead" name="block_title" value="<?= $block_title ?>">
+          <div class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="typeahead">Offer Block Title </label>
+            <div class="col-sm-10">
+              <input type="text" class=" form-control typeahead" name="block_title" value="<?= $block_title ?>">
             </div>
           </div>
 
