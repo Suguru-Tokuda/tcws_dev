@@ -9,13 +9,9 @@ $create_account_url = base_url()."users/create";
 
   <div class="row-fluid sortable">
     <div class="box span12">
-      <div class="box-header" data-original-title>
-        <h2><i class="halflings-icon white briefcase"></i><span class="break"></span>Members</h2>
-        <div class="box-icon">
-          <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-          <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
+      <div class="green-panel" data-original-title>
+        <h2><i class="fa fas fa-briefcase"></i><span class="break"></span>Members</h2>
         </div>
-      </div>
       <div class="box-content">
 
         <table class="table table-striped table-bordered bootstrap-datatable datatable">
@@ -47,7 +43,7 @@ $create_account_url = base_url()."users/create";
                 <td class="center"><?= $date_created ?></td>
                 <td class="center">
                   <a class="btn btn-info" href="<?= $edit_account_url ?>">
-                    <i class="halflings-icon white edit"></i>
+                    <i class="fa fas fa-edit"></i>
                   </a>
                 </td>
               </tr>

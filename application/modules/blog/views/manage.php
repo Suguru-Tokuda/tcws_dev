@@ -8,11 +8,13 @@
   ?><p style="margin-top: 30px;">
     <a href="<?= $create_blog_url ?>"><button class="btn btn-primary" type="submit">Create New Blog Entry</button></a>
 
-    <div class="row mt">
-      <div class="col-lg-12">
-          <div class="form-panel">
-              <h4 class="mb"><i class="fa fas fa-file"></i> Custom Blog</h4>
-              <input type= "search"/>
+    <div class="row-fluid sortable">
+      <div class="box span12">
+        <div class="green-panel" data-original-title>
+          <h2 class="mb"><i class="fa fas fa-file"></i> Custom Blog</h2>
+
+        </div>
+        <div class="box-content">
               <table class="table table-bordered table-striped table-condensed">
             <thead>
               <tr>

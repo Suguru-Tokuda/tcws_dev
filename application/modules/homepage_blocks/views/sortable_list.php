@@ -29,14 +29,14 @@
         $update_id = $row->id;
         ?>
         <a class="btn btn-default" href="<?= base_url() ?>">
-          <i class="halflings-icon white eye-open"></i>
+          <i class="fa fas fa-eye"></i>
           <?php
           echo $num_items." ".$entity;
           ?>
         </a>
 
       <a class="btn btn-info" href="<?= $edit_item_url ?>">
-        <i class="halflings-icon white edit"></i>
+        <i class="fa fas fa-edit"></i>
       </a>
     </li>
     <?php
