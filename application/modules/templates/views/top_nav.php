@@ -1,9 +1,7 @@
 <?php
 $this->load->module('site_security');
 $user_id = $this->site_security->_get_user_id();
-$signup_url = base_url()."youraccount/start";
-$this->load->module('site_security');
-$user_id = $this->site_security->_get_user_id();
+$signin_signup_url = base_url()."youraccount/start";
 ?>
 <li><a href="#"><span>Trading Post</span></a>
   <ul class="sub-menu">
@@ -11,7 +9,7 @@ $user_id = $this->site_security->_get_user_id();
     <?php
     if ($user_id != "") {
       ?>
-      <li><a href="<?= base_url().'trading_post/post_item'?>">Post for Sale</a></li>
+      <li><a href="<?= base_url().'listed_items/create_item'?>">Post for Sale</a></li>
       <?php
     }
     ?>
@@ -23,16 +21,3 @@ $user_id = $this->site_security->_get_user_id();
   </ul>
 </li>
 <li><a href="#"><span>Community</span></a></li>
-<?php
-if ($user_id == "") {
-  ?>
-  <li><a href="#"><span>Account Menu</span></a>
-    <ul class="sub-menu">
-      <li><a href="<?= $signup_url ?>"><span class="glyphicon glyphicon-user"></span> Sign Up / Login</a></li>
-    </ul>
-  </li>
-  <?php
-} else if ($user_id > 0) {
-  include('customer_dropdown.php');
-}
-?>

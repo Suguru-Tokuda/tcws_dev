@@ -54,9 +54,7 @@ class Youraccount extends MX_Controller {
     $this->load->module('site_security');
     $this->site_security->_make_sure_logged_in();
     $data['flash'] = $this->session->flashdata('item');
-    $data['view_file'] = "welcome";
-    $this->load->module('templates');
-    $this->templates->public_bootstrap($data);
+    redirect('listed_items/manage');
   }
 
   // login function

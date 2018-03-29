@@ -28,7 +28,7 @@ $create_item_url = base_url()."listed_items/create_item";
             <thead>
               <tr>
                 <th style="text-align: center;">ID</th>
-                <th style="text-align: center;">Picture</th>
+                <th style="width: 200px; text-align: center;">Picture</th>
                 <th style="text-align: center;">Item Title</th>
                 <th style="text-align: center;">Listed Price</th>
                 <th style="width: 15px;">Status</th>
@@ -54,9 +54,11 @@ $create_item_url = base_url()."listed_items/create_item";
                 if ($status == 1) {
                   $status_label = "success";
                   $status_desc = "Active";
+                  $status_color = "#00cc00";
                 } else {
                   $status_label = "default";
                   $status_desc = "Inactive";
+                  $status_color = "#cc0000";
                 }
                 ?>
                 <tr>
@@ -76,19 +78,19 @@ $create_item_url = base_url()."listed_items/create_item";
                 <td style="text-align: center; padding: 50px 0;"><?= $item_title ?></td>
                 <td class="center" style="text-align: center; padding: 50px 0;"><?= $item_price ?></td>
                 <td style="text-align: center; padding: 50px 0;">
-                  <span class="label label-<?= $status_label ?>"><?= $status_desc ?></span>
+                  <p style="color: <?= $status_color ?>;"><?= $status_desc ?></p>
                 </td>
                 <td class="span1" width="15%;" style="text-align: center; padding: 50px 0;">
                   <?php
                   if (isset($cat_url)) {
                     ?>
-                    <a class="btn btn-default" href="<?= $view_item_url ?>">
+                    <a class="btn btn-info" href="<?= $view_item_url ?>">
                       <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View
                     </a>
                     <?php
                   }
                   ?>
-                  <a class="btn btn-default" href="<?= $edit_item_url ?>">
+                  <a class="btn btn-success" href="<?= $edit_item_url ?>">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
                   </a>
                   <i class="halflings-icon white edit"></i>

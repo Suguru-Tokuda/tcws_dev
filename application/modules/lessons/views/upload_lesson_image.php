@@ -50,7 +50,7 @@ $form_location = base_url().'lessons/do_upload/'.$lesson_id;
       </div>
       <div class="form-action">
         <button type="submit" name="submit" class="btn btn-primary" value="upload">Upload</button>
-        <button type="submit" name="submit" class="btn" value="cancel">Cancel</button>
+        <button type="submit" name="submit" class="btn" value="cancel">Back</button>
       </div>
     </form>
     <?php

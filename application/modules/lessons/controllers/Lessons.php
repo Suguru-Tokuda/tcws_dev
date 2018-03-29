@@ -66,7 +66,7 @@ class Lessons extends MX_Controller {
           $flash_msg = "The lesson details were successfully updatd.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
           $this->session->set_flashdata('item', $value);
-          redirect('lessons/create_lesson'.$lesson_url); // sending back to create_lesson page
+          redirect('lessons/create_lesson/'.$lesson_id); // sending back to create_lesson page
         } else {
           // inseting to DB
           $code = $this->site_security->generate_random_string(6);
@@ -146,8 +146,10 @@ class Lessons extends MX_Controller {
   function _process_delete_lesson($lesson_id) {
     $this->load->module('lesson_small_pics');
     $this->load->module('lesson_big_pics');
+    $this->load->module('lesson_schedules');
     $lesson_small_pic_ids = $this->lesson_small_pics->get_lesson_small_pic_ids_by_lesson_id($lesson_id);
 
+    // loop through picture ids and delete
     foreach($lesson_small_pic_ids as $key => $value) {
       $picture_name = $this->lesson_small_pics->get_picture_name_by_lesson_small_pic_id($value);
       $big_pic_path = './lesson_big_pics'.$picture_name;
@@ -162,6 +164,7 @@ class Lessons extends MX_Controller {
       $this->lesson_big_pics->_delete_where('small_pic_id', $value);
     }
 
+    $this->lesson_schedules->_delete_where('lesson_id', $lesson_id);
     $this->lesson_small_pics->_delete_where('lesson_id', $lesson_id);
     $this->_delete($lesson_id);
   }

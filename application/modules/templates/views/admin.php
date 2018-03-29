@@ -2,15 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Admin</title>
+  <title>TCW Admin</title>
   <meta name="description" content="Bootstrap Metro Dashboard">
   <meta name="author" content="Dennis Ji">
   <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="<?php echo base_url(); ?>assets/css/admin_vendor_style.css" rel="stylesheet">
-  <link href="<?php echo base_url(); ?>assets/css/admin_custom_style.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/dashgum_custom.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/admin_header.js"></script>
+
+  <link href="<?php echo base_url(); ?>assets/css/admin_vendor_style.css" rel="stylesheet">
+  <link href="<?php echo base_url(); ?>assets/css/admin_custom_style.css" rel="stylesheet">
 
   <!-- start: Favicon -->
   <link rel="shortcut icon" href="<?php echo base_url(); ?>adminfiles/img/favicon.ico">

@@ -26,12 +26,14 @@
             <th>Name</th>
             <th>Capacity</th>
             <th>Fee</th>
+            <th>Schedules</ht>
             <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <?php
+          $this->load->module('lesson_schedules');
           foreach($query->result() as $row) {
             $edit_lesson_url = base_url()."lessons/create_lesson/".$row->id;
             $view_lesson_url = base_url()."lessons/view_lesson/".$row->id;
@@ -39,6 +41,7 @@
             $lesson_name = $row->lesson_name;
             $lesson_capacity = $row->lesson_capacity;
             $lesson_fee = $currency_symbol.$row->lesson_fee;
+            $number_of_schedules = $this->lesson_schedules->get_where_custom('lesson_id', $id)->num_rows();
 
             $status = $row->status;
             $status_string = "";
@@ -55,6 +58,7 @@
              <td><?= $lesson_name ?></td>
              <td><?= $lesson_capacity ?></td>
              <td><?= $lesson_fee ?></td>
+             <td><?= $number_of_schedules ?></td>
              <td>
                <span class="label label-<?=$status_label ?>"><?= $status_desc ?></span>
              </td>

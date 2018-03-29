@@ -60,7 +60,11 @@
         include('top_nav.php');
         ?>
       </ul>
-    </nav><!--Nav bar ends--></header><?php
+    </nav>
+    <?php
+    include('toolbar.php')
+     ?>
+  </header><?php
     if (isset($page_content)) {
       if ($page_url == "") { // means it's in homepage
         require_once('carousel.php');

@@ -5,7 +5,7 @@ class Lesson_schedules extends MX_Controller {
     parent::__construct();
     $this->load->library('form_validation');
     $this->load->module('custom_pagination');
-    $this->form_validation->set_ci($this);
+    $this->form_validation->set_ci_reference($this);
   }
 
   function manage_lesson_schedules($lesson_id) {
@@ -30,6 +30,7 @@ class Lesson_schedules extends MX_Controller {
     $data['lesson_id'] = $lesson_id;
     $data['query'] = $query;
     $data['view_file'] = "manage_lesson_schedules";
+    $data['flash'] = $this->session->flashdata('item');
     $this->load->module('templates');
     $this->templates->admin($data);
   }
@@ -37,11 +38,11 @@ class Lesson_schedules extends MX_Controller {
   function create_lesson_schedule($lesson_id) {
     $this->load->module('site_security');
     $this->load->module('timedate');
+    $this->load->library('session');
     $this->site_security->_make_sure_is_admin();
 
     $submit = $this->input->post('submit', true);
     $lesson_schedule_id = $this->uri->segment(4);
-
 
     if ($submit == "cancel") {
       redirect('lesson_schedules/manage_lesson_schedules/'.$lesson_id);
@@ -64,7 +65,6 @@ class Lesson_schedules extends MX_Controller {
           // insert
           $data['lesson_id'] = $lesson_id;
           $this->_insert($data);
-          $this->load->library('session');
           $flash_msg = "The schedule was successfully added.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
           $this->session->set_flashdata('item', $value);
@@ -79,21 +79,61 @@ class Lesson_schedules extends MX_Controller {
       $data = $this->fetch_data_from_post();
     }
 
-
-    if (!isset($lesson_shcedule_id)) {
+    if (!isset($lesson_schedule_id)) {
       $lesson_schedule_id = "";
       $data['headline'] = "Craete New Lesson Schedule";
     } else {
       $data['headline'] = "Update Lesson Schedule";
     }
 
-
-
     $data['lesson_id'] = $lesson_id;
     $data['lesson_schedule_id'] = $lesson_schedule_id;
     $data['view_file'] = "create_lesson_schedule";
+    $data['flash'] = $this->session->flashdata('item');
     $this->load->module('templates');
     $this->templates->admin($data);
+  }
+
+  function lesson_schedule_deleteconf($lesson_id, $lesson_schedule_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($lesson_schedule_id)) {
+      redirect('site_security/not_allowed');
+    }
+    $data['lesson_id'] = $lesson_id;
+    $data['lesson_schedule_id'] = $lesson_schedule_id;
+    $data['headline'] = "Delete Lesson Schedule";
+
+    $data['flash'] = $this->session->flashdata('item');
+    $data['view_file'] = "lesson_schedule_deleteconf";
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function delete_lesson_schedule($lesson_id, $lesson_schedule_id) {
+    if (!is_numeric($lesson_schedule_id)) {
+      redirect('site_security/not_allowed');
+    }
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+    $this->load->library('session');
+
+    $submit = $this->input->post('submit', true);
+
+    if ($submit == "cancel") {
+      redirect('lesson_schedules/create_lesson_schedule/'.$lesson_id.'/'.$lesson_schedule_id);
+    } else if ($submit == "delete") {
+      $this->_process_delete_lesson_schedule($lesson_schedule_id);
+      $flash_msg = "The schedule was successfully deleted.";
+      $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
+      $this->session->set_flashdata('item', $value);
+      redirect('lesson_schedules/manage_lesson_schedules/'.$lesson_id);
+    }
+  }
+
+  function _process_delete_lesson_schedule($lesson_schedule_id) {
+    $this->_delete($lesson_schedule_id);
   }
 
   // beginning of pagination methods
@@ -194,6 +234,11 @@ class Lesson_schedules extends MX_Controller {
 
     $this->load->model('mdl_lesson_schedules');
     $this->mdl_lesson_schedules->_delete($id);
+  }
+
+  function _delete_where($col, $value) {
+    $this->load->model('mdl_lesson_schedules');
+    $this->mdl_lesson_schedules->_delete_where($col, $value);
   }
 
   function count_where($column, $value) {
