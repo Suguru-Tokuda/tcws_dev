@@ -8,10 +8,11 @@ class Small_pics extends MX_Controller {
   function _get_picture_name_by_small_pic_id($id) {
     $mysql_query = "SELECT picture_name FROM small_pics WHERE id = $id";
     $query = $this->_custom_query($mysql_query);
-    foreach($query->result() as $row) {
-      $picture_name = $row->picture_name;
-    }
-    return $picture_name;
+    return $query->row()->picture_name;
+    // foreach($query->result() as $row) {
+    //   $picture_name = $row->picture_name;
+    // }
+    // return $picture_name;
   }
 
   function _delete_where($col, $value) {

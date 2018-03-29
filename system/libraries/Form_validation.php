@@ -855,7 +855,7 @@ class CI_Form_validation {
 			return $line;
 		}
 
-		return $this->CI->lang->line('form_validation_error_message_not_set').'('.$rule.')';
+		return $this->CI->lang->line('form_f_message_not_set').'('.$rule.')';
 	}
 
 	// --------------------------------------------------------------------

@@ -22,8 +22,8 @@ if (is_numeric($update_id)) { ?>
         <?php
       }
       ?>
-    </div><!--/span-->
-  </div><!--/row-->
+    </div>
+  </div>
   <?php
 }
 ?>
@@ -37,7 +37,7 @@ if (is_numeric($update_id)) { ?>
       <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
         <fieldset>
           <div class="form-group">
-            <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Item Title </label>
+            <label class="col-sm-2 control-label" for="typeahead">Item Title </label>
             <div class="col-sm-10">
               <input type="text" class="form-control typeahead" name="item_title" value="<?= $item_title ?>">
             </div>
@@ -59,7 +59,7 @@ if (is_numeric($update_id)) { ?>
 
             <!-- categories - dropdown or checkbox -->
             <div class="form-group">
-              <label class="col-sm-2 col-sm-2 control-label" for="textinput">Categories</label>
+              <label class="col-sm-2 control-label" for="textinput">Categories</label>
               <div class="col-sm-10" style="margin-top: 8px;">
                 <?php
                 $this->load->module('store_categories');
@@ -80,7 +80,7 @@ if (is_numeric($update_id)) { ?>
             </div>
 
             <div class="form-group">
-              <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Satus </label>
+              <label class="col-sm-2 control-label" for="typeahead">Satus </label>
               <div class="col-sm-10">
                 <?php
                 if (!isset($status)) {
@@ -115,15 +115,10 @@ if (is_numeric($update_id)) { ?>
               </div>
             </div>
 
-
             <div class="form-group hidden-phone">
               <label class="col-sm-2 col-sm-2 control-label" for="textarea2">Item Description</label>
               <div class="col-sm-10">
-                <textarea class="form-control" id="textarea2" rows="3" name="item_description" >
-                  <?php
-                  echo $item_description;
-                  ?>
-                </textarea>
+                <textarea class="form-control" id="textarea2" rows="3" name="item_description" ><?php echo $item_description; ?></textarea>
               </div>
             </div>
 
@@ -133,8 +128,6 @@ if (is_numeric($update_id)) { ?>
             </div>
           </fieldset>
         </form>
-
       </div>
-    </div><!--/span-->
-
-  </div><!--/row-->
+    </div>
+  </div>

@@ -10,12 +10,8 @@
 
     <div class="row-fluid sortable">
       <div class="box span12">
-        <div class="box-header" data-original-title>
-          <h2><i class="halflings-icon white file"></i><span class="break"></span>Custom Webpages</h2>
-          <div class="box-icon">
-            <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-            <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
-          </div>
+        <div class="green-panel" data-original-title>
+          <h2><i class="fa fas-list"></i>Custom Webpages</h2>
         </div>
         <div class="box-content">
           <table class="table table-striped table-bordered bootstrap-datatable datatable">
@@ -40,10 +36,10 @@
                   <td class="center"><?= $row->page_title ?></td>
                   <td class="center">
                     <a class="btn btn-success" href="<?= $view_page_url ?>">
-                      <i class="halflings-icon white zoom-in"></i>
+                      <i class="fa fas fa-search"></i>
                     </a>
                     <a class="btn btn-info" href="<?= $edit_page_url ?>">
-                      <i class="halflings-icon white edit"></i>
+                      <i class="fa fas fa-edit"></i>
                     </a>
                   </td>
                 </tr>

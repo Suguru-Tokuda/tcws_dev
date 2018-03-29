@@ -1,7 +1,7 @@
 <?php
 if (is_numeric($lesson_id)) {
-  $lesson_url = $this->uri->segment(3);
-  $form_location = base_url().'lessons/create_lesson/'.$lesson_url;
+  $lesson_id = $this->uri->segment(3);
+  $form_location = base_url().'lessons/create_lesson/'.$lesson_id;
 } else {
   $form_location = base_url().'lessons/create_lesson';
 }
@@ -9,18 +9,19 @@ if (is_numeric($lesson_id)) {
 <div class="form-panel">
   <h4 class="mb"><?= $headline ?></h4>
   <?php
-  if (isset($lesson_url)) {
-   ?>
-  <a href="<?= base_url() ?>lessons/upload_image/<?= $lesson_url ?>" ><button type="button" class="btn btn-primary">Manage Images</button></a>
-  <a href="<?= base_url() ?>lessons/deleteconf/<?= $lesson_url ?>" ><button type="button" class="btn btn-danger">Delete Lesson</button></a>
-  <a href="<?= base_url() ?>lessons/view/<?= $lesson_url?>" ><button type="button" class="btn btn-default">View Lesson In Shop</button></a>
-  <?php
-  }
-   ?>
-  <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
-    <?php
-    echo validation_errors("<p style='color: red;'>", "</p>");
+  if (!empty($lesson_id)) {
     ?>
+    <a href="<?= base_url() ?>lesson_schedules/manage_lesson_schedules/<?= $lesson_id ?>" ><button type="button" class="btn btn-warning">Manage Schedules for the Lesson</button></a>
+    <a href="<?= base_url() ?>lessons/upload_lesson_image/<?= $lesson_id ?>" ><button type="button" class="btn btn-primary">Manage Images</button></a>
+    <a href="<?= base_url() ?>lessons/view_lesson/<?= $lesson_id?>" ><button type="button" class="btn btn-info">View Lesson On Main Page</button></a>
+    <a href="<?= base_url() ?>lessons/deleteconf/<?= $lesson_id ?>" ><button type="button" class="btn btn-danger">Delete Lesson</button></a>
+    <a href="<?= base_url() ?>lessons/manage_lessons" ><button type="button" class="btn">Back to All Lessons</button></a>
+    <p style="margin-top: 20px;"></p>
+    <?php
+  }
+  ?>
+  <?php validation_errors("<p style='color: red;'>", "</p>"); ?>
+  <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
     <div class="form-group">
       <label class="col-sm-2 control-label">Lesson Name</label>
       <div class="col-sm-5">
@@ -78,8 +79,8 @@ if (is_numeric($lesson_id)) {
     <?php
     if (is_numeric($lesson_id)) {
       ?>
-      <div class="fomr-group">
-        <label class="col-md-3 control-label">Status</label>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Status</label>
         <div class="col-md-2">
           <?php
           if (!isset($status)) {
@@ -100,7 +101,19 @@ if (is_numeric($lesson_id)) {
     ?>
     <div class="form-group">
       <div class="col-md-offset-3 col-md-4">
-        <button name="submit" value="submit" class="btn btn-primary">Proceed</button>
+        <button name="submit" value="submit" class="btn btn-primary">
+          <?php
+          if (!empty($lesson_id)) {
+            ?>
+            Update
+            <?php
+          } else {
+            ?>
+            Proceeds
+            <?php
+          }
+          ?>
+        </button>
         <button name="submit" value="cancel" class="btn btn-default">Cancel</button>
       </div>
     </div>

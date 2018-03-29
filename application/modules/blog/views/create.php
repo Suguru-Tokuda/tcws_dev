@@ -19,7 +19,7 @@ if (isset($flash)) {
           <div class="form-group">
             <label class=" col-sm-2 col-sm-2 control-label" for="typeahead">Date published</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control has-toolbar fc" name="date_published" value="<?= $date_published ?>" >
+              <input type="date" class="form-control has-toolbar fc" name="date_published" value="<?= $date_published ?>" >
             </div>
           </div>
 

@@ -31,7 +31,6 @@ $form_location = base_url().'listed_items/do_upload/'.$item_url;
   <div class="row-fluid sortable">
     <div class="box span12">
       <div class="box-header" data-original-title>
-        <!-- <h2><i class="halflings-icon white tag"></i><span class="break"></span>Upload Image</h2> -->
         <div class="box-icon">
           <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
           <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
@@ -79,7 +78,7 @@ $form_location = base_url().'listed_items/do_upload/'.$item_url;
     if ($num_rows > 0) {
       ?>
       <h4>Uploaded Pictures</h4>
-      <p><?= $num_rows ?> pictures for the item (max 10 pictures) - <strong>You can drag and change the oder</strong></p>
+      <p><?= $num_rows ?> pictures for the item (max 5 pictures) - <strong>You can drag and change the order</strong></p>
       <!-- pictures -->
       <ul id="sortlist" class="list-group" style="margin-top: 30px; list-style: none;">
         <?php
@@ -87,7 +86,7 @@ $form_location = base_url().'listed_items/do_upload/'.$item_url;
         foreach($query->result() as $row) {
           $delete_image_url = base_url()."/listed_items/delete_image/".$row->id;
           $picture_location = base_url()."big_pics/".$row->picture_name;
-          $view_item_url = base_url()."/store_categories/view/".$row->id;
+          // $view_item_url = base_url()."/store_categories/view/".$row->id;
           $priority = $row->priority;
           ?>
           <li class="sort list-group-item col-md-3" style="height: 200px;" id="<?= $row->id?>">

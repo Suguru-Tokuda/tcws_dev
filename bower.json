@@ -29,6 +29,8 @@
     "jquery.sparkline": "^2.1.2"
   },
   "devDependencies": {
-    "jquery-ui": "^1.12.1"
+    "jquery-ui": "^1.12.1",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
+    "tether": "^1.4.3"
   }
 }

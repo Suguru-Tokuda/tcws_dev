@@ -2,7 +2,6 @@
 $this->load->module('site_security');
 $user_id = $this->site_security->_get_user_id();
 $signup_url = base_url()."youraccount/start";
-$login_url = base_url()."youraccount/login";
 $this->load->module('site_security');
 $user_id = $this->site_security->_get_user_id();
 ?>
@@ -29,8 +28,7 @@ if ($user_id == "") {
   ?>
   <li><a href="#"><span>Account Menu</span></a>
     <ul class="sub-menu">
-      <li><a href="<?= $signup_url ?>"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-      <li><a href="<?= $login_url ?>"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <li><a href="<?= $signup_url ?>"><span class="glyphicon glyphicon-user"></span> Sign Up / Login</a></li>
     </ul>
   </li>
   <?php
