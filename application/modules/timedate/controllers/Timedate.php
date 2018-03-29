@@ -64,7 +64,7 @@ class Timedate extends MX_Controller {
     return $timestamp;
   }
 
-  function make_timestemp($day, $month, $year) {
+  function make_timestamp($day, $month, $year) {
     $hour = 7;
     $minute = 0;
     $second = 0;

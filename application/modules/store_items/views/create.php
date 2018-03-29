@@ -22,8 +22,8 @@ if (is_numeric($update_id)) { ?>
         <?php
       }
       ?>
-    </div><!--/span-->
-  </div><!--/row-->
+    </div>
+  </div>
   <?php
 }
 ?>
@@ -115,15 +115,10 @@ if (is_numeric($update_id)) { ?>
               </div>
             </div>
 
-
             <div class="form-group hidden-phone">
               <label class="col-sm-2 col-sm-2 control-label" for="textarea2">Item Description</label>
               <div class="col-sm-10">
-                <textarea class="form-control" id="textarea2" rows="3" name="item_description" >
-                  <?php
-                  echo $item_description;
-                  ?>
-                </textarea>
+                <textarea class="form-control" id="textarea2" rows="3" name="item_description" ><?php echo $item_description; ?></textarea>
               </div>
             </div>
 
@@ -133,8 +128,6 @@ if (is_numeric($update_id)) { ?>
             </div>
           </fieldset>
         </form>
-
       </div>
-    </div><!--/span-->
-
-  </div><!--/row-->
+    </div>
+  </div>

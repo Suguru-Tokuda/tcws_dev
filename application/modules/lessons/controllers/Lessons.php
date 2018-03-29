@@ -7,7 +7,7 @@ class Lessons extends MX_Controller {
     $this->load->module('custom_pagination');
     $this->load->library('upload');
     $this->load->library('image_lib');
-    $this->form_validation->set_ci_reference( $this );
+    $this->form_validation->set_ci_reference($this);
   }
 
   function manage_lessons() {
@@ -105,35 +105,6 @@ class Lessons extends MX_Controller {
     $data['view_file'] = "create_lesson";
     $this->load->module('templates');
     $this->templates->admin($data);
-  }
-
-  function manage_lesson_schedules($lesson_id) {
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_is_admin();
-
-    $mysql_query = "SELECT * FROM lesson_schedules WHERE lesson_id = $lesson_id ORDER BY lesson_date DESC";
-    $lesson_name = $this->_get_lesson_name_for_lesson_id($lesson_id);
-    $query = $this->_custom_query($mysql_query);
-    $total_lesson_schedules = $query->num_rows();
-
-    $pagination_data['template'] = "public_bootstrap";
-    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
-    $pagination_data['total_rows'] = $total_lesson_schedules;
-    $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_pagination_limit();
-    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
-
-    $data['headline'] = "Manage Schedules";
-    $data['lesson_name'] = $lesson_name;
-    $data['lesson_id'] = $lesson_id;
-    $data['query'] = $query;
-    $data['view_file'] = "manage_lesson_schedules";
-    $this->load->module('templates');
-    $this->templates->admin($data);
-  }
-
-  function create_lesson_schedule($lesson_id) {
-
   }
 
   function deleteconf($lesson_id) {

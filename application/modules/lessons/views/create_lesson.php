@@ -11,7 +11,7 @@ if (is_numeric($lesson_id)) {
   <?php
   if (!empty($lesson_id)) {
     ?>
-    <a href="<?= base_url() ?>lessons/manage_lesson_schedules/<?= $lesson_id ?>" ><button type="button" class="btn btn-warning">Manage Schedules for the Lesson</button></a>
+    <a href="<?= base_url() ?>lesson_schedules/manage_lesson_schedules/<?= $lesson_id ?>" ><button type="button" class="btn btn-warning">Manage Schedules for the Lesson</button></a>
     <a href="<?= base_url() ?>lessons/upload_lesson_image/<?= $lesson_id ?>" ><button type="button" class="btn btn-primary">Manage Images</button></a>
     <a href="<?= base_url() ?>lessons/view_lesson/<?= $lesson_id?>" ><button type="button" class="btn btn-info">View Lesson On Main Page</button></a>
     <a href="<?= base_url() ?>lessons/deleteconf/<?= $lesson_id ?>" ><button type="button" class="btn btn-danger">Delete Lesson</button></a>
