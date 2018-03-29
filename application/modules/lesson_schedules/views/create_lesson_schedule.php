@@ -7,13 +7,18 @@ if (is_numeric($lesson_schedule_id)) {
 ?>
 <div class="form-panel">
   <h4 class="mb"><?= $headline ?></h4>
+  <?php
+  if (isset($flash)) {
+    echo $flash;
+  }
+   ?>
   <?php validation_errors('<p style="color: red;" >', "</p>"); ?>
   <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
     <div class="form-group">
       <label class=" col-sm-2 col-sm-2 control-label" for="typeahead">Lesosn Date</label>
       <div class="col-sm-3">
         <div class='input-group date' id='lessonDatePicker'>
-          <input name="lesson_date" type='text' class="form-control" />
+          <input name="lesson_date" type='text' class="form-control" value="<?= $lesson_date ?>" />
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-calendar"></span>
           </span>
@@ -31,7 +36,7 @@ if (is_numeric($lesson_schedule_id)) {
       <label class="col-sm-2 control-label">Start Time</label>
         <div class="col-sm-3">
           <div class='input-group date' id='startTimePicker'>
-            <input name="lesson_start_time" type='text' class="form-control" />
+            <input name="lesson_start_time" type='text' class="form-control" value="<?= $lesson_start_time ?>" />
             <span class="input-group-addon">
               <span class="glyphicon glyphicon-time"></span>
             </span>
@@ -49,7 +54,7 @@ if (is_numeric($lesson_schedule_id)) {
       <label class="col-sm-2 control-label">End Time</label>
       <div class="col-sm-3">
         <div class='input-group date' id='endTimePicker'>
-          <input name="lesson_end_time" type='text' class="form-control" />
+          <input name="lesson_end_time" type='text' class="form-control" value="<?= $lesson_end_time ?>" />
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-time"></span>
           </span>

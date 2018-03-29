@@ -40,8 +40,8 @@ class Lesson_schedules extends MX_Controller {
     $this->site_security->_make_sure_is_admin();
 
     $submit = $this->input->post('submit', true);
-
     $lesson_schedule_id = $this->uri->segment(4);
+
 
     if ($submit == "cancel") {
       redirect('lesson_schedules/manage_lesson_schedules/'.$lesson_id);
@@ -74,10 +74,11 @@ class Lesson_schedules extends MX_Controller {
     }
 
     if ((isset($lesson_schedule_id)) && ($submit != "submit")) {
-      $data = $this->fetch_data_from_db($lesson_id);
+      $data = $this->fetch_data_from_db($lesson_schedule_id);
     } else {
       $data = $this->fetch_data_from_post();
     }
+
 
     if (!isset($lesson_shcedule_id)) {
       $lesson_schedule_id = "";
@@ -85,6 +86,7 @@ class Lesson_schedules extends MX_Controller {
     } else {
       $data['headline'] = "Update Lesson Schedule";
     }
+
 
 
     $data['lesson_id'] = $lesson_id;
@@ -128,7 +130,7 @@ class Lesson_schedules extends MX_Controller {
     $this->load->module('site_security');
     $this->load->module('timedate');
     $this->site_security->_make_sure_is_admin();
-    if (!is_numeric($lesson_id)) {
+    if (!is_numeric($lesson_schedule_id)) {
       redirect(base_url());
     }
     $query = $this->get_where($lesson_schedule_id);

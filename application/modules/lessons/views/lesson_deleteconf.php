@@ -5,7 +5,7 @@ if (isset($flash)) {
   echo $flash;
 }
  ?>
- <h4>Are you sure that you want to delete the lesson?</h4>
+ <h4>Are you sure that you want to delete the lesson? All the schedules associated to this lesson will be deleted as well.</h4>
  <?php
  $attributes = array('class' => 'form-horizontal', 'id' => 'myform');
  echo form_open_multipart('lessons/delete_lesson/'.$lesson_id, $attributes);

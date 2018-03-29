@@ -1,4 +1,9 @@
 <h3 class="mb"><?= $headline ?></h3>
+<?php
+if (isset($flash)) {
+  echo $flash;
+}
+ ?>
 <div class="form-panel">
   <h4><?= $lesson_name ?></h4>
   <a href="<?= base_url() ?>lesson_schedules/create_lesson_schedule/<?= $lesson_id ?>" ><button type="button" class="btn btn-warning">Create Schedule</button></a>
@@ -22,7 +27,7 @@
         foreach($query->result() as $row) {
           $this->load->module('lesson_bookings');
           $this->load->module('timedate');
-          $edit_lesson_schedule_url = base_url()."lessons/create-lessons/".$row->id;
+          $edit_lesson_schedule_url = base_url()."lesson_schedules/create_lesson_schedule/".$lesson_id.'/'.$row->id;
           $lesson_schedule_id = $row->id;
           $lesson_date = $this->timedate->get_date($row->lesson_date, "datepicker_us");
           $start_time = $row->lesson_start_time;
