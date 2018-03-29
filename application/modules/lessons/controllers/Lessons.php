@@ -155,7 +155,6 @@ class Lessons extends MX_Controller {
   }
   // end of pagination methods
 
->>>>>>> e7335221a3f2d31f0a17922add51b85315154a46
   function get($order_by)
   {
     $this->load->model('mdl_lessons');
