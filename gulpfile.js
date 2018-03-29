@@ -7,7 +7,7 @@ var ignore = require('gulp-ignore'); // npm install --save-dev gulp-ignore
 var minify = require('gulp-minify'); // npm install --save-dev gulp-minify
 var order = require('gulp-order'); // npm install --save-dev gulp-order
 var del = require('del'); // npm install --save-dev del
-
+var uglify = require('gulp-uglify'); // npm install --save-dev uglify
 var gulpFilter = require('gulp-filter'); // npm install --save-dev gulp-filter
 var mainBowerFiles = require('main-bower-files'); // npm install --save-dev main-bower-files
 
@@ -118,6 +118,12 @@ gulp.task('compress-dashgum-custom-css', function() {
 
 gulp.task('compress-dashgum-vendor-css', function() {
   var stream = gulp.src(paths.dashgumVendorCSSSource)
+  .pipe(order([
+    'bootstrap.css',
+    'bootstrap-datetimepicker.min.css',
+    '*.css'
+  ]))
+  .pipe(minify())
   .pipe(concat('admin_vendor_style.css'))
   .pipe(gulp.dest(paths.cssDest));
   return stream;
@@ -169,6 +175,13 @@ gulp.task('publish-dashgum-images', function() {
 
 gulp.task('compress-dashgum-header-js', function() {
   var stream = gulp.src(paths.dashgumHeaderJSSource)
+  .pipe(order([
+    "jquery.js",
+    "moment.js",
+    "bootstrap.min.js",
+    "bootstra-datetimepicker.min.js",
+    "Chart.js"
+  ]))
   .pipe(concat('admin_header.js'))
   .pipe(gulp.dest(paths.jsDest));
   return stream;
@@ -190,5 +203,62 @@ gulp.task('publish-components', function() {
   .pipe(jsFilter)
   .pipe(gulp.dest(paths.vendorJSDest))
   .pipe(jsFilter.restore);
+  return stream;
+});
+
+gulp.task('push-bowercomponents-to-assets', function() {
+  var jsFilter = gulpFilter('**/*.js', {restore: true});
+  var cssFilter = gulpFilter('**/*.css', {restore: true});
+
+  var stream = gulp.src(mainBowerFiles({
+    includeDev: true,
+    overrides: {
+      'bootstrap': {
+        main: [
+          './dist/*/bootstrap.css',
+          './dist/*/bootstrap.js',
+          './dist/fonts/*'
+        ]
+      },
+    }
+  }))
+  .pipe(jsFilter)
+  .pipe(uglify())
+  .pipe(gulp.dest('./assets/vendor/js'))
+  .pipe(jsFilter.restore)
+
+  .pipe(cssFilter)
+  .pipe(gulp.dest('./assets/vendor/css'))
+  .pipe(cssFilter.restore);
+  return stream;
+});
+
+gulp.task('compress-bower-js', ['push-bowercomponents-to-assets'], function() {
+  var stream = gulp.src('./assets/vendor/js/*.js')
+  .pipe(order([
+    'tether.js',
+    'jquery.js',
+    'bootstrap.js',
+    'moment.js',
+    '*.js'
+  ]))
+  .pipe(concat('admin_bower_vendor.js'))
+  .pipe(gulp.dest(paths.jsDest));
+  return stream;
+});
+
+gulp.task('compress-bower-css', ['push-bowercomponents-to-assets'], function() {
+  var stream = gulp.src('./assets/vendor/css/*.css')
+  .pipe(order([
+    'bootstrap.css',
+    '*.css'
+  ]))
+  .pipe(concat('admin_bower_vendor.css'))
+  .pipe(gulp.dest(paths.cssDest));
+  return stream;
+});
+
+gulp.task('process-bower-components', ['compress-bower-js', 'compress-bower-css'], function() {
+  var stream = del('./assets/vendor/');
   return stream;
 });

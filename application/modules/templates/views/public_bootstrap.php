@@ -25,8 +25,8 @@
 </head>
 
 <body>
-<!-- inserting side menu bar-->
-<?php include('side_menu_bar.php'); ?>
+  <!-- inserting side menu bar-->
+  <?php include('side_menu_bar.php'); ?>
   <?php
   // isseet = determines if the value is NOT NULL
   if (isset($sort_this)) {
@@ -67,74 +67,81 @@
       }
     }
     ?>
-  <?php
-      if (isset($page_content)) {
-        if (!isset($page_url)) {
-          $page_url = 'homepage';
-        }
-        if ($page_url == "") {
-          // this lines loads 'content_homepage.php'
-          // require_once('content_homepage.php');
-        } elseif ($page_url == "contactus") {
-          // load up a contact form
-          // echo Modules::run('contact/_drow_form');
-        }
-      } else if (isset($view_file)) {
-        $this->load->view($view_module.'/'.$view_file);
+    <?php
+    if (isset($page_content)) {
+      if (!isset($page_url)) {
+        $page_url = 'homepage';
       }
-      ?>
-  <?php if ($this->uri->segment(1) == "") {
-    echo Modules::run('store_items/_draw_new_items');
-  }
+      if ($page_url == "") {
+        // this lines loads 'content_homepage.php'
+        // require_once('content_homepage.php');
+      } elseif ($page_url == "contactus") {
+        // load up a contact form
+        // echo Modules::run('contact/_drow_form');
+      }
+    } else if (isset($view_file)) {
+      $this->load->view($view_module.'/'.$view_file);
+    }
+    ?>
+    <?php if ($this->uri->segment(1) == "") {
+      echo Modules::run('store_items/_draw_new_items');
+    }
     ?>
 
-  <footer class="site-footer">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-3 col-md-6">
-          <section class="widget widget-light-skin">
-            <h3 class="widget-title">Get In Touch With Us</h3>
-            <p class="text-white">Phone: 123 456 7890</p>
-            <ul class="list-unstyled text-sm text-white">
-              <li><span class="opacity-50">Monday-Friday:</span> 9:00 am - 5:00 pm</li>
-              <li><span class="opacity-50">Saturday-Sunday:</span> 10.00 am - 5.00 pm</li>
-            </ul>
-            <p><a class="navi-link-light" href="#">twincitywatersports@gmail.com</a></p><a class="social-button shape-circle sb-facebook sb-light-skin" href="#"><i class="socicon-facebook"></i></a><a class="social-button shape-circle sb-twitter sb-light-skin" href="#"><i class="socicon-twitter"></i></a><a class="social-button shape-circle sb-instagram sb-light-skin" href="#"><i class="socicon-instagram"></i></a><a class="social-button shape-circle sb-google-plus sb-light-skin" href="#"><i class="socicon-googleplus"></i></a>
-          </section>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <!-- About Us-->
-          <section class="widget widget-links widget-light-skin">
-            <h3 class="widget-title">About Us</h3>
-            <ul>
-              <li><a href="<?= base_url()."contactus" ?>">Contact us</a></li>
-              <li><a href="#">Our Team</a></li>
-              <li><a href="#">Community</a></li>
-            </ul>
-          </section>
-        </div>
-        <?php
-        if ($user_id == 0) {
-          ?>
+    <footer class="site-footer">
+      <div class="container">
+        <div class="row">
           <div class="col-lg-3 col-md-6">
+            <section class="widget widget-light-skin">
+              <h3 class="widget-title">Get In Touch With Us</h3>
+              <p class="text-white">Phone: 123 456 7890</p>
+              <ul class="list-unstyled text-sm text-white">
+                <li><span class="opacity-50">Monday-Friday:</span> 9:00 am - 5:00 pm</li>
+                <li><span class="opacity-50">Saturday-Sunday:</span> 10.00 am - 5.00 pm</li>
+              </ul>
+              <p><a class="navi-link-light" href="#">twincitywatersports@gmail.com</a></p><a class="social-button shape-circle sb-facebook sb-light-skin" href="#"><i class="socicon-facebook"></i></a><a class="social-button shape-circle sb-twitter sb-light-skin" href="#"><i class="socicon-twitter"></i></a><a class="social-button shape-circle sb-instagram sb-light-skin" href="#"><i class="socicon-instagram"></i></a><a class="social-button shape-circle sb-google-plus sb-light-skin" href="#"><i class="socicon-googleplus"></i></a>
+            </section>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <!-- About Us-->
             <section class="widget widget-links widget-light-skin">
-              <h3 class="widget-title">Account</h3>
+              <h3 class="widget-title">About Us</h3>
               <ul>
-                <li><a href="<?= base_url()?>youraccount/start">Sign up</a></li>
+                <li><a href="<?= base_url()."contactus" ?>">Contact us</a></li>
+                <li><a href="#">Our Team</a></li>
+                <li><a href="#">Community</a></li>
               </ul>
             </section>
           </div>
           <?php
-        }
-        ?>
-      </div>
-      <p class="footer-copyright">© <?= $our_company ?></p>
-    </div>
-</footer>
+          if ($user_id == 0) {
+            ?>
+            <div class="col-lg-3 col-md-6">
+              <section class="widget widget-links widget-light-skin">
+                <h3 class="widget-title">Account</h3>
+                <ul>
+                  <li><a href="<?= base_url()?>youraccount/start">Sign up</a></li>
+                </ul>
+              </section>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <section class="widget widget-links widget-light-skin">
+                <h3 class="widget-title">Internal</h3>
+                <ul>
+                  <li><a href="<?= base_url()?>dvilsf">Admin</a></li>
+                </ul>
+              </div>
+              <?php
+            }
+            ?>
+          </div>
+          <p class="footer-copyright">© <?= $our_company ?></p>
+        </div>
+      </footer>
 
-<a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
-<div class="site-backdrop"></div>
-<script src="<?php echo base_url(); ?>assets/js/unishop.vendor.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/unishop.custom.min.js"></script>
-</body>
-</html>
+      <a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+      <div class="site-backdrop"></div>
+      <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.min.js"></script>
+      <script src="<?php echo base_url(); ?>assets/js/unishop.custom.min.js"></script>
+    </body>
+    </html>

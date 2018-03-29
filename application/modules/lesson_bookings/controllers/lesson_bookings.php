@@ -5,6 +5,18 @@ class Lesson_bookings extends MX_Controller {
     parent::__construct();
   }
 
+  function _get_num_of_bookings_for_lesson_schedule_id($lesson_schedule_id) {
+      $mysql_query = "SELECT * FROM lesson_bookings WHERE lesson_schedule_id = ".$lesson_schedule_id;
+      $query = $this->_custom_query($mysql_query);
+      foreach($query->result() as $row) {
+        $sum = $row->lesson_booking_qty;
+      }
+      if (!isset($sum)) {
+        $sum = 0;
+      }
+      return $sum;
+  }
+
   function get($order_by) {
     $this->load->model('mdl_lesson_bookings');
     $query = $this->mdl_lesson_bookings->get($order_by);
