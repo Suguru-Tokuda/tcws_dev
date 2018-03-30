@@ -5,9 +5,62 @@ class Lessons extends MX_Controller {
     parent::__construct();
     $this->load->library('form_validation');
     $this->load->module('custom_pagination');
+    $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
     $this->form_validation->set_ci_reference($this);
+  }
+
+  function view_lessons() {
+    $query = $this->get("lesson_name");
+    $total_lessons = $query->num_rows();
+
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_lessons;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_pagination_limit();
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $data['query'] = $query;
+    $data['view_file'] = "view_lessons";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
+
+  function view_lesson($lesson_url) {
+    $this->load->module('site_security');
+    $this->load->module('site_settings');
+    $this->load->module('lesson_small_pics');
+    $this->load->module('lesson_schedules');
+    $lesson_id = $this->get_where_custom("lesson_url", $lesson_url)->row(0)->id;
+    $capacity = $this->get_where_custom("lesson_url", $lesson_url)->row(0)->lesson_capacity;
+
+    if (!is_numeric($lesson_id)) {
+      $this->site_security->not_allowed();
+    }
+
+    $data_from_db = $this->fetch_data_from_db($lesson_id);
+    $pics_query = $this->lesson_small_pics->get_where_custom("lesson_id", $lesson_id);
+    $schedule_query = $this->lesson_schedules->get_where_custom("lesson_id", $lesson_id);
+
+    $data['flash'] = $this->session->flashdata('item');
+    $currency_symbol = $this->site_settings->_get_currency_symbol();
+    $data['lesson_name'] = $data_from_db['lesson_name'];
+    $data['lesson_description'] = $data_from_db['lesson_description'];
+    $data['lesson_capacity'] = $data_from_db['lesson_capacity'];
+    $data['lesson_fee'] = $data_from_db['lesson_fee'];
+    $data['address'] = $data_from_db['address'];
+    $data['city'] = $data_from_db['city'];
+    $data['state'] = $data_from_db['state'];
+    $data['pics_query'] = $pics_query;
+    $data['schedule_query'] = $schedule_query;
+    $data['leson_fee'] = number_format($data['lesson_fee'], 2);
+    $data['capacity'] = $capacity;
+    $data['currency_symbol'] = $currency_symbol;
+    $data['view_file'] = "view_lesson";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
   }
 
   function manage_lessons() {
@@ -343,7 +396,6 @@ class Lessons extends MX_Controller {
 
   function fetch_data_from_db($lesson_id) {
     $this->load->module('site_security');
-    $this->site_security->_make_sure_is_admin();
     if (!is_numeric($lesson_id)) {
       redirect(base_url());
     }
