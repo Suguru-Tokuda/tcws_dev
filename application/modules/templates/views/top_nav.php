@@ -4,7 +4,7 @@ $user_id = $this->site_security->_get_user_id();
 $signin_signup_url = base_url()."youraccount/start";
 $search_form_location = base_url()."store_items/search_items_by_keywords";
 ?>
-<header class="navbar navbar-sticky">
+<header class="navbar navbar-sticky" style="position: fixed;">
   <form class="site-search" action="<?= $search_form_location ?>" method="post">
     <input type="text" name="searchKeywords" placeholder="Type to search...">
     <div class="search-tools"><span class="clear-search">Clear</span><span class="close-search"><i class="icon-cross"></i></span></div>
@@ -37,11 +37,12 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
         ?>
       </ul>
     </li>
-    <li><a href="#"><span>Lessons</span></a>
+    <li><a href="#"><span>Wakeboard Lessons</span></a>
       <ul class="sub-menu">
-        <li><a href="<?= base_url().'lessons/view_lessons'?>">Wakeboad Lessons</a></li>
+        <li><a href="<?= base_url().'lessons/view_lessons'?>">View Lessons</a></li>
       </ul>
     </li>
+    <li><a href="#"><span>Boat Renting</span></a></li>
     <li><a href="#"><span>Community</span></a></li>
   </ul>
 </nav>

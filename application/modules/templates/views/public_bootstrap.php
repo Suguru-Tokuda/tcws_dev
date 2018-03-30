@@ -23,7 +23,6 @@
   <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.header.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/modernizr.min.js"></script>
 </head>
-
 <body>
   <!-- inserting side menu bar-->
   <?php include('side_menu_bar.php'); ?>
@@ -39,17 +38,23 @@
   include('top_nav.php');
   ?>
   <?php
+  $page_url = $this->uri->segment(3);
   if (isset($page_content)) {
-    if (isset($page_url)) { // means it's in homepage
+    if ($page_url == "") { // means it's in homepage
+      ?>
+      <p style="margin-top: 85px;"></p>
+      <?php
       require_once('carousel.php');
+    } else {
+      ?>
+      <p style="margin-top: 150px;"></p>
+      <?php
     }
   }
   ?>
+  <p style="margin-top: 150px;"></p>
   <?php
   if (isset($page_content)) {
-    if (!isset($page_url)) {
-      $page_url = 'homepage';
-    }
     if ($page_url == "") {
       // this lines loads 'content_homepage.php'
       // require_once('content_homepage.php');

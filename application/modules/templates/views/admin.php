@@ -17,7 +17,6 @@
   <!-- start: Favicon -->
   <link rel="shortcut icon" href="<?php echo base_url(); ?>adminfiles/img/favicon.ico">
   <!-- end: Favicon -->
-
 </head>
 <body>
   <?php
