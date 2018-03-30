@@ -88,7 +88,9 @@ class Site_security extends MX_Controller {
   }
 
   function not_allowed() {
-    echo "You are not allowed to be here.";
+    $data['view_file'] = 'not_allowed';
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
   }
 
 }
