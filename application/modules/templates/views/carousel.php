@@ -1,7 +1,10 @@
+<section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg); padding-top: 75px">
+  <div class="owl-carousel large-controls dots-inside" data-owl-carousel="{ &quot;nav&quot;: true, &quot;dots&quot;: true, &quot;loop&quot;: true, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 7000 }">
+    <div class="item">
 <!-- Main Slider-->
-      <section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);" >
+      <!-- <section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);" >
         <div class="owl-carousel large-controls dots-inside" data-owl-carousel="{ &quot;nav&quot;: true, &quot;dots&quot;: true, &quot;loop&quot;: true, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 7000 }">
-          <div class="item">
+          <div class="item"> -->
             <!-- <div class="container padding-top-3x">
               <div class="row justify-content-center align-items-center">
                 <div class="col-lg-5 col-md-6 padding-bottom-2x text-md-left text-center">
@@ -13,9 +16,7 @@
                 <div class="col-md-6 padding-bottom-2x mb-3"><img class="d-block mx-auto" src="<?=base_url()."/img/surf-lessons-kona-hawaii.jpg"?>" alt="Puma Backpack"></div>
               </div>
             </div> -->
-            <div class="container padding-top-3x">
-                <div class="row justify-content-center align-items-center padding-bottom-4x"><img class="d-block mx-auto" src="<?=base_url()."/img/surf-lessons-kona-hawaii.jpg"?>" alt="Puma Backpack"></div>
-            </div>
+            <img class="d-block mx-auto" src="<?=base_url()."/img/surf-lessons-kona-hawaii.jpg"?>" alt="Puma Backpack" style="width:2475px; height:475px;">
           </div>
           <div class="item">
             <!-- <div class="container padding-top-3x">
@@ -29,9 +30,7 @@
                 <div class="col-md-6 padding-bottom-2x mb-3"><img class="d-block mx-auto" src="<?=base_url()."/img/ocean-7.jpg"?>" alt="Chuck Taylor All Star II"></div>
               </div>
             </div> -->
-            <div class="container padding-top-3x">
-                <div class="padding-bottom-4x"><img class="d-block mx-auto" src="<?=base_url()."/img/ocean-7.jpg"?>" alt="Chuck Taylor All Star II" style="width:1600px; height:450px; background-size:100% 100%"></div>
-            </div>
+            <img class="d-block mx-auto" src="<?=base_url()."/img/ocean-7.jpg"?>" alt="Chuck Taylor All Star II" style="width:2475px; height:475px;">
           </div>
           <div class="item">
             <!-- <div class="container padding-top-3x">
@@ -45,9 +44,7 @@
                 <div class="col-md-6 padding-bottom-2x mb-3"><img class="d-block mx-auto" src="<?=base_url()."/img/background.jpg"?>" alt="Moto 360"></div>
               </div>
             </div> -->
-            <div class="container padding-top-3x">
-                <div class="row justify-content-center align-items-center padding-bottom-4x"><img class="d-block mx-auto" src="<?=base_url()."/img/background.jpg"?>" alt="Moto 360" style="width:1600px; height:450px;"></div>
-            </div>
+          <img class="d-block mx-auto" src="<?=base_url()."/img/background.jpg"?>" alt="Moto 360" style="width:1600px; height:475px;">
           </div>
         </div>
       </section>
