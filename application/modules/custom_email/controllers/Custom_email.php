@@ -8,31 +8,28 @@ class Custom_email extends MX_Controller
   }
 
   function _custom_email_intiate($data) {
-    $from = $data['from'];
-    $set_newline = $data['set_newline'];
-    $to = $data['to'];
-    $subject = $data['subject'];
-    $message = $data['message'];
-    $config = Array(
-       'protocol' => 'smtp',
-       'smtp_host' => 'ssl://smtp.googlemail.com',
-       'smtp_port' => '465',
-       'smtp_user' => '*******@gmail.com', // change it to yours
-       'smtp_pass' => '*******'
-    );
-    //$this->load->library('email',$config);
+    $config['protocol'] = "smtp";
+    $config['smtp_host'] = "ssl://smtp.googlemail.com";
+    $config['smtp_port'] = "465";
+    $config['smtp_user'] = '*****@gmail.com';
+    $config['smtp_pass'] = '*****';
+    $config['mailtype'] = "html";
+    $config['charset'] = "iso-8859-1";
+
     $this->email->initialize($config);
-    $this->email->from($from);
-    $this->email->to($to);
-    $this->email->subject($subject);
-    $this->email->message($message);
-    if($this->email->send())
-    {
+
+    $this->email->from('*****@gmail.com');
+    $this->email->to($data['user_email']);
+
+    $this->email->subject($data['subject']);
+    $this->email->message($data['message']);
+    $this->email->set_newline("\r\n");
+
+    if ($this->email->send()) {
       return true;
-    }
-    else
-    {
+    } else {
       return false;
     }
   }
+
 }

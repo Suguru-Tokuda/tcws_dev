@@ -14,7 +14,9 @@ class Lesson_schedules extends MX_Controller {
     $this->load->module('lessons');
 
     $mysql_query = "SELECT * FROM lesson_schedules WHERE lesson_id = $lesson_id ORDER BY lesson_start_date DESC";
-    $lesson_name = $this->lessons->_get_lesson_name_for_lesson_id($lesson_id);
+    $lesson_capacity = $this->lessons->get_where($lesson_id)->row()->lesson_capacity;
+    $lesson_name = $this->lessons->get_where($lesson_id)->row()->lesson_name;
+
     $query = $this->_custom_query($mysql_query);
     $total_lesson_schedules = $query->num_rows();
 
@@ -28,6 +30,7 @@ class Lesson_schedules extends MX_Controller {
     $data['headline'] = "Manage Schedules";
     $data['lesson_name'] = $lesson_name;
     $data['lesson_id'] = $lesson_id;
+    $data['lesson_capacity'] = $lesson_capacity;
     $data['query'] = $query;
     $data['view_file'] = "manage_lesson_schedules";
     $data['flash'] = $this->session->flashdata('item');
