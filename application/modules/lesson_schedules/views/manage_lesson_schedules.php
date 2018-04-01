@@ -29,15 +29,15 @@ if (isset($flash)) {
           $this->load->module('timedate');
           $edit_lesson_schedule_url = base_url()."lesson_schedules/create_lesson_schedule/".$lesson_id.'/'.$row->id;
           $lesson_schedule_id = $row->id;
-          $lesson_date = $this->timedate->get_date($row->lesson_date, "datepicker_us");
-          $start_time = $row->lesson_start_time;
-          $end_time = $row->lesson_end_time;
+          $lesson_date = $this->timedate->get_date($row->lesson_start_date, "datepicker_us");
+          $lesson_start_time = $this->timedate->get_time($row->lesson_start_date);
+          $lesson_end_time = $this->timedate->get_time($row->lesson_end_date);
           $num_of_bookings = $this->lesson_bookings->_get_num_of_bookings_for_lesson_schedule_id($lesson_schedule_id);
           ?>
           <tr>
             <td><?= $lesson_date ?></td>
-            <td><?= $start_time ?></td>
-            <td><?= $end_time ?></td>
+            <td><?= $lesson_start_time ?></td>
+            <td><?= $lesson_end_time ?></td>
             <td><?= $num_of_bookings?></td>
             <td class="center">
               <a class="btn btn-success" href="<?= $edit_lesson_schedule_url ?>">
