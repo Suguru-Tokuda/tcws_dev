@@ -56,6 +56,12 @@ class Mdl_lesson_schedules extends CI_Model {
     $this->db->delete($table);
   }
 
+  function _delete_where($col, $value) {
+    $table = $this->get_table();
+    $this->db->where($col, $value);
+    $this->db->delete($table);
+  }
+
   function count_where($column, $value) {
     $table = $this->get_table();
     $this->db->where($column, $value);

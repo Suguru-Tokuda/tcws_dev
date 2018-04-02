@@ -5,9 +5,62 @@ class Lessons extends MX_Controller {
     parent::__construct();
     $this->load->library('form_validation');
     $this->load->module('custom_pagination');
+    $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
     $this->form_validation->set_ci_reference($this);
+  }
+
+  function view_lessons() {
+    $query = $this->get("lesson_name");
+    $total_lessons = $query->num_rows();
+
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_lessons;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_pagination_limit();
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $data['query'] = $query;
+    $data['view_file'] = "view_lessons";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
+
+  function view_lesson($lesson_url) {
+    $this->load->module('site_security');
+    $this->load->module('site_settings');
+    $this->load->module('lesson_small_pics');
+    $this->load->module('lesson_schedules');
+    $lesson_id = $this->get_where_custom("lesson_url", $lesson_url)->row(0)->id;
+    $capacity = $this->get_where_custom("lesson_url", $lesson_url)->row(0)->lesson_capacity;
+
+    if (!is_numeric($lesson_id)) {
+      $this->site_security->not_allowed();
+    }
+
+    $data_from_db = $this->fetch_data_from_db($lesson_id);
+    $pics_query = $this->lesson_small_pics->get_where_custom("lesson_id", $lesson_id);
+    $schedule_query = $this->lesson_schedules->get_where_custom("lesson_id", $lesson_id);
+
+    $data['flash'] = $this->session->flashdata('item');
+    $currency_symbol = $this->site_settings->_get_currency_symbol();
+    $data['lesson_name'] = $data_from_db['lesson_name'];
+    $data['lesson_description'] = $data_from_db['lesson_description'];
+    $data['lesson_capacity'] = $data_from_db['lesson_capacity'];
+    $data['lesson_fee'] = $data_from_db['lesson_fee'];
+    $data['address'] = $data_from_db['address'];
+    $data['city'] = $data_from_db['city'];
+    $data['state'] = $data_from_db['state'];
+    $data['pics_query'] = $pics_query;
+    $data['schedule_query'] = $schedule_query;
+    $data['leson_fee'] = number_format($data['lesson_fee'], 2);
+    $data['capacity'] = $capacity;
+    $data['currency_symbol'] = $currency_symbol;
+    $data['view_file'] = "view_lesson";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
   }
 
   function manage_lessons() {
@@ -66,7 +119,7 @@ class Lessons extends MX_Controller {
           $flash_msg = "The lesson details were successfully updatd.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
           $this->session->set_flashdata('item', $value);
-          redirect('lessons/create_lesson'.$lesson_url); // sending back to create_lesson page
+          redirect('lessons/create_lesson/'.$lesson_id); // sending back to create_lesson page
         } else {
           // inseting to DB
           $code = $this->site_security->generate_random_string(6);
@@ -146,8 +199,10 @@ class Lessons extends MX_Controller {
   function _process_delete_lesson($lesson_id) {
     $this->load->module('lesson_small_pics');
     $this->load->module('lesson_big_pics');
+    $this->load->module('lesson_schedules');
     $lesson_small_pic_ids = $this->lesson_small_pics->get_lesson_small_pic_ids_by_lesson_id($lesson_id);
 
+    // loop through picture ids and delete
     foreach($lesson_small_pic_ids as $key => $value) {
       $picture_name = $this->lesson_small_pics->get_picture_name_by_lesson_small_pic_id($value);
       $big_pic_path = './lesson_big_pics'.$picture_name;
@@ -162,6 +217,7 @@ class Lessons extends MX_Controller {
       $this->lesson_big_pics->_delete_where('small_pic_id', $value);
     }
 
+    $this->lesson_schedules->_delete_where('lesson_id', $lesson_id);
     $this->lesson_small_pics->_delete_where('lesson_id', $lesson_id);
     $this->_delete($lesson_id);
   }
@@ -340,7 +396,6 @@ class Lessons extends MX_Controller {
 
   function fetch_data_from_db($lesson_id) {
     $this->load->module('site_security');
-    $this->site_security->_make_sure_is_admin();
     if (!is_numeric($lesson_id)) {
       redirect(base_url());
     }
@@ -381,11 +436,6 @@ class Lessons extends MX_Controller {
     return $target_base_url;
   }
   // end of pagination methods
-
-  function _get_lesson_id_from_lesson_url($lesson_url) {
-    $query = $this->get_where_custom('lesson_url', $lesson_url);
-    return $query->row()->lesson_id;
-  }
 
   function get($order_by)
   {
@@ -468,11 +518,6 @@ class Lessons extends MX_Controller {
     $this->load->model('mdl_lessons');
     $query = $this->mdl_lessons->_custom_query($mysql_query);
     return $query;
-  }
-
-  function _get_lesson_name_for_lesson_id($lesson_id) {
-    $query = $this->get_where($lesson_id);
-    return $query->row()->lesson_name;
   }
 
   // a method to check if the item name exists.

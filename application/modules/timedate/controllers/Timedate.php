@@ -38,6 +38,10 @@ class Timedate extends MX_Controller {
     return $the_date;
   }
 
+  function get_time($timestamp) {
+    return date('h:i A', $timestamp);
+  }
+
   function make_timestamp_from_datepicker($datepicker) {
     $hour = 7;
     $minute = 0;

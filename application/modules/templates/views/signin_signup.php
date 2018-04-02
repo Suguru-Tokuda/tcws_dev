@@ -9,7 +9,6 @@ if ($first_bit == "youraccount") {
   $label = "Admin Login";
 }
 ?>
-<div style="margin-top: 40px"></div>
 <div class="container padding-bottom-3x mb-2">
   <div class="row">
     <div class="col-md-6">

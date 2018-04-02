@@ -9,6 +9,11 @@ if (is_numeric($lesson_id)) {
 <div class="form-panel">
   <h4 class="mb"><?= $headline ?></h4>
   <?php
+  if (isset($flash)) {
+    echo $flash;
+  }
+   ?>
+  <?php
   if (!empty($lesson_id)) {
     ?>
     <a href="<?= base_url() ?>lesson_schedules/manage_lesson_schedules/<?= $lesson_id ?>" ><button type="button" class="btn btn-warning">Manage Schedules for the Lesson</button></a>

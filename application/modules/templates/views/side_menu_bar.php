@@ -19,18 +19,6 @@
               <li><a href="home-collection-showcase.html">Products Collection Showcase</a></li>
           </ul>
         </li>
-        <li class="has-children"><span><a href="shop-grid-ls.html"><span>Wakeboarding</span></a><span class="sub-menu-toggle"></span></span>
-          <ul class="offcanvas-submenu">
-              <li><a href="shop-categories.html">Shop Categories</a></li>
-            <li class="has-children"><span><a href="shop-grid-ls.html"><span>Shop Grid</span></a><span class="sub-menu-toggle"></span></span>
-              <ul class="offcanvas-submenu">
-                  <li><a href="shop-grid-ls.html">Grid Left Sidebar</a></li>
-                  <li><a href="shop-grid-rs.html">Grid Right Sidebar</a></li>
-                  <li><a href="shop-grid-ns.html">Grid No Sidebar</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
         <li class="has-children"><span><a href="shop-grid-ls.html"><span>Trading Post</span></a><span class="sub-menu-toggle"></span></span>
           <ul class="offcanvas-submenu">
               <li><a href="shop-categories.html">Shop Categories</a></li>
@@ -43,7 +31,19 @@
             </li>
           </ul>
         </li>
-        <li class="has-children"><span><a href="shop-grid-ls.html"><span>Lessons</span></a><span class="sub-menu-toggle"></span></span>
+        <li class="has-children"><span><a href="shop-grid-ls.html"><span>Wakeboard Lessons</span></a><span class="sub-menu-toggle"></span></span>
+          <ul class="offcanvas-submenu">
+              <li><a href="shop-categories.html">Shop Categories</a></li>
+            <li class="has-children"><span><a href="shop-grid-ls.html"><span>Shop Grid</span></a><span class="sub-menu-toggle"></span></span>
+              <ul class="offcanvas-submenu">
+                  <li><a href="shop-grid-ls.html">Grid Left Sidebar</a></li>
+                  <li><a href="shop-grid-rs.html">Grid Right Sidebar</a></li>
+                  <li><a href="shop-grid-ns.html">Grid No Sidebar</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li class="has-children"><span><a href="shop-grid-ls.html"><span>Boat Rent</span></a><span class="sub-menu-toggle"></span></span>
           <ul class="offcanvas-submenu">
               <li><a href="shop-categories.html">Shop Categories</a></li>
             <li class="has-children"><span><a href="shop-grid-ls.html"><span>Shop Grid</span></a><span class="sub-menu-toggle"></span></span>

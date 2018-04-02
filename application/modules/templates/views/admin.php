@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Admin</title>
-  <meta name="description" content="Twincity Admin Dashboard">
+  <title>TCW Admin</title>
+  <meta name="description" content="Bootstrap Metro Dashboard">
+  <meta name="author" content="Dennis Ji">
+  <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="<?php echo base_url(); ?>assets/css/admin_vendor_style.css" rel="stylesheet">
-  <link href="<?php echo base_url(); ?>assets/css/admin_custom_style.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/dashgum_custom.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/admin_header.js"></script>
+
+  <link href="<?php echo base_url(); ?>assets/css/admin_vendor_style.css" rel="stylesheet">
+  <link href="<?php echo base_url(); ?>assets/css/admin_custom_style.css" rel="stylesheet">
 
   <!-- start: Favicon -->
   <link rel="shortcut icon" href="<?php echo base_url(); ?>adminfiles/img/favicon.ico">
   <!-- end: Favicon -->
-
 </head>
 <body>
   <?php
@@ -33,9 +36,7 @@
     <!--header start-->
     <header class="header black-bg">
       <div class="sidebar-toggle-box">
-        <div class=" navbar-toggler" data-toggle="collapse" data-placement="right" data-target="#sidebar">
-          <span class="fa fa-bars tooltips"></span>
-        </div>
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
       <a class="logo" href="<? base_url().'dashboard/home' ?>"><b><?= $our_company ?> Admin</b></a>
@@ -53,7 +54,7 @@
     *********************************************************************************************************************************************************** -->
     <!--sidebar start-->
     <aside>
-      <div id="sidebar"  class="nav-collapse collapse">
+      <div id="sidebar"  class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
           <!--	  <p class="centered"><a><img class="img-circle" width="60"></a></p>-->

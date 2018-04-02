@@ -7,13 +7,26 @@ if (is_numeric($lesson_schedule_id)) {
 ?>
 <div class="form-panel">
   <h4 class="mb"><?= $headline ?></h4>
+  <?php
+  if (isset($flash)) {
+    echo $flash;
+  }
+  ?>
   <?php validation_errors('<p style="color: red;" >', "</p>"); ?>
+  <?php
+  if (is_numeric($lesson_schedule_id)) {
+    ?>
+    <a href="<?= base_url() ?>lesson_schedules/lesson_schedule_deleteconf/<?= $lesson_id ?>/<?= $lesson_schedule_id?>" ><button type="button" class="btn btn-danger">Delete Schedule</button></a>
+    <p style="margin-top: 20px;"></p>
+    <?php
+  }
+  ?>
   <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
     <div class="form-group">
       <label class=" col-sm-2 col-sm-2 control-label" for="typeahead">Lesosn Date</label>
       <div class="col-sm-3">
         <div class='input-group date' id='lessonDatePicker'>
-          <input name="lesson_date" type='text' class="form-control" />
+          <input name="lesson_date" type='text' class="form-control" value="<?= $lesson_date ?>" />
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-calendar"></span>
           </span>
@@ -29,14 +42,14 @@ if (is_numeric($lesson_schedule_id)) {
     </script>
     <div class="form-group">
       <label class="col-sm-2 control-label">Start Time</label>
-        <div class="col-sm-3">
-          <div class='input-group date' id='startTimePicker'>
-            <input name="lesson_start_time" type='text' class="form-control" />
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-time"></span>
-            </span>
-          </div>
+      <div class="col-sm-3">
+        <div class='input-group date' id='startTimePicker'>
+          <input name="lesson_start_time" type='text' class="form-control" value="<?= $lesson_start_time ?>" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-time"></span>
+          </span>
         </div>
+      </div>
       <script type="text/javascript">
       $(function () {
         $('#startTimePicker').datetimepicker({
@@ -49,7 +62,7 @@ if (is_numeric($lesson_schedule_id)) {
       <label class="col-sm-2 control-label">End Time</label>
       <div class="col-sm-3">
         <div class='input-group date' id='endTimePicker'>
-          <input name="lesson_end_time" type='text' class="form-control" />
+          <input name="lesson_end_time" type='text' class="form-control" value="<?= $lesson_end_time ?>" />
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-time"></span>
           </span>

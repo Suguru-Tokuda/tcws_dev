@@ -8,6 +8,7 @@ class Youraccount extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->library('form_validation');
+    $this->load->module('custom_email');
     $this->form_validation->set_ci($this);
   }
 
@@ -54,9 +55,7 @@ class Youraccount extends MX_Controller {
     $this->load->module('site_security');
     $this->site_security->_make_sure_logged_in();
     $data['flash'] = $this->session->flashdata('item');
-    $data['view_file'] = "welcome";
-    $this->load->module('templates');
-    $this->templates->public_bootstrap($data);
+    redirect('listed_items/manage');
   }
 
   // login function
@@ -312,7 +311,7 @@ class Youraccount extends MX_Controller {
 		foreach ($query->result() as $row) {
 		  $userEmail = $row->email;
 		}
-		if ($this->send_Email($userEmail) == false)
+		if ($this->send_Email_custom($userEmail) == false)
 		{
 		return false;
 		}
@@ -331,8 +330,8 @@ class Youraccount extends MX_Controller {
 	$mail->Host = 'smtp.gmail.com';
 	$mail->SMTPAuth = true;
   //Give sender email and password (account details) here
-	$mail->Username = 'fromadress@gmail.com';
-	$mail->Password = 'password@0@';
+	$mail->Username = '********@gmail.com';
+	$mail->Password = '**********@0@';
 	$mail->SMTPSecure = 'tls';
 	$mail->Port = 587;
 
@@ -344,7 +343,7 @@ class Youraccount extends MX_Controller {
 		]
 	]);
   //Give sender email here
-	$mail->From = 'fromadress@gmail.com';
+	$mail->From = '*********@gmail.com';
 	$mail->FromName = 'twincitywatersports';
 	$mail->addAddress($userEmail);
 
@@ -355,6 +354,23 @@ class Youraccount extends MX_Controller {
 	$mail->isHTML(true);
 
 	if(!$mail->send()) {
+		return false;
+	} else {
+    $this->update_genString($userEmail,$genString);
+		return true;
+	}
+	}
+
+  function send_Email_custom($userEmail){
+  $genString = $this->RandomString();
+  $email_data['from'] = "***********@gmail.com";
+  $email_data['set_newline'] = "\r\n";
+  $email_data['to'] = $userEmail;
+  $email_data['subject'] = "Forgot Password Recovery";
+  $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='" . PROJECT_HOME . "reset_password/?email=" . $userEmail . "&genString=" .$genString. "'>" . "Click Here" . "</a><br><br></p>Regards,<br> Admin.</div>";
+  $email_data['message'] = $emailBody;
+	if(!$this->custom_email->_custom_email_intiate($email_data)) {
+    $this->email->print_debugger();
 		return false;
 	} else {
     $this->update_genString($userEmail,$genString);
