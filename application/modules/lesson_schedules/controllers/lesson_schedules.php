@@ -7,7 +7,8 @@ class Lesson_schedules extends MX_Controller {
     $this->load->module('custom_pagination');
     $this->form_validation->set_ci_reference($this);
   }
-
+  
+  // shows all the schedules in a table
   function manage_lesson_schedules($lesson_id) {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
