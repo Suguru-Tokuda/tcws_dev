@@ -520,11 +520,6 @@ class Lessons extends MX_Controller {
     return $query;
   }
 
-  function _get_lesson_name_for_lesson_id($lesson_id) {
-    $query = $this->get_where($lesson_id);
-    return $query->row()->lesson_name;
-  }
-
   // a method to check if the item name exists.
   function lesson_check($str) {
 

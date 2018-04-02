@@ -14,8 +14,10 @@ class Lesson_schedules extends MX_Controller {
     $this->site_security->_make_sure_is_admin();
     $this->load->module('lessons');
 
-    $mysql_query = "SELECT * FROM lesson_schedules WHERE lesson_id = $lesson_id ORDER BY lesson_date DESC";
-    $lesson_name = $this->lessons->_get_lesson_name_for_lesson_id($lesson_id);
+    $mysql_query = "SELECT * FROM lesson_schedules WHERE lesson_id = $lesson_id ORDER BY lesson_start_date DESC";
+    $lesson_capacity = $this->lessons->get_where($lesson_id)->row()->lesson_capacity;
+    $lesson_name = $this->lessons->get_where($lesson_id)->row()->lesson_name;
+
     $query = $this->_custom_query($mysql_query);
     $total_lesson_schedules = $query->num_rows();
 
@@ -29,6 +31,7 @@ class Lesson_schedules extends MX_Controller {
     $data['headline'] = "Manage Schedules";
     $data['lesson_name'] = $lesson_name;
     $data['lesson_id'] = $lesson_id;
+    $data['lesson_capacity'] = $lesson_capacity;
     $data['query'] = $query;
     $data['view_file'] = "manage_lesson_schedules";
     $data['flash'] = $this->session->flashdata('item');
@@ -161,9 +164,11 @@ class Lesson_schedules extends MX_Controller {
   // end of pagination methods
 
   function fetch_data_from_post() {
-    $data['lesson_date'] = $this->input->post('lesson_date', true);
-    $data['lesson_start_time'] = $this->input->post('lesson_start_time', true);
-    $data['lesson_end_time'] = $this->input->post('lesson_end_time', true);
+    $lesson_date = $this->input->post('lesson_date', true);
+    $lesson_start_time = $this->input->post('lesson_start_time', true);
+    $lesson_end_time = $this->input->post('lesson_end_time', true);
+    $data['lesson_start_date'] = $lesson_date.' '.$lesson_start_time;
+    $data['lesson_end_date'] = $lesson_date.' '.$lesson_end_time;
     return $data;
   }
 
@@ -176,9 +181,9 @@ class Lesson_schedules extends MX_Controller {
     }
     $query = $this->get_where($lesson_schedule_id);
     $row = $query->row();
-    $data['lesson_date'] = $this->timedate->get_date($row->lesson_date, "datepicker_us");
-    $data['lesson_start_time'] = $row->lesson_start_time;
-    $data['lesson_end_time'] = $row->lesson_end_time;
+    $data['lesson_date'] = $this->timedate->get_date($row->lesson_start_date, "datepicker_us");
+    $data['lesson_start_time'] = $this->timedate->get_time($row->lesson_start_date);
+    $data['lesson_end_time'] = $this->timedate->get_time($row->lesson_end_date);
     return $data;
   }
 
