@@ -1,7 +1,4 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
 define("PROJECT_HOME","http://localhost/twincitywatersports/youraccount/");
 class Youraccount extends MX_Controller {
 
@@ -363,8 +360,6 @@ class Youraccount extends MX_Controller {
 
   function send_Email_custom($userEmail){
   $genString = $this->RandomString();
-  $email_data['from'] = "***********@gmail.com";
-  $email_data['set_newline'] = "\r\n";
   $email_data['to'] = $userEmail;
   $email_data['subject'] = "Forgot Password Recovery";
   $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='" . PROJECT_HOME . "reset_password/?email=" . $userEmail . "&genString=" .$genString. "'>" . "Click Here" . "</a><br><br></p>Regards,<br> Admin.</div>";
