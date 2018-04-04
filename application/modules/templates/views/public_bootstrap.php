@@ -8,6 +8,7 @@
   <meta name="author" content="">
   <link rel="icon" href="<?php echo base_url(); ?>/favicon.ico">
   <title><?php
+  $page_url = $this->uri->segment(1);
   $signup_url = base_url()."youraccount/start";
   $login_url = base_url()."youraccount/login";
   $this->load->module('site_security');
@@ -38,7 +39,6 @@
   include('top_nav.php');
   ?>
   <?php
-  $page_url = $this->uri->segment(3);
   if (isset($page_content)) {
     if ($page_url == "") { // means it's in homepage
       ?>
@@ -47,12 +47,17 @@
       require_once('carousel.php');
     } else {
       ?>
-      <p style="margin-top: 150px;"></p>
       <?php
     }
   }
   ?>
-  <p style="margin-top: 150px;"></p>
+  <?php
+  if ($page_url != "") {
+   ?>
+  <p style="margin-top: 85px;"></p>
+  <?php
+}
+   ?>
   <?php
   if (isset($page_content)) {
     if ($page_url == "") {

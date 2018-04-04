@@ -50,7 +50,7 @@ class Blog extends MX_Controller {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $update_id = $this->uri->segment(3);
+    $blog_id = $this->uri->segment(3);
     $submit = $this->input->post('submit', true);
     $this->load->module('timedate');
 
@@ -71,19 +71,19 @@ class Blog extends MX_Controller {
         // convert the datepicker into a unix timestamp
         $data['date_published'] = $this->timedate->make_timestamp_from_datepicker_us($data['date_published']);
 
-        if (is_numeric($update_id)) {
+        if (is_numeric($blog_id)) {
           //update the item details
-          $this->_update($update_id, $data);
+          $this->_update($blog_id, $data);
           // These two lines show the alert for the successful item details change.
           $flash_msg = "The blog details were successfully updated.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
           $this->session->set_flashdata('item', $value);
           // add the update data into the URL
-          redirect('blog/create/'.$update_id);
+          redirect('blog/create/'.$blog_id);
         } else {
           // insert a new item into DB
           $this->_insert($data);
-          $update_id = $this->get_max(); //get the ID of the new item
+          $blog_id = $this->get_max(); //get the ID of the new item
 
           $this->load->library('session');
 
@@ -91,19 +91,19 @@ class Blog extends MX_Controller {
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
           $this->session->set_flashdata('item', $value);
           // add the update data into the URL
-          redirect('blog/create/'.$update_id);
+          redirect('blog/create/'.$blog_id);
         }
       }
     }
 
-    if ((is_numeric($update_id)) && ($submit != "Submit")) {
-      $data = $this->fetch_data_from_db($update_id);
+    if ((is_numeric($blog_id)) && ($submit != "Submit")) {
+      $data = $this->fetch_data_from_db($blog_id);
     } else {
       $data = $this->fetch_data_from_post();
       $data['picture'] = "";
     }
 
-    if (!is_numeric($update_id)) {
+    if (!is_numeric($blog_id)) {
       $data['headline'] = "Create New Blog";
     } else {
       $data['headline'] = "Update Blog Details";
@@ -115,7 +115,7 @@ class Blog extends MX_Controller {
     }
 
     // pass update id into the blog
-    $data['update_id'] = $update_id;
+    $data['blog_id'] = $blog_id;
     $data['flash'] = $this->session->flashdata('item');
 
     // create a view file. Putting a php (html) into the admin template.
@@ -127,10 +127,10 @@ class Blog extends MX_Controller {
     $this->templates->admin($data);
   }
 
-  function deleteconf($update_id) {
+  function deleteconf($blog_id) {
 
-    // only those people with an update_id for an item can get in.
-    if (!is_numeric($update_id)) {
+    // only those people with an blog_id for an item can get in.
+    if (!is_numeric($blog_id)) {
       redirect('site_security/not_allowed');
     }
 
@@ -140,7 +140,7 @@ class Blog extends MX_Controller {
     $this->site_security->_make_sure_is_admin();
 
     $data['headline'] = "Delete Blog";
-    $data['update_id'] = $update_id;
+    $data['blog_id'] = $blog_id;
     $date['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "deleteconf";
     $this->load->module('templates');
@@ -148,29 +148,33 @@ class Blog extends MX_Controller {
   }
 
   // This function displays the upload_image page
-  function upload_image($update_id) {
-
-    // only those people with an update_id for an item can get in.
-    if (!is_numeric($update_id)) {
+  function upload_image($blog_id) {
+    // only those people with an blog_id for an item can get in.
+    if (!is_numeric($blog_id)) {
       redirect('site_security/not_allowed');
     }
+
+    $mysql_query = "SELECT * FROM blog_pics WHERE blog_id = $blog_id ORDER BY priority";
+    $query = $this->_custom_query($mysql_query);
     // security
     $this->load->library('session');
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $data['headline'] = "Upload Image";
-    $data['update_id'] = $update_id;
+    $data['query'] = $query;
+    $data['num_rows'] = $query->num_rows();
+    $data['headline'] = "Manage Image";
+    $data['blog_id'] = $blog_id;
     $date['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "upload_image";
     $this->load->module('templates');
     $this->templates->admin($data);
   }
 
-  function do_upload($update_id) {
+  function do_upload($blog_id) {
 
-    // only those people with an update_id for an item can get in.
-    if (!is_numeric($update_id)) {
+    // only those people with an blog_id for an item can get in.
+    if (!is_numeric($blog_id)) {
       redirect('site_security/not_allowed');
     }
 
@@ -183,15 +187,12 @@ class Blog extends MX_Controller {
     $submit = $this->input->post('submit', true);
 
     if ($submit == "Cancel") {
-      redirect('blog/create/'.$update_id);
+      redirect('blog/create/'.$blog_id);
     } else if ($submit == "Upload") {
-      $config['upload_path'] = './blog_pics/';
+      $config['upload_path'] = './big_blog_pics/';
       $config['allowed_types'] = 'gif|jpg|png';
-      // $config['max_size'] = 100;
-      $config['max_size'] = 200;
-      // $config['max_width'] = 1024;
+      $config['max_size'] = 2000;
       $config['max_width'] = 2024;
-      // $config['max_height'] = 768;
       $config['max_height'] = 1268;
       $config['file_name'] = $this->site_security->generate_random_string(16);
 
@@ -200,7 +201,7 @@ class Blog extends MX_Controller {
       if (!$this->upload->do_upload('userfile')) {
         $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
         $data['headline'] = "Upload Error";
-        $data['update_id'] = $update_id;
+        $data['blog_id'] = $blog_id;
         $date['flash'] = $this->session->flashdata('item');
         $data['view_file'] = "upload_image";
         $this->load->module('templates');
@@ -209,39 +210,32 @@ class Blog extends MX_Controller {
         // upload was successful
         $data = array('upload_data' => $this->upload->data());
         $upload_data = $data['upload_data'];
-        // the clode below checks the picture's info
-        // foreach ($upload_data as $key => $value) {
-        //   echo "key of $key has value of $value<br>";
-        // }
-        // die();
-
-        //raw_name ... file_ext
         $raw_name = $upload_data['raw_name'];
         $file_ext = $upload_data['file_ext'];
-        // generate a thumbnail name
-        $thumbnail_name = $raw_name."_thumb".$file_ext;
 
         $file_name = $upload_data['file_name'];
-        $this->_genrate_thumbnail($file_name, $thumbnail_name);
+        $this->_genrate_thumbnail($file_name);
 
-        //update the database
-        // insde [] is the column name
         $update_data['picture'] = $file_name;
-        $this->_update($update_id, $update_data);
+        $priority = $this->_get_pictures_priority($blog_id);
+        $insert_statement = "INSERT INTO blog_pics (blog_id, picture_name, priority) VALUES ($blog_id, '$file_name', $priority)";
+        $this->_custom_query($insert_statement);
 
-        $data['headline'] = "Upload Success";
-        $data['update_id'] = $update_id;
-        $date['flash'] = $this->session->flashdata('item');
-        $data['view_file'] = "upload_success";
+        $data['blog_id'] = $blog_id;
+        $flash_msg = "The picture was successfully uploaded.";
+        $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+        $data['flash'] = $this->session->flashdata('item', $value);
+
+        $data['view_file'] = "upload_image";
         $this->load->module('templates');
         $this->templates->admin($data);
       }
     }
   }
 
-  function delete($update_id) {
-    // only those people with an update_id for an item can get in.
-    if (!is_numeric($update_id)) {
+  function delete($blog_id) {
+    // only those people with an blog_id for an item can get in.
+    if (!is_numeric($blog_id)) {
       redirect('site_security/not_allowed');
     }
     // security
@@ -252,10 +246,10 @@ class Blog extends MX_Controller {
     $submit = $this->input->post('submit', true);
 
     if ($submit == "Cancel") {
-      redirect('blog/create/'.$update_id);
+      redirect('blog/create/'.$blog_id);
     } else if ($submit == "Delete") {
       // manipulate the DB
-      $this->_process_delete($update_id);
+      $this->_process_delete($blog_id);
       // preparing the flash message after deletion
       $flash_msg = "The blog was successfully deleted.";
       $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
@@ -265,15 +259,15 @@ class Blog extends MX_Controller {
     }
   }
 
-  function _process_delete($update_id) {
+  function _process_delete($blog_id) {
     // delete the blog record from blog
-    $this->_delete($update_id);
+    $this->_delete($blog_id);
   }
 
-  function delete_image($update_id) {
+  function delete_image($blog_id) {
 
-    // only those people with an update_id for an item can get in.
-    if (!is_numeric($update_id)) {
+    // only those people with an blog_id for an item can get in.
+    if (!is_numeric($blog_id)) {
       redirect('site_security/not_allowed');
     }
 
@@ -282,7 +276,7 @@ class Blog extends MX_Controller {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $data = $this->fetch_data_from_db($update_id);
+    $data = $this->fetch_data_from_db($blog_id);
     $picture = $data['picture'];
     // echo $blog_pic; die();
 
@@ -303,13 +297,13 @@ class Blog extends MX_Controller {
     // update the database
     unset($data);
     $data['picture'] = "";
-    $this->_update($update_id, $data);
+    $this->_update($blog_id, $data);
 
     $flash_msg = "The item image was successfuly deleted.";
     $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
     $this->session->set_flashdata('item', $value);
 
-    redirect('blog/create/'.$update_id);
+    redirect('blog/create/'.$blog_id);
 
   }
 
@@ -326,13 +320,13 @@ class Blog extends MX_Controller {
   }
 
   // get data from database
-  function fetch_data_from_db($update_id) {
+  function fetch_data_from_db($blog_id) {
 
-    if (!is_numeric($update_id)) {
+    if (!is_numeric($blog_id)) {
       redirect('site_security/not_allowed');
     }
 
-    $query = $this->get_where($update_id);
+    $query = $this->get_where($blog_id);
     foreach($query->result() as $row) {
       $data['blog_title'] = $row->blog_title;
       $data['blog_url'] = $row->blog_url;
@@ -349,10 +343,10 @@ class Blog extends MX_Controller {
     return $data;
   }
 
-  function _genrate_thumbnail($file_name, $thumbnail_name) {
+  function _genrate_thumbnail($file_name) {
     $config['image_library'] = 'gd2';
-    $config['source_image'] = './blog_pics/'.$file_name;
-    $config['new_image'] = './blog_pics/'.$thumbnail_name;
+    $config['source_image'] = './big_blog_pics/'.$file_name;
+    $config['new_image'] = './small_blog_pics/'.$file_name;
     // $config['craete_thumb'] = true;
     $config['maintain_ratio'] = true;
     $config['width'] = 200;

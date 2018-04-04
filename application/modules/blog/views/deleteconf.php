@@ -5,7 +5,7 @@ if (isset($flash)) {
   echo $flash;
 }
 ?>
-<!-- This section appears only there is an update_id -->
+<!-- This section appears only there is an blog_id -->
 <div class="row-fluid sortable">
   <div class="box span12">
     <div class="box-header" data-original-title>
@@ -21,7 +21,7 @@ if (isset($flash)) {
 <?php
 // This line adds attributes into a form. No need to put <form...> manually
 $attributes = array('class' => 'form-horizontal', 'id' => 'myform');
-echo form_open_multipart('blog/delete/'.$update_id, $attributes);
+echo form_open_multipart('blog/delete/'.$blog_id, $attributes);
 ?>
 
 <filedset>

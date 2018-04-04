@@ -76,4 +76,9 @@ class Timedate extends MX_Controller {
     return $timestamp;
   }
 
+  // use this function to get unix time stamp from '04/02/2018 04:00 PM' for example
+  function make_timestamp_from_datetime($datetime) {
+    return strtotime($datetime);
+  }
+
 }

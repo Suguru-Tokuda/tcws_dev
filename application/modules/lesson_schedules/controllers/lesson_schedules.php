@@ -7,7 +7,7 @@ class Lesson_schedules extends MX_Controller {
     $this->load->module('custom_pagination');
     $this->form_validation->set_ci_reference($this);
   }
-  
+
   // shows all the schedules in a table
   function manage_lesson_schedules($lesson_id) {
     $this->load->module('site_security');
@@ -56,7 +56,6 @@ class Lesson_schedules extends MX_Controller {
       $this->form_validation->set_rules('lesson_end_time', 'End Time', 'required|min_length[7]|max_length[8]');
       if ($this->form_validation->run()) {
         $data = $this->fetch_data_from_post();
-        $data['lesson_date'] = $this->timedate->make_timestamp_from_datepicker_us($data['lesson_date']);
         if (isset($lesson_schedule_id)) {
           // update
           $data['lesson_id'] = $lesson_id;
@@ -67,6 +66,7 @@ class Lesson_schedules extends MX_Controller {
           redirect("lesson_schedules/create_lesson_schedule/".$lesson_id."/".$lesson_schedule_id);
         } else {
           // insert
+          unset($data['lesson_date']);
           $data['lesson_id'] = $lesson_id;
           $this->_insert($data);
           $flash_msg = "The schedule was successfully added.";
@@ -164,11 +164,13 @@ class Lesson_schedules extends MX_Controller {
   // end of pagination methods
 
   function fetch_data_from_post() {
+    $this->load->module('timedate');
     $lesson_date = $this->input->post('lesson_date', true);
     $lesson_start_time = $this->input->post('lesson_start_time', true);
     $lesson_end_time = $this->input->post('lesson_end_time', true);
-    $data['lesson_start_date'] = $lesson_date.' '.$lesson_start_time;
-    $data['lesson_end_date'] = $lesson_date.' '.$lesson_end_time;
+    $data['lesson_date'] = $lesson_date;
+    $data['lesson_start_date'] = $this->timedate->make_timestamp_from_datetime($lesson_date.' '.$lesson_start_time);
+    $data['lesson_end_date'] = $this->timedate->make_timestamp_from_datetime($lesson_date.' '.$lesson_end_time);
     return $data;
   }
 
@@ -182,8 +184,8 @@ class Lesson_schedules extends MX_Controller {
     $query = $this->get_where($lesson_schedule_id);
     $row = $query->row();
     $data['lesson_date'] = $this->timedate->get_date($row->lesson_start_date, "datepicker_us");
-    $data['lesson_start_time'] = $this->timedate->get_time($row->lesson_start_date);
-    $data['lesson_end_time'] = $this->timedate->get_time($row->lesson_end_date);
+    $data['lesson_start_date'] = $this->timedate->get_time($row->lesson_start_date);
+    $data['lesson_end_date'] = $this->timedate->get_time($row->lesson_end_date);
     return $data;
   }
 

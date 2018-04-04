@@ -6,7 +6,7 @@ if (isset($flash)) {
   echo $flash;
 }
 ?>
-<!-- This section appears only there is an update_id -->
+<!-- This section appears only there is an blog_id -->
 <div class="row-fluid sortable">
   <div class="box span12">
     <div class="box-header" data-original-title>
@@ -26,7 +26,7 @@ if (isset($flash)) {
 </ul>
 <p>
   <?php
-  $edit_item_url = base_url()."blog/create/".$update_id;
+  $edit_item_url = base_url()."blog/create/".$blog_id;
   ?>
 <a href="<?= $edit_item_url ?>" ><button type="button" class="btn btn-primary">Return To Update Blog Entry Page</button></a>
 

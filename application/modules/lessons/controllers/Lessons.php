@@ -289,7 +289,6 @@ class Lessons extends MX_Controller {
         $insert_statement = "INSERT INTO lesson_small_pics (lesson_id, picture_name, priority) VALUES ($lesson_id, '$file_name', $priority)";
         $this->_custom_query($insert_statement);
 
-
         $lessons_small_pic_id = $this->_get_lesson_small_pic_id($lesson_id, $priority);
         $insert_statement = "INSERT INTO lesson_big_pics (lesson_small_pic_id, picture_name) VALUES ($lessons_small_pic_id, '$file_name')";
         $this->_custom_query($insert_statement);

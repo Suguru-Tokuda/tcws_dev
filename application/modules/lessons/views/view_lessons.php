@@ -40,18 +40,20 @@
         $lesson_url = base_url().'lessons/view_lesson/'.$row->lesson_url;
         $picture_name = $this->lesson_small_pics->get_where_custom("lesson_id", $lesson_id)->row(0)->picture_name;
         $picture_src = base_url().'lesson_small_pics/'.$picture_name;
-      }
-
-      ?>
-      <div class="grid-item" style="position: absolute; left: 0px; top: 0px;">
-        <div class="product-card">
-          <a class="product-thumb" href="<?= $lesson_url ?>"><img src="<?= $picture_src ?>" alt="Product"></a>
-          <h3 class="product-title"><a href="<?= $lesson_url ?>"><?= $lesson_name ?></a></h3>
-          <div class="product-buttons">
-            <a href="<?= $lesson_url ?>" class="btn btn-outline-primary btn-sm">View Lesson</a>
+        ?>
+        <div class="grid-item" style="position: absolute; left: 0px; top: 0px;">
+          <div class="product-card">
+            <a class="product-thumb" href="<?= $lesson_url ?>"><img src="<?= $picture_src ?>" alt="Product"></a>
+            <h3 class="product-title"><a href="<?= $lesson_url ?>"><?= $lesson_name ?></a></h3>
+            <div class="product-buttons">
+              <a href="<?= $lesson_url ?>" class="btn btn-outline-primary btn-sm">View Lesson</a>
+            </div>
           </div>
         </div>
-      </div>
+
+        <?php
+      }
+      ?>
 
     </div>
 

@@ -128,9 +128,9 @@ if (isset($flash)) {
           $this->load->module('timedate');
           foreach($schedule_query->result() as $row) {
             $lesson_schedule_id = $row->id;
-            $lesson_date = $this->timedate->get_date($row->lesson_date, 'datepicker_us');
-            $start_time = $row->lesson_start_time;
-            $end_time = $row->lesson_end_time;
+            $lesson_date = $this->timedate->get_date($row->lesson_start_date, 'datepicker_us');
+            $start_time = $this->timedate->get_time($row->lesson_start_date);
+            $end_time = $this->timedate->get_time($row->lesson_end_date);
             $number_of_bookings = $this->lesson_bookings->_get_num_of_bookings_for_lesson_schedule_id($lesson_schedule_id);
             $availability = $capacity - $number_of_bookings;
             ?>

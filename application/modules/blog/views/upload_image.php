@@ -38,6 +38,33 @@
       </fieldset>
     </form>
 
+    <?php
+    if ($num_rows > 0) {
+      ?>
+      <h5>Uploaded Pictures</h5>
+      <p><?= $num_rows ?> pictures for the lesson (max 5 pictures) - <strong>You can drag and change the order</strong></p>
+      <ul id="sortlist" class="list-group" style="margin-top: 30px; list-style: none;">
+        <?php
+        $this->load->module('lessons');
+        foreach($query->result() as $row) {
+          $delete_image_url = base_url()."/lessons/delete_image/".$row->id;
+          $picture_location = base_url()."lesson_big_pics/".$row->picture_name;
+          $priority = $row->priority;
+          ?>
+          <li style="width: 250px;" id="<?= $row->id?>">
+              <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px">
+              <?php
+              echo anchor(base_url().'lessons/delete_image/'.$lesson_id.'/'.$row->id, 'Remove');
+              ?>
+          </li>
+          <?php
+        }
+        ?>
+      </ul>
+      <?php
+    }
+    ?>
+
 
 
   </div>

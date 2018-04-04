@@ -44,7 +44,7 @@ if (is_numeric($lesson_schedule_id)) {
       <label class="col-sm-2 control-label">Start Time</label>
       <div class="col-sm-3">
         <div class='input-group date' id='startTimePicker'>
-          <input name="lesson_start_time" type='text' class="form-control" value="<?= $lesson_start_time ?>" />
+          <input name="lesson_start_time" type='text' class="form-control" value="<?= $lesson_start_date ?>" />
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-time"></span>
           </span>
@@ -62,7 +62,7 @@ if (is_numeric($lesson_schedule_id)) {
       <label class="col-sm-2 control-label">End Time</label>
       <div class="col-sm-3">
         <div class='input-group date' id='endTimePicker'>
-          <input name="lesson_end_time" type='text' class="form-control" value="<?= $lesson_end_time ?>" />
+          <input name="lesson_end_time" type='text' class="form-control" value="<?= $lesson_end_date ?>" />
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-time"></span>
           </span>
