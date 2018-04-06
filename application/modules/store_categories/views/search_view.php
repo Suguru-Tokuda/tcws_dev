@@ -35,7 +35,7 @@
           $item_price = $row->item_price;
           $was_price = $row->was_price;
           $picture_name = $row->picture_name;
-          $small_pic_path = base_url()."small_pics/".$picture_name;
+          $small_pic_path = base_url()."media/item_big_pics/".$picture_name;
           // $item_page = base_url()."$item_segments./$cat_url/$item_url";
           $item_page = base_url().$parent_cat_url."/".$sub_cat_url."/".$item_url;
           ?>

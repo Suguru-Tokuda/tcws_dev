@@ -17,7 +17,7 @@ if (isset($flash)) {
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."lesson_big_pics/".$picture_name;
+            $picture_location = base_url()."media/lesson_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <div class="gallery-item active"><a href="<?= $picture_location ?>" data-hash="one" data-size="1000x667"></a></div>
@@ -45,7 +45,7 @@ if (isset($flash)) {
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."lesson_big_pics/".$picture_name;
+            $picture_location = base_url()."media/lesson_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <div data-hash="one"><img src="<?= $picture_location ?>" alt="<?= $picture_name ?>"></div>
@@ -73,7 +73,7 @@ if (isset($flash)) {
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."lesson_big_pics/".$picture_name;
+            $picture_location = base_url()."media/lesson_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <li class="active"><a href="#one"><img src="<?= $picture_location ?>" alt="<?= $picture_name ?>"></a></li>
@@ -98,17 +98,16 @@ if (isset($flash)) {
         </ul>
       </div>
     </div>
-
     <!-- Product Info-->
     <div class="col-md-6">
       <div class="padding-top-2x mt-2 hidden-md-up"></div>
       <h2 class="padding-top-1x text-normal"><?= $lesson_name ?></h2>
       <span class="h2 d-block"><?= $currency_symbol.$lesson_fee.' / per' ?></span>
-      <p><?= nl2br($lesson_description) ?></p>
+      <p>About Lesson: <?= nl2br($lesson_description) ?></p>
+      <p>Location: <?= nl2br($address.', '.$city.', '.$state) ?></p>
+      <p>Lesson Capacity: <?= nl2br($capacity) ?></p>
     </div>
   </div>
-
-
   <div class="row">
     <div class="table-responsive">
       <table class="table table-striped">
@@ -169,9 +168,7 @@ if (isset($flash)) {
                 </table>
               </div>
             </div>
-
           </div>
-
           <!-- Photoswipe container-->
           <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="pswp__bg"></div>

@@ -18,7 +18,7 @@ if (isset($flash)) {
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."big_pics/".$picture_name;
+            $picture_location = base_url()."media/item_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <div class="gallery-item active"><a href="<?= $picture_location ?>" data-hash="one" data-size="1000x667"></a></div>
@@ -46,7 +46,7 @@ if (isset($flash)) {
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."big_pics/".$picture_name;
+            $picture_location = base_url()."media/item_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <div data-hash="one"><img src="<?= $picture_location ?>" alt="<?= $picture_name ?>"></div>
@@ -74,7 +74,7 @@ if (isset($flash)) {
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."big_pics/".$picture_name;
+            $picture_location = base_url()."media/item_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <li class="active"><a href="#one"><img src="<?= $picture_location ?>" alt="<?= $picture_name ?>"></a></li>

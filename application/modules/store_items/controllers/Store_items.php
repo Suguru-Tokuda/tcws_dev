@@ -19,7 +19,7 @@ class Store_items extends MX_Controller {
     $searchKeywords = explode(" ", $searchKeywords);
 
     if ($submit == "submit") {
-      $mysqlQuery = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN small_pics sp ON si.id = sp.item_id WHERE item_title LIKE '$searchKeywords[0]' OR item_description LIKE '$searchKeywords[0]'";
+      $mysqlQuery = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN item_pics sp ON si.id = sp.item_id WHERE item_title LIKE '$searchKeywords[0]' OR item_description LIKE '$searchKeywords[0]'";
 
       if (sizeOf($searchKeywords) > 1) {
         for ($i = 1; $i < sizeOf($searchKeywords); $i++) {
@@ -62,7 +62,7 @@ class Store_items extends MX_Controller {
     $this->load->module('site_security');
     $this->load->module('site_settings');
 
-    $mysqlQuery = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN small_pics sp ON si.id = sp.item_id";
+    $mysqlQuery = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN item_pics sp ON si.id = sp.item_id";
 
     $storeItemsQuery = $this->_custom_query($mysqlQuery);
     $total_items = $storeItemsQuery->num_rows();
@@ -112,14 +112,14 @@ class Store_items extends MX_Controller {
 
   function sort() {
     $this->load->module('site_security');
-    $this->load->module('small_pics');
+    $this->load->module('item_pics');
     $this->site_security->_make_sure_is_admin();
 
     $number = $this->input->post('number', true);
     for ($i = 1; $i <= $number; $i++) {
       $small_pic_id = $_POST['order'.$i];
       $data['priority'] = $i;
-      $this->small_pics->_update($small_pic_id, $data);
+      $this->item_pics->_update($small_pic_id, $data);
     }
   }
 
@@ -151,7 +151,7 @@ class Store_items extends MX_Controller {
   function _get_small_pic_by_item_url($item_url) {
     $mysql_query = "
     SELECT sp.picture_name AS picture_name FROM
-    store_items si JOIN small_pics sp ON si.id = sp.item_id
+    store_items si JOIN item_pics sp ON si.id = sp.item_id
     WHERE si.item_url = '$item_url'
     ORDER BY sp.priority DESC
     LIMIT 1
@@ -222,7 +222,7 @@ class Store_items extends MX_Controller {
   function _get_pics_by_update_id($item_id) {
     $mysql_query = "
     SELECT @counter := @counter + 1 as row_number, picture_name
-    FROM small_pics WHERE item_id = ?
+    FROM item_pics WHERE item_id = ?
     ";
 
     $query = $this->db->query($mysql_query, array($item_id));
@@ -325,7 +325,7 @@ class Store_items extends MX_Controller {
   function _genrate_thumbnail($file_name) {
     $config['image_library'] = 'gd2';
     $config['source_image'] = './big_pics/'.$file_name;
-    $config['new_image'] = './small_pics/'.$file_name;
+    $config['new_image'] = './item_pics/'.$file_name;
     $config['maintain_ratio'] = true;
     $config['width'] = 200;
     $config['height'] = 200;
@@ -345,7 +345,7 @@ class Store_items extends MX_Controller {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $mysql_query = "SELECT * FROM small_pics WHERE item_id = $item_id ORDER BY priority ASC";
+    $mysql_query = "SELECT * FROM item_pics WHERE item_id = $item_id ORDER BY priority ASC";
     $query = $this->_custom_query($mysql_query);
     $data['query'] = $query;
     $data['num_rows'] = $query->num_rows(); // number of pictures that an item has
@@ -382,7 +382,7 @@ class Store_items extends MX_Controller {
       $this->load->library('upload', $config);
 
       if (!$this->upload->do_upload('userfile')) {
-        $mysql_query = "SELECT * FROM small_pics WHERE item_id = $item_id";
+        $mysql_query = "SELECT * FROM item_pics WHERE item_id = $item_id";
         $query = $this->_custom_query($mysql_query);
         $data['query'] = $query;
         $data['num_rows'] = $query->num_rows();
@@ -406,12 +406,12 @@ class Store_items extends MX_Controller {
 
         //update the database
         $priority = $this->_get_priority($item_id);
-        $mysql_query = "INSERT INTO small_pics (item_id, picture_name, priority) VALUES ($item_id, '$file_name', $priority)";
+        $mysql_query = "INSERT INTO item_pics (item_id, picture_name, priority) VALUES ($item_id, '$file_name', $priority)";
         $this->_custom_query($mysql_query);
 
-        $small_pic_id = $this->_get_small_pic_id($item_id, $priority);
-        $mysql_query = "INSERT INTO big_pics (small_pic_id, picture_name) VALUES ($small_pic_id, '$file_name')";
-        $this->_custom_query($mysql_query);
+        // $small_pic_id = $this->_get_small_pic_id($item_id, $priority);
+        // $mysql_query = "INSERT INTO big_pics (small_pic_id, picture_name) VALUES ($small_pic_id, '$file_name')";
+        // $this->_custom_query($mysql_query);
 
         $data['headline'] = "Upload Success";
         $data['update_id'] = $item_id;
@@ -425,7 +425,7 @@ class Store_items extends MX_Controller {
   }
 
   function _get_priority($item_id) {
-    $mysql_query = "SELECT * FROM small_pics WHERE item_id = $item_id ORDER BY priority DESC LIMIT 1";
+    $mysql_query = "SELECT * FROM item_pics WHERE item_id = $item_id ORDER BY priority DESC LIMIT 1";
     $query = $this->_custom_query($mysql_query);
     if ($query->num_rows() == 1) {
       foreach ($query->result() as $row) {
@@ -438,7 +438,7 @@ class Store_items extends MX_Controller {
   }
 
   function _get_small_pic_id($item_id, $priority) {
-    $mysql_query = "SELECT id FROM small_pics WHERE item_id = $item_id AND priority = $priority";
+    $mysql_query = "SELECT id FROM item_pics WHERE item_id = $item_id AND priority = $priority";
     $query = $this->_custom_query($mysql_query);
     foreach($query->result() as $row) {
       $small_pic_id = $row->id;
@@ -476,14 +476,14 @@ class Store_items extends MX_Controller {
     // attempt to delete item big & small pics
     $data = $this->fetch_data_from_db($item_id);
 
-    $this->load->module('small_pics');
+    $this->load->module('item_pics');
     $this->load->module('big_pics');
-    $small_pic_ids = $this->small_pics->get_small_pic_ids_by_item_id($item_id);
+    $small_pic_ids = $this->item_pics->get_small_pic_ids_by_item_id($item_id);
 
     foreach ($small_pic_ids as $key => $value) {
-      $picture_name = $this->small_pics->_get_picture_name_by_small_pic_id($value);
+      $picture_name = $this->item_pics->_get_picture_name_by_small_pic_id($value);
       $big_pic_path = './big_pics/'.$picture_name;
-      $small_pic_path = './small_pics/'.$picture_name;
+      $small_pic_path = './item_pics/'.$picture_name;
       // attemp to delete item small pics
       if (file_exists($big_pic_path)) {
         unlink($big_pic_path);
@@ -525,7 +525,7 @@ class Store_items extends MX_Controller {
 
   function delete_image($item_id) {
     $this->load->module('site_security');
-    $this->load->module('small_pics');
+    $this->load->module('item_pics');
     $this->load->module('big_pics');
 
 
@@ -543,10 +543,10 @@ class Store_items extends MX_Controller {
 
     $data = $this->fetch_data_from_db($item_id);
 
-    $picture_name = $this->small_pics->_get_picture_name_by_small_pic_id($small_pic_id);
+    $picture_name = $this->item_pics->_get_picture_name_by_small_pic_id($small_pic_id);
 
     $big_pic_path = './big_pics/'.$picture_name;
-    $small_pic_path = './small_pics/'.$picture_name;
+    $small_pic_path = './item_pics/'.$picture_name;
 
     // checks if the file exists in the directory and if so, attemt to remove the images
     if (file_exists($big_pic_path)) {
@@ -561,15 +561,15 @@ class Store_items extends MX_Controller {
     $this->big_pics->_delete_where('small_pic_id', $small_pic_id);
 
     // reassign priority
-    $priority_for_deleted_pic = $this->small_pics->get_priority_for_item($small_pic_id, $item_id);
+    $priority_for_deleted_pic = $this->item_pics->get_priority_for_item($small_pic_id, $item_id);
     // delete small and big pics
-    $this->small_pics->_delete($small_pic_id);
-    $query = $this->small_pics->get_where_custom('item_id', $item_id);
+    $this->item_pics->_delete($small_pic_id);
+    $query = $this->item_pics->get_where_custom('item_id', $item_id);
     foreach ($query->result() as $row) {
       if ($row->priority > $priority_for_deleted_pic) {
         $new_priority = $row->priority - 1;
         $data['priority'] = $new_priority;
-        $this->small_pics->_update($row->id, $data);
+        $this->item_pics->_update($row->id, $data);
       }
     }
 

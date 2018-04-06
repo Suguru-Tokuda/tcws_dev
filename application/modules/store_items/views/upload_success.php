@@ -32,5 +32,5 @@ if (isset($flash)) {
 
 </p>
     </div>
-  </div><!--/span-->
-</div><!--/row-->
+  </div>
+</div>

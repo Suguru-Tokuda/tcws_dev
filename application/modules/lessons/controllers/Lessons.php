@@ -31,7 +31,7 @@ class Lessons extends MX_Controller {
   function view_lesson($lesson_url) {
     $this->load->module('site_security');
     $this->load->module('site_settings');
-    $this->load->module('lesson_small_pics');
+    $this->load->module('lesson_pics');
     $this->load->module('lesson_schedules');
     $lesson_id = $this->get_where_custom("lesson_url", $lesson_url)->row(0)->id;
     $capacity = $this->get_where_custom("lesson_url", $lesson_url)->row(0)->lesson_capacity;
@@ -41,7 +41,7 @@ class Lessons extends MX_Controller {
     }
 
     $data_from_db = $this->fetch_data_from_db($lesson_id);
-    $pics_query = $this->lesson_small_pics->get_where_custom("lesson_id", $lesson_id);
+    $pics_query = $this->lesson_pics->get_where_custom("lesson_id", $lesson_id);
     $schedule_query = $this->lesson_schedules->get_where_custom("lesson_id", $lesson_id);
 
     $data['flash'] = $this->session->flashdata('item');
@@ -197,16 +197,15 @@ class Lessons extends MX_Controller {
   }
 
   function _process_delete_lesson($lesson_id) {
-    $this->load->module('lesson_small_pics');
-    $this->load->module('lesson_big_pics');
+    $this->load->module('lesson_pics');
     $this->load->module('lesson_schedules');
-    $lesson_small_pic_ids = $this->lesson_small_pics->get_lesson_small_pic_ids_by_lesson_id($lesson_id);
+    $lesson_pic_ids = $this->lesson_pics->get_lesson_pic_ids_by_lesson_id($lesson_id);
 
     // loop through picture ids and delete
-    foreach($lesson_small_pic_ids as $key => $value) {
-      $picture_name = $this->lesson_small_pics->get_picture_name_by_lesson_small_pic_id($value);
+    foreach($lesson_pic_ids as $key => $value) {
+      $picture_name = $this->lesson_pics->get_picture_name_by_lesson_pic_id($value);
       $big_pic_path = './lesson_big_pics'.$picture_name;
-      $small_pic_path = './lesson_small_pics'.$picture_name;
+      $small_pic_path = './lesson_pics'.$picture_name;
       // attemp to delete item small pics
       if (file_exists($big_pic_path)) {
         unlink($big_pic_path);
@@ -214,11 +213,10 @@ class Lessons extends MX_Controller {
       if (file_exists($small_pic_path)) {
         unlink($small_pic_path);
       }
-      $this->lesson_big_pics->_delete_where('small_pic_id', $value);
     }
 
     $this->lesson_schedules->_delete_where('lesson_id', $lesson_id);
-    $this->lesson_small_pics->_delete_where('lesson_id', $lesson_id);
+    $this->lesson_pics->_delete_where('lesson_id', $lesson_id);
     $this->_delete($lesson_id);
   }
 
@@ -230,7 +228,7 @@ class Lessons extends MX_Controller {
       redirect('site_security/not_allowed');
     }
 
-    $mysql_query = "SELECT * FROM lesson_small_pics WHERE lesson_id = $lesson_id ORDER BY priority";
+    $mysql_query = "SELECT * FROM lesson_pics WHERE lesson_id = $lesson_id ORDER BY priority";
     $query = $this->_custom_query($mysql_query);
     $data['query'] = $query;
     $data['lesson_id'] = $lesson_id;
@@ -267,7 +265,7 @@ class Lessons extends MX_Controller {
       $this->upload->initialize($config);
 
       if (!$this->upload->do_upload('userfile')) {
-        $mysql_query = "SELECT * FROM lesson_small_pics WHERE lesson_id = $lesson_id";
+        $mysql_query = "SELECT * FROM lesson_pics WHERE lesson_id = $lesson_id";
         $query = $this->_custom_query($mysql_query);
         $data['query'] = $query;
         $data['num_rows'] = $query->num_rows();
@@ -286,12 +284,12 @@ class Lessons extends MX_Controller {
 
         // insert into db
         $priority = $this->_get_pictures_priority($lesson_id);
-        $insert_statement = "INSERT INTO lesson_small_pics (lesson_id, picture_name, priority) VALUES ($lesson_id, '$file_name', $priority)";
+        $insert_statement = "INSERT INTO lesson_pics (lesson_id, picture_name, priority) VALUES ($lesson_id, '$file_name', $priority)";
         $this->_custom_query($insert_statement);
 
-        $lessons_small_pic_id = $this->_get_lesson_small_pic_id($lesson_id, $priority);
-        $insert_statement = "INSERT INTO lesson_big_pics (lesson_small_pic_id, picture_name) VALUES ($lessons_small_pic_id, '$file_name')";
-        $this->_custom_query($insert_statement);
+        // $lessons_small_pic_id = $this->_get_lesson_pic_id($lesson_id, $priority);
+        // $insert_statement = "INSERT INTO lesson_big_pics (lesson_pic_id, picture_name) VALUES ($lessons_small_pic_id, '$file_name')";
+        // $this->_custom_query($insert_statement);
 
         $data['headline'] = "Upload Success";
         $data['lesson_id'] = $lesson_id;
@@ -306,38 +304,35 @@ class Lessons extends MX_Controller {
 
   function delete_image() {
     $this->load->module('site_security');
-    $this->load->module('lesson_small_pics');
-    $this->load->module('lesson_big_pics');
+    $this->load->module('lesson_pics');
 
     $lesson_id = $this->uri->segment(3);
-    $lesson_small_pic_id = $this->uri->segment(4);
+    $lesson_pic_id = $this->uri->segment(4);
     $this->site_security->_make_sure_is_admin();
 
-    $query = $this->lesson_small_pics->get_where_custom('lesson_id', $lesson_id);
+    $query = $this->lesson_pics->get_where_custom('lesson_id', $lesson_id);
     $picture_name = $query->row(1)->picture_name;
 
     $lesson_big_pic_path = './lesson_big_pics/'.$picture_name;
-    $lesson_small_pic_path = './lesson_small_pics/'.$picture_name;
-    // delete files in lesson_big_pics and lesson_small_pics
+    $lesson_small_pic_path = './lesson_pics/'.$picture_name;
+    // delete files in lesson_big_pics and lesson_pics
     if (file_exists($lesson_big_pic_path)) {
       unlink($lesson_big_pic_path);
     }
     if (file_exists($lesson_small_pic_path)) {
       unlink($lesson_small_pic_path);
     }
-    // delete every big pic that is linked to a small pic
-    $this->lesson_big_pics->_delete_where('lesson_small_pic_id', $lesson_small_pic_id);
 
     // reasign priority
-    $priority_for_deleted_pic = $this->lesson_small_pics->get_priority_for_lesson($lesson_small_pic_id, $lesson_id);
+    $priority_for_deleted_pic = $this->lesson_pics->get_priority_for_lesson($lesson_pic_id, $lesson_id);
     // delete small and big pics from database
-    $this->lesson_small_pics->_delete($lesson_small_pic_id);
-    $query = $this->lesson_small_pics->get_where_custom('lesson_id', $lesson_id);
+    $this->lesson_pics->_delete($lesson_pic_id);
+    $query = $this->lesson_pics->get_where_custom('lesson_id', $lesson_id);
     foreach ($query->result() as $row) {
       if ($row->priority > $priority_for_deleted_pic) {
         $new_priority = $row->priority - 1;
         $data['priority'] = $new_priority;
-        $this->lesson_small_pics->_update($row->id, $data);
+        $this->lesson_pics->_update($row->id, $data);
       }
     }
     $flash_msg = "The image was successfully deleted.";
@@ -349,7 +344,7 @@ class Lessons extends MX_Controller {
   function _generate_thumbnail($file_name) {
     $config['image_library'] = 'gd2';
     $config['source_image'] = './lesson_big_pics/'.$file_name;
-    $config['new_image'] = './lesson_small_pics/'.$file_name;
+    $config['new_image'] = './lesson_pics/'.$file_name;
     $config['maintain_ratio'] = true;
     $config['width'] = 200;
     $config['height'] = 200;
@@ -358,7 +353,7 @@ class Lessons extends MX_Controller {
   }
 
   function _get_pictures_priority($lesson_id) {
-    $mysql_query = "SELECT * FROM lesson_small_pics WHERE lesson_id = $lesson_id ORDER BY priority DESC LIMIT 1";
+    $mysql_query = "SELECT * FROM lesson_pics WHERE lesson_id = $lesson_id ORDER BY priority DESC LIMIT 1";
     $query = $this->_custom_query($mysql_query);
     if ($query->num_rows() == 1) {
       foreach ($query->result() as $row) {
@@ -370,8 +365,8 @@ class Lessons extends MX_Controller {
     return $priority;
   }
 
-  function _get_lesson_small_pic_id($lesson_id, $priority) {
-    $mysql_query = "SELECT id FROM lesson_small_pics WHERE lesson_id = $lesson_id AND priority = $priority";
+  function _get_lesson_pic_id($lesson_id, $priority) {
+    $mysql_query = "SELECT id FROM lesson_pics WHERE lesson_id = $lesson_id AND priority = $priority";
     $query = $this->_custom_query($mysql_query);
     foreach($query->result() as $row) {
       $small_pic_id = $row->id;

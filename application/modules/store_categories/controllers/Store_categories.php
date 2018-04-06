@@ -92,10 +92,10 @@ class Store_categories extends MX_Controller {
 
   function _get_picture_name_by_item_url($item_url) {
     $mysql_query = "
-    SELECT sp.picture_name FROM small_pics sp
-    JOIN store_items si ON sp.item_id = si.id
+    SELECT ip.picture_name FROM item_pics ip
+    JOIN store_items si ON ip.item_id = si.id
     WHERE si.item_url = ?
-    AND sp.priority = 1
+    AND ip.priority = 1
     ";
     $query = $this->db->query($mysql_query, array($item_url));
     foreach ($query->result() as $row) {

@@ -33,13 +33,13 @@
       <!-- Product-->
 
       <?php
-      $this->load->module('lesson_small_pics');
+      $this->load->module('lesson_pics');
       foreach($query->result() as $row) {
         $lesson_id = $row->id;
         $lesson_name = $row->lesson_name;
         $lesson_url = base_url().'lessons/view_lesson/'.$row->lesson_url;
-        $picture_name = $this->lesson_small_pics->get_where_custom("lesson_id", $lesson_id)->row(0)->picture_name;
-        $picture_src = base_url().'lesson_small_pics/'.$picture_name;
+        $picture_name = $this->lesson_pics->get_where_custom("lesson_id", $lesson_id)->row(0)->picture_name;
+        $picture_src = base_url().'lesson_big_pics/'.$picture_name;
         ?>
         <div class="grid-item" style="position: absolute; left: 0px; top: 0px;">
           <div class="product-card">
@@ -50,12 +50,9 @@
             </div>
           </div>
         </div>
-
         <?php
       }
       ?>
-
     </div>
-
   </div>
 </div>

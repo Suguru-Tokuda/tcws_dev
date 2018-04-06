@@ -15,7 +15,7 @@
               // echo $row->small_pic;
 
               ?>
-              <img src="<?= base_url() ?>small_pics/<?= $row->small_pic ?>" title="<?= base_url() ?>small_pics/<?= $row->small_pic ?>">
+              <img src="<?= base_url() ?>item_pics/<?= $row->small_pic ?>" title="<?= base_url() ?>item_pics/<?= $row->small_pic ?>">
               <?php
             } else {
               echo "No image preview available";

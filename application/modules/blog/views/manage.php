@@ -29,14 +29,16 @@
             <tbody>
               <?php
               $this->load->module('timedate');
+              $this->load->module('blog_pics');
               foreach($query->result() as $row) {
                 $edit_blog_url = base_url()."blog/create/".$row->id;
                 $view_blog_url = base_url().$row->blog_url;
+                $picture_name = $this->blog_pics->get_first_picture_name_by_blog_id($row->id);
                 $date_published = $this->timedate->get_date($row->date_published, 'datepicker_us');
-                $thumbnail_name = str_replace('.', '_thumb.', $row->picture);
+                $thumbnail_name = str_replace('.', '_thumb.', $picture_name);
                 ?>
                 <tr>
-                  <td><img src="<?= base_url() ?>blog_pics/<?= $thumbnail_name ?>" alt="<?= $thumbnail_name ?>"></td>
+                  <td><img src="<?= base_url() ?>/media/blog_small_pics/<?= $thumbnail_name ?>" alt="<?= $thumbnail_name ?>"></td>
                   <td><?= $date_published ?></td>
                   <td><?= $row->author ?></td>
                   <td>
@@ -46,10 +48,10 @@
                   <td class="center"><?= $row->blog_title ?></td>
                   <td class="center">
                     <a class="btn btn-success" href="<?= $view_blog_url ?>">
-                      <i class="fa fas fa-search"></i>
+                      <i class="fa fas fa-search"></i>&nbsp;&nbsp; View
                     </a>
                     <a class="btn btn-info" href="<?= $edit_blog_url ?>">
-                      <i class="fa fas fa-edit"></i>
+                      <i class="fa fas fa-edit"></i>&nbsp;&nbsp; Edit
                     </a>
                   </td>
                 </tr>

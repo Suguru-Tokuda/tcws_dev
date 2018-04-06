@@ -8,7 +8,7 @@
   foreach ($query->result() as $row) {
     $item_url = $row->item_url;
     $index_pic_name = $this->store_categories->_get_picture_name_by_item_url($item_url);
-    $small_pic_path = base_url()."small_pics/".$index_pic_name;
+    $small_pic_path = base_url()."media/item_small_pics/".$index_pic_name;
     $item_page = base_url()."$item_segments./$row->cat_url/$row->item_url";
     ?>
     <div class="col-md-2 img-thumbnail" style="margin: 5px; height: 300px;" >

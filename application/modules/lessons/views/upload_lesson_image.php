@@ -72,7 +72,7 @@ if ($num_rows > 0) {
     $this->load->module('lessons');
     foreach($query->result() as $row) {
       $delete_image_url = base_url()."/lessons/delete_image/".$row->id;
-      $picture_location = base_url()."lesson_big_pics/".$row->picture_name;
+      $picture_location = base_url()."media/lesson_big_pics/".$row->picture_name;
       $priority = $row->priority;
       ?>
       <li style="width: 250px;" id="<?= $row->id?>">

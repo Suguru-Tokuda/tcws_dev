@@ -85,7 +85,7 @@ $form_location = base_url().'listed_items/do_upload/'.$item_url;
         $this->load->module('store_categories');
         foreach($query->result() as $row) {
           $delete_image_url = base_url()."/listed_items/delete_image/".$row->id;
-          $picture_location = base_url()."big_pics/".$row->picture_name;
+          $picture_location = base_url()."media/item_big_pics/".$row->picture_name;
           // $view_item_url = base_url()."/store_categories/view/".$row->id;
           $priority = $row->priority;
           ?>

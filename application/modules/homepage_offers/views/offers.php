@@ -1,15 +1,15 @@
 <?php
-$this->load->module('small_pics');
+$this->load->module('item_pics');
 foreach ($query->result() as $row) {
   $item_id = $row->item_id;
-  $picture_name = $this->small_pics->get_index_small_pic_name_id_by_item_id($item_id);
+  $picture_name = $this->item_pics->get_index_small_pic_name_id_by_item_id($item_id);
   $item_title = $row->item_title;
   // $small_pic = $row->small_pic;
   $item_price = number_format($row->item_price, 2);
   $item_price = str_replace('.00', '', $item_price);
 
   $was_price = $row->was_price;
-  $small_pic_path = base_url()."small_pics/".$picture_name;
+  $small_pic_path = base_url()."item_pics/".$picture_name;
   $item_page = base_url()."$item_segments./$row->cat_url/$row->item_url";
   ?>
   <div class="col-md-3 col-xs-3 col-xs-3" >

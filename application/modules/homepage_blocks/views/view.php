@@ -4,7 +4,7 @@
 <div class="row">
   <?php
   foreach ($query->result() as $row) {
-    $small_pic_path = base_url()."small_pics/".$row->small_pic;
+    $small_pic_path = base_url()."item_pics/".$row->small_pic;
     $item_page = base_url()."$item_segments./$row->cat_url/$row->item_url";
     ?>
     <div class="col-md-2 img-thumbnail" style="margin: 5px; height: 300px;" >

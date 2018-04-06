@@ -42,7 +42,7 @@ $create_item_url = base_url()."listed_items/create_item";
                 $item_url = $row->item_url;
                 $edit_item_url = base_url()."listed_items/create_item/".$item_url;
                 $picture_name = $this->store_items->_get_small_pic_by_item_url($item_url);
-                $image_location = base_url()."small_pics/".$picture_name;
+                $image_location = base_url()."item_pics/".$picture_name;
                 $cat_url = $this->store_items->_get_cat_url_by_item_url($item_url);
                 if (isset($cat_url)) {
                   $view_item_url = base_url()."$item_segments./$cat_url/$row->item_url";

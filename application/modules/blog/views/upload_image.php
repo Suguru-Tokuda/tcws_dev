@@ -1,16 +1,17 @@
-<h1><?= $headline ?></h1>
-<div class="row-fluid sortable">
-  <div class="box span12">
-    <div class="box-header" data-original-title>
-      <h2><i class="halflings-icon white tag"></i><span class="break"></span>Upload Image</h2>
-      <div class="box-icon">
-        <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-        <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
+<div class="form-panel">
+  <h1><?= $headline ?></h1>
+  <div class="row-fluid sortable">
+    <div class="box span12">
+      <div class="box-header" data-original-title>
+        <div class="box-icon">
+          <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+          <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
+        </div>
       </div>
-    </div>
-
-    <div class="box-content">
       <?php
+      if (isset($flash)) {
+        echo $flash;
+      }
       if (isset($error)) {
         foreach ($error as $value) {
           echo $value;
@@ -20,7 +21,7 @@
       <?php
       // This line adds attributes into a form. No need to put <form...> manually
       $attributes = array('class' => 'form-horizontal', 'id' => 'myform');
-      echo form_open_multipart('blog/do_upload/'.$update_id, $attributes);
+      echo form_open_multipart('blog/do_upload/'.$blog_id, $attributes);
       ?>
       <!-- <form class="form-horizontal"> -->
       <p style="margin-top: 24px;">Please choose a file from your computer and then press "Upload".</p>
@@ -32,8 +33,8 @@
           </div>
         </div>
         <div class="form-actions">
-          <button type="submit" name="submit" class="btn btn-primary" value="Upload">Upload</button>
-          <button type="submit" name="submit" class="btn" value="Cancel">Cancel</button>
+          <button type="submit" name="submit" class="btn btn-primary" value="upload">Upload</button>
+          <button type="submit" name="submit" class="btn" value="cancel">Cancel</button>
         </div>
       </fieldset>
     </form>
@@ -47,15 +48,15 @@
         <?php
         $this->load->module('lessons');
         foreach($query->result() as $row) {
-          $delete_image_url = base_url()."/lessons/delete_image/".$row->id;
-          $picture_location = base_url()."lesson_big_pics/".$row->picture_name;
+          $delete_image_url = base_url()."blog/delete_image/".$blog_id.'/'.$row->id;
+          $picture_location = base_url()."media/blog_big_pics/".$row->picture_name;
           $priority = $row->priority;
           ?>
           <li style="width: 250px;" id="<?= $row->id?>">
-              <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px">
-              <?php
-              echo anchor(base_url().'lessons/delete_image/'.$lesson_id.'/'.$row->id, 'Remove');
-              ?>
+            <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px">
+            <?php
+            echo anchor($delete_image_url, 'Remove');
+            ?>
           </li>
           <?php
         }
@@ -64,9 +65,6 @@
       <?php
     }
     ?>
-
-
-
   </div>
 </div><!--/span-->
 </div><!--/row-->
