@@ -254,7 +254,7 @@ class Lessons extends MX_Controller {
     if ($submit == "cancel") {
       redirect('lessons/create_lesson/'.$lesson_id);
     } else if ($submit == "upload") {
-      $config['upload_path'] = './lesson_big_pics';
+      $config['upload_path'] = './media/lesson_big_pics';
       $config['allowed_types'] = 'gif|jpg|png';
       $config['max_size'] = 2048;
       $config['max_width'] = 3036;
@@ -287,10 +287,6 @@ class Lessons extends MX_Controller {
         $insert_statement = "INSERT INTO lesson_pics (lesson_id, picture_name, priority) VALUES ($lesson_id, '$file_name', $priority)";
         $this->_custom_query($insert_statement);
 
-        // $lessons_small_pic_id = $this->_get_lesson_pic_id($lesson_id, $priority);
-        // $insert_statement = "INSERT INTO lesson_big_pics (lesson_pic_id, picture_name) VALUES ($lessons_small_pic_id, '$file_name')";
-        // $this->_custom_query($insert_statement);
-
         $data['headline'] = "Upload Success";
         $data['lesson_id'] = $lesson_id;
         $flash_msg = "The picture was successfully uploaded.";
@@ -313,8 +309,8 @@ class Lessons extends MX_Controller {
     $query = $this->lesson_pics->get_where_custom('lesson_id', $lesson_id);
     $picture_name = $query->row(1)->picture_name;
 
-    $lesson_big_pic_path = './lesson_big_pics/'.$picture_name;
-    $lesson_small_pic_path = './lesson_pics/'.$picture_name;
+    $lesson_big_pic_path = './media/lesson_big_pics/'.$picture_name;
+    $lesson_small_pic_path = './media/lesson_pics/'.$picture_name;
     // delete files in lesson_big_pics and lesson_pics
     if (file_exists($lesson_big_pic_path)) {
       unlink($lesson_big_pic_path);
@@ -343,8 +339,8 @@ class Lessons extends MX_Controller {
 
   function _generate_thumbnail($file_name) {
     $config['image_library'] = 'gd2';
-    $config['source_image'] = './lesson_big_pics/'.$file_name;
-    $config['new_image'] = './lesson_pics/'.$file_name;
+    $config['source_image'] = './media/lesson_big_pics/'.$file_name;
+    $config['new_image'] = './media/lesson_pics/'.$file_name;
     $config['maintain_ratio'] = true;
     $config['width'] = 200;
     $config['height'] = 200;

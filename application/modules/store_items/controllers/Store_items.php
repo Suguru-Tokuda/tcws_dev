@@ -324,7 +324,7 @@ class Store_items extends MX_Controller {
   // '_' means private
   function _genrate_thumbnail($file_name) {
     $config['image_library'] = 'gd2';
-    $config['source_image'] = './big_pics/'.$file_name;
+    $config['source_image'] = './media/big_pics/'.$file_name;
     $config['new_image'] = './item_pics/'.$file_name;
     $config['maintain_ratio'] = true;
     $config['width'] = 200;
@@ -372,7 +372,7 @@ class Store_items extends MX_Controller {
     if ($submit == "cancel") {
       redirect('store_items/create/'.$item_id);
     } else if ($submit == "upload") {
-      $config['upload_path'] = './big_pics/';
+      $config['upload_path'] = '.media/item_big_pics/';
       $config['allowed_types'] = 'gif|jpg|png';
       $config['max_size'] = 2048;
       $config['max_width'] = 3036;
@@ -482,8 +482,8 @@ class Store_items extends MX_Controller {
 
     foreach ($small_pic_ids as $key => $value) {
       $picture_name = $this->item_pics->_get_picture_name_by_small_pic_id($value);
-      $big_pic_path = './big_pics/'.$picture_name;
-      $small_pic_path = './item_pics/'.$picture_name;
+      $big_pic_path = './media/item_big_pics/'.$picture_name;
+      $small_pic_path = '.media/item_small_pics/'.$picture_name;
       // attemp to delete item small pics
       if (file_exists($big_pic_path)) {
         unlink($big_pic_path);
@@ -545,8 +545,8 @@ class Store_items extends MX_Controller {
 
     $picture_name = $this->item_pics->_get_picture_name_by_small_pic_id($small_pic_id);
 
-    $big_pic_path = './big_pics/'.$picture_name;
-    $small_pic_path = './item_pics/'.$picture_name;
+    $big_pic_path = './item_big_pics/'.$picture_name;
+    $small_pic_path = './item_small_pics/'.$picture_name;
 
     // checks if the file exists in the directory and if so, attemt to remove the images
     if (file_exists($big_pic_path)) {

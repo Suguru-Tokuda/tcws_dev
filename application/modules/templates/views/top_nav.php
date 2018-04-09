@@ -43,7 +43,7 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
       </ul>
     </li>
     <li><a href="#"><span>Boat Renting</span></a></li>
-    <li><a href="#"><span>Community</span></a></li>
+    <li><a href="<?= base_url().'blog/view_blogs' ?>"><span>Community</span></a></li>
   </ul>
 </nav>
 <?php
