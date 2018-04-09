@@ -84,6 +84,12 @@
             </a>
           </li>
           <li class="sub-menu">
+            <a href="<?= base_url() ?>boats/manage_boats">
+              <i class="fa fa-anchor"></i>
+              <span>Manage Boats</span>
+            </a>
+          </li>
+          <li class="sub-menu">
             <a href="<?= base_url() ?>store_categories/manage">
               <i class="fa fa-bars"></i>
               <span>Manage Categories</span>
