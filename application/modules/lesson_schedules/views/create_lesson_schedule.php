@@ -23,7 +23,7 @@ if (is_numeric($lesson_schedule_id)) {
   ?>
   <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
     <div class="form-group">
-      <label class=" col-sm-2 col-sm-2 control-label" for="typeahead">Lesosn Date</label>
+      <label class=" col-sm-2 col-sm-2 control-label" for="typeahead">Lesson Date</label>
       <div class="col-sm-3">
         <div class='input-group date' id='lessonDatePicker'>
           <input name="lesson_date" type='text' class="form-control" value="<?= $lesson_date ?>" />

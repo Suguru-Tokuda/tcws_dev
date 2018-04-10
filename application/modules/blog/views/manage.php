@@ -18,7 +18,7 @@
               <table class="table table-bordered table-striped table-condensed">
             <thead>
               <tr>
-                <th>Picture</th>
+                <th>Thumnail</th>
                 <th>Date Published</th>
                 <th>Author</th>
                 <th>Blog URL</th>
@@ -32,13 +32,12 @@
               $this->load->module('blog_pics');
               foreach($query->result() as $row) {
                 $edit_blog_url = base_url()."blog/create/".$row->id;
-                $view_blog_url = base_url().$row->blog_url;
+                $view_blog_url = base_url()."blog/view_blog/".$row->blog_url;
                 $picture_name = $this->blog_pics->get_first_picture_name_by_blog_id($row->id);
                 $date_published = $this->timedate->get_date($row->date_published, 'datepicker_us');
-                $thumbnail_name = str_replace('.', '_thumb.', $picture_name);
                 ?>
                 <tr>
-                  <td><img src="<?= base_url() ?>/media/blog_small_pics/<?= $thumbnail_name ?>" alt="<?= $thumbnail_name ?>"></td>
+                  <td><img src="<?= base_url() ?>media/blog_small_pics/<?= $picture_name ?>" alt="<?= $picture_name ?>"></td>
                   <td><?= $date_published ?></td>
                   <td><?= $row->author ?></td>
                   <td>

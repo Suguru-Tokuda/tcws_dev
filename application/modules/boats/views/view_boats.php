@@ -23,7 +23,9 @@
         </div>
       </div>
       <div class="column">
-        <div class="shop-view"><a class="grid-view active" href="shop-grid-ls.html"><span></span><span></span><span></span></a><a class="list-view" href="shop-list-ls.html"><span></span><span></span><span></span></a></div>
+        <div class="shop-view"><a class="grid-view active" href="shop-grid-ls.html"></a>
+          <a class="list-view" href="shop-list-ls.html"></a>
+        </div>
       </div>
     </div>
     <!-- Products Grid-->
@@ -33,13 +35,21 @@
       <!-- Product-->
 
       <?php
-      $this->load->module('boat_small_pics');
+      $this->load->module('boat_pics');
       foreach($query->result() as $row) {
-        $boat_id = $row->id;
+        $boat_rental_id = $row->id;
         $boat_name = $row->boat_name;
         $boat_url = base_url().'boats/view_boat/'.$row->boat_url;
-        $picture_name = $this->boat_small_pics->get_where_custom("boat_id", $boat_id)->row(0)->picture_name;
-        $picture_src = base_url().'boat_small_pics/'.$picture_name;
+        $picture_name = $this->boat_pics->get_where_custom("boat_rental_id", $boat_rental_id)->row(0)->picture_name;
+        if(isset($picture_name))
+        {
+          $picture_src = base_url().'boat_big_pics/'.$picture_name;
+        }
+        else {
+          {
+            $picture_src="";
+          }
+        }
       }
 
       ?>

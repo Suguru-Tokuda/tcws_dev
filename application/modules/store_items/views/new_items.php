@@ -9,7 +9,7 @@
       $item_url = $row->item_url;
       $item_price = $row->item_price;
       $index_pic_name = $this->store_categories->_get_picture_name_by_item_url($item_url);
-      $small_pic_path = base_url()."big_pics/".$index_pic_name;
+      $small_pic_path = base_url()."media/item_big_pics/".$index_pic_name;
       $item_page = base_url()."$item_segments./$row->cat_url/$row->item_url";
       ?>
 
@@ -17,7 +17,6 @@
         <div class="card mb-30"><a class="card-img-tiles" href="<?= $item_page ?>">
           <div class="inner">
             <div class="main-img"><img src="<?= $small_pic_path ?>" alt="<?= $item_title ?>"></div>
-            <!-- <div class="thumblist"><img src="img/shop/categories/02.jpg" alt="Category"><img src="img/shop/categories/03.jpg" alt="Category"></div> -->
           </div></a>
           <div class="card-body text-center">
             <h4 class="card-title"><?= $item_title ?></h4>

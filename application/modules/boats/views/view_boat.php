@@ -17,7 +17,7 @@ if (isset($flash)) {
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."lesson_big_pics/".$picture_name;
+            $picture_location = base_url()."boat_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <div class="gallery-item active"><a href="<?= $picture_location ?>" data-hash="one" data-size="1000x667"></a></div>
@@ -45,7 +45,7 @@ if (isset($flash)) {
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."lesson_big_pics/".$picture_name;
+            $picture_location = base_url()."boat_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <div data-hash="one"><img src="<?= $picture_location ?>" alt="<?= $picture_name ?>"></div>
@@ -73,7 +73,7 @@ if (isset($flash)) {
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."lesson_big_pics/".$picture_name;
+            $picture_location = base_url()."boat_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <li class="active"><a href="#one"><img src="<?= $picture_location ?>" alt="<?= $picture_name ?>"></a></li>
@@ -102,75 +102,74 @@ if (isset($flash)) {
     <!-- Product Info-->
     <div class="col-md-6">
       <div class="padding-top-2x mt-2 hidden-md-up"></div>
-      <h2 class="padding-top-1x text-normal"><?= $lesson_name ?></h2>
-      <span class="h2 d-block"><?= $currency_symbol.$lesson_fee.' / per' ?></span>
-      <p><?= nl2br($lesson_description) ?></p>
+      <h2 class="padding-top-1x text-normal"><?= $boat_name ?></h2>
+      <span class="h2 d-block"><?= $currency_symbol.$boat_rental_fee.' / per' ?></span>
+      <p><?= nl2br($boat_description) ?></p>
+      <p> Year Made: <?= nl2br($boat_year_made) ?></p>
+      <p> Maker: <?= nl2br($boat_maker)?></p>
+      <p> Capacity: <?= nl2br($boat_capacity) ?></p>
     </div>
   </div>
-
-
-  <div class="row">
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Availability</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          $this->load->module('lesson_bookings');
-          $this->load->module('timedate');
-          foreach($schedule_query->result() as $row) {
-            $lesson_schedule_id = $row->id;
-            $lesson_date = $this->timedate->get_date($row->lesson_start_date, 'datepicker_us');
-            $start_time = $this->timedate->get_time($row->lesson_start_date);
-            $end_time = $this->timedate->get_time($row->lesson_end_date);
-            $number_of_bookings = $this->lesson_bookings->_get_num_of_bookings_for_lesson_schedule_id($lesson_schedule_id);
-            $availability = $capacity - $number_of_bookings;
-            ?>
-            <tr>
-              <td><?= $lesson_date ?></td>
-              <td><?= $start_time ?></td>
-              <td><?= $end_time ?></td>
-              <td><?= $availability.'/'.$capacity ?></td>
-              <td>
-                <select class="form-control" name="booking_qty">
-                  <?php
-                  if ($availability > 5) {
-                    for ($i = 1; $i <= 5; $i++) {
-                      ?>
-                      <option value="<?= $i ?>"><?= $i ?></option>
-                      <?php
-                    }
-                    ?>
-                    <?php
-                  } else {
-                    for ($i = 1; $i <= $number_of_bookings; $i++) {
-                      ?>
-                      <option value="<?= $i ?>"><?= $i ?></option>
-                      <?php
-                    }
-                  }
-                    ?>
-                  </select>
-                </td>
-              <td><button class="btn btn-primary">Book Lesson</button></td>
-              </tr>
-                      <?php
-                    }
-                    ?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
+  <div class = "row">
+    <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
+      <div class="form-group">
+        <label class=" col-sm-2 col-sm-2 control-label" for="typeahead">Booking Date</label>
+        <div class="col-sm-3">
+          <div class='input-group date' id='boatDatePicker'>
+            <input name="boat_date" type='text' class="form-control" value="<?= $boat_date ?>" />
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </span>
           </div>
+        </div>
+      </div>
+      <script type="text/javascript">
+      $(function () {
+        $('#boatDatePicker').datetimepicker({
+          format: 'MM/DD/YYYY'
+        });
+      });
+      </script>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Start Time</label>
+        <div class="col-sm-3">
+          <div class='input-group date' id='startTimePicker'>
+            <input name="boat_start_time" type='text' class="form-control" value="<?= $boat_start_date ?>" />
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-time"></span>
+            </span>
+          </div>
+        </div>
+        <script type="text/javascript">
+        $(function () {
+          $('#startTimePicker').datetimepicker({
+            format: 'LT'
+          });
+        });
+        </script>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">End Time</label>
+        <div class="col-sm-3">
+          <div class='input-group date' id='endTimePicker'>
+            <input name="boat_end_time" type='text' class="form-control" value="<?= $boat_end_date ?>" />
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-time"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript">
+      $(function () {
+        $('#endTimePicker').datetimepicker({
+          format: 'LT'
+        });
+      });
+      </script>
+    </form>
+
+  </div>
+  </div>
 
           <!-- Photoswipe container-->
           <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
