@@ -132,6 +132,7 @@ if (isset($flash)) {
             $end_time = $this->timedate->get_time($row->lesson_end_date);
             $number_of_bookings = $this->lesson_bookings->_get_num_of_bookings_for_lesson_schedule_id($lesson_schedule_id);
             $availability = $capacity - $number_of_bookings;
+            $booking_url = base_url().'/lessons/fakefunc';
             ?>
             <tr>
               <td><?= $lesson_date ?></td>
@@ -159,7 +160,7 @@ if (isset($flash)) {
                     ?>
                   </select>
                 </td>
-              <td><button class="btn btn-primary">Book Lesson</button></td>
+              <td><a class="btn btn-primary" href="<?= $booking_url ?>">Book Lesson</a></td>
               </tr>
                       <?php
                     }

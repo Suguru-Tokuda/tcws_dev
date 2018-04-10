@@ -50,6 +50,17 @@
         }
         ?>
       </div>
+      <?php
+      if ($video_name != "") {
+        $video_path = base_url().'media/blog_videos/'.$video_name;
+      ?>
+      <video width="320" height="240" controls>
+        <source src="<?= $video_path ?>" type="video/mp4">
+      </video>
+      <?php
+    }
+       ?>
+
       <h2 class="padding-top-2x"><?= $blog_title ?></h2>
       <p><?= $blog_content ?></p>
 

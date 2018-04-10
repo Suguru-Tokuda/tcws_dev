@@ -19,7 +19,7 @@ if (isset($flash)) {
             // Check if the item has an image. Upload image icon appears only there is NO image.
             if ($blog_id > 2) { ?>
               <a href="<?= base_url() ?>blog/upload_image/<?= $blog_id ?>"><button type="button"class="btn btn-warning"><i class="fa fa-camera"></i>&nbsp;&nbsp;Manage Images</button></a>
-              <a href="<?= base_url() ?>blog/upload_image/<?= $blog_id ?>"><button type="button"class="btn btn-success"><i class="fa fa-video-camera"></i>&nbsp;&nbsp;Manage Video</button></a>
+              <a href="<?= base_url() ?>blog/upload_video/<?= $blog_id ?>"><button type="button"class="btn btn-success"><i class="fa fa-video-camera"></i>&nbsp;&nbsp;Manage Video</button></a>
               <a href="<?= base_url() ?>blog/deleteconf/<?= $blog_id ?>" ><button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i>&nbsp;&nbsp;Delete Blog Entry</button></a>
               <?php
             }

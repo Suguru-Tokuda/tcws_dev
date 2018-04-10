@@ -50,6 +50,7 @@ class Blog extends MX_Controller {
     $data['blog_content'] = $query->row()->blog_content;
     $data['date_published'] = $this->timedate->get_date($query->row()->date_published, 'datepicker_us');
     $data['author'] = $query->row()->author;
+    $data['video_name'] = $query->row()->video_name;
 
     $data['pics_query'] = $this->blog_pics->get_where_custom('blog_id', $data['blog_id']);
 
@@ -199,7 +200,6 @@ class Blog extends MX_Controller {
     $mysql_query = "SELECT * FROM blog_pics WHERE blog_id = $blog_id ORDER BY priority";
     $query = $this->_custom_query($mysql_query);
     // security
-    $this->load->library('session');
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
@@ -275,6 +275,89 @@ class Blog extends MX_Controller {
       }
     }
   }
+
+  function upload_video($blog_id) {
+    $this->load->library('session');
+
+    if (!is_numeric($blog_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $query = $this->get_where($blog_id);
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $data['query'] = $query;
+    if (!isset($query->row()->video_name)) {
+      $data['headline'] = "Upload Video";
+    }
+
+    $data['video_name'] = $data['query']->row()->video_name;
+    $data['headline'] = "Update Video";
+    $data['blog_id'] = $blog_id;
+    $data['flash'] = $this->session->flashdata('item');
+    $data['view_file'] = "upload_video";
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function do_upload_video($blog_id) {
+    if (!is_numeric($blog_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $this->load->library('session');
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $submit = $this->input->post('submit', true);
+
+    if ($submit == "cancel") {
+      redirect('blog/create/'.$blog_id);
+    } elseif ($submit == "upload") {
+      $config['upload_path'] ="./media/blog_videos/";
+      $config['allowed_types'] = "mp4|wmv|avi";
+      $config['max_size'] = '102400';
+      $config['file_name'] = $this->site_security->generate_random_string(16);
+
+      $this->load->library('upload', $config);
+
+      if (!$this->upload->do_upload('userfile')) {
+        $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
+        $data['video_name'] = $this->get($blog_id)->row()->video_name;
+        $data['headline'] = "Upload Error";
+        $data['blog_id'] = $blog_id;
+        $data['flash'] = $this->session->flashdata('item');
+        $data['view_file'] = "upload_video";
+        $this->load->module('templates');
+        $this->templates->admin($data);
+      } else {
+        $data = array('upload_data' => $this->upload->data());
+        $upload_data = $data['upload_data'];
+        $raw_name = $upload_data['raw_name'];
+        $file_ext = $upload_data['file_ext'];
+
+        $file_name = $upload_data['file_name'];
+        $old_video_name = $this->get_where($blog_id)->row()->video_name;
+
+        if ($old_video_name != "") {
+          $video_path = './media/blog_videos/'.$old_video_name;
+          if (file_exists($video_path)) {
+            unlink($video_path);
+          }
+        }
+
+        $update_data['video_name'] = $file_name;
+        $this->_update($blog_id, $update_data);
+
+        $flash_msg = "The video was successfully updated.";
+        $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('item', $value);
+        redirect('blog/upload_video/'.$blog_id);
+      }
+    }
+  }
+
 
   function delete($blog_id) {
     // only those people with an blog_id for an item can get in.
