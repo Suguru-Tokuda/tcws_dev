@@ -111,63 +111,7 @@ if (isset($flash)) {
     </div>
   </div>
   <div class = "row">
-    <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
-      <div class="form-group">
-        <label class=" col-sm-2 col-sm-2 control-label" for="typeahead">Booking Date</label>
-        <div class="col-sm-3">
-          <div class='input-group date' id='boatDatePicker'>
-            <input name="boat_date" type='text' class="form-control" value="<?= $boat_date ?>" />
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-          </div>
-        </div>
-      </div>
-      <script type="text/javascript">
-      $(function () {
-        $('#boatDatePicker').datetimepicker({
-          format: 'MM/DD/YYYY'
-        });
-      });
-      </script>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Start Time</label>
-        <div class="col-sm-3">
-          <div class='input-group date' id='startTimePicker'>
-            <input name="boat_start_time" type='text' class="form-control" value="<?= $boat_start_date ?>" />
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-time"></span>
-            </span>
-          </div>
-        </div>
-        <script type="text/javascript">
-        $(function () {
-          $('#startTimePicker').datetimepicker({
-            format: 'LT'
-          });
-        });
-        </script>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">End Time</label>
-        <div class="col-sm-3">
-          <div class='input-group date' id='endTimePicker'>
-            <input name="boat_end_time" type='text' class="form-control" value="<?= $boat_end_date ?>" />
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-time"></span>
-            </span>
-          </div>
-        </div>
-      </div>
-      <script type="text/javascript">
-      $(function () {
-        $('#endTimePicker').datetimepicker({
-          format: 'LT'
-        });
-      });
-      </script>
-    </form>
-
+    <input type="text" name="daterange" value="01/01/2018 1:30 PM - 01/01/2018 2:00 PM" />
   </div>
   </div>
 
@@ -206,3 +150,14 @@ if (isset($flash)) {
               </div>
             </div>
           </div>
+          <script type="text/javascript">
+          $(function() {
+              $('input[name="daterange"]').daterangepicker({
+                  timePicker: true,
+                  timePickerIncrement: 30,
+                  locale: {
+                      format: 'MM/DD/YYYY h:mm A'
+                  }
+              });
+          });
+          </script>
