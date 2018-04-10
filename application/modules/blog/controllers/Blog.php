@@ -3,11 +3,45 @@ class Blog extends MX_Controller {
 
   function __construct() {
     parent::__construct();
+    $this->load->module('custom_pagination');
+    $this->load->library('form_validation');
+    $this->form_validation->set_ci_reference($this);
   }
 
+  // display all the blogs
+  function view_blogs() {
+    $query = $this->get("date_published");
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $query->num_rows();
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_pagination_limit();
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $data['query'] = $query;
+    $data['view_file'] = "view_blogs";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
+
+  // displays a specific blog for blog_url
   function view_blog($blog_url) {
     $this->load->module('timedate');
+    $this->load->module('blog_pics');
     $query = $this->get_where_custom('blog_url', $blog_url);
+
+    $query_for_all_blogs = $this->get('date_published');
+
+    $current_row = 0;
+    foreach ($query_for_all_blogs->result() as $row) {
+      if ($row->blog_url == $blog_url) {
+        $current_row++;
+      }
+    }
+    if ($query_for_all_blogs->num_rows() > 1) {
+      $data['prev_blog_url'] = $query_for_all_blogs->row($current_row - 1)->blog_url;
+      $data['next_blog_url'] = $query_for_all_blogs->row($current_row + 1)->blog_url;
+    }
 
     $data['blog_id'] = $query->row()->id;
     $data['blog_title'] = $query->row()->blog_title;
@@ -17,11 +51,13 @@ class Blog extends MX_Controller {
     $data['date_published'] = $this->timedate->get_date($query->row()->date_published, 'datepicker_us');
     $data['author'] = $query->row()->author;
 
+    $data['pics_query'] = $this->blog_pics->get_where_custom('blog_id', $data['blog_id']);
+
     $data['view_module'] = "blog";
-    $data['view_file'] = "manage";
+    $data['view_file'] = "view_blog";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
-    }
+  }
 
   function _draw_feed_hp() {
     $this->load->helper('text');
@@ -200,7 +236,7 @@ class Blog extends MX_Controller {
     if ($submit == "cancel") {
       redirect('blog/create/'.$blog_id);
     } else if ($submit == "upload") {
-      $config['upload_path'] = './blog_big_pics/';
+      $config['upload_path'] = './media/blog_big_pics/';
       $config['allowed_types'] = 'gif|jpg|png';
       $config['max_size'] = 2000;
       $config['max_width'] = 4048;
@@ -284,8 +320,8 @@ class Blog extends MX_Controller {
     $this->site_security->_make_sure_is_admin();
 
     $picture_name = $this->blog_pics->get_where($blog_pic_id)->row()->picture_name;
-    $blog_pic_path = './blog_big_pics/'.$picture_name;
-    $thumbnail_pic_path = './blog_small_pics/'.$picture_name;
+    $blog_pic_path = './media/blog_big_pics/'.$picture_name;
+    $thumbnail_pic_path = './media/blog_small_pics/'.$picture_name;
 
     // checks if the file exists in the directory and if so, attemt to remove the images
     if (file_exists($blog_pic_path)) {
@@ -351,8 +387,8 @@ class Blog extends MX_Controller {
 
   function _genrate_thumbnail($file_name) {
     $config['image_library'] = 'gd2';
-    $config['source_image'] = './blog_big_pics/'.$file_name;
-    $config['new_image'] = './blog_small_pics/'.$file_name;
+    $config['source_image'] = './media/blog_big_pics/'.$file_name;
+    $config['new_image'] = './media/blog_small_pics/'.$file_name;
     $config['maintain_ratio'] = true;
     $config['width'] = 200;
     $config['height'] = 200;
@@ -360,6 +396,28 @@ class Blog extends MX_Controller {
     $this->image_lib->resize();
   }
 
+  // beginning of pagination methods
+  function get_pagination_limit() {
+    $limit = 20;
+    return $limit;
+  }
+
+  function _get_pagination_offset() {
+    $offset = $this->uri->segment(4);
+    if (!is_numeric($offset)) {
+      $offset = 0;
+    }
+    return $offset;
+  }
+
+  function get_target_pagination_base_url() {
+    $first_bit = $this->uri->segment(1);
+    $second_bit = $this->uri->segment(2);
+    $third_bit = $this->uri->segment(3);
+    $target_base_url = base_url().$first_bit."/".$second_bit."/".$third_bit;
+    return $target_base_url;
+  }
+  // end of pagination methods
 
   function get($order_by)
   {

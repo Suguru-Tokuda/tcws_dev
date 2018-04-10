@@ -34,7 +34,7 @@
         </div>
         <div class="form-actions">
           <button type="submit" name="submit" class="btn btn-primary" value="upload">Upload</button>
-          <button type="submit" name="submit" class="btn" value="cancel">Cancel</button>
+          <button type="submit" name="submit" class="btn" value="cancel">Back</button>
         </div>
       </fieldset>
     </form>
