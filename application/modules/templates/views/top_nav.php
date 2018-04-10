@@ -16,6 +16,7 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
       <!-- <a class="offcanvas-toggle cats-toggle" href="#shop-categories" data-toggle="offcanvas"></a> -->
       <!-- Off-Canvas Toggle (#mobile-menu)-->
       <a class="offcanvas-toggle menu-toggle" href="#mobile-menu" data-toggle="offcanvas"></a>
+
       <!-- Site Logo-->
       <a class="site-logo" href="<?= base_url() ?>"><img src="img/logo/logo.png" alt="TWC"></a>
     </div>
