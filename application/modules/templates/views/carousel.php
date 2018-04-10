@@ -1,11 +1,8 @@
-<section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg); padding-top: 75px">
-  <div class="owl-carousel large-controls dots-inside" data-owl-carousel="{ &quot;nav&quot;: true, &quot;dots&quot;: true, &quot;loop&quot;: true, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 7000 }">
-    <div class="item">
 <!-- Main Slider-->
       <!-- <section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);" >
         <div class="owl-carousel large-controls dots-inside" data-owl-carousel="{ &quot;nav&quot;: true, &quot;dots&quot;: true, &quot;loop&quot;: true, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 7000 }">
-          <div class="item"> -->
-            <!-- <div class="container padding-top-3x">
+          <div class="item">
+            <div class="container padding-top-3x">
               <div class="row justify-content-center align-items-center">
                 <div class="col-lg-5 col-md-6 padding-bottom-2x text-md-left text-center">
                   <div class="from-bottom"><img class="d-inline-block w-150 mb-4" src="<?=base_url()."/img/surf-lessons-kona-hawaii.jpg"?>" alt="Puma">
@@ -15,11 +12,10 @@
                 </div>
                 <div class="col-md-6 padding-bottom-2x mb-3"><img class="d-block mx-auto" src="<?=base_url()."/img/surf-lessons-kona-hawaii.jpg"?>" alt="Puma Backpack"></div>
               </div>
-            </div> -->
-            <img class="d-block mx-auto" src="<?=base_url()."/img/surf-lessons-kona-hawaii.jpg"?>" alt="Puma Backpack" style="width:2475px; height:475px;">
+            </div>
           </div>
           <div class="item">
-            <!-- <div class="container padding-top-3x">
+            <div class="container padding-top-3x">
               <div class="row justify-content-center align-items-center">
                 <div class="col-lg-5 col-md-6 padding-bottom-2x text-md-left text-center">
                   <div class="from-bottom"><img class="d-inline-block w-200 mb-4" src="<?=base_url()."/img/ocean-7.jpg"?>" alt="Converse">
@@ -29,11 +25,10 @@
                 </div>
                 <div class="col-md-6 padding-bottom-2x mb-3"><img class="d-block mx-auto" src="<?=base_url()."/img/ocean-7.jpg"?>" alt="Chuck Taylor All Star II"></div>
               </div>
-            </div> -->
-            <img class="d-block mx-auto" src="<?=base_url()."/img/ocean-7.jpg"?>" alt="Chuck Taylor All Star II" style="width:2475px; height:475px;">
+            </div>
           </div>
           <div class="item">
-            <!-- <div class="container padding-top-3x">
+            <div class="container padding-top-3x">
               <div class="row justify-content-center align-items-center">
                 <div class="col-lg-5 col-md-6 padding-bottom-2x text-md-left text-center">
                   <div class="from-bottom"><img class="d-inline-block mb-4" src="<?=base_url()."/img/background.jpg"?>" style="width: 125px;" alt="Motorola">
@@ -43,8 +38,19 @@
                 </div>
                 <div class="col-md-6 padding-bottom-2x mb-3"><img class="d-block mx-auto" src="<?=base_url()."/img/background.jpg"?>" alt="Moto 360"></div>
               </div>
-            </div> -->
-          <img class="d-block mx-auto" src="<?=base_url()."/img/background.jpg"?>" alt="Moto 360" style="width:1600px; height:475px;">
+            </div>
           </div>
         </div>
-      </section>
+      </section> -->
+
+        <div class="owl-carousel large-controls dots-inside" data-owl-carousel="{ &quot;nav&quot;: true, &quot;dots&quot;: true, &quot;loop&quot;: true, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 7000 }">
+          <div class="item">
+            <img class="d-block mx-auto" src="<?=base_url()."/img/surf-lessons-kona-hawaii.jpg"?>" alt="Puma Backpack" style="position:absolute;">
+          </div>
+          <div class="item">
+                <img class="d-block mx-auto" src="<?=base_url()."/img/ocean-7.jpg"?>" alt="Chuck Taylor All Star II" style="position:absolute;">
+          </div>
+          <div class="item">
+                <img class="d-block mx-auto" src="<?=base_url()."/img/background.jpg"?>" alt="Moto 360">
+          </div>
+        </div>
