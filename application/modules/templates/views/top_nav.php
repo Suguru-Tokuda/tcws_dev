@@ -42,7 +42,7 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
         <li><a href="<?= base_url().'lessons/view_lessons'?>">View Lessons</a></li>
       </ul>
     </li>
-    <li><a href="#"><span>Boat Renting</span></a></li>
+    <li><a href="<?= base_url().'boats/view_boats'?>"><span>Boat Renting</span></a></li>
     <li><a href="#"><span>Community</span></a></li>
   </ul>
 </nav>

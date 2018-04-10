@@ -22,7 +22,7 @@ img#blankImg {
 }
 </style>
 <?php
-$form_location = base_url().'boats/do_upload/'.$boat_id;
+$form_location = base_url().'boats/do_upload/'.$boat_rental_id;
 ?>
 <div class="form-panel">
   <h4><?= $headline ?></h4>
@@ -78,7 +78,7 @@ if ($num_rows > 0) {
       <li style="width: 250px;" id="<?= $row->id?>">
           <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px">
           <?php
-          echo anchor(base_url().'boats/delete_image/'.$boat_id.'/'.$row->id, 'Remove');
+          echo anchor(base_url().'boats/delete_image/'.$boat_rental_id.'/'.$row->id, 'Remove');
           ?>
       </li>
       <?php
