@@ -43,7 +43,7 @@
             </li>
           </ul>
         </li>
-        <li class="has-children"><span><a href="shop-grid-ls.html"><span>Boat Rent</span></a><span class="sub-menu-toggle"></span></span>
+        <li class="has-children"><span><a href="<?= base_url().'boats/view_boats'?>"><span>Boat Rent</span></a><span class="sub-menu-toggle"></span></span>
           <ul class="offcanvas-submenu">
               <li><a href="shop-categories.html">Shop Categories</a></li>
             <li class="has-children"><span><a href="shop-grid-ls.html"><span>Shop Grid</span></a><span class="sub-menu-toggle"></span></span>

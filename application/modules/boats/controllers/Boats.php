@@ -42,9 +42,8 @@ class Boats extends MX_Controller {
     }
 
     $data_from_db = $this->fetch_data_from_db($boat_rental_id);
-    $pics_query = $this->boat_pics->get_where_custom("boat_id", $boat_rental_id);
-    //$schedule_query = $this->boat_rental_schedules->get_where_custom("boat_id", $boat_rental_id);
-
+    $pics_query = $this->boat_pics->get_where_custom("boat_rental_id", $boat_rental_id);
+    //$schedule_query = $this->boat_rental_schedules->get_where_custom("boat_rental_id", $boat_rental_id);
     $data['flash'] = $this->session->flashdata('item');
     $currency_symbol = $this->site_settings->_get_currency_symbol();
     $data['boat_name'] = $data_from_db['boat_name'];
@@ -57,7 +56,7 @@ class Boats extends MX_Controller {
     //$data['schedule_query'] = $schedule_query;
     $data['boat_rental_fee'] = number_format($data['boat_rental_fee'], 2);
     $data['currency_symbol'] = $currency_symbol;
-    $data['view_file'] = "view_boats";
+    $data['view_file'] = "view_boat";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
@@ -149,7 +148,7 @@ class Boats extends MX_Controller {
       $data['headline'] = "Update Boat Details";
     }
 
-    $data['boat_id'] = $boat_rental_id;
+    $data['boat_rental_id'] = $boat_rental_id;
     $data['flash'] = $this->session->flashdata('item');
 
     $data['states'] = $this->site_settings->_get_states_dropdown();
@@ -166,7 +165,7 @@ class Boats extends MX_Controller {
       redirect('site_security/not_allowed');
     }
 
-    $data['boat_id'] = $boat_rental_id;
+    $data['boat_rental_id'] = $boat_rental_id;
     $data['headline'] = "Delete Boat";
     $data['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "boat_deleteconf";
@@ -229,7 +228,7 @@ class Boats extends MX_Controller {
     $mysql_query = "SELECT * FROM boat_pics WHERE boat_rental_id = $boat_rental_id ORDER BY priority";
     $query = $this->_custom_query($mysql_query);
     $data['query'] = $query;
-    $data['boat_id'] = $boat_rental_id;
+    $data['boat_rental_id'] = $boat_rental_id;
     $data['num_rows'] = $query->num_rows(); // number of pictures that an item has
     $data['headline'] = "Manage Image";
     $date['flash'] = $this->session->flashdata('item');
@@ -252,7 +251,7 @@ class Boats extends MX_Controller {
     if ($submit == "cancel") {
       redirect('boats/create_boat/'.$boat_rental_id);
     } else if ($submit == "upload") {
-      $config['upload_path'] = './boat_big_pics';
+      $config['upload_path'] = './boat_pics';
       $config['allowed_types'] = 'gif|jpg|png';
       $config['max_size'] = 2048;
       $config['max_width'] = 3036;
@@ -269,7 +268,7 @@ class Boats extends MX_Controller {
         $data['num_rows'] = $query->num_rows();
         $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
         $data['headline'] = "Upload Error";
-        $data['boat_id'] = $boat_rental_id;
+        $data['boat_rental_id'] = $boat_rental_id;
         $date['flash'] = $this->session->flashdata('item');
         $data['view_file'] = "upload_boat_image";
         $this->load->module('templates');
@@ -282,11 +281,11 @@ class Boats extends MX_Controller {
 
         // insert into db
         $priority = $this->_get_pictures_priority($boat_rental_id);
-        $insert_statement = "INSERT INTO boat_pics (boat_id, picture_name, priority) VALUES ($boat_rental_id, '$file_name', $priority)";
+        $insert_statement = "INSERT INTO boat_pics (boat_rental_id, picture_name, priority) VALUES ($boat_rental_id, '$file_name', $priority)";
         $this->_custom_query($insert_statement);
 
         $data['headline'] = "Upload Success";
-        $data['boat_id'] = $boat_rental_id;
+        $data['boat_rental_id'] = $boat_rental_id;
         $flash_msg = "The picture was successfully uploaded.";
         $value= '<div class="alert alert-success" role="alert">.'.$flash_msg.'</div>';
         $this->session->set_flashdata('item', $value);
@@ -305,7 +304,7 @@ class Boats extends MX_Controller {
     $boat_small_pic_id = $this->uri->segment(4);
     $this->site_security->_make_sure_is_admin();
 
-    $query = $this->boat_pics->get_where_custom('boat_id', $boat_rental_id);
+    $query = $this->boat_pics->get_where_custom('boat_rental_id', $boat_rental_id);
     $picture_name = $query->row(1)->picture_name;
 
     $boat_big_pic_path = './boat_big_pics/'.$picture_name;
@@ -322,7 +321,7 @@ class Boats extends MX_Controller {
     $priority_for_deleted_pic = $this->boat_pics->get_priority_for_boat($boat_pic_id, $boat_rental_id);
     // delete small and big pics from database
     $this->boat_pics->_delete($boat_pic_id);
-    $query = $this->boat_pics->get_where_custom('boat_id', $boat_rental_id);
+    $query = $this->boat_pics->get_where_custom('boat_rental_id', $boat_rental_id);
     foreach ($query->result() as $row) {
       if ($row->priority > $priority_for_deleted_pic) {
         $new_priority = $row->priority - 1;
@@ -348,7 +347,7 @@ class Boats extends MX_Controller {
   }
 
   function _get_pictures_priority($boat_rental_id) {
-    $mysql_query = "SELECT * FROM boat_pics WHERE boat_id = $boat_rental_id ORDER BY priority DESC LIMIT 1";
+    $mysql_query = "SELECT * FROM boat_pics WHERE boat_rental_id = $boat_rental_id ORDER BY priority DESC LIMIT 1";
     $query = $this->_custom_query($mysql_query);
     if ($query->num_rows() == 1) {
       foreach ($query->result() as $row) {
@@ -361,7 +360,7 @@ class Boats extends MX_Controller {
   }
 
   function _get_boat_pic_id($boat_rental_id, $priority) {
-    $mysql_query = "SELECT id FROM boat_pics WHERE boat_id = $boat_rental_id AND priority = $priority";
+    $mysql_query = "SELECT id FROM boat_pics WHERE boat_rental_id = $boat_rental_id AND priority = $priority";
     $query = $this->_custom_query($mysql_query);
     foreach($query->result() as $row) {
       $small_pic_id = $row->id;
