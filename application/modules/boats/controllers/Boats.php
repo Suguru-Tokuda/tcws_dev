@@ -46,6 +46,7 @@ class Boats extends MX_Controller {
     //$schedule_query = $this->boat_rental_schedules->get_where_custom("boat_rental_id", $boat_rental_id);
     $data['flash'] = $this->session->flashdata('item');
     $currency_symbol = $this->site_settings->_get_currency_symbol();
+    $data['boat_rental_id'] = $boat_rental_id;
     $data['boat_name'] = $data_from_db['boat_name'];
     $data['boat_description'] = $data_from_db['boat_description'];
     $data['boat_capacity'] = $data_from_db['boat_capacity'];

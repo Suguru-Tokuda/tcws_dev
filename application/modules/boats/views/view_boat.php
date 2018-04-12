@@ -110,8 +110,52 @@ if (isset($flash)) {
       <p> Capacity: <?= nl2br($boat_capacity) ?></p>
     </div>
   </div>
-  <div class = "row">
-    <input type="text" name="daterange" value="01/01/2018 1:30 PM - 01/01/2018 2:00 PM" />
+  <script>
+    $(function(e){
+      $('#checkAvailability').on('submit',function(){
+        var startDate = $('#boat_start_date').val();
+        var endDate = $('#boat_end_date').val();
+        var id = "<?= nl2br($boat_rental_id)?>";
+        alert(startDate);
+        $.ajax({
+          url: "<?= base_url().'boat_schedules/create_boat_schedules'?>",
+          type: 'post',
+          dataType: 'json',
+          data:{
+            'startDate': startDate,
+            'endDate' : endDate,
+            'boat_rental_id': id
+
+          },
+          success: function(data){
+            alert('===');
+            alert(data);
+
+            }
+
+        });
+
+    });
+  });
+    </script>
+  <div class = "col-12 row">
+    <form method="post" id = "checkAvailability">
+      <div class="form-group row">
+        <label class="col-6 col-form-label" for="startDate-time-input" >Start Date and time</label>
+        <div class="col-6">
+          <input class="form-control" type="datetime-local" name="boat_start_date" id = "boat_start_date">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-6 col-form-label" for="endDate-time-input">End Date and time</label>
+        <div class="col-6">
+          <input class="form-control" type="datetime-local" name ="boat_end_date">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-3 col-md-4">
+          <button class="btn btn-primary" name="submit" value="submit">Check Availability</button>
+</form>
   </div>
   </div>
 
@@ -150,14 +194,3 @@ if (isset($flash)) {
               </div>
             </div>
           </div>
-          <script type="text/javascript">
-          $(function() {
-              $('input[name="daterange"]').daterangepicker({
-                  timePicker: true,
-                  timePickerIncrement: 30,
-                  locale: {
-                      format: 'MM/DD/YYYY h:mm A'
-                  }
-              });
-          });
-          </script>
