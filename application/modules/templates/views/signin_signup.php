@@ -47,26 +47,40 @@ if ($first_bit == "youraccount") {
         <form class="row" method="post" action="<?= $signup_form_location ?>">
           <div class="col-sm-6">
             <div class="form-group">
+              <label for="reg-email">First Name</label>
+              <input class="form-control" name="signupFirstName" value="<?= $signupFirstName ?>" type="text" required>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="reg-email">Last Name</label>
+              <input class="form-control" name="signupLastName" value="<?= $signupLastName ?>" type="text" required>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="form-group">
               <label for="reg-email">Username</label>
-              <input class="form-control" name="signupUserName" value="<?= $signupUserName ?>" type="text" id="reg-email" required>
+              <input class="form-control" name="signupUserName" value="<?= $signupUserName ?>" type="text" required>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label for="reg-email">E-mail Address</label>
-              <input class="form-control" name="signUpEmail" value="<?= $signUpEmail ?>" type="email" id="reg-email" required>
+              <input class="form-control" name="signUpEmail" value="<?= $signUpEmail ?>" type="email" required>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label for="reg-pass">Password</label>
-              <input class="form-control" name="signUpPassword" value="<?= $signUpPassword ?>" type="password" id="reg-pass" required>
+              <input class="form-control" name="signUpPassword" value="<?= $signUpPassword ?>" type="password" required>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label for="reg-pass-confirm">Confirm Password</label>
-              <input class="form-control" name="signUpconfirmPassword" value="<?= $signUpconfirmPassword ?>" type="password" id="reg-pass-confirm" required>
+              <input class="form-control" name="signUpconfirmPassword" value="<?= $signUpconfirmPassword ?>" type="password" required>
             </div>
           </div>
           <div class="col-12 text-center text-sm-right">

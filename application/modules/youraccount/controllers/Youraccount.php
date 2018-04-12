@@ -5,38 +5,58 @@ class Youraccount extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->library('form_validation');
+    $this->load->library('session');
     $this->load->module('custom_email');
     $this->form_validation->set_ci($this);
   }
 
-  function manageaccount() {
+  function manage_account() {
     $this->load->module('site_security');
     $this->site_security->_make_sure_logged_in();
+    $user_id = $this->site_security->_get_user_id();
+
+    $data = $this->fetch_data_from_db($user_id);
     $data['flash'] = $this->session->flashdata('item');
-    $data['view_file'] = "manageaccount";
-    $data = $this->fetch_data_from_post();
+    $data['view_file'] = "manage_account";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
 
   function update_account() {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_logged_in();
+
     $submit = $this->input->post('submit', true);
 
     if ($submit == "submit") {
+      $user_id = $this->site_security->_get_user_id();
+      $user_data = $this->fetch_data_from_db($user_id);
       // process the form
-      $this->form_validation->set_rules('userName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_existence_check');
-      $this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[120]');
-      $this->form_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
-      $this->form_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
+      $this->form_validation->set_rules('firstName', 'First Name', 'required|min_length[5]|max_length[60]');
+      $this->form_validation->set_rules('lastName', 'Last Name', 'required|min_length[5]|max_length[60]');
+
+      $input_user_name = $this->input->post('userName', true);
+      $input_email = $this->input->post('email', true);
+
+      // Checks if the username is unique only the value is different from the original.
+      if ($input_user_name != $user_data['userName']) {
+        $this->form_validation->set_rules('userName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_existence_check');
+      } else {
+        $this->form_validation->set_rules('userName', 'Username', 'required|min_length[5]|max_length[60]');
+      }
+      // Checks if the email is unique only the value is different from the original.
+      if ($input_email != $user_data['email']) {
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[120]');
+      } else {
+        $this->form_validation->set_rules('email', 'Email', 'required|max_length[120]');
+      }
 
       if ($this->form_validation->run() == true) {
-        // insert a new account into DB
-        $this->_process_create_account();
-        $data['view_file'] = "account_create_success";
-        $this->load->module('templates');
-        $this->templates->public_bootstrap($data);
-      } else {
-        $this->start();
+        $this->_process_update_account($user_id);
+        $flash_msg = "Account Information was successfully updated";
+        $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('item', $value);
+        redirect('youraccount/manage_account');
       }
     }
   }
@@ -103,14 +123,14 @@ class Youraccount extends MX_Controller {
   }
 
   function forgotPass() {
-  $submit = $this->input->post('submit', true);
-  if ($submit == "submit") {
-    // process the form
-    $this->form_validation->set_rules('userName', 'Username', 'required|callback_userId_check');
-    if ($this->form_validation->run() == true) {
+    $submit = $this->input->post('submit', true);
+    if ($submit == "submit") {
+      // process the form
+      $this->form_validation->set_rules('userName', 'Username', 'required|callback_userId_check');
+      if ($this->form_validation->run() == true) {
         $this ->sendEmail();
       }else{
-          $this->resetPass();
+        $this->resetPass();
       }
     }
   }
@@ -136,12 +156,12 @@ class Youraccount extends MX_Controller {
 
     if ($submit == "submit") {
       // process the form
+      $this->form_validation->set_rules('signupFirstName', 'First Name', 'required|min_length[5]|max_length[60]');
+      $this->form_validation->set_rules('signupLastName', 'Last Name', 'required|min_length[5]|max_length[60]');
       $this->form_validation->set_rules('signupUserName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_existence_check');
       $this->form_validation->set_rules('signUpEmail', 'Email', 'required|valid_email|max_length[120]|callback_email_existence_check');
       $this->form_validation->set_rules('signUpPassword', 'Password', 'required|min_length[7]|max_length[35]');
       $this->form_validation->set_rules('signUpconfirmPassword', 'Confirm Password', 'required|matches[signUpPassword]');
-      // $this->form_validation->set_rules($config);
-
       if ($this->form_validation->run() == true) {
         // insert a new account into DB
         $this->_process_create_account();
@@ -171,14 +191,26 @@ class Youraccount extends MX_Controller {
     $data = $this->fetch_data_from_post();
     unset($data['confirmPassword']);
     $password = $data['signUpPassword'];
-    $insertData['userName'] = $data['signupUserName'];
-    $insertData['email'] = $data['signUpEmail'];
+    $inset_data['firstName'] = $data['signupFirstName'];
+    $inset_data['lastName'] = $data['signupLastName'];
+    $inset_data['userName'] = $data['signupUserName'];
+    $inset_data['email'] = $data['signUpEmail'];
     $password = $data['signUpPassword'];
     $this->load->module('site_security');
-    $insertData['password'] = $this->site_security->_hash_string($password);
-    $insetData['date_made'] = time();
+    $inset_data['password'] = $this->site_security->_hash_string($password);
+    $inset_data['date_made'] = time();
 
-    $this->users->_insert($insertData);
+    $this->users->_insert($inset_data);
+  }
+
+  function _process_update_account($user_id) {
+    $this->load->module('users');
+    $data['firstName'] = $this->input->post('firstName', true);
+    $data['lastName'] = $this->input->post('firstName', true);
+    $data['userName'] = $this->input->post('firstName', true);
+    $data['email'] = $this->input->post('email', true);
+
+
   }
 
   function start() {
@@ -193,10 +225,27 @@ class Youraccount extends MX_Controller {
   function fetch_data_from_post() {
     $data['userId'] = $this->input->post('userId', true);
     $data['loginPassword'] = $this->input->post('loginPassword', true);
+
+    $data['signupFirstName'] = $this->input->post('signupFirstName', true);
+    $data['signupLastName'] = $this->input->post('signupLastName', true);
+    $data['signupUserName'] = $this->input->post('signupUserName', true);
+    $data['signUpEmail'] = $this->input->post('signUpEmail', true);
     $data['signupUserName'] = $this->input->post('signupUserName', true);
     $data['signUpEmail'] = $this->input->post('signUpEmail', true);
     $data['signUpPassword'] = $this->input->post('signUpPassword', true);
     $data['signUpconfirmPassword'] = $this->input->post('signUpconfirmPassword', true);
+    return $data;
+  }
+
+  function fetch_data_from_db($user_id) {
+    $this->load->module('users');
+    $query = $this->users->get_where($user_id);
+    $result = $query->row();
+    $data['firstName'] = $result->firstName;
+    $data['lastName'] = $result->lastName;
+    $data['userName'] = $result->userName;
+    $data['email'] = $result->email;
+    $data['password'] = $result->password;
     return $data;
   }
 
@@ -303,84 +352,84 @@ class Youraccount extends MX_Controller {
       $this->form_validation->set_message('userName', $error_msg);
       return false;
     }
-	else
-	{
-		foreach ($query->result() as $row) {
-		  $userEmail = $row->email;
-		}
-		if ($this->send_Email_custom($userEmail) == false)
-		{
-		return false;
-		}
-    else{
-		return true;
-  }
+    else
+    {
+      foreach ($query->result() as $row) {
+        $userEmail = $row->email;
+      }
+      if ($this->send_Email_custom($userEmail) == false)
+      {
+        return false;
+      }
+      else{
+        return true;
+      }
     }
   }
 
   function send_Email($userEmail){
-  $genString = $this->RandomString();
-	$mail = new PHPMailer();
+    $genString = $this->RandomString();
+    $mail = new PHPMailer();
 
-	$mail->isSMTP();
-	//$mail->SMTPDebug = 2;
-	$mail->Host = 'smtp.gmail.com';
-	$mail->SMTPAuth = true;
-  //Give sender email and password (account details) here
-	$mail->Username = '********@gmail.com';
-	$mail->Password = '**********@0@';
-	$mail->SMTPSecure = 'tls';
-	$mail->Port = 587;
+    $mail->isSMTP();
+    //$mail->SMTPDebug = 2;
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    //Give sender email and password (account details) here
+    $mail->Username = '********@gmail.com';
+    $mail->Password = '**********@0@';
+    $mail->SMTPSecure = 'tls';
+    $mail->Port = 587;
 
-	$mail->smtpConnect([
-		'ssl' => [
-			'verify_peer' => false,
-			'verify_peer_name' => false,
-			'allow_self_signed' => true
-		]
-	]);
-  //Give sender email here
-	$mail->From = '*********@gmail.com';
-	$mail->FromName = 'twincitywatersports';
-	$mail->addAddress($userEmail);
+    $mail->smtpConnect([
+      'ssl' => [
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+      ]
+    ]);
+    //Give sender email here
+    $mail->From = '*********@gmail.com';
+    $mail->FromName = 'twincitywatersports';
+    $mail->addAddress($userEmail);
 
-	$mail->Subject = "Forgot Password Recovery";
-  $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='" . PROJECT_HOME . "reset_password/?email=" . $userEmail . "&genString=" .$genString. "'>" . "Click Here" . "</a><br><br></p>Regards,<br> Admin.</div>";
-	//$mail->Body = 'This is my message';
-  $mail->MsgHTML($emailBody);
-	$mail->isHTML(true);
+    $mail->Subject = "Forgot Password Recovery";
+    $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='" . PROJECT_HOME . "reset_password/?email=" . $userEmail . "&genString=" .$genString. "'>" . "Click Here" . "</a><br><br></p>Regards,<br> Admin.</div>";
+    //$mail->Body = 'This is my message';
+    $mail->MsgHTML($emailBody);
+    $mail->isHTML(true);
 
-	if(!$mail->send()) {
-		return false;
-	} else {
-    $this->update_genString($userEmail,$genString);
-		return true;
-	}
-	}
+    if(!$mail->send()) {
+      return false;
+    } else {
+      $this->update_genString($userEmail,$genString);
+      return true;
+    }
+  }
 
   function send_Email_custom($userEmail){
-  $genString = $this->RandomString();
-  $email_data['to'] = $userEmail;
-  $email_data['subject'] = "Forgot Password Recovery";
-  $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='" . PROJECT_HOME . "reset_password/?email=" . $userEmail . "&genString=" .$genString. "'>" . "Click Here" . "</a><br><br></p>Regards,<br> Admin.</div>";
-  $email_data['message'] = $emailBody;
-	if(!$this->custom_email->_custom_email_intiate($email_data)) {
-    $this->email->print_debugger();
-		return false;
-	} else {
-    $this->update_genString($userEmail,$genString);
-		return true;
-	}
-	}
+    $genString = $this->RandomString();
+    $email_data['to'] = $userEmail;
+    $email_data['subject'] = "Forgot Password Recovery";
+    $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='" . PROJECT_HOME . "reset_password/?email=" . $userEmail . "&genString=" .$genString. "'>" . "Click Here" . "</a><br><br></p>Regards,<br> Admin.</div>";
+    $email_data['message'] = $emailBody;
+    if(!$this->custom_email->_custom_email_intiate($email_data)) {
+      $this->email->print_debugger();
+      return false;
+    } else {
+      $this->update_genString($userEmail,$genString);
+      return true;
+    }
+  }
 
   function RandomString($length=32, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
   {
-      $str = '';
-      $max = mb_strlen($keyspace, '8bit') - 1;
-      for ($i = 0; $i < $length; ++$i) {
-          $str .= $keyspace[random_int(0, $max)];
-      }
-      return $str;
+    $str = '';
+    $max = mb_strlen($keyspace, '8bit') - 1;
+    for ($i = 0; $i < $length; ++$i) {
+      $str .= $keyspace[random_int(0, $max)];
+    }
+    return $str;
   }
 
   function update_genString($userEmail,$genString){
@@ -395,52 +444,52 @@ class Youraccount extends MX_Controller {
   }
 
   function update_password() {
-  $submit = $this->input->post('submit', true);
+    $submit = $this->input->post('submit', true);
 
-  if ($submit == "submit") {
-    // process the form
-    $this->form_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
-    $this->form_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
-    if ($this->form_validation->run() == true) {
-      // update password
-      if ($this->_process_update_password() == true)
-      {
-      $data['view_file'] = "password_reset_success";
-      $this->load->module('templates');
-      $this->templates->public_bootstrap($data);
+    if ($submit == "submit") {
+      // process the form
+      $this->form_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
+      $this->form_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
+      if ($this->form_validation->run() == true) {
+        // update password
+        if ($this->_process_update_password() == true)
+        {
+          $data['view_file'] = "password_reset_success";
+          $this->load->module('templates');
+          $this->templates->public_bootstrap($data);
+        }
+        else{
+          $error_message = "Gen Id Missing Something wrong";
+          $this->resetPass();
+        }
       }
       else{
-      $error_message = "Gen Id Missing Something wrong";
-      $this->resetPass();
+        $this->reset_password();
+      }
     }
+  }
+
+  function _process_update_password() {
+    $this->load->module('users');
+    $email = $this->input->post('email', true);
+    $genString = $this->input->post('genString', true);
+    $password = $this->input->post('password', true);
+    $col1 = 'email';
+    $value1 = $this->input->post('email', true);
+    $col2 = 'genString';
+    $value2 = $this->input->post('genString', true);
+    $query = $this->users->get_with_double_and($col1, $value1, $col2, $value2);
+    $num_rows = $query->num_rows();
+    if ($num_rows < 1) {
+      return false;
     }
     else{
-      $this->reset_password();
+      $this->load->module('site_security');
+      $data['password'] = $this->site_security->_hash_string($password);
+      $this->users-> _update_email($email,$data);
+      $data['genString'] = NULL;
+      $this->users-> _update_email($email,$data);
+      return true;
     }
   }
-}
-
-function _process_update_password() {
-  $this->load->module('users');
-  $email = $this->input->post('email', true);
-  $genString = $this->input->post('genString', true);
-  $password = $this->input->post('password', true);
-  $col1 = 'email';
-  $value1 = $this->input->post('email', true);
-  $col2 = 'genString';
-  $value2 = $this->input->post('genString', true);
-  $query = $this->users->get_with_double_and($col1, $value1, $col2, $value2);
-  $num_rows = $query->num_rows();
-  if ($num_rows < 1) {
-  return false;
-  }
-  else{
-  $this->load->module('site_security');
-  $data['password'] = $this->site_security->_hash_string($password);
-  $this->users-> _update_email($email,$data);
-  $data['genString'] = NULL;
-  $this->users-> _update_email($email,$data);
-  return true;
-}
-}
 }
