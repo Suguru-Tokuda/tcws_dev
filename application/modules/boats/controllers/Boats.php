@@ -11,6 +11,11 @@ class Boats extends MX_Controller {
     $this->form_validation->set_ci_reference($this);
   }
 
+  function dummy() {
+    echo "dummy";
+    die();
+  }
+
   function view_boats() {
     $query = $this->get("boat_name");
     $total_boats = $query->num_rows();
