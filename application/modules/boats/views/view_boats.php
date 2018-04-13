@@ -43,7 +43,7 @@
         $picture_name = $this->boat_pics->get_where_custom("boat_rental_id", $boat_rental_id)->row(0)->picture_name;
         if(isset($picture_name))
         {
-          $picture_src = base_url().'boat_big_pics/'.$picture_name;
+          $picture_src = base_url().'media/boats_big_pics/'.$picture_name;
         }
         else {
           {

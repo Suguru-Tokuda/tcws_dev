@@ -252,7 +252,7 @@ class Boats extends MX_Controller {
     if ($submit == "cancel") {
       redirect('boats/create_boat/'.$boat_rental_id);
     } else if ($submit == "upload") {
-      $config['upload_path'] = './boat_pics';
+      $config['upload_path'] = './media/boats_big_pics';
       $config['allowed_types'] = 'gif|jpg|png';
       $config['max_size'] = 2048;
       $config['max_width'] = 3036;

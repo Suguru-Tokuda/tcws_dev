@@ -6,7 +6,7 @@ class Mdl_boat_rental_schedules extends CI_Model {
   }
 
   function get_table() {
-    $table = "boat_rental_schedules";
+    $table = "tablename";
     return $table;
   }
 
@@ -53,12 +53,6 @@ class Mdl_boat_rental_schedules extends CI_Model {
   function _delete($id) {
     $table = $this->get_table();
     $this->db->where('id', $id);
-    $this->db->delete($table);
-  }
-
-  function _delete_where($col, $value) {
-    $table = $this->get_table();
-    $this->db->where($col, $value);
     $this->db->delete($table);
   }
 

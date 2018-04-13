@@ -64,10 +64,10 @@
              </td>
              <td class="center">
                <a class="btn btn-success" href="<?= $view_lesson_url ?>">
-                 <i class="fa fa-external-link"></i>
+                 <i class="fa fa-external-link"></i>&nbsp;&nbsp;View
                </a>
                <a class="btn btn-info" href="<?= $edit_lesson_url ?>">
-                 <i class="fa fa-edit"></i>
+                 <i class="fa fa-edit"></i>&nbsp;&nbsp;Edit
                </a>
              </td>
            </tr>

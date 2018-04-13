@@ -24,9 +24,12 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
 
 <nav class="site-menu">
   <ul>
-    <li class="has-megamenu active"><a href="<?= base_url() ?>"><span>Home</span></a>
+    <?php
+    $second_bit = $this->uri->segment(1);
+     ?>
+    <li class="has-megamenu <?php if (!isset($second_bit)) { echo 'active';} ?>"><a href="<?= base_url() ?>"><span>Home</span></a>
     </li>
-    <li><a href="#"><span>Trading Post</span></a>
+    <li class="<?php if ($second_bit === "store_items") { echo 'active';} ?>"><a href="#"><span>Trading Post</span></a>
       <ul class="sub-menu">
         <li><a href="<?= base_url().'store_items/view_all_items'?>">Browse for Sale</a></li>
         <?php
@@ -38,13 +41,17 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
         ?>
       </ul>
     </li>
-    <li><a href="#"><span>Wakeboard Lessons</span></a>
+    <li class="<?php if ($second_bit === "lessons") { echo 'active';} ?>"><a href="#"><span>Wakeboard Lessons</span></a>
       <ul class="sub-menu">
         <li><a href="<?= base_url().'lessons/view_lessons'?>">View Lessons</a></li>
       </ul>
     </li>
-    <li><a href="<?= base_url().'boats/view_boats'?>"><span>Boat Renting</span></a></li>
-    <li><a href="<?= base_url().'blog/view_blogs' ?>"><span>Community</span></a></li>
+    <li class="<?php if ($second_bit === "boats") { echo 'active';} ?>"><a href="<?= base_url().'boats/view_boats'?>"><span>Boat Renting</span></a></li>
+    <li class="<?php if ($second_bit === "blog") { echo 'active';} ?>"><a href="#"><span>Community</span></a>
+      <ul class="sub-menu">
+        <li><a href="<?= base_url().'blog/view_blogs' ?>">Go to Board</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 <?php

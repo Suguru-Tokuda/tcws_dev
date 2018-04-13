@@ -8,6 +8,22 @@ class Lesson_schedules extends MX_Controller {
     $this->form_validation->set_ci_reference($this);
   }
 
+  function view_booked_users($lesson_id, $lesson_schedule_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $mysql_query = "SELECT u.firstName, u.lastName, u.email FROM users u JOIN lesson_bookings lb ON u.id = lb.user_id WHERE lb.lesson_schedule_id = $lesson_schedule_id";
+    $query = $this->_custom_query($mysql_query);
+
+    $data['query'] = $query;
+    $data['lesson_id'] = $lesson_id;
+    $data['view_file'] = "view_booked_users";
+    $data['headline'] = "View Members";
+    $data['num_of_users'] = $query->num_rows();
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
   // shows all the schedules in a table
   function manage_lesson_schedules($lesson_id) {
     $this->load->module('site_security');
@@ -17,7 +33,7 @@ class Lesson_schedules extends MX_Controller {
     $mysql_query = "SELECT * FROM lesson_schedules WHERE lesson_id = $lesson_id ORDER BY lesson_start_date DESC";
     $lesson_capacity = $this->lessons->get_where($lesson_id)->row()->lesson_capacity;
     $lesson_name = $this->lessons->get_where($lesson_id)->row()->lesson_name;
-
+    
     $query = $this->_custom_query($mysql_query);
     $total_lesson_schedules = $query->num_rows();
 
