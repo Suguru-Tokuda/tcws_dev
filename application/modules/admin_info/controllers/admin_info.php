@@ -35,7 +35,7 @@ class admin_info extends MX_Controller {
 
     $submit = $this->input->post('submit', true);
 
-    $id = $this->uri->segment(3);
+    $id = 1;
 
     if ($submit == "cancel") {
       redirect('admin_info/view_admin_info');
@@ -45,10 +45,12 @@ class admin_info extends MX_Controller {
       $this->form_validation->set_rules('last_name', 'Last Name', 'required');
       $this->form_validation->set_rules('phone', 'Phone', 'required');
       $this->form_validation->set_rules('email', 'Email', 'required');
+      $this->form_validation->set_rules('company_name', 'Company Name', 'required');
       $this->form_validation->set_rules('address', 'Address', 'required');
       $this->form_validation->set_rules('city', 'City', 'required');
       $this->form_validation->set_rules('state', 'State', 'required');
-      if ($this->form_validation->run()) {
+      $this->form_validation->set_rules('descritpion', 'Descritpion', 'required');
+    //  if ($this->form_validation->run()) {
         $data = $this->fetch_data_from_post();
         if (is_numeric($id)) {
           // update
@@ -68,8 +70,7 @@ class admin_info extends MX_Controller {
       } else {
         echo validation_errors();
       }
-    }
-
+  //  }
     if ((is_numeric($id)) && ($submit != "submit")) {
       $data = $this->fetch_data_from_db($id);
     } else {
@@ -97,12 +98,14 @@ class admin_info extends MX_Controller {
     $data['last_name'] = $this->input->post('last_name', true);
     $data['phone'] = $this->input->post('phone', true);
     $data['email'] = $this->input->post('email', true);
+    $data['company_name'] = $this->input->post('company_name', true);
     $data['address'] = $this->input->post('address', true);
     $data['city'] = $this->input->post('city', true);
     $this->load->module('site_settings');
     $states = $this->site_settings->_get_states_dropdown();
     $state_index = $this->input->post('state', true);
     $data['state'] = $states[$state_index];
+    $data['description'] = $this->input->post('description', true);
     return $data;
   }
 
@@ -116,12 +119,14 @@ class admin_info extends MX_Controller {
     $data['first_name'] = $row->first_name;
     $data['last_name'] = $row->last_name;
     $data['phone'] = $row->phone;
-    $data['email'] = $row->address;
+    $data['email'] = $row->email;
+    $data['company_name'] = $row->company_name;
     $data['address'] = $row->address;
     $data['city'] = $row->city;
     $data['state'] = $row->state;
     $states = $this->site_settings->_get_states_dropdown();
     $data['state_key'] = array_search($data['state'], $states);
+    $data['description'] = $row->description;
     return $data;
   }
 

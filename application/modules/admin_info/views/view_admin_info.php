@@ -8,32 +8,8 @@
   $upload_image_url = base_url()."admin_info/upload_image";
   ?>
   <p style="margin-top: 30px;">
-    <a href="<?= $update_admin_info_url ?>"><button class="btn btn-primary" type="submit">Add details</button></a>
-    <a href="<?= $upload_image_url ?>"><button class="btn btn-primary" type="submit">Upload image</button></a>
-    <div class="row-fluid sortable">
-      <div class="box span12">
-        <div class="green-panel" data-original-title>
-          <h2><i class="fa fa-tag "></i>Admin details</h2>
-        </div>
-
-        <div class="box-content">
-          <table class="table table-striped table-bordered bootstrap-datatable datatable">
-            <thead>
-              <?php
-                $num_rows = $query->num_rows();
-                ?>
-                <tr>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Phone</th>
-                  <th>Email</th>
-                  <th>Address</ht>
-                  <th>City</th>
-                  <th>State</th>
-                  <th>Update</th>
-                </tr>
-            </thead>
-            <tbody>
+    <a href="<?= $update_admin_info_url ?>"><button class="btn btn-primary" type="submit">update details</button></a>
+    <a href="<?= $upload_image_url ?>"><button class="btn btn-primary" type="submit">Upload image</button></a> <br>
               <?php
                 $this->load->module('admin_info');
                  foreach($query->result() as $row) {
@@ -41,31 +17,82 @@
                   $first_name = $row->first_name;
                   $last_name = $row->last_name;
                   $phone = $row->phone;
+                  $company_name = $row->company_name;
                   $email = $row->email;
                   $address = $row->address;
                   $city = $row->city;
                   $state = $row->state;
+                  $description = $row->description;
+                 }
               ?>
-              <tr>
-                <td><?= $first_name ?></td>
-                <td><?= $last_name ?></td>
-                <td><?= $phone ?></td>
-                <td><?= $email ?></td>
-                <td><?= $address ?></td>
-                <td><?= $city ?></td>
-                <td><?= $state ?></td>
-                <td class="center">
-                  <a class="btn btn-info" href="<?= $update_admin_info_url ?>">
-                    <i class="fa fa-edit"></i>
-                  </a>
-                </td>
-              </tr>
-             <?php
-            }
-              ?>
-            </tbody>
-          </table>
+
+  <p style="margin-top: 30px;">
+    <?php
+      $form_location = base_url().'admin_info/view_admin_info/';
+    ?>
+
+    <form class="form-horizontal style-form" action="<?= $form_location ?>">
+      <div class="form-group">
+        <label class="col-sm-2 control-label">First Name</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" name="first_name" style="border: 0px;" value="<?= $first_name ?>" readonly>
         </div>
       </div>
-    </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Last Name</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" name="last_name" style="border: 0px;" value="<?= $last_name ?>" readonly>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Phone</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" name="phone" style="border: 0px;" value="<?= $phone ?>" readonly>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" name="email" style="border: 0px;" value="<?= $email?>" readonly>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Company Name</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" name="company_name" style="border: 0px;" value="<?= $company_name ?>" readonly>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Address</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" name="address" style="border: 0px;" value="<?= $address ?>" readonly>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">City</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" name="city" style="border: 0px;" value="<?= $city ?>" readonly>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">State</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" name="state" style="border: 0px;" value="<?= $state ?>" readonly>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Description</label>
+        <div class="col-sm-5">
+          <textarea type="text" class="form-control" name="description" rows="10" style="resize: none; border: 0px;" readonly><?= $description ?></textarea>
+        </div>
+      </div>
+    </form>
 </section>
