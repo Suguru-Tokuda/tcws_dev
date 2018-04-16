@@ -1,8 +1,6 @@
 <?php
 if (is_numeric($id)) {
-  $id = $this->uri->segment(3);
-  $form_location = base_url().'admin_info/update_admin_info/'.$id;
-} else {
+  $id = 1;
   $form_location = base_url().'admin_info/update_admin_info/';
 }
 ?>
@@ -44,6 +42,13 @@ if (is_numeric($id)) {
     </div>
 
     <div class="form-group">
+      <label class="col-sm-2 control-label">Company name</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" name="company_name" value="<?= $company_name ?>">
+      </div>
+    </div>
+
+    <div class="form-group">
       <label class="col-sm-2 control-label">Address</label>
       <div class="col-sm-5">
         <input type="text" class="form-control" name="address" value="<?= $address ?>">
@@ -65,6 +70,13 @@ if (is_numeric($id)) {
         $selection = $state;
         echo form_dropdown('state', $states, $state_key, 'class="form-control"');
         ?>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Description</label>
+      <div class="col-sm-5">
+        <textarea type="text" class="form-control" name="description" rows="10" style="resize: none;"><?= $description; ?></textarea>
       </div>
     </div>
 
