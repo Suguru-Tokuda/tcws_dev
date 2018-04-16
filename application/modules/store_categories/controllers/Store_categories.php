@@ -8,6 +8,20 @@ class Store_categories extends MX_Controller {
     $this->form_validation->set_ci($this);
   }
 
+  function _draw_categories() {
+    $mysql_query = "SELECT * FROM store_categories";
+    $query = $this->_custom_query($mysql_query);
+    $data['query'] = $query;
+    $this->load->view('categories', $data);
+  }
+
+  function _get_num_of_items($cat_id) {
+    $mysql_query = "SELECT * FROM store_items si JOIN store_cat_assign sca ON si.id = sca.item_id WHERE sca.cat_id = $cat_id";
+    $query = $this->_custom_query($mysql_query);
+    $num_of_items = $query->num_rows();
+    return $num_of_items;
+  }
+
   function _get_cat_id_from_cat_url($cat_url) {
     $query = $this->get_where_custom('cat_url', $cat_url);
     foreach($query->result() as $row) {

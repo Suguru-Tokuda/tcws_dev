@@ -1,0 +1,131 @@
+<?php
+class Boats_schedules extends MX_Controller {
+
+  function __construct() {
+    parent::__construct();
+    $this->load->library('form_validation');
+    $this->load->module('custom_pagination');
+  //  $this->load->model('Mdl_boats_schedules');
+    $this->form_validation->set_ci_reference($this);
+  }
+
+  function create_boat_schedules()
+  {
+
+    $this->load->module('site_security');
+    $this->load->library('session');
+    $submit = $this->input->post('submit', true);
+    $boat_schedule_id = $this->uri->segment(4);
+    $this->form_validation->set_rules('boat_start_date', 'Start Time', 'required');
+    $this->form_validation->set_rules('boat_end_date', 'End Time', 'required');
+    $boat_rental_id = $this->input->get('boat_rental_id');
+    if ($this->form_validation->run()) {
+
+        $data['boat_start_date'] = strtotime($_POST['boat_start_date']);
+        $data['boat_end_date'] = strtotime($_POST['boat_end_date']);
+        if (isset($boat_schedule_id)) {
+          echo("Hi");
+          $query = $this->get_where_custom('boat_rental_id',$data['boat_rental_id']);
+        $arr = array();
+        foreach($query->result() as $row) {
+          $arr[] = array($row['boat_start_date'], $row['boat_end_date']);
+        }
+      }
+    else {
+      // insert
+      //echo($data);
+      $data['boat_rental_id'] = $boat_rental_id;
+      $this->_insert($data);
+      echo("Hi");
+      $flash_msg = "The boat was successfully booked.";
+      $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+      $this->session->set_flashdata('item', $value);
+      redirect('boats/view_boat/'.$boat_rental_id);
+    }
+  }
+    //   $start_date_in_db = $row->boat_start_date;
+    //   $end_date_in_db = $row->boat_end_date;
+    // $data = array(
+    // 'username' => $this->input->post('startDate'),
+    // 'pwd'=>$this->input->post('endDate')
+    // 'id'=> $this->input->post->('boat_rental_id')
+    // );
+    // return $data;
+    //echo $arr[0];
+    //die();
+  }
+
+  function get($order_by) {
+    $this->load->model('mdl_boats_schedules');
+    $query = $this->mdl_boats_schedules->get($order_by);
+    return $query;
+  }
+
+  function get_with_limit($limit, $offset, $order_by) {
+    if ((!is_numeric($limit)) || (!is_numeric($offset))) {
+      die('Non-numeric variable!');
+    }
+
+    $this->load->model('mdl_boats_schedules');
+    $query = $this->mdl_boats_schedules->get_with_limit($limit, $offset, $order_by);
+    return $query;
+  }
+
+  function get_where($id) {
+    if (!is_numeric($id)) {
+      die('Non-numeric variable!');
+    }
+
+    $this->load->model('mdl_boats_schedules');
+    $query = $this->mdl_boats_schedules->get_where($id);
+    return $query;
+  }
+
+  function get_where_custom($col, $value) {
+    $this->load->model('mdl_boats_schedules');
+    $query = $this->mdl_boats_schedules->get_where_custom($col, $value);
+    return $query;
+  }
+
+  function _insert($data) {
+    $this->load->model('mdl_boats_schedules');
+    $this->mdl_boats_schedules->_insert($data);
+  }
+
+  function _update($id, $data) {
+    if (!is_numeric($id)) {
+      die('Non-numeric variable!');
+    }
+
+    $this->load->model('mdl_boats_schedules');
+    $this->mdl_boats_schedules->_update($id, $data);
+  }
+
+  function _delete($id) {
+    if (!is_numeric($id)) {
+      die('Non-numeric variable!');
+    }
+
+    $this->load->model('mdl_boats_schedules');
+    $this->mdl_boats_schedules->_delete($id);
+  }
+
+  function count_where($column, $value) {
+    $this->load->model('mdl_boats_schedules');
+    $count = $this->mdl_boats_schedules->count_where($column, $value);
+    return $count;
+  }
+
+  function get_max() {
+    $this->load->model('mdl_boats_schedules');
+    $max_id = $this->mdl_boats_schedules->get_max();
+    return $max_id;
+  }
+
+  function _custom_query($mysql_query) {
+    $this->load->model('mdl_boats_schedules');
+    $query = $this->mdl_boats_schedules->_custom_query($mysql_query);
+    return $query;
+  }
+
+}

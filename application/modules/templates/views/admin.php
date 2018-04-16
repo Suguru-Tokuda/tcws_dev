@@ -119,6 +119,12 @@
               <span>Accounts</span>
             </a>
           </li>
+          <li class="sub-menu">
+            <a href="<?= base_url() ?>admin_info/view_admin_info">
+              <i class="fa fa-user"></i>
+              <span>My Info</span>
+            </a>
+          </li>
         </ul>
         <!-- sidebar menu end-->
       </div>

@@ -11,11 +11,6 @@ class Boats extends MX_Controller {
     $this->form_validation->set_ci_reference($this);
   }
 
-  function dummy() {
-    echo "dummy";
-    die();
-  }
-
   function view_boats() {
     $query = $this->get("boat_name");
     $total_boats = $query->num_rows();
@@ -257,7 +252,7 @@ class Boats extends MX_Controller {
     if ($submit == "cancel") {
       redirect('boats/create_boat/'.$boat_rental_id);
     } else if ($submit == "upload") {
-      $config['upload_path'] = './boat_pics';
+      $config['upload_path'] = './media/boats_big_pics';
       $config['allowed_types'] = 'gif|jpg|png';
       $config['max_size'] = 2048;
       $config['max_width'] = 3036;

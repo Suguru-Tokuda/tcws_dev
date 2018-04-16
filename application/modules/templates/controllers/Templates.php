@@ -24,7 +24,6 @@ class Templates extends MX_Controller {
   }
 
   function public_bootstrap($data) {
-    // getting the module name from the URL
     if (!isset($data['view_module'])) {
       $data['view_module'] = $this->uri->segment(1);
     }
@@ -33,7 +32,6 @@ class Templates extends MX_Controller {
     $this->load->module('site_settings');
     $data['customer_id'] = $this->site_security->_get_user_id();
     $data['our_company'] = $this->site_settings->_get_our_company_name();
-
     $this->load->view('public_bootstrap', $data);
   }
 

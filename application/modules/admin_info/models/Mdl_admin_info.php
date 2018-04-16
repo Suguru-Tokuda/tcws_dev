@@ -1,16 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Mdl_boat_rental_schedules extends CI_Model {
+class Mdl_admin_info extends CI_Model {
 
   function __construct() {
     parent::__construct();
   }
 
   function get_table() {
-    $table = "boat_rental_schedules";
+    $table = "admin_info";
     return $table;
   }
 
-  function get($order_by) {
+  function get($order_by){
     $table = $this->get_table();
     $this->db->order_by($order_by);
     $query=$this->db->get($table);
@@ -25,7 +25,7 @@ class Mdl_boat_rental_schedules extends CI_Model {
     return $query;
   }
 
-  function get_where($id) {
+  function get_where($id){
     $table = $this->get_table();
     $this->db->where('id', $id);
     $query=$this->db->get($table);
@@ -39,26 +39,20 @@ class Mdl_boat_rental_schedules extends CI_Model {
     return $query;
   }
 
-  function _insert($data) {
+  function _insert($data){
     $table = $this->get_table();
     $this->db->insert($table, $data);
   }
 
-  function _update($id, $data) {
+  function _update($id, $data){
     $table = $this->get_table();
     $this->db->where('id', $id);
     $this->db->update($table, $data);
   }
 
-  function _delete($id) {
+  function _delete($id){
     $table = $this->get_table();
     $this->db->where('id', $id);
-    $this->db->delete($table);
-  }
-
-  function _delete_where($col, $value) {
-    $table = $this->get_table();
-    $this->db->where($col, $value);
     $this->db->delete($table);
   }
 

@@ -1,15 +1,16 @@
-<div class="container padding-bottom-3x mb-1">
+<div class="container padding-bottom-2x mb-2">
   <?= $pagination ?>
-  <?= $showing_statement ?><br>
-  <?php
-  if (isset($keywords)) {
-    $keywords;
-    ?>
-    <?php
-  }
-  ?>
   <div class="row">
+    <?php
+    echo Modules::run('store_categories/_draw_categories');
+     ?>
     <div class="col-xl-9 col-lg-8 order-lg-2">
+      <?php
+      if (isset($keywords)) {
+        echo $keywords;
+      }
+        ?><br/>
+        <?= $showing_statement ?><br>
       <div class="isotope-grid cols-3 mb-2">
         <div class="gutter-sizer"></div>
         <div class="grid-sizer"></div>
@@ -34,9 +35,7 @@
           $item_title = $row->item_title;
           $item_price = $row->item_price;
           $was_price = $row->was_price;
-          $picture_name = $row->picture_name;
-          $small_pic_path = base_url()."media/item_big_pics/".$picture_name;
-          // $item_page = base_url()."$item_segments./$cat_url/$item_url";
+          $small_pic_path = base_url()."media/item_small_pics/".$index_pic_name;
           $item_page = base_url().$parent_cat_url."/".$sub_cat_url."/".$item_url;
           ?>
           <div class="grid-item">
@@ -55,7 +54,7 @@
                 <h3 class="product-title"><a href="<?= $item_page ?>" ><?= $item_title ?></a></h3>
                 <h4 class="product-price">
                   <?php
-                  if ($row->was_price > 0) { ?>
+                  if ($was_price > 0) { ?>
                     <del><?= $currency_symbol.$was_price ?></del>
                     <?php
                   }

@@ -10,8 +10,35 @@ class Store_items extends MX_Controller {
     $this->form_validation->set_ci($this);
   }
 
+  // shows items based on the category_title
+  function view_items_for_category($cat_url) {
+    $this->load->module('store_categories');
+    $this->load->module('site_settings');
+    $cat_id = $this->store_categories->get_where_custom('cat_url', $cat_url)->row()->id;
+    $mysql_query = "SELECT si.id, si.item_title, si.item_url, si.item_price, si.was_price FROM store_items si JOIN store_cat_assign sca ON si.id = sca.item_id WHERE sca.cat_id = $cat_id AND si.status = 1;";
+    $query = $this->_custom_query($mysql_query);
+    $data['query'] = $query;
+
+    $total_items = $query->num_rows();
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_items;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_pagination_limit();
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $showing_statement_data['limit'] = $this->get_pagination_limit();
+    $showing_statement_data['offset'] = $this->_get_pagination_offset();
+    $showing_statement_data['total_rows'] = $total_items;
+    $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
+    $data['showing_statement'] = $this->custom_pagination->get_showing_statement($showing_statement_data);
+    $data['view_file'] = "view_items";
+
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
+
   function search_items_by_keywords() {
-    $this->load->module('site_security');
     $this->load->module('site_settings');
     $submit = $this->input->post('submit', true);
     $searchKeywords = $this->input->post('searchKeywords', true);
@@ -19,16 +46,16 @@ class Store_items extends MX_Controller {
     $searchKeywords = explode(" ", $searchKeywords);
 
     if ($submit == "submit") {
-      $mysqlQuery = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN item_pics sp ON si.id = sp.item_id WHERE item_title LIKE '$searchKeywords[0]' OR item_description LIKE '$searchKeywords[0]'";
+      $mysql_query = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN item_pics sp ON si.id = sp.item_id WHERE item_title LIKE '$searchKeywords[0]' OR item_description LIKE '$searchKeywords[0]'";
 
       if (sizeOf($searchKeywords) > 1) {
         for ($i = 1; $i < sizeOf($searchKeywords); $i++) {
-          $mysqlQuery.= " OR item_title LIKE '$searchKeywords[$i]' OR item_description LIKE '$searchKeywords[$i]'";
+          $mysql_query.= " OR item_title LIKE '$searchKeywords[$i]' OR item_description LIKE '$searchKeywords[$i]'";
         }
       }
 
-      $storeItemsQuery = $this->_custom_query($mysqlQuery);
-      $total_items = $storeItemsQuery->num_rows();
+      $store_items_query = $this->_custom_query($mysql_query);
+      $total_items = $store_items_query->num_rows();
 
       $pagination_data['template'] = "public_bootstrap";
       $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
@@ -47,11 +74,11 @@ class Store_items extends MX_Controller {
         $keywords.= $value." ";
       }
 
-      $data['keywords'] = "<b>Keywords</b>: ".$keywords;
+      $data['keywords'] = "<b>Keyword(s)</b>: ".$keywords;
       $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
-      $data['view_module'] = "store_categories";
-      $data['view_file'] = "search_view";
-      $data['query'] = $storeItemsQuery;
+      $data['view_file'] = "view_items";
+      $data['query'] = $store_items_query;
+
       $this->load->module('templates');
       $this->templates->public_bootstrap($data);
     }
@@ -62,10 +89,10 @@ class Store_items extends MX_Controller {
     $this->load->module('site_security');
     $this->load->module('site_settings');
 
-    $mysqlQuery = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN item_pics sp ON si.id = sp.item_id";
+    $mysql_query = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN item_pics sp ON si.id = sp.item_id";
 
-    $storeItemsQuery = $this->_custom_query($mysqlQuery);
-    $total_items = $storeItemsQuery->num_rows();
+    $store_items_query = $this->_custom_query($mysql_query);
+    $total_items = $store_items_query->num_rows();
 
     $pagination_data['template'] = "public_bootstrap";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
@@ -80,9 +107,8 @@ class Store_items extends MX_Controller {
     $data['showing_statement'] = $this->custom_pagination->get_showing_statement($showing_statement_data);
 
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
-    $data['view_module'] = "store_categories";
-    $data['view_file'] = "search_view";
-    $data['query'] = $storeItemsQuery;
+    $data['view_file'] = "view_items";
+    $data['query'] = $store_items_query;
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
@@ -408,10 +434,6 @@ class Store_items extends MX_Controller {
         $priority = $this->_get_priority($item_id);
         $mysql_query = "INSERT INTO item_pics (item_id, picture_name, priority) VALUES ($item_id, '$file_name', $priority)";
         $this->_custom_query($mysql_query);
-
-        // $small_pic_id = $this->_get_small_pic_id($item_id, $priority);
-        // $mysql_query = "INSERT INTO big_pics (small_pic_id, picture_name) VALUES ($small_pic_id, '$file_name')";
-        // $this->_custom_query($mysql_query);
 
         $data['headline'] = "Upload Success";
         $data['update_id'] = $item_id;
@@ -815,12 +837,9 @@ class Store_items extends MX_Controller {
 
   function _draw_new_items() {
     $this->load->module('site_settings');
-    // $mysql_query = "
-    // SELECT * FROM store_items si ORDER BY si.date_made LIMIT 6
-    // ";
 
     $mysql_query = "
-    SELECT si.item_title, si.item_url, si.item_price, si.small_pic, si.was_price, sc.cat_url
+    SELECT si.item_title, si.item_url, si.item_price, si.was_price, sc.cat_url
     FROM store_items si
     JOIN store_cat_assign sca ON sca.item_id = si.id
     JOIN store_categories sc ON sc.id = sca.cat_id
