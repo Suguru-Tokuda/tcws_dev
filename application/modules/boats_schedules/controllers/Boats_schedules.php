@@ -3,6 +3,7 @@ class Boats_schedules extends MX_Controller {
 
   function __construct() {
     parent::__construct();
+    $this->load->library('session');
     $this->load->library('form_validation');
     $this->load->module('custom_pagination');
   //  $this->load->model('Mdl_boats_schedules');
@@ -18,23 +19,22 @@ class Boats_schedules extends MX_Controller {
     $boat_schedule_id = $this->uri->segment(4);
     $this->form_validation->set_rules('boat_start_date', 'Start Time', 'required');
     $this->form_validation->set_rules('boat_end_date', 'End Time', 'required');
-    $boat_rental_id = $this->input->get('boat_rental_id');
+    //$data['boat_rental_id'] = $boat_rental_id;
+  //  echo($data['boat_rental_id']);
     if ($this->form_validation->run()) {
 
         $data['boat_start_date'] = strtotime($_POST['boat_start_date']);
         $data['boat_end_date'] = strtotime($_POST['boat_end_date']);
         if (isset($boat_schedule_id)) {
-          echo("Hi");
           $query = $this->get_where_custom('boat_rental_id',$data['boat_rental_id']);
-        $arr = array();
-        foreach($query->result() as $row) {
-          $arr[] = array($row['boat_start_date'], $row['boat_end_date']);
+          $arr = array();
+          foreach($query->result() as $row) {
+            $arr[] = array($row['boat_start_date'], $row['boat_end_date']);
         }
       }
     else {
       // insert
       //echo($data);
-      $data['boat_rental_id'] = $boat_rental_id;
       $this->_insert($data);
       echo("Hi");
       $flash_msg = "The boat was successfully booked.";

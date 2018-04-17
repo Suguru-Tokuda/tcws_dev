@@ -3,7 +3,7 @@ if (isset($flash)) {
   echo $flash;
 }
 
-$form_location = base_url().'boats_schedules/create_boat_schedules';
+$form_location = base_url().'boats_schedules/create_boat_schedules/';
 
 ?>
 <!-- Product Gallery-->
@@ -121,7 +121,7 @@ $form_location = base_url().'boats_schedules/create_boat_schedules';
       var endDate = $('#boat_end_date').val();
       var id = "<?= nl2br($boat_rental_id)?>";
       $.ajax({
-        url: "<?= base_url().'boats_schedules/create_boat_schedules'?>",
+        url: "<?= base_url().'boats_schedules/create_boat_schedules/'?>",
         type: 'post',
         data:{
           'startDate': startDate,
@@ -129,8 +129,7 @@ $form_location = base_url().'boats_schedules/create_boat_schedules';
           'boat_rental_id': id
         },
         success: function(data, status){
-          alert(data);
-          alert(status);
+            alert(true);
         },
         error: function(error) {
           alert(error);
@@ -140,7 +139,7 @@ $form_location = base_url().'boats_schedules/create_boat_schedules';
   });
   </script>
   <div class = "col-12 row">
-    <form method="post" id = "checkAvailability" action="<?= $form_location ?>">
+    <form method="post" id = "checkAvailability">
       <div class="form-group row">
         <label class="col-5 col-form-label" for="startDate-time-input" >Start Date and time</label>
         <div class="col-7">
@@ -155,7 +154,6 @@ $form_location = base_url().'boats_schedules/create_boat_schedules';
       </div>
       <div class="form-group">
         <div class="col-md-offset-3 col-md-4">
-          <a class="btn btn-danger" href="<?= base_url().'boats_schedules/test' ?> ">Test</a>
           <button class="btn btn-primary" name="submit" value="submit">Check Availability</button>
         </form>
       </div>
