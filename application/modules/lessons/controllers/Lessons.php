@@ -404,6 +404,20 @@ class Lessons extends MX_Controller {
     return $data;
   }
 
+
+  function fetch_limited_data_from_db($lesson_id) {
+    $this->load->module('site_security');
+    if (!is_numeric($lesson_id)) {
+      redirect(base_url());
+    }
+    $query = $this->get_where($lesson_id);
+    $row = $query->row();
+    $data['lesson_name'] = $row->lesson_name;
+    $data['lesson_fee'] = $row->lesson_fee;
+    return $data;
+  }
+
+
   // beginning of pagination methods
   function get_pagination_limit() {
     $limit = 20;

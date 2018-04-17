@@ -127,13 +127,17 @@ if (isset($flash)) {
           $this->load->module('timedate');
           foreach($schedule_query->result() as $row) {
             $lesson_schedule_id = $row->id;
+            $lesson_id = $row->lesson_id;
             $lesson_date = $this->timedate->get_date($row->lesson_start_date, 'datepicker_us');
             $start_time = $this->timedate->get_time($row->lesson_start_date);
             $end_time = $this->timedate->get_time($row->lesson_end_date);
+            $lesson_start_date = $row->lesson_start_date;
+            $lesson_end_date  = $row->lesson_end_date;
             $number_of_bookings = $this->lesson_bookings->_get_num_of_bookings_for_lesson_schedule_id($lesson_schedule_id);
             $availability = $capacity - $number_of_bookings;
-            $booking_url = base_url().'/lessons/fakefunc';
+            $booking_url = base_url().'lesson_basket/add_to_basket';
             ?>
+            <form class"reset-box" method="post" action="<?= $booking_url ?>"
             <tr>
               <td><?= $lesson_date ?></td>
               <td><?= $start_time ?></td>
@@ -160,11 +164,18 @@ if (isset($flash)) {
                     ?>
                   </select>
                 </td>
-              <td><a class="btn btn-primary" href="<?= $booking_url ?>">Book Lesson</a></td>
+              <td><button class="btn btn-primary" name="submit" value="submit" type="submit">Book Lesson</button></td>
+                <!-- <a class="btn btn-primary" href="<?= $booking_url ?>">Book Lesson</a></td> -->
               </tr>
+              <input type="hidden" name="lesson_schedule_id" value="<?php echo $lesson_schedule_id ?>">
+              <input type="hidden" name="lesson_id" value="<?php echo $lesson_id ?>">
+              <input type="hidden" name="lesson_start_date" value="<?php echo $lesson_start_date ?>">
+              <input type="hidden" name="lesson_end_date" value="<?php echo $lesson_end_date ?>">
+              </form>
                       <?php
                     }
                     ?>
+
                   </tbody>
                 </table>
               </div>
