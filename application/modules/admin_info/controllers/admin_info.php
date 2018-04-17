@@ -93,6 +93,87 @@ class admin_info extends MX_Controller {
     $this->templates->admin($data);
   }
 
+  function upload_admin_image() {
+    $id=1;
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+    $data['num_rows'] = $id;
+    $data['headline'] = "Upload Image";
+    $date['flash'] = $this->session->flashdata('item');
+    $data['view_file'] = "upload_image";
+    $data['id']=$id;
+    $data['sort_this'] = true;
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+
+  function do_upload() {
+    $this->load->module('site_security');
+    $this->load->library('session');
+    $this->site_security->_make_sure_is_admin();
+
+    $id = 1;
+    if (!is_numeric($id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $submit = $this->input->post('submit', true);
+    if ($submit == "cancel") {
+      redirect('admin_info/view_admin_info/');
+    } else if ($submit == "upload") {
+      $config['upload_path'] = './media/admin_pics';
+      $config['allowed_types'] = 'gif|jpg|png';
+      $config['max_size'] = 2048;
+      $config['max_width'] = 3036;
+      $config['max_height'] = 1902;
+      $file_name = $this->site_security->generate_random_string(16);
+      $config['file_name'] = $file_name;
+      $this->load->library('upload', $config);
+      $this->upload->initialize($config);
+
+      if (!$this->upload->do_upload('userfile')) {
+        $mysql_query = "SELECT * FROM admin_info WHERE id = $id";
+        $query = $this->_custom_query($mysql_query);
+        $data['query'] = $query;
+        $data['num_rows'] = $query->num_rows();
+        $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
+        $data['headline'] = "Upload Error";
+        $data['id'] = $id;
+        $date['flash'] = $this->session->flashdata('item');
+        $data['view_file'] = "upload_image";
+        $this->load->module('templates');
+        $this->templates->admin($data);
+      } else {
+        $data = array('upload_data' => $this->upload->data());
+        $upload_data = $data['upload_data'];
+        $file_name = $upload_data['file_name'];
+        $this->_generate_thumbnail($file_name);
+
+        // insert into db
+        $insert_statement = "UPDATE admin_info set picture_name = '$file_name' WHERE id = $id";
+        $this->_custom_query($insert_statement);
+        $data['headline'] = "Upload Success";
+        $data['id'] = $id;
+        $flash_msg = "The picture was successfully uploaded.";
+        $value= '<div class="alert alert-success" role="alert">.'.$flash_msg.'</div>';
+        $this->session->set_flashdata('item', $value);
+        redirect(base_url()."/admin_info/view_admin_info");
+      }
+    }
+  }
+
+    function _generate_thumbnail($file_name) {
+      $config['image_library'] = 'gd2';
+      $config['source_image'] = './media/admin_pics/'.$file_name;
+      $config['new_image'] = './media/admin_pics_1/'.$file_name.$id;
+      $config['maintain_ratio'] = true;
+      $config['width'] = 200;
+      $config['height'] = 200;
+      $this->image_lib->initialize($config);
+      $this->image_lib->resize();
+    }
+
   function fetch_data_from_post() {
     $data['first_name'] = $this->input->post('first_name', true);
     $data['last_name'] = $this->input->post('last_name', true);
