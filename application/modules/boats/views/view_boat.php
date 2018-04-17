@@ -2,6 +2,9 @@
 if (isset($flash)) {
   echo $flash;
 }
+
+$form_location = base_url().'boats_schedules/create_boat_schedules';
+
 ?>
 <!-- Product Gallery-->
 <div class="container padding-bottom-3x mb-1">
@@ -110,15 +113,13 @@ if (isset($flash)) {
       <p> Capacity: <?= nl2br($boat_capacity) ?></p>
     </div>
   </div>
+
   <script>
   $(function(e){
     $('#checkAvailability').on('submit',function(){
       var startDate = $('#boat_start_date').val();
       var endDate = $('#boat_end_date').val();
       var id = "<?= nl2br($boat_rental_id)?>";
-      alert(startDate);
-      alert(endDate);
-      alert(id);
       $.ajax({
         url: "<?= base_url().'boats_schedules/create_boat_schedules'?>",
         type: 'post',
@@ -128,11 +129,6 @@ if (isset($flash)) {
           'boat_rental_id': id
         },
         success: function(data, status){
-          if (data == true) {
-            alert(true);
-          } else {
-            alert(false);
-          }
           alert(data);
           alert(status);
         },
@@ -144,25 +140,28 @@ if (isset($flash)) {
   });
   </script>
   <div class = "col-12 row">
-    <form method="post" id = "checkAvailability">
+    <form method="post" id = "checkAvailability" action="<?= $form_location ?>">
       <div class="form-group row">
-        <label class="col-6 col-form-label" for="startDate-time-input" >Start Date and time</label>
-        <div class="col-8">
+        <label class="col-5 col-form-label" for="startDate-time-input" >Start Date and time</label>
+        <div class="col-7">
           <input class="form-control" type="datetime-local" name="boat_start_date" id="boat_start_date">
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-6 col-form-label" for="endDate-time-input">End Date and time</label>
-        <div class="col-8">
+        <label class="col-5 col-form-label" for="endDate-time-input">End Date and time</label>
+        <div class="col-7">
           <input class="form-control" type="datetime-local" name ="boat_end_date" id="boat_end_date">
         </div>
       </div>
       <div class="form-group">
         <div class="col-md-offset-3 col-md-4">
+          <a class="btn btn-danger" href="<?= base_url().'boats_schedules/test' ?> ">Test</a>
           <button class="btn btn-primary" name="submit" value="submit">Check Availability</button>
         </form>
       </div>
     </div>
+  </div>
+
 
     <!-- Photoswipe container-->
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
