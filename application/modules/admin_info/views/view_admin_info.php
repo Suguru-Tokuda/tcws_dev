@@ -5,7 +5,7 @@
     echo $flash;
   }
   $update_admin_info_url = base_url()."admin_info/update_admin_info";
-  $upload_image_url = base_url()."admin_info/upload_image";
+  $upload_image_url = base_url()."admin_info/upload_admin_image";
   ?>
   <p style="margin-top: 30px;">
     <a href="<?= $update_admin_info_url ?>"><button class="btn btn-primary" type="submit">update details</button></a>

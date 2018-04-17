@@ -1,36 +1,61 @@
-<h1><?= $headline ?></h1>
-
-<?php
-if (isset($flash)) {
-  echo $flash;
+<style>
+#file {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  cursor: pointer;
 }
-?>
-<!-- This section appears only there is an blog_id -->
-<div class="row-fluid sortable">
-  <div class="box span12">
-    <div class="box-header" data-original-title>
-      <h2><i class="halflings-icon white edit"></i><span class="break"></span>Blog Options</h2>
-      <div class="box-icon">
-        <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-      </div>
-    </div>
-    <div class="box-content">
-
-<h3>Are you sure that you want to delete the blog?</h3>
-
+div.uploadBtn {
+  width: 115px;
+  height: 40px;
+  background: url('https://lh6.googleusercontent.com/-dqTIJRTqEAQ/UJaofTQm3hI/AAAAAAAABHo/w7ruR1SOIsA/s157/upload.png');
+  position: relative;
+  background-size: 100%;
+  cursor: pointer;
+}
+.imageUploadedOrNot {
+  display: none;
+}
+img#blankImg {
+  max-width: 20%;
+}
+</style>
 <?php
-// This line adds attributes into a form. No need to put <form...> manually
-$attributes = array('class' => 'form-horizontal', 'id' => 'myform');
-echo form_open_multipart('blog/delete/'.$blog_id, $attributes);
+$form_location = base_url().'admin_info/do_upload/'.$id;
 ?>
-
-<filedset>
-  <div class="control-group" style="height: 200px;">
-<button type="submit" name="submit" class="btn btn-danger" value="Delete">Yes - Delete Page</button>
-<button type="submit" name="submit" value="Cancel" class="btn">Cancel</button>
-</fieldset>
-</form>
-
+<div class="form-panel">
+  <h4><?= $headline ?></h4>
+  <?php
+  if (isset($flash)) {
+    echo $flash;
+  }
+  if (isset($error)) {
+    foreach ($error as $value) {
+      echo $value;
+    }
+  }
+  ?>
+  <?php
+  if ($num_rows == 1) {
+    ?>
+    <div class="imageUploadedOrNot">
+      <h5>Here's the display of your image: </h5>
+      <img src="#" id="blankImg">
     </div>
-  </div><!--/span-->
-</div><!--/row-->
+    <?php echo form_open_multipart($form_location);?>
+    <div class="form-group">
+      <label>Image</label>
+      <div class="uploadBtn"><input type="file" name="userfile" id="file"></div>
+    </div>
+    <div class="form-action">
+      <button type="submit" name="submit" class="btn btn-primary" value="upload">Upload</button>
+      <button type="submit" name="submit" class="btn" value="cancel">Back</button>
+    </div>
+  </form>
+  <?php
+}
+  ?>
+<?php
+?>
+</div>
