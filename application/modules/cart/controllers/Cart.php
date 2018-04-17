@@ -22,14 +22,17 @@ class Cart extends MX_Controller {
       $shoppe_id = 0;
     }
     $table = "store_basket";
-    $date['flash'] = $this->session->flashdata('item');
+    $lesson_table = "lesson_basket";
+    //$date['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "cart";
 
     $data['query'] = $this->_fetch_cart_content($session_id, $shopper_id, $table);
-
+    $data['lesson_query'] = $this->_fetch_lesson_cart_content($session_id, $shopper_id, $lesson_table);
     // count the number of items in the cart
+    $total_num = $data['query']->num_rows() + $data['lesson_query']->num_rows() ;
     $data['num_rows'] = $data['query']->num_rows();
-    $data['showing_statement'] = $this->_get_showing_statement($data['num_rows']);
+    $data['lesson_num_rows'] = $data['lesson_query']->num_rows();
+    $data['showing_statement'] = $this->_get_showing_statement($total_num);
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
@@ -156,7 +159,7 @@ class Cart extends MX_Controller {
     $this->load->view('checkout_btn_fake', $data);
   }
 
-  function _draw_cart_content($query, $user_type) {
+  function _draw_cart_content($query, $lesson_query, $user_type) {
     // NOTE: user_type can be 'public' or 'admin'
     $this->load->module('site_settings');
     $this->load->module('shipping');
@@ -169,6 +172,7 @@ class Cart extends MX_Controller {
     }
     $data['shipping'] = $this->shipping->_get_shipping();
     $data['query'] = $query;
+    $data['lesson_query'] = $lesson_query;
     $this->load->view($view_file, $data);
   }
 
@@ -176,16 +180,33 @@ class Cart extends MX_Controller {
     // fetch the contents of the shopping cart
     $this->load->module($table);
     $mysql_query = "
-    SELECT sb.*, si.small_pic, si.item_url
-    FROM store_basket sb LEFT JOIN store_items si ON sb.item_id = si.id
+    SELECT sb.*, si.picture_name,si.priority
+    FROM store_basket sb LEFT JOIN item_pics si ON sb.item_id = si.item_id
     ";
     if ($shopper_id > 0) {
-      $where_condition = " WHERE sb.shopper_id = $shopper_id";
+      $where_condition = " WHERE sb.shopper_id = $shopper_id and si.priority = 1";
     } else {
-      $where_condition = " WHERE sb.session_id = '$session_id'";
+      $where_condition = " WHERE sb.session_id = '$session_id and si.priority = 1'";
     }
     $mysql_query.= $where_condition;
     $query = $this->store_basket->_custom_query($mysql_query);
+    return $query;
+  }
+
+  function _fetch_lesson_cart_content($session_id, $shopper_id, $table) {
+    // fetch the contents of the shopping cart
+    $this->load->module($table);
+    $mysql_query = "
+    SELECT sb.*, si.picture_name
+    FROM lesson_basket sb LEFT JOIN lesson_pics si ON sb.lesson_id = si.lesson_id
+    ";
+    if ($shopper_id > 0) {
+      $where_condition = " WHERE sb.shopper_id = $shopper_id and si.priority = 1";
+    } else {
+      $where_condition = " WHERE sb.session_id = '$session_id' and si.priority = 1";
+    }
+    $mysql_query.= $where_condition;
+    $query = $this->lesson_basket->_custom_query($mysql_query);
     return $query;
   }
 
