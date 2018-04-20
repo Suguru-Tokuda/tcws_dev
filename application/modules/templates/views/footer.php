@@ -18,7 +18,6 @@
           <h3 class="widget-title">About Us</h3>
           <ul>
             <li><a href="<?= base_url()."contactus" ?>">Contact us</a></li>
-            <li><a href="#">Our Team</a></li>
             <li><a href="#">Community</a></li>
           </ul>
         </section>

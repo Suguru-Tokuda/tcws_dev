@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content=""> -->
+
   <link rel="icon" href="<?php echo base_url(); ?>/favicon.ico">
   <title><?php
   $page_url = $this->uri->segment(1);
@@ -19,14 +15,14 @@
     echo "Twincity Water Sports";
   }
   ?></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="<?php echo base_url(); ?>assets/css/unishop.vendor.min.css" rel="stylesheet">
   <link id="mainStyles" rel="stylesheet" media-"screen" href="<?php echo base_url(); ?>assets/css/unishop.custom.min.css">
   <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.header.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/modernizr.min.js"></script>
 </head>
+<!-- Body-->
 <body>
-  <!-- inserting side menu bar-->
-  <?php include('side_menu_bar.php'); ?>
   <?php
   // isseet = determines if the value is NOT NULL
   if (isset($sort_this)) {
@@ -34,54 +30,43 @@
     require_once('sort_pictures_code.php');
   }
   ?>
-  <!-- nav bar starts -->
+  <!-- Navbar-->
   <?php
+  include('top_bar.php');
+  include('mobile_menu.php');
   include('top_nav.php');
   ?>
-  <?php
-  if (isset($page_content)) {
-    if ($page_url == "") { // means it's in homepage
-      ?>
-      <p style="margin-top: 85px;"></p>
-      <?php
-      require_once('carousel.php');
-    } else {
-      ?>
-      <?php
+  <!-- Off-Canvas Wrapper-->
+  <div class="offcanvas-wrapper">
+    <!-- Page Content-->
+    <!-- Main Slider-->
+    <?php
+    if (isset($page_content)) {
+      if ($page_url == "") { // means it's in homepage
+        ?>
+        <?php
+        require_once('carousel.php');
+      } else {
+        ?>
+        <?php
+      }
+    } else if (isset($view_file)) {
+      $this->load->view($view_module.'/'.$view_file);
     }
-  }
-  ?>
-  <?php
-  if ($page_url != "") {
-   ?>
-  <p style="margin-top: 85px;"></p>
-  <?php
-}
-   ?>
-  <?php
-  if (isset($page_content)) {
-    if ($page_url == "") {
-      // this lines loads 'content_homepage.php'
-      // require_once('content_homepage.php');
-    } elseif ($page_url == "contactus") {
-      // load up a contact form
-      // echo Modules::run('contact/_drow_form');
+    ?>
+    <?php if ($this->uri->segment(1) == "") {
+      echo Modules::run('store_items/_draw_new_items');
     }
-  } else if (isset($view_file)) {
-    $this->load->view($view_module.'/'.$view_file);
-  }
-  ?>
-  <?php if ($this->uri->segment(1) == "") {
-    echo Modules::run('store_items/_draw_new_items');
-  }
-  ?>
-  <?php
-  include('footer.php');
-   ?>
-
-    <a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
-    <div class="site-backdrop"></div>
-    <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/unishop.custom.min.js"></script>
-  </body>
-  </html>
+    ?>
+    <!-- Site Footer-->
+    <?php
+    include('footer.php');
+    ?>
+  </div>
+  <!-- Back To Top Button--><a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+  <!-- Backdrop-->
+  <div class="site-backdrop"></div>
+  <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/unishop.custom.min.js"></script>
+</body>
+</html>
