@@ -49,4 +49,8 @@ class Templates extends MX_Controller {
     $this->load->view('admin', $data);
   }
 
+  function show_dummy_page() {
+    $this->load->view('dummy_public');
+  }
+
 }
