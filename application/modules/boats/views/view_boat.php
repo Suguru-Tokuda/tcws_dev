@@ -3,7 +3,7 @@ if (isset($flash)) {
   echo $flash;
 }
 
-$form_location = base_url().'boats_schedules/create_boat_schedules/';
+$form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_rental_id;
 
 ?>
 <!-- Product Gallery-->
@@ -111,25 +111,33 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/';
       <p> Year Made: <?= nl2br($boat_year_made) ?></p>
       <p> Maker: <?= nl2br($boat_maker)?></p>
       <p> Capacity: <?= nl2br($boat_capacity) ?></p>
+
     </div>
   </div>
 
-  <script>
+ <script>
   $(function(e){
     $('#checkAvailability').on('submit',function(){
       var startDate = $('#boat_start_date').val();
       var endDate = $('#boat_end_date').val();
       var id = "<?= nl2br($boat_rental_id)?>";
       $.ajax({
-        url: "<?= base_url().'boats_schedules/create_boat_schedules/'?>",
+        url: "<?= base_url().'boats_schedules/create_boat_schedules/'.$boat_rental_id?>",
         type: 'post',
         data:{
-          'startDate': startDate,
-          'endDate' : endDate,
+          'boat_start_date': startDate,
+          'boat_end_date' : endDate,
           'boat_rental_id': id
         },
         success: function(data, status){
-            alert(true);
+
+          if(data === "true")
+          {
+            alert(data);
+          }
+          else {
+            alert(status);
+          }
         },
         error: function(error) {
           alert(error);
@@ -139,7 +147,7 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/';
   });
   </script>
   <div class = "col-12 row">
-    <form method="post" id = "checkAvailability">
+    <form method="post" id = "checkAvailability" >
       <div class="form-group row">
         <label class="col-5 col-form-label" for="startDate-time-input" >Start Date and time</label>
         <div class="col-7">
@@ -154,7 +162,7 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/';
       </div>
       <div class="form-group">
         <div class="col-md-offset-3 col-md-4">
-          <button class="btn btn-primary" name="submit" value="submit">Check Availability</button>
+          <button class="btn btn-primary" name="submit" id = "boat_rental_id" value="<?= nl2br($boat_rental_id)?>">Check Availability</button>
         </form>
       </div>
     </div>

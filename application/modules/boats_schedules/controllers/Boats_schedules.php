@@ -10,49 +10,65 @@ class Boats_schedules extends MX_Controller {
     $this->form_validation->set_ci_reference($this);
   }
 
-  function create_boat_schedules()
+  function create_boat_schedules($boat_rental_id)
   {
-
     $this->load->module('site_security');
     $this->load->library('session');
     $submit = $this->input->post('submit', true);
     $boat_schedule_id = $this->uri->segment(4);
     $this->form_validation->set_rules('boat_start_date', 'Start Time', 'required');
     $this->form_validation->set_rules('boat_end_date', 'End Time', 'required');
-    //$data['boat_rental_id'] = $boat_rental_id;
-  //  echo($data['boat_rental_id']);
-    if ($this->form_validation->run()) {
-
-        $data['boat_start_date'] = strtotime($_POST['boat_start_date']);
-        $data['boat_end_date'] = strtotime($_POST['boat_end_date']);
-        if (isset($boat_schedule_id)) {
-          $query = $this->get_where_custom('boat_rental_id',$data['boat_rental_id']);
+    $data['boat_rental_id'] = $boat_rental_id;
+    $data['boat_start_date'] = strtotime($_POST['boat_start_date']);
+    $data['boat_end_date'] = strtotime($_POST['boat_end_date']);
+    if ($this->form_validation->run())
+    {
+      if($data['boat_start_date'] < $data['boat_end_date'])
+      {
+        $switchVal = "true";
+        $query = $this->get_where_custom('boat_rental_id',$boat_rental_id);
+        if($query)
+        {
           $arr = array();
-          foreach($query->result() as $row) {
-            $arr[] = array($row['boat_start_date'], $row['boat_end_date']);
+          foreach($query->result() as $row)
+          {
+            $arr[] = array('startDate'=>$row->boat_start_date,'endDate'=> $row->boat_end_date);
+          }
+          foreach ($arr as $var) {
+            if($switchVal = "true")
+            {
+              if($data['boat_start_date']< $var['startDate'] && $data['boat_end_date']< $var['startDate'])
+              {
+                $switchVal = "true";
+              }
+              elseif ($data['boat_start_date']> $var['endDate'] && $data['boat_end_date']> $var['endDate'])
+              {
+                foreach($arr as $second)
+                if ($data['boat_start_date']> $var['endDate'] && $data['boat_start_date']< $second['startDate'])
+                {
+                  if($data['boat_end_date']< $second['startDate'])
+                  {
+                    $switchVal = "true";
+                  }
+                  else{
+                    $switchVal = "false";
+                  }
+                }
+              }
+              else
+              {
+                $switchVal = "false";
+              }
+            }
+          }
         }
+
+        echo($switchVal);
+      //  die();
+      //  return $switchVal;
+        // die();
       }
-    else {
-      // insert
-      //echo($data);
-      $this->_insert($data);
-      echo("Hi");
-      $flash_msg = "The boat was successfully booked.";
-      $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-      $this->session->set_flashdata('item', $value);
-      redirect('boats/view_boat/'.$boat_rental_id);
     }
-  }
-    //   $start_date_in_db = $row->boat_start_date;
-    //   $end_date_in_db = $row->boat_end_date;
-    // $data = array(
-    // 'username' => $this->input->post('startDate'),
-    // 'pwd'=>$this->input->post('endDate')
-    // 'id'=> $this->input->post->('boat_rental_id')
-    // );
-    // return $data;
-    //echo $arr[0];
-    //die();
   }
 
   function get($order_by) {
@@ -129,3 +145,16 @@ class Boats_schedules extends MX_Controller {
   }
 
 }
+/*  else {
+  // insert
+  //echo($data);
+    $this->_insert($data);
+    $flash_msg = "The boat was successfully booked.";
+    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+    $this->session->set_flashdata('item', $value);
+    return true;
+  }*/
+  //   foreach ($arr as $var) {
+  //     echo "\n", $var['startDate'], "\t\t", $var['endDate'];
+  //   }
+  // die();
