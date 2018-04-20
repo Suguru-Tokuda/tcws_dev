@@ -133,10 +133,8 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_renta
 
           if(data === "true")
           {
+            //redirect it to cart
             alert(data);
-          }
-          else {
-            alert(status);
           }
         },
         error: function(error) {
