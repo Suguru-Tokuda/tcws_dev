@@ -2047,7 +2047,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 
 	$.fn.dcAccordion = function(options) {
 
-		//set default options 
+		//set default options
 		var defaults = {
 			classParent	 : 'dcjq-parent',
 			classActive	 : 'active',
@@ -2113,7 +2113,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 				}
 
 			} else {
-			
+
 				$('li a',obj).click(function(e){
 
 					$activeLi = $(this).parent('li');
@@ -2139,7 +2139,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 						$(this).siblings('ul').slideToggle(defaults.speed);
 						$('> a',$activeLi).addClass(defaults.classActive);
 					}
-					
+
 //					// Write cookie if save state is on
 //					if(defaults.saveState == true){
 //						createCookie(defaults.cookie, obj);
@@ -2171,7 +2171,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 					});
 				}
 			}
-			
+
 			function linkOver(){
 
 			$activeLi = $(this).parent('li');
@@ -2749,7 +2749,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
             'font: 10px arial, san serif;' +
             'text-align: left;' +
             'white-space: nowrap;' +
-            
+
             'border: 1px solid white;' +
             'z-index: 10000;' +
             '}' +
@@ -5569,12 +5569,12 @@ var Script = function () {
  */
 
 (function($){
- 	
+
 	/**
 	* Set it up as an object under the jQuery namespace
 	*/
 	$.gritter = {};
-	
+
 	/**
 	* Set up global options that the user can over-ride
 	*/
@@ -5585,7 +5585,7 @@ var Script = function () {
 		fade_out_speed: 1000, // how fast the notices fade out
 		time: 6000 // hang on the screen for...
 	}
-	
+
 	/**
 	* Add a gritter notification to the screen
 	* @see Gritter#add();
@@ -5595,16 +5595,16 @@ var Script = function () {
 		try {
 			return Gritter.add(params || {});
 		} catch(e) {
-		
+
 			var err = 'Gritter Error: ' + e;
-			(typeof(console) != 'undefined' && console.error) ? 
-				console.error(err, params) : 
+			(typeof(console) != 'undefined' && console.error) ?
+				console.error(err, params) :
 				alert(err);
-				
+
 		}
-		
+
 	}
-	
+
 	/**
 	* Remove a gritter notification from the screen
 	* @see Gritter#removeSpecific();
@@ -5612,7 +5612,7 @@ var Script = function () {
 	$.gritter.remove = function(id, params){
 		Gritter.removeSpecific(id, params || {});
 	}
-	
+
 	/**
 	* Remove all notifications
 	* @see Gritter#stop();
@@ -5620,19 +5620,19 @@ var Script = function () {
 	$.gritter.removeAll = function(params){
 		Gritter.stop(params || {});
 	}
-	
+
 	/**
 	* Big fat Gritter object
 	* @constructor (not really since its object literal)
 	*/
 	var Gritter = {
-		
+
 		// Public - options to over-ride with $.gritter.options in "add"
 		position: '',
 		fade_in_speed: '',
 		fade_out_speed: '',
 		time: '',
-		
+
 		// Private - no touchy the private parts
 		_custom_timer: 0,
 		_item_count: 0,
@@ -5641,7 +5641,7 @@ var Script = function () {
 		_tpl_title: '<span class="gritter-title">[[title]]</span>',
 		_tpl_item: '<div id="gritter-item-[[number]]" class="gritter-item-wrapper [[item_class]]" style="display:none"><div class="gritter-top"></div><div class="gritter-item">[[close]][[image]]<div class="[[class_name]]">[[title]]<p>[[text]]</p></div><div style="clear:both"></div></div><div class="gritter-bottom"></div></div>',
 		_tpl_wrap: '<div id="gritter-notice-wrapper"></div>',
-		
+
 		/**
 		* Add a gritter notification to the screen
 		* @param {Object} params The object that contains all the options for drawing the notification
@@ -5655,16 +5655,16 @@ var Script = function () {
 
 			// We might have some issues if we don't have a title or text!
 			if(!params.text){
-				throw 'You must supply "text" parameter.'; 
+				throw 'You must supply "text" parameter.';
 			}
-			
+
 			// Check the options and set them once
 			if(!this._is_setup){
 				this._runSetup();
 			}
-			
+
 			// Basics
-			var title = params.title, 
+			var title = params.title,
 				text = params.text,
 				image = params.image || '',
 				sticky = params.sticky || false,
@@ -5673,11 +5673,11 @@ var Script = function () {
 				time_alive = params.time || '';
 
 			this._verifyWrapper();
-			
+
 			this._item_count++;
-			var number = this._item_count, 
+			var number = this._item_count,
 				tmp = this._tpl_item;
-			
+
 			// Assign callbacks
 			$(['before_open', 'after_open', 'before_close', 'after_close']).each(function(i, val){
 				Gritter['_' + val + '_' + number] = ($.isFunction(params[val])) ? params[val] : function(){}
@@ -5685,22 +5685,22 @@ var Script = function () {
 
 			// Reset
 			this._custom_timer = 0;
-			
+
 			// A custom fade time set
 			if(time_alive){
 				this._custom_timer = time_alive;
 			}
-			
+
 			var image_str = (image != '') ? '<img src="' + image + '" class="gritter-image" />' : '',
 				class_name = (image != '') ? 'gritter-with-image' : 'gritter-without-image';
-			
+
 			// String replacements on the template
 			if(title){
 				title = this._str_replace('[[title]]',title,this._tpl_title);
 			}else{
 				title = '';
 			}
-			
+
 			tmp = this._str_replace(
 				['[[title]]', '[[text]]', '[[close]]', '[[image]]', '[[number]]', '[[class_name]]', '[[item_class]]'],
 				[title, text, this._tpl_close, image_str, this._item_count, class_name, item_class], tmp
@@ -5712,21 +5712,21 @@ var Script = function () {
 			}
 
 			$('#gritter-notice-wrapper').addClass(position).append(tmp);
-			
+
 			var item = $('#gritter-item-' + this._item_count);
-			
+
 			item.fadeIn(this.fade_in_speed, function(){
 				Gritter['_after_open_' + number]($(this));
 			});
-			
+
 			if(!sticky){
 				this._setFadeTimer(item, number);
 			}
-			
+
 			// Bind the hover/unhover states
 			$(item).bind('mouseenter mouseleave', function(event){
 				if(event.type == 'mouseenter'){
-					if(!sticky){ 
+					if(!sticky){
 						Gritter._restoreItemIfFading($(this), number);
 					}
 				}
@@ -5737,16 +5737,16 @@ var Script = function () {
 				}
 				Gritter._hoverState($(this), event.type);
 			});
-			
+
 			// Clicking (X) makes the perdy thing close
 			$(item).find('.gritter-close').click(function(){
 				Gritter.removeSpecific(number, {}, null, true);
 			});
-			
+
 			return number;
-		
+
 		},
-		
+
 		/**
 		* If we don't have any more gritter notifications, get rid of the wrapper using this check
 		* @private
@@ -5755,18 +5755,18 @@ var Script = function () {
 		* @param {Boolean} manual_close Did we close the gritter dialog with the (X) button
 		*/
 		_countRemoveWrapper: function(unique_id, e, manual_close){
-			
+
 			// Remove it then run the callback function
 			e.remove();
 			this['_after_close_' + unique_id](e, manual_close);
-			
+
 			// Check if the wrapper is empty, if it is.. remove the wrapper
 			if($('.gritter-item-wrapper').length == 0){
 				$('#gritter-notice-wrapper').remove();
 			}
-		
+
 		},
-		
+
 		/**
 		* Fade out an element after it's been on the screen for x amount of time
 		* @private
@@ -5783,15 +5783,15 @@ var Script = function () {
 				manual_close = unbind_events;
 
 			this['_before_close_' + unique_id](e, manual_close);
-			
+
 			// If this is true, then we are coming from clicking the (X)
 			if(unbind_events){
 				e.unbind('mouseenter mouseleave');
 			}
-			
+
 			// Fade it out or remove it
 			if(fade){
-			
+
 				e.animate({
 					opacity: 0
 				}, fade_out_speed, function(){
@@ -5799,45 +5799,45 @@ var Script = function () {
 						Gritter._countRemoveWrapper(unique_id, e, manual_close);
 					})
 				})
-				
+
 			}
 			else {
-				
+
 				this._countRemoveWrapper(unique_id, e);
-				
+
 			}
-						
+
 		},
-		
+
 		/**
-		* Perform actions based on the type of bind (mouseenter, mouseleave) 
+		* Perform actions based on the type of bind (mouseenter, mouseleave)
 		* @private
 		* @param {Object} e The jQuery element
 		* @param {String} type The type of action we're performing: mouseenter or mouseleave
 		*/
 		_hoverState: function(e, type){
-			
+
 			// Change the border styles and add the (X) close button when you hover
 			if(type == 'mouseenter'){
-				
+
 				e.addClass('hover');
-				
+
 				// Show close button
 				e.find('.gritter-close').show();
-						
+
 			}
 			// Remove the border styles and hide (X) close button when you mouse out
 			else {
-				
+
 				e.removeClass('hover');
-				
+
 				// Hide close button
 				e.find('.gritter-close').hide();
-				
+
 			}
-			
+
 		},
-		
+
 		/**
 		* Remove a specific notification based on an ID
 		* @param {Integer} unique_id The ID used to delete a specific notification
@@ -5846,17 +5846,17 @@ var Script = function () {
 		* @param {Boolean} unbind_events If we clicked on the (X) we set this to true to unbind mouseenter/mouseleave
 		*/
 		removeSpecific: function(unique_id, params, e, unbind_events){
-			
+
 			if(!e){
 				var e = $('#gritter-item-' + unique_id);
 			}
 
-			// We set the fourth param to let the _fade function know to 
+			// We set the fourth param to let the _fade function know to
 			// unbind the "mouseleave" event.  Once you click (X) there's no going back!
 			this._fade(e, unique_id, params || {}, unbind_events);
-			
+
 		},
-		
+
 		/**
 		* If the item is fading out and we hover over it, restore it!
 		* @private
@@ -5864,25 +5864,25 @@ var Script = function () {
 		* @param {Integer} unique_id The ID of the element
 		*/
 		_restoreItemIfFading: function(e, unique_id){
-			
+
 			clearTimeout(this['_int_id_' + unique_id]);
 			e.stop().css({ opacity: '', height: '' });
-			
+
 		},
-		
+
 		/**
 		* Setup the global options - only once
 		* @private
 		*/
 		_runSetup: function(){
-		
+
 			for(opt in $.gritter.options){
 				this[opt] = $.gritter.options[opt];
 			}
 			this._is_setup = 1;
-			
+
 		},
-		
+
 		/**
 		* Set the notification to fade out after a certain amount of time
 		* @private
@@ -5890,90 +5890,90 @@ var Script = function () {
 		* @param {Integer} unique_id The ID of the element
 		*/
 		_setFadeTimer: function(e, unique_id){
-			
+
 			var timer_str = (this._custom_timer) ? this._custom_timer : this.time;
-			this['_int_id_' + unique_id] = setTimeout(function(){ 
+			this['_int_id_' + unique_id] = setTimeout(function(){
 				Gritter._fade(e, unique_id);
 			}, timer_str);
-		
+
 		},
-		
+
 		/**
 		* Bring everything to a halt
 		* @param {Object} params A list of callback functions to pass when all notifications are removed
-		*/  
+		*/
 		stop: function(params){
-			
+
 			// callbacks (if passed)
 			var before_close = ($.isFunction(params.before_close)) ? params.before_close : function(){};
 			var after_close = ($.isFunction(params.after_close)) ? params.after_close : function(){};
-			
+
 			var wrap = $('#gritter-notice-wrapper');
 			before_close(wrap);
 			wrap.fadeOut(function(){
 				$(this).remove();
 				after_close();
 			});
-		
+
 		},
-		
+
 		/**
 		* An extremely handy PHP function ported to JS, works well for templating
 		* @private
 		* @param {String/Array} search A list of things to search for
 		* @param {String/Array} replace A list of things to replace the searches with
 		* @return {String} sa The output
-		*/  
+		*/
 		_str_replace: function(search, replace, subject, count){
-		
+
 			var i = 0, j = 0, temp = '', repl = '', sl = 0, fl = 0,
 				f = [].concat(search),
 				r = [].concat(replace),
 				s = subject,
 				ra = r instanceof Array, sa = s instanceof Array;
 			s = [].concat(s);
-			
+
 			if(count){
 				this.window[count] = 0;
 			}
-		
+
 			for(i = 0, sl = s.length; i < sl; i++){
-				
+
 				if(s[i] === ''){
 					continue;
 				}
-				
+
 				for (j = 0, fl = f.length; j < fl; j++){
-					
+
 					temp = s[i] + '';
 					repl = ra ? (r[j] !== undefined ? r[j] : '') : r[0];
 					s[i] = (temp).split(f[j]).join(repl);
-					
+
 					if(count && s[i] !== temp){
 						this.window[count] += (temp.length-s[i].length) / f[j].length;
 					}
-					
+
 				}
 			}
-			
+
 			return sa ? s : s[0];
-			
+
 		},
-		
+
 		/**
 		* A check to make sure we have something to wrap our notices with
 		* @private
-		*/  
+		*/
 		_verifyWrapper: function(){
-		  
+
 			if($('#gritter-notice-wrapper').length == 0){
 				$('body').append(this._tpl_wrap);
 			}
-		
+
 		}
-		
+
 	}
-	
+
 })(jQuery);
 
 var Script = function () {
@@ -21102,12 +21102,12 @@ var TaskList = function () {
 
         initTaskWidget: function () {
 			$('input.list-child').change(function() {
-				if ($(this).is(':checked')) { 
-					$(this).parents('li').addClass("task-done"); 
-				} else { 
-					$(this).parents('li').removeClass("task-done"); 
+				if ($(this).is(':checked')) {
+					$(this).parents('li').addClass("task-done");
+				} else {
+					$(this).parents('li').removeClass("task-done");
 				}
-			}); 
+			});
         }
 
     };
@@ -21705,7 +21705,7 @@ $(function () {
 
                 // If the end of the range is before the minimum or the start of the range is
                 // after the maximum, don't display this range option at all.
-                if ((this.minDate && end.isBefore(this.minDate, this.timepicker ? 'minute' : 'day')) 
+                if ((this.minDate && end.isBefore(this.minDate, this.timepicker ? 'minute' : 'day'))
                   || (maxDate && start.isAfter(maxDate, this.timepicker ? 'minute' : 'day')))
                     continue;
 
@@ -22907,7 +22907,7 @@ $(function () {
             this.container.find('input[name="daterangepicker_start"], input[name="daterangepicker_end"]').removeClass('active');
             $(e.target).addClass('active');
 
-            // Set the state such that if the user goes back to using a mouse, 
+            // Set the state such that if the user goes back to using a mouse,
             // the calendars are aware we're selecting the end of the range, not
             // the start. This allows someone to edit the end of a date range without
             // re-selecting the beginning, by clicking on the end date input then
@@ -22946,7 +22946,7 @@ $(function () {
             // Other browsers and versions of IE are untested and the behaviour is unknown.
             if (e.keyCode === 13) {
                 // Prevent the calendar from being updated twice on Chrome/Firefox/Edge
-                e.preventDefault(); 
+                e.preventDefault();
                 this.formInputsChanged(e);
             }
         },
@@ -23044,11 +23044,11 @@ $(function () {
 window.Chart = function(context){
 
 	var chart = this;
-	
-	
+
+
 	//Easing functions adapted from Robert Penner's easing equations
 	//http://www.robertpenner.com/easing/
-	
+
 	var animationOptions = {
 		linear : function (t){
 			return t;
@@ -23156,7 +23156,7 @@ window.Chart = function(context){
 			return 1*((t=t/1-1)*t*((s+1)*t + s) + 1);
 		},
 		easeInOutBack: function (t) {
-			var s = 1.70158; 
+			var s = 1.70158;
 			if ((t/=1/2) < 1) return 1/2*(t*t*(((s*=(1.525))+1)*t - s));
 			return 1/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2);
 		},
@@ -23195,7 +23195,7 @@ window.Chart = function(context){
 	}
 
 	this.PolarArea = function(data,options){
-	
+
 		chart.PolarArea.defaults = {
 			scaleOverlay : true,
 			scaleOverride : false,
@@ -23225,14 +23225,14 @@ window.Chart = function(context){
 			animateScale : false,
 			onAnimationComplete : null
 		};
-		
+
 		var config = (options)? mergeChartConfig(chart.PolarArea.defaults,options) : chart.PolarArea.defaults;
-		
+
 		return new PolarArea(data,config,context);
 	};
 
 	this.Radar = function(data,options){
-	
+
 		chart.Radar.defaults = {
 			scaleOverlay : false,
 			scaleOverride : false,
@@ -23254,7 +23254,7 @@ window.Chart = function(context){
 			scaleBackdropPaddingX : 2,
 			angleShowLineOut : true,
 			angleLineColor : "rgba(0,0,0,.1)",
-			angleLineWidth : 1,			
+			angleLineWidth : 1,
 			pointLabelFontFamily : "'Arial'",
 			pointLabelFontStyle : "normal",
 			pointLabelFontSize : 12,
@@ -23270,12 +23270,12 @@ window.Chart = function(context){
 			animationEasing : "easeOutQuart",
 			onAnimationComplete : null
 		};
-		
+
 		var config = (options)? mergeChartConfig(chart.Radar.defaults,options) : chart.Radar.defaults;
 
 		return new Radar(data,config,context);
 	};
-	
+
 	this.Pie = function(data,options){
 		chart.Pie.defaults = {
 			segmentShowStroke : true,
@@ -23287,15 +23287,15 @@ window.Chart = function(context){
 			animateRotate : true,
 			animateScale : false,
 			onAnimationComplete : null
-		};		
+		};
 
 		var config = (options)? mergeChartConfig(chart.Pie.defaults,options) : chart.Pie.defaults;
-		
-		return new Pie(data,config,context);				
+
+		return new Pie(data,config,context);
 	};
-	
+
 	this.Doughnut = function(data,options){
-	
+
 		chart.Doughnut.defaults = {
 			segmentShowStroke : true,
 			segmentStrokeColor : "#d6d9dc",
@@ -23307,16 +23307,16 @@ window.Chart = function(context){
 			animateRotate : true,
 			animateScale : false,
 			onAnimationComplete : null
-		};		
+		};
 
 		var config = (options)? mergeChartConfig(chart.Doughnut.defaults,options) : chart.Doughnut.defaults;
-		
-		return new Doughnut(data,config,context);			
-		
+
+		return new Doughnut(data,config,context);
+
 	};
 
 	this.Line = function(data,options){
-	
+
 		chart.Line.defaults = {
 			scaleOverlay : false,
 			scaleOverride : false,
@@ -23345,12 +23345,12 @@ window.Chart = function(context){
 			animationSteps : 60,
 			animationEasing : "easeOutQuart",
 			onAnimationComplete : null
-		};		
+		};
 		var config = (options) ? mergeChartConfig(chart.Line.defaults,options) : chart.Line.defaults;
-		
+
 		return new Line(data,config,context);
 	}
-	
+
 	this.Bar = function(data,options){
 		chart.Bar.defaults = {
 			scaleOverlay : false,
@@ -23377,29 +23377,29 @@ window.Chart = function(context){
 			animationSteps : 60,
 			animationEasing : "easeOutQuart",
 			onAnimationComplete : null
-		};		
+		};
 		var config = (options) ? mergeChartConfig(chart.Bar.defaults,options) : chart.Bar.defaults;
-		
-		return new Bar(data,config,context);		
+
+		return new Bar(data,config,context);
 	}
-	
+
 	var clear = function(c){
 		c.clearRect(0, 0, width, height);
 	};
 
 	var PolarArea = function(data,config,ctx){
-		var maxSize, scaleHop, calculatedScale, labelHeight, scaleHeight, valueBounds, labelTemplateString;		
-		
-		
+		var maxSize, scaleHop, calculatedScale, labelHeight, scaleHeight, valueBounds, labelTemplateString;
+
+
 		calculateDrawingSizes();
-		
+
 		valueBounds = getValueBounds();
 
 		labelTemplateString = (config.scaleShowLabels)? config.scaleLabel : null;
 
 		//Check and set the scale
 		if (!config.scaleOverride){
-			
+
 			calculatedScale = calculateScale(scaleHeight,valueBounds.maxSteps,valueBounds.minSteps,valueBounds.maxValue,valueBounds.minValue,labelTemplateString);
 		}
 		else {
@@ -23411,7 +23411,7 @@ window.Chart = function(context){
 			}
 			populateLabels(labelTemplateString, calculatedScale.labels,calculatedScale.steps,config.scaleStartValue,config.scaleStepWidth);
 		}
-		
+
 		scaleHop = maxSize/(calculatedScale.steps);
 
 		//Wrap in an animation loop wrapper
@@ -23420,16 +23420,16 @@ window.Chart = function(context){
 		function calculateDrawingSizes(){
 			maxSize = (Min([width,height])/2);
 			//Remove whatever is larger - the font size or line width.
-			
+
 			maxSize -= Max([config.scaleFontSize*0.5,config.scaleLineWidth*0.5]);
-			
+
 			labelHeight = config.scaleFontSize*2;
 			//If we're drawing the backdrop - add the Y padding to the label height and remove from drawing region.
 			if (config.scaleShowLabelBackdrop){
 				labelHeight += (2 * config.scaleBackdropPaddingY);
 				maxSize -= config.scaleBackdropPaddingY*1.5;
 			}
-			
+
 			scaleHeight = maxSize;
 			//If the label height is less than 5, set it to 5 so we don't have lines on top of each other.
 			labelHeight = Default(labelHeight,5);
@@ -23509,24 +23509,24 @@ window.Chart = function(context){
 
 			var maxSteps = Math.floor((scaleHeight / (labelHeight*0.66)));
 			var minSteps = Math.floor((scaleHeight / labelHeight*0.5));
-			
+
 			return {
 				maxValue : upperValue,
 				minValue : lowerValue,
 				maxSteps : maxSteps,
 				minSteps : minSteps
 			};
-			
+
 
 		}
 	}
 
 	var Radar = function (data,config,ctx) {
-		var maxSize, scaleHop, calculatedScale, labelHeight, scaleHeight, valueBounds, labelTemplateString;	
-			
+		var maxSize, scaleHop, calculatedScale, labelHeight, scaleHeight, valueBounds, labelTemplateString;
+
 		//If no labels are defined set to an empty array, so referencing length for looping doesn't blow up.
 		if (!data.labels) data.labels = [];
-		
+
 		calculateDrawingSizes();
 
 		var valueBounds = getValueBounds();
@@ -23535,7 +23535,7 @@ window.Chart = function(context){
 
 		//Check and set the scale
 		if (!config.scaleOverride){
-			
+
 			calculatedScale = calculateScale(scaleHeight,valueBounds.maxSteps,valueBounds.minSteps,valueBounds.maxValue,valueBounds.minValue,labelTemplateString);
 		}
 		else {
@@ -23547,11 +23547,11 @@ window.Chart = function(context){
 			}
 			populateLabels(labelTemplateString, calculatedScale.labels,calculatedScale.steps,config.scaleStartValue,config.scaleStepWidth);
 		}
-		
+
 		scaleHop = maxSize/(calculatedScale.steps);
-		
+
 		animationLoop(config,drawScale,drawAllDataPoints,ctx);
-		
+
 		//Radar specific functions.
 		function drawAllDataPoints(animationDecimal){
 			var rotationDegree = (2*Math.PI)/data.datasets[0].data.length;
@@ -23559,27 +23559,27 @@ window.Chart = function(context){
 			ctx.save();
 			//translate to the centre of the canvas.
 			ctx.translate(width/2,height/2);
-			
+
 			//We accept multiple data sets for radar charts, so show loop through each set
 			for (var i=0; i<data.datasets.length; i++){
 				ctx.beginPath();
 
 				ctx.moveTo(0,animationDecimal*(-1*calculateOffset(data.datasets[i].data[0],calculatedScale,scaleHop)));
 				for (var j=1; j<data.datasets[i].data.length; j++){
-					ctx.rotate(rotationDegree);	
+					ctx.rotate(rotationDegree);
 					ctx.lineTo(0,animationDecimal*(-1*calculateOffset(data.datasets[i].data[j],calculatedScale,scaleHop)));
-			
+
 				}
 				ctx.closePath();
-				
-				
+
+
 				ctx.fillStyle = data.datasets[i].fillColor;
 				ctx.strokeStyle = data.datasets[i].strokeColor;
 				ctx.lineWidth = config.datasetStrokeWidth;
 				ctx.fill();
 				ctx.stroke();
-				
-								
+
+
 				if (config.pointDot){
 					ctx.fillStyle = data.datasets[i].pointColor;
 					ctx.strokeStyle = data.datasets[i].pointStrokeColor;
@@ -23590,26 +23590,26 @@ window.Chart = function(context){
 						ctx.arc(0,animationDecimal*(-1*calculateOffset(data.datasets[i].data[k],calculatedScale,scaleHop)),config.pointDotRadius,2*Math.PI,false);
 						ctx.fill();
 						ctx.stroke();
-					}					
-					
+					}
+
 				}
 				ctx.rotate(rotationDegree);
-				
+
 			}
 			ctx.restore();
-			
-			
+
+
 		}
 		function drawScale(){
 			var rotationDegree = (2*Math.PI)/data.datasets[0].data.length;
 			ctx.save();
-		    ctx.translate(width / 2, height / 2);	
-			
+		    ctx.translate(width / 2, height / 2);
+
 			if (config.angleShowLineOut){
-				ctx.strokeStyle = config.angleLineColor;		    	    
+				ctx.strokeStyle = config.angleLineColor;
 				ctx.lineWidth = config.angleLineWidth;
 				for (var h=0; h<data.datasets[0].data.length; h++){
-					
+
 				    ctx.rotate(rotationDegree);
 					ctx.beginPath();
 					ctx.moveTo(0,0);
@@ -23620,25 +23620,25 @@ window.Chart = function(context){
 
 			for (var i=0; i<calculatedScale.steps; i++){
 				ctx.beginPath();
-				
+
 				if(config.scaleShowLine){
 					ctx.strokeStyle = config.scaleLineColor;
 					ctx.lineWidth = config.scaleLineWidth;
-					ctx.moveTo(0,-scaleHop * (i+1));					
+					ctx.moveTo(0,-scaleHop * (i+1));
 					for (var j=0; j<data.datasets[0].data.length; j++){
 					    ctx.rotate(rotationDegree);
 						ctx.lineTo(0,-scaleHop * (i+1));
 					}
 					ctx.closePath();
-					ctx.stroke();			
-							
+					ctx.stroke();
+
 				}
-				
-				if (config.scaleShowLabels){				
+
+				if (config.scaleShowLabels){
 					ctx.textAlign = 'center';
-					ctx.font = config.scaleFontStyle + " " + config.scaleFontSize+"px " + config.scaleFontFamily; 
+					ctx.font = config.scaleFontStyle + " " + config.scaleFontSize+"px " + config.scaleFontFamily;
 					ctx.textBaseline = "middle";
-					
+
 					if (config.scaleShowLabelBackdrop){
 						var textWidth = ctx.measureText(calculatedScale.labels[i]).width;
 						ctx.fillStyle = config.scaleBackdropColor;
@@ -23650,18 +23650,18 @@ window.Chart = function(context){
 							Math.round(config.scaleFontSize + (config.scaleBackdropPaddingY*2)) //Height
 						);
 						ctx.fill();
-					}						
+					}
 					ctx.fillStyle = config.scaleFontColor;
 					ctx.fillText(calculatedScale.labels[i],0,-scaleHop*(i+1));
 				}
 
 			}
-			for (var k=0; k<data.labels.length; k++){				
+			for (var k=0; k<data.labels.length; k++){
 			ctx.font = config.pointLabelFontStyle + " " + config.pointLabelFontSize+"px " + config.pointLabelFontFamily;
 			ctx.fillStyle = config.pointLabelFontColor;
 				var opposite = Math.sin(rotationDegree*k) * (maxSize + config.pointLabelFontSize);
 				var adjacent = Math.cos(rotationDegree*k) * (maxSize + config.pointLabelFontSize);
-				
+
 				if(rotationDegree*k == Math.PI || rotationDegree*k == 0){
 					ctx.textAlign = "center";
 				}
@@ -23671,11 +23671,11 @@ window.Chart = function(context){
 				else{
 					ctx.textAlign = "left";
 				}
-				
+
 				ctx.textBaseline = "middle";
-				
+
 				ctx.fillText(data.labels[k],opposite,-adjacent);
-				
+
 			}
 			ctx.restore();
 		};
@@ -23683,17 +23683,17 @@ window.Chart = function(context){
 			maxSize = (Min([width,height])/2);
 
 			labelHeight = config.scaleFontSize*2;
-			
+
 			var labelLength = 0;
 			for (var i=0; i<data.labels.length; i++){
 				ctx.font = config.pointLabelFontStyle + " " + config.pointLabelFontSize+"px " + config.pointLabelFontFamily;
 				var textMeasurement = ctx.measureText(data.labels[i]).width;
 				if(textMeasurement>labelLength) labelLength = textMeasurement;
 			}
-			
+
 			//Figure out whats the largest - the height of the text or the width of what's there, and minus it from the maximum usable size.
-			maxSize -= Max([labelLength,((config.pointLabelFontSize/2)*1.5)]);				
-			
+			maxSize -= Max([labelLength,((config.pointLabelFontSize/2)*1.5)]);
+
 			maxSize -= config.pointLabelFontSize;
 			maxSize = CapValue(maxSize, null, 0);
 			scaleHeight = maxSize;
@@ -23703,7 +23703,7 @@ window.Chart = function(context){
 		function getValueBounds() {
 			var upperValue = Number.MIN_VALUE;
 			var lowerValue = Number.MAX_VALUE;
-			
+
 			for (var i=0; i<data.datasets.length; i++){
 				for (var j=0; j<data.datasets[i].data.length; j++){
 					if (data.datasets[i].data[j] > upperValue){upperValue = data.datasets[i].data[j]}
@@ -23713,31 +23713,31 @@ window.Chart = function(context){
 
 			var maxSteps = Math.floor((scaleHeight / (labelHeight*0.66)));
 			var minSteps = Math.floor((scaleHeight / labelHeight*0.5));
-			
+
 			return {
 				maxValue : upperValue,
 				minValue : lowerValue,
 				maxSteps : maxSteps,
 				minSteps : minSteps
 			};
-			
+
 
 		}
 	}
 
 	var Pie = function(data,config,ctx){
 		var segmentTotal = 0;
-		
+
 		//In case we have a canvas that is not a square. Minus 5 pixels as padding round the edge.
 		var pieRadius = Min([height/2,width/2]) - 5;
-		
+
 		for (var i=0; i<data.length; i++){
 			segmentTotal += data[i].value;
 		}
-		
-		
+
+
 		animationLoop(config,null,drawPieSegments,ctx);
-				
+
 		function drawPieSegments (animationDecimal){
 			var cumulativeAngle = -Math.PI/2,
 			scaleAnimation = 1,
@@ -23758,33 +23758,33 @@ window.Chart = function(context){
 				ctx.closePath();
 				ctx.fillStyle = data[i].color;
 				ctx.fill();
-				
+
 				if(config.segmentShowStroke){
 					ctx.lineWidth = config.segmentStrokeWidth;
 					ctx.strokeStyle = config.segmentStrokeColor;
 					ctx.stroke();
 				}
 				cumulativeAngle += segmentAngle;
-			}			
-		}		
+			}
+		}
 	}
 
 	var Doughnut = function(data,config,ctx){
 		var segmentTotal = 0;
-		
+
 		//In case we have a canvas that is not a square. Minus 5 pixels as padding round the edge.
 		var doughnutRadius = Min([height/2,width/2]) - 5;
-		
+
 		var cutoutRadius = doughnutRadius * (config.percentageInnerCutout/100);
-		
+
 		for (var i=0; i<data.length; i++){
 			segmentTotal += data[i].value;
 		}
-		
-		
+
+
 		animationLoop(config,null,drawPieSegments,ctx);
-		
-		
+
+
 		function drawPieSegments (animationDecimal){
 			var cumulativeAngle = -Math.PI/2,
 			scaleAnimation = 1,
@@ -23805,30 +23805,30 @@ window.Chart = function(context){
 				ctx.closePath();
 				ctx.fillStyle = data[i].color;
 				ctx.fill();
-				
+
 				if(config.segmentShowStroke){
 					ctx.lineWidth = config.segmentStrokeWidth;
 					ctx.strokeStyle = config.segmentStrokeColor;
 					ctx.stroke();
 				}
 				cumulativeAngle += segmentAngle;
-			}			
-		}			
-		
-		
-		
+			}
+		}
+
+
+
 	}
 
 	var Line = function(data,config,ctx){
 		var maxSize, scaleHop, calculatedScale, labelHeight, scaleHeight, valueBounds, labelTemplateString, valueHop,widestXLabel, xAxisLength,yAxisPosX,xAxisPosY, rotateLabels = 0;
-			
+
 		calculateDrawingSizes();
-		
+
 		valueBounds = getValueBounds();
 		//Check and set the scale
 		labelTemplateString = (config.scaleShowLabels)? config.scaleLabel : "";
 		if (!config.scaleOverride){
-			
+
 			calculatedScale = calculateScale(scaleHeight,valueBounds.maxSteps,valueBounds.minSteps,valueBounds.maxValue,valueBounds.minValue,labelTemplateString);
 		}
 		else {
@@ -23840,11 +23840,11 @@ window.Chart = function(context){
 			}
 			populateLabels(labelTemplateString, calculatedScale.labels,calculatedScale.steps,config.scaleStartValue,config.scaleStepWidth);
 		}
-		
+
 		scaleHop = Math.floor(scaleHeight/calculatedScale.steps);
 		calculateXAxisSize();
-		animationLoop(config,drawScale,drawLines,ctx);		
-		
+		animationLoop(config,drawScale,drawLines,ctx);
+
 		function drawLines(animPc){
 			for (var i=0; i<data.datasets.length; i++){
 				ctx.strokeStyle = data.datasets[i].strokeColor;
@@ -23883,9 +23883,9 @@ window.Chart = function(context){
 					}
 				}
 			}
-			
+
 			function yPos(dataSet,iteration){
-				return xAxisPosY - animPc*(calculateOffset(data.datasets[dataSet].data[iteration],calculatedScale,scaleHop));			
+				return xAxisPosY - animPc*(calculateOffset(data.datasets[dataSet].data[iteration],calculatedScale,scaleHop));
 			}
 			function xPos(iteration){
 				return yAxisPosX + (valueHop * iteration);
@@ -23899,8 +23899,8 @@ window.Chart = function(context){
 			ctx.moveTo(width-widestXLabel/2+5,xAxisPosY);
 			ctx.lineTo(width-(widestXLabel/2)-xAxisLength-5,xAxisPosY);
 			ctx.stroke();
-			
-			
+
+
 			if (rotateLabels > 0){
 				ctx.save();
 				ctx.textAlign = "right";
@@ -23917,26 +23917,26 @@ window.Chart = function(context){
 					ctx.fillText(data.labels[i], 0,0);
 					ctx.restore();
 				}
-				
+
 				else{
-					ctx.fillText(data.labels[i], yAxisPosX + i*valueHop,xAxisPosY + config.scaleFontSize+3);					
+					ctx.fillText(data.labels[i], yAxisPosX + i*valueHop,xAxisPosY + config.scaleFontSize+3);
 				}
 
 				ctx.beginPath();
 				ctx.moveTo(yAxisPosX + i * valueHop, xAxisPosY+3);
-				
+
 				//Check i isnt 0, so we dont go over the Y axis twice.
 				if(config.scaleShowGridLines && i>0){
 					ctx.lineWidth = config.scaleGridLineWidth;
-					ctx.strokeStyle = config.scaleGridLineColor;					
+					ctx.strokeStyle = config.scaleGridLineColor;
 					ctx.lineTo(yAxisPosX + i * valueHop, 5);
 				}
 				else{
-					ctx.lineTo(yAxisPosX + i * valueHop, xAxisPosY+3);				
+					ctx.lineTo(yAxisPosX + i * valueHop, xAxisPosY+3);
 				}
 				ctx.stroke();
 			}
-			
+
 			//Y axis
 			ctx.lineWidth = config.scaleLineWidth;
 			ctx.strokeStyle = config.scaleLineColor;
@@ -23944,7 +23944,7 @@ window.Chart = function(context){
 			ctx.moveTo(yAxisPosX,xAxisPosY+5);
 			ctx.lineTo(yAxisPosX,5);
 			ctx.stroke();
-			
+
 			ctx.textAlign = "right";
 			ctx.textBaseline = "middle";
 			for (var j=0; j<calculatedScale.steps; j++){
@@ -23953,20 +23953,20 @@ window.Chart = function(context){
 				if (config.scaleShowGridLines){
 					ctx.lineWidth = config.scaleGridLineWidth;
 					ctx.strokeStyle = config.scaleGridLineColor;
-					ctx.lineTo(yAxisPosX + xAxisLength + 5,xAxisPosY - ((j+1) * scaleHop));					
+					ctx.lineTo(yAxisPosX + xAxisLength + 5,xAxisPosY - ((j+1) * scaleHop));
 				}
 				else{
 					ctx.lineTo(yAxisPosX-0.5,xAxisPosY - ((j+1) * scaleHop));
 				}
-				
+
 				ctx.stroke();
-				
+
 				if (config.scaleShowLabels){
 					ctx.fillText(calculatedScale.labels[j],yAxisPosX-8,xAxisPosY - ((j+1) * scaleHop));
 				}
 			}
-			
-			
+
+
 		}
 		function calculateXAxisSize(){
 			var longestText = 1;
@@ -23981,11 +23981,11 @@ window.Chart = function(context){
 				longestText +=10;
 			}
 			xAxisLength = width - longestText - widestXLabel;
-			valueHop = Math.floor(xAxisLength/(data.labels.length-1));	
-				
+			valueHop = Math.floor(xAxisLength/(data.labels.length-1));
+
 			yAxisPosX = width-widestXLabel/2-xAxisLength;
-			xAxisPosY = scaleHeight + config.scaleFontSize/2;				
-		}		
+			xAxisPosY = scaleHeight + config.scaleFontSize/2;
+		}
 		function calculateDrawingSizes(){
 			maxSize = height;
 
@@ -24001,7 +24001,7 @@ window.Chart = function(context){
 				rotateLabels = 45;
 				if (width/data.labels.length < Math.cos(rotateLabels) * widestXLabel){
 					rotateLabels = 90;
-					maxSize -= widestXLabel; 
+					maxSize -= widestXLabel;
 				}
 				else{
 					maxSize -= Math.sin(rotateLabels) * widestXLabel;
@@ -24010,21 +24010,21 @@ window.Chart = function(context){
 			else{
 				maxSize -= config.scaleFontSize;
 			}
-			
+
 			//Add a little padding between the x line and the text
 			maxSize -= 5;
-			
-			
+
+
 			labelHeight = config.scaleFontSize;
-			
+
 			maxSize -= labelHeight;
 			//Set 5 pixels greater than the font size to allow for a little padding from the X axis.
-			
+
 			scaleHeight = maxSize;
-			
+
 			//Then get the area above we can safely draw on.
-			
-		}		
+
+		}
 		function getValueBounds() {
 			var upperValue = Number.MIN_VALUE;
 			var lowerValue = Number.MAX_VALUE;
@@ -24034,33 +24034,33 @@ window.Chart = function(context){
 					if ( data.datasets[i].data[j] < lowerValue) { lowerValue = data.datasets[i].data[j] };
 				}
 			};
-	
+
 			var maxSteps = Math.floor((scaleHeight / (labelHeight*0.66)));
 			var minSteps = Math.floor((scaleHeight / labelHeight*0.5));
-			
+
 			return {
 				maxValue : upperValue,
 				minValue : lowerValue,
 				maxSteps : maxSteps,
 				minSteps : minSteps
 			};
-			
-	
+
+
 		}
 
-		
+
 	}
-	
+
 	var Bar = function(data,config,ctx){
 		var maxSize, scaleHop, calculatedScale, labelHeight, scaleHeight, valueBounds, labelTemplateString, valueHop,widestXLabel, xAxisLength,yAxisPosX,xAxisPosY,barWidth, rotateLabels = 0;
-			
+
 		calculateDrawingSizes();
-		
+
 		valueBounds = getValueBounds();
 		//Check and set the scale
 		labelTemplateString = (config.scaleShowLabels)? config.scaleLabel : "";
 		if (!config.scaleOverride){
-			
+
 			calculatedScale = calculateScale(scaleHeight,valueBounds.maxSteps,valueBounds.minSteps,valueBounds.maxValue,valueBounds.minValue,labelTemplateString);
 		}
 		else {
@@ -24072,11 +24072,11 @@ window.Chart = function(context){
 			}
 			populateLabels(labelTemplateString, calculatedScale.labels,calculatedScale.steps,config.scaleStartValue,config.scaleStepWidth);
 		}
-		
+
 		scaleHop = Math.floor(scaleHeight/calculatedScale.steps);
 		calculateXAxisSize();
-		animationLoop(config,drawScale,drawBars,ctx);		
-		
+		animationLoop(config,drawScale,drawBars,ctx);
+
 		function drawBars(animPc){
 			ctx.lineWidth = config.barStrokeWidth;
 			for (var i=0; i<data.datasets.length; i++){
@@ -24084,7 +24084,7 @@ window.Chart = function(context){
 					ctx.strokeStyle = data.datasets[i].strokeColor;
 				for (var j=0; j<data.datasets[i].data.length; j++){
 					var barOffset = yAxisPosX + config.barValueSpacing + valueHop*j + barWidth*i + config.barDatasetSpacing*i + config.barStrokeWidth*i;
-					
+
 					ctx.beginPath();
 					ctx.moveTo(barOffset, xAxisPosY);
 					ctx.lineTo(barOffset, xAxisPosY - animPc*calculateOffset(data.datasets[i].data[j],calculatedScale,scaleHop)+(config.barStrokeWidth/2));
@@ -24097,7 +24097,7 @@ window.Chart = function(context){
 					ctx.fill();
 				}
 			}
-			
+
 		}
 		function drawScale(){
 			//X axis line
@@ -24107,8 +24107,8 @@ window.Chart = function(context){
 			ctx.moveTo(width-widestXLabel/2+5,xAxisPosY);
 			ctx.lineTo(width-(widestXLabel/2)-xAxisLength-5,xAxisPosY);
 			ctx.stroke();
-			
-			
+
+
 			if (rotateLabels > 0){
 				ctx.save();
 				ctx.textAlign = "right";
@@ -24125,21 +24125,21 @@ window.Chart = function(context){
 					ctx.fillText(data.labels[i], 0,0);
 					ctx.restore();
 				}
-				
+
 				else{
-					ctx.fillText(data.labels[i], yAxisPosX + i*valueHop + valueHop/2,xAxisPosY + config.scaleFontSize+3);					
+					ctx.fillText(data.labels[i], yAxisPosX + i*valueHop + valueHop/2,xAxisPosY + config.scaleFontSize+3);
 				}
 
 				ctx.beginPath();
 				ctx.moveTo(yAxisPosX + (i+1) * valueHop, xAxisPosY+3);
-				
+
 				//Check i isnt 0, so we dont go over the Y axis twice.
 					ctx.lineWidth = config.scaleGridLineWidth;
-					ctx.strokeStyle = config.scaleGridLineColor;					
+					ctx.strokeStyle = config.scaleGridLineColor;
 					ctx.lineTo(yAxisPosX + (i+1) * valueHop, 5);
 				ctx.stroke();
 			}
-			
+
 			//Y axis
 			ctx.lineWidth = config.scaleLineWidth;
 			ctx.strokeStyle = config.scaleLineColor;
@@ -24147,7 +24147,7 @@ window.Chart = function(context){
 			ctx.moveTo(yAxisPosX,xAxisPosY+5);
 			ctx.lineTo(yAxisPosX,5);
 			ctx.stroke();
-			
+
 			ctx.textAlign = "right";
 			ctx.textBaseline = "middle";
 			for (var j=0; j<calculatedScale.steps; j++){
@@ -24156,19 +24156,19 @@ window.Chart = function(context){
 				if (config.scaleShowGridLines){
 					ctx.lineWidth = config.scaleGridLineWidth;
 					ctx.strokeStyle = config.scaleGridLineColor;
-					ctx.lineTo(yAxisPosX + xAxisLength + 5,xAxisPosY - ((j+1) * scaleHop));					
+					ctx.lineTo(yAxisPosX + xAxisLength + 5,xAxisPosY - ((j+1) * scaleHop));
 				}
 				else{
 					ctx.lineTo(yAxisPosX-0.5,xAxisPosY - ((j+1) * scaleHop));
 				}
-				
+
 				ctx.stroke();
 				if (config.scaleShowLabels){
 					ctx.fillText(calculatedScale.labels[j],yAxisPosX-8,xAxisPosY - ((j+1) * scaleHop));
 				}
 			}
-			
-			
+
+
 		}
 		function calculateXAxisSize(){
 			var longestText = 1;
@@ -24183,13 +24183,13 @@ window.Chart = function(context){
 				longestText +=10;
 			}
 			xAxisLength = width - longestText - widestXLabel;
-			valueHop = Math.floor(xAxisLength/(data.labels.length));	
-			
+			valueHop = Math.floor(xAxisLength/(data.labels.length));
+
 			barWidth = (valueHop - config.scaleGridLineWidth*2 - (config.barValueSpacing*2) - (config.barDatasetSpacing*data.datasets.length-1) - ((config.barStrokeWidth/2)*data.datasets.length-1))/data.datasets.length;
-			
+
 			yAxisPosX = width-widestXLabel/2-xAxisLength;
-			xAxisPosY = scaleHeight + config.scaleFontSize/2;				
-		}		
+			xAxisPosY = scaleHeight + config.scaleFontSize/2;
+		}
 		function calculateDrawingSizes(){
 			maxSize = height;
 
@@ -24205,7 +24205,7 @@ window.Chart = function(context){
 				rotateLabels = 45;
 				if (width/data.labels.length < Math.cos(rotateLabels) * widestXLabel){
 					rotateLabels = 90;
-					maxSize -= widestXLabel; 
+					maxSize -= widestXLabel;
 				}
 				else{
 					maxSize -= Math.sin(rotateLabels) * widestXLabel;
@@ -24214,21 +24214,21 @@ window.Chart = function(context){
 			else{
 				maxSize -= config.scaleFontSize;
 			}
-			
+
 			//Add a little padding between the x line and the text
 			maxSize -= 5;
-			
-			
+
+
 			labelHeight = config.scaleFontSize;
-			
+
 			maxSize -= labelHeight;
 			//Set 5 pixels greater than the font size to allow for a little padding from the X axis.
-			
+
 			scaleHeight = maxSize;
-			
+
 			//Then get the area above we can safely draw on.
-			
-		}		
+
+		}
 		function getValueBounds() {
 			var upperValue = Number.MIN_VALUE;
 			var lowerValue = Number.MAX_VALUE;
@@ -24238,39 +24238,39 @@ window.Chart = function(context){
 					if ( data.datasets[i].data[j] < lowerValue) { lowerValue = data.datasets[i].data[j] };
 				}
 			};
-	
+
 			var maxSteps = Math.floor((scaleHeight / (labelHeight*0.66)));
 			var minSteps = Math.floor((scaleHeight / labelHeight*0.5));
-			
+
 			return {
 				maxValue : upperValue,
 				minValue : lowerValue,
 				maxSteps : maxSteps,
 				minSteps : minSteps
 			};
-			
-	
+
+
 		}
 	}
-	
+
 	function calculateOffset(val,calculatedScale,scaleHop){
 		var outerValue = calculatedScale.steps * calculatedScale.stepValue;
 		var adjustedValue = val - calculatedScale.graphMin;
 		var scalingFactor = CapValue(adjustedValue/outerValue,1,0);
 		return (scaleHop*calculatedScale.steps) * scalingFactor;
 	}
-	
+
 	function animationLoop(config,drawScale,drawData,ctx){
 		var animFrameAmount = (config.animation)? 1/CapValue(config.animationSteps,Number.MAX_VALUE,1) : 1,
 			easingFunction = animationOptions[config.animationEasing],
 			percentAnimComplete =(config.animation)? 0 : 1;
-		
-	
-		
+
+
+
 		if (typeof drawScale !== "function") drawScale = function(){};
-		
+
 		requestAnimFrame(animLoop);
-		
+
 		function animateFrame(){
 			var easeAdjustedAnimationPercent =(config.animation)? CapValue(easingFunction(percentAnimComplete),null,0) : 1;
 			clear(ctx);
@@ -24280,12 +24280,12 @@ window.Chart = function(context){
 			} else {
 				drawScale();
 				drawData(easeAdjustedAnimationPercent);
-			}				
+			}
 		}
 		function animLoop(){
 			//We need to check if the animation is incomplete (less than 1), or complete (1).
 				percentAnimComplete += animFrameAmount;
-				animateFrame();	
+				animateFrame();
 				//Stop the loop continuing forever
 				if (percentAnimComplete <= 1){
 					requestAnimFrame(animLoop);
@@ -24293,14 +24293,14 @@ window.Chart = function(context){
 				else{
 					if (typeof config.onAnimationComplete == "function") config.onAnimationComplete();
 				}
-			
-		}		
-		
+
+		}
+
 	}
 
 	//Declare global functions to be called within this namespace here.
-	
-	
+
+
 	// shim layer with setTimeout fallback
 	var requestAnimFrame = (function(){
 		return window.requestAnimationFrame ||
@@ -24315,22 +24315,22 @@ window.Chart = function(context){
 
 	function calculateScale(drawingHeight,maxSteps,minSteps,maxValue,minValue,labelTemplateString){
 			var graphMin,graphMax,graphRange,stepValue,numberOfSteps,valueRange,rangeOrderOfMagnitude,decimalNum;
-			
+
 			valueRange = maxValue - minValue;
-			
+
 			rangeOrderOfMagnitude = calculateOrderOfMagnitude(valueRange);
 
         	graphMin = Math.floor(minValue / (1 * Math.pow(10, rangeOrderOfMagnitude))) * Math.pow(10, rangeOrderOfMagnitude);
-            
+
             graphMax = Math.ceil(maxValue / (1 * Math.pow(10, rangeOrderOfMagnitude))) * Math.pow(10, rangeOrderOfMagnitude);
-            
+
             graphRange = graphMax - graphMin;
-            
+
             stepValue = Math.pow(10, rangeOrderOfMagnitude);
-            
+
 	        numberOfSteps = Math.round(graphRange / stepValue);
-	        
-	        //Compare number of steps to the max and min for that size graph, and add in half steps if need be.	        
+
+	        //Compare number of steps to the max and min for that size graph, and add in half steps if need be.
 	        while(numberOfSteps < minSteps || numberOfSteps > maxSteps) {
 	        	if (numberOfSteps < minSteps){
 			        stepValue /= 2;
@@ -24344,18 +24344,18 @@ window.Chart = function(context){
 
 	        var labels = [];
 	        populateLabels(labelTemplateString, labels, numberOfSteps, graphMin, stepValue);
-		
+
 	        return {
 		        steps : numberOfSteps,
 				stepValue : stepValue,
 				graphMin : graphMin,
-				labels : labels		        
-		        
+				labels : labels
+
 	        }
-		
+
 			function calculateOrderOfMagnitude(val){
 			  return Math.floor(Math.log(val) / Math.LN10);
-			}		
+			}
 
 
 	}
@@ -24369,7 +24369,7 @@ window.Chart = function(context){
             }
         }
     }
-	
+
 	//Max value from array
 	function Max( array ){
 		return Math.max.apply( Math, array );
@@ -24412,34 +24412,34 @@ window.Chart = function(context){
 		else{
 			return 0;
 		}
-		
-	} 
-	
+
+	}
+
 	function mergeChartConfig(defaults,userDefined){
 		var returnObj = {};
 	    for (var attrname in defaults) { returnObj[attrname] = defaults[attrname]; }
 	    for (var attrname in userDefined) { returnObj[attrname] = userDefined[attrname]; }
 	    return returnObj;
 	}
-	
+
 	//Javascript micro templating by John Resig - source at http://ejohn.org/blog/javascript-micro-templating/
 	  var cache = {};
-	 
+
 	  function tmpl(str, data){
 	    // Figure out if we're getting a template, or if we need to
 	    // load the template - and be sure to cache the result.
 	    var fn = !/\W/.test(str) ?
 	      cache[str] = cache[str] ||
 	        tmpl(document.getElementById(str).innerHTML) :
-	     
+
 	      // Generate a reusable function that will serve as a template
 	      // generator (and which will be cached).
 	      new Function("obj",
 	        "var p=[],print=function(){p.push.apply(p,arguments);};" +
-	       
+
 	        // Introduce the data as local variables using with(){}
 	        "with(obj){p.push('" +
-	       
+
 	        // Convert the template into pure JavaScript
 	        str
 	          .replace(/[\r\t\n]/g, " ")
@@ -24450,7 +24450,7 @@ window.Chart = function(context){
 	          .split("%>").join("p.push('")
 	          .split("\r").join("\\'")
 	      + "');}return p.join('');");
-	   
+
 	    // Provide some basic currying to the user
 	    return data ? fn( data ) : fn;
 	  };
@@ -27649,12 +27649,12 @@ var Gritter = function () {
 /*
 
 	jQuery Tags Input Plugin 1.3.3
-	
+
 	Copyright (c) 2011 XOXCO, Inc
-	
+
 	Documentation for this plugin lives here:
 	http://xoxco.com/clickable/jquery-tags-input
-	
+
 	Licensed under the MIT license:
 	http://www.opensource.org/licenses/mit-license.php
 
@@ -27672,9 +27672,9 @@ var Gritter = function () {
 	        val = '',
 	        input = $(this),
 	        testSubject = $('#'+$(this).data('tester_id'));
-	
+
 	    if (val === (val = input.val())) {return;}
-	
+
 	    // Enter new content into testSubject
 	    var escaped = val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 	    testSubject.html(escaped);
@@ -27684,7 +27684,7 @@ var Gritter = function () {
 	        currentWidth = input.width(),
 	        isValidWidthChange = (newWidth < currentWidth && newWidth >= minWidth)
 	                             || (newWidth > minWidth && newWidth < maxWidth);
-	
+
 	    // Animate width
 	    if (isValidWidthChange) {
 	        input.width(newWidth);
@@ -27720,19 +27720,19 @@ var Gritter = function () {
     input.data('tester_id', testerId);
     input.css('width', minWidth);
   };
-  
+
 	$.fn.addTag = function(value,options) {
 			options = jQuery.extend({focus:false,callback:true},options);
-			this.each(function() { 
+			this.each(function() {
 				var id = $(this).attr('id');
 
 				var tagslist = $(this).val().split(delimiter[id]);
-				if (tagslist[0] == '') { 
+				if (tagslist[0] == '') {
 					tagslist = new Array();
 				}
 
 				value = jQuery.trim(value);
-		
+
 				if (options.unique) {
 					var skipTag = $(this).tagExist(value);
 					if(skipTag == true) {
@@ -27740,10 +27740,10 @@ var Gritter = function () {
     				    $('#'+id+'_tag').addClass('not_valid');
     				}
 				} else {
-					var skipTag = false; 
+					var skipTag = false;
 				}
-				
-				if (value !='' && skipTag != true) { 
+
+				if (value !='' && skipTag != true) {
                     $('<span>').addClass('tag').append(
                         $('<span>').text(value).append('&nbsp;&nbsp;'),
                         $('<a class="tagsinput-remove-link">', {
@@ -27756,16 +27756,16 @@ var Gritter = function () {
                     ).insertBefore('#' + id + '_addTag');
 
 					tagslist.push(value);
-				
+
 					$('#'+id+'_tag').val('');
 					if (options.focus) {
 						$('#'+id+'_tag').focus();
-					} else {		
+					} else {
 						$('#'+id+'_tag').blur();
 					}
-					
+
 					$.fn.tagsInput.updateTagsField(this,tagslist);
-					
+
 					if (options.callback && tags_callbacks[id] && tags_callbacks[id]['onAddTag']) {
 						var f = tags_callbacks[id]['onAddTag'];
 						f.call(this, value);
@@ -27775,29 +27775,29 @@ var Gritter = function () {
 						var i = tagslist.length;
 						var f = tags_callbacks[id]['onChange'];
 						f.call(this, $(this), tagslist[i-1]);
-					}					
+					}
 				}
-		
-			});		
-			
+
+			});
+
 			return false;
 		};
-		
-	$.fn.removeTag = function(value) { 
+
+	$.fn.removeTag = function(value) {
 			value = unescape(value);
-			this.each(function() { 
+			this.each(function() {
 				var id = $(this).attr('id');
-	
+
 				var old = $(this).val().split(delimiter[id]);
-					
+
 				$('#'+id+'_tagsinput .tag').remove();
 				str = '';
-				for (i=0; i< old.length; i++) { 
-					if (old[i]!=value) { 
+				for (i=0; i< old.length; i++) {
+					if (old[i]!=value) {
 						str = str + delimiter[id] +old[i];
 					}
 				}
-				
+
 				$.fn.tagsInput.importTags(this,str);
 
 				if (tags_callbacks[id] && tags_callbacks[id]['onRemoveTag']) {
@@ -27805,24 +27805,24 @@ var Gritter = function () {
 					f.call(this, value);
 				}
 			});
-					
+
 			return false;
 		};
-	
+
 	$.fn.tagExist = function(val) {
 		var id = $(this).attr('id');
 		var tagslist = $(this).val().split(delimiter[id]);
 		return (jQuery.inArray(val, tagslist) >= 0); //true when tag exists, false when not
 	};
-	
+
 	// clear all existing tags and import new ones from a string
 	$.fn.importTags = function(str) {
                 id = $(this).attr('id');
 		$('#'+id+'_tagsinput .tag').remove();
 		$.fn.tagsInput.importTags(this,str);
 	}
-		
-	$.fn.tagsInput = function(options) { 
+
+	$.fn.tagsInput = function(options) {
     var settings = jQuery.extend({
       interactive:true,
       defaultText:'',
@@ -27840,15 +27840,15 @@ var Gritter = function () {
       inputPadding: 6*2
     },options);
 
-		this.each(function() { 
-			if (settings.hide) { 
-				$(this).hide();				
+		this.each(function() {
+			if (settings.hide) {
+				$(this).hide();
 			}
 			var id = $(this).attr('id');
 			if (!id || delimiter[$(this).attr('id')]) {
 				id = $(this).attr('id', 'tags' + new Date().getTime()).attr('id');
 			}
-			
+
 			var data = jQuery.extend({
 				pid:id,
 				real_input: '#'+id,
@@ -27856,56 +27856,56 @@ var Gritter = function () {
 				input_wrapper: '#'+id+'_addTag',
 				fake_input: '#'+id+'_tag'
 			},settings);
-	
+
 			delimiter[id] = data.delimiter;
-			
+
 			if (settings.onAddTag || settings.onRemoveTag || settings.onChange) {
 				tags_callbacks[id] = new Array();
 				tags_callbacks[id]['onAddTag'] = settings.onAddTag;
 				tags_callbacks[id]['onRemoveTag'] = settings.onRemoveTag;
 				tags_callbacks[id]['onChange'] = settings.onChange;
 			}
-	
+
             var containerClass = $('#'+id).attr('class').replace('tagsinput', '');
 			var markup = '<div id="'+id+'_tagsinput" class="tagsinput '+containerClass+'"><div class="tagsinput-add-container" id="'+id+'_addTag"><div class="tagsinput-add"></div>';
-			
+
 			if (settings.interactive) {
 				markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" />';
 			}
-			
+
 			markup = markup + '</div></div>';
-			
+
 			$(markup).insertAfter(this);
 
 			$(data.holder).css('width',settings.width);
 			$(data.holder).css('min-height',settings.height);
 			$(data.holder).css('height','100%');
-	
-			if ($(data.real_input).val()!='') { 
+
+			if ($(data.real_input).val()!='') {
 				$.fn.tagsInput.importTags($(data.real_input),$(data.real_input).val());
-			}		
-			if (settings.interactive) { 
+			}
+			if (settings.interactive) {
 				$(data.fake_input).val($(data.fake_input).attr('data-default'));
 				$(data.fake_input).css('color',settings.placeholderColor);
 		        $(data.fake_input).resetAutosize(settings);
-		
+
 				$(data.holder).bind('click',data,function(event) {
 					$(event.data.fake_input).focus();
 				});
-			
+
 				$(data.fake_input).bind('focus',data,function(event) {
-					if ($(event.data.fake_input).val()==$(event.data.fake_input).attr('data-default')) { 
+					if ($(event.data.fake_input).val()==$(event.data.fake_input).attr('data-default')) {
 						$(event.data.fake_input).val('');
 					}
-					$(event.data.fake_input).css('color','#000000');		
+					$(event.data.fake_input).css('color','#000000');
 				});
-						
+
 				if (settings.autocomplete_url != undefined) {
 					autocomplete_options = {source: settings.autocomplete_url};
-					for (attrname in settings.autocomplete) { 
-						autocomplete_options[attrname] = settings.autocomplete[attrname]; 
+					for (attrname in settings.autocomplete) {
+						autocomplete_options[attrname] = settings.autocomplete[attrname];
 					}
-				
+
 					if (jQuery.Autocompleter !== undefined) {
 						$(data.fake_input).autocomplete(settings.autocomplete_url, settings.autocomplete);
 						$(data.fake_input).bind('result',data,function(event,data,formatted) {
@@ -27920,14 +27920,14 @@ var Gritter = function () {
 							return false;
 						});
 					}
-				
-					
+
+
 				} else {
 						// if a user tabs out of the field, create a new tag
 						// this is only available if autocomplete is not used.
-						$(data.fake_input).bind('blur',data,function(event) { 
+						$(data.fake_input).bind('blur',data,function(event) {
 							var d = $(this).attr('data-default');
-							if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) { 
+							if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) {
 								if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
 									$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
 							} else {
@@ -27936,7 +27936,7 @@ var Gritter = function () {
 							}
 							return false;
 						});
-				
+
 				}
 				// if user types a comma, create a new tag
 				$(data.fake_input).bind('keypress',data,function(event) {
@@ -27948,7 +27948,7 @@ var Gritter = function () {
 						return false;
 					} else if (event.data.autosize) {
 			            $(event.data.fake_input).doAutosize(settings);
-            
+
           			}
 				});
 				//Delete last tag on backspace
@@ -27965,7 +27965,7 @@ var Gritter = function () {
 					}
 				});
 				$(data.fake_input).blur();
-				
+
 				//Removes the not_valid class when user changes the value of the fake input
 				if(data.unique) {
 				    $(data.fake_input).keydown(function(event){
@@ -27976,21 +27976,21 @@ var Gritter = function () {
 				}
 			} // if settings.interactive
 		});
-			
+
 		return this;
-	
+
 	};
-	
-	$.fn.tagsInput.updateTagsField = function(obj,tagslist) { 
+
+	$.fn.tagsInput.updateTagsField = function(obj,tagslist) {
 		var id = $(obj).attr('id');
 		$(obj).val(tagslist.join(delimiter[id]));
 	};
-	
-	$.fn.tagsInput.importTags = function(obj,val) {			
+
+	$.fn.tagsInput.importTags = function(obj,val) {
 		$(obj).val('');
 		var id = $(obj).attr('id');
 		var tags = val.split(delimiter[id]);
-		for (i=0; i<tags.length; i++) { 
+		for (i=0; i<tags.length; i++) {
 			$(obj).addTag(tags[i],{focus:false,callback:false});
 		}
 		if(tags_callbacks[id] && tags_callbacks[id]['onChange'])

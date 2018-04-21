@@ -7,10 +7,8 @@
   <meta name="author" content="Dennis Ji">
   <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="<?php echo base_url(); ?>assets/js/dashgum_custom.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
   <script src="<?php echo base_url(); ?>assets/js/admin_header.js"></script>
-
   <link href="<?php echo base_url(); ?>assets/css/admin_vendor_style.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/admin_custom_style.css" rel="stylesheet">
 
@@ -30,109 +28,10 @@
   ?>
   <!-- start: Header -->
   <section id="container" >
-    <!-- **********************************************************************************************************************************************************
-    TOP BAR CONTENT & NOTIFICATIONS
-    *********************************************************************************************************************************************************** -->
-    <!--header start-->
-    <header class="header black-bg">
-      <div class="sidebar-toggle-box">
-        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
-      </div>
-      <!--logo start-->
-      <a class="logo" href="<? base_url().'dashboard/home' ?>"><b><?= $our_company ?> Admin</b></a>
-      <!--logo end-->
-      <div class="top-menu">
-        <ul class="nav pull-right top-menu">
-          <li><a class="logout" href="<?= base_url() ?>">Logout</a></li>
-        </ul>
-      </div>
-    </header>
-    <!--header end-->
-
-    <!-- **********************************************************************************************************************************************************
-    MAIN SIDEBAR MENU
-    *********************************************************************************************************************************************************** -->
-    <!--sidebar start-->
-    <aside>
-      <div id="sidebar"  class="nav-collapse ">
-        <!-- sidebar menu start-->
-        <ul class="sidebar-menu" id="nav-accordion">
-          <!--	  <p class="centered"><a><img class="img-circle" width="60"></a></p>-->
-          <h5 class="centered">Mark Cangelosi</h5>
-          <li class="mt">
-            <a href="<?= base_url() ?>dashboard/home">
-              <i class="fa fa-dashboard"></i>
-              <span>Dashboard</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="<?= base_url() ?>enquiries/inbox">
-              <i class="fa fa-envelope"></i>
-              <span>Messages</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="<?= base_url() ?>store_items/manage">
-              <i class="fa fa-tag"></i>
-              <span>Manage Items</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="<?= base_url() ?>lessons/manage_lessons">
-              <i class="fa fa-anchor"></i>
-              <span>Manage Lessons</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="<?= base_url() ?>boats/manage_boats">
-              <i class="fa fa-anchor"></i>
-              <span>Manage Boats</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="<?= base_url() ?>store_categories/manage">
-              <i class="fa fa-bars"></i>
-              <span>Manage Categories</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a class= "hidden-tablet" href="<?= base_url() ?>homepage_blocks/manage">
-              <i class="fa fa-star"></i>
-              <span>Homepage Offers</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="<?= base_url() ?>webpages/manage">
-              <i class="fa fa-file"></i>
-              <span>CMS</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="<?= base_url() ?>blog/manage">
-              <i class="fa fa-file"></i>
-              <span>Manage Blog</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="<?= base_url() ?>users/manage">
-              <i class="fa fa-user"></i>
-              <span>Accounts</span>
-            </a>
-          </li>
-          <li class="sub-menu">
-            <a href="<?= base_url() ?>admin_info/view_admin_info">
-              <i class="fa fa-user"></i>
-              <span>My Info</span>
-            </a>
-          </li>
-        </ul>
-        <!-- sidebar menu end-->
-      </div>
-    </aside>
-    <!--sidebar end-->
-    <!-- **********************************************************************************************************************************************************
-    MAIN CONTENT
-    *********************************************************************************************************************************************************** -->
+    <?php
+    include('admin_header.php');
+    include('admin_side_bar.php');
+     ?>
     <!--main content start-->
     <section id="main-content">
       <section class="wrapper">
@@ -145,16 +44,12 @@
         </div>
       </section>
     </section>
-
     <!--main content end-->
-    <!--footer start-->
-    <footer class="site-footer">
-      <div class="text-center">
-        Twincity Water Sports
-      </div>
-    </footer>
-    <!--footer end-->
+    <?php
+    include('admin_footer.php');
+     ?>
   </section>
-
+  <script src="<?php echo base_url(); ?>assets/js/admin_footer.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/dashgum_custom.js"></script>
 </body>
 </html>
