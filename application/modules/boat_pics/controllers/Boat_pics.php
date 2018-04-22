@@ -6,15 +6,21 @@ class Boat_pics extends MX_Controller {
   }
 
   function get_picture_name_by_boat_pic_id($id) {
-    $mysql_query = "SELECT picture_name FROM boat_pics WHERE id = $id";
-    $query = $this->_custom_query($mysql_query);
-    return $query->row()->picture_name();
+    $query = $this->get_where($id);$ids = [];
+    $picture_name = [];
+    foreach($query->result() as $row) {
+
+      $picture_name[] = $row->picture_name;
+    }
+    return $picture_name;
   }
 
   function get_boat_pic_ids_by_boat_id($boat_rental_id) {
-    $query = $this->get_where($boat_rental_id);
+    $query = $this->get_where_custom("boat_rental_id",$boat_rental_id);
     $ids = [];
+
     foreach($query->result() as $row) {
+
       $ids[] = $row->id;
     }
     return $ids;
@@ -43,6 +49,7 @@ class Boat_pics extends MX_Controller {
   }
 
   function get_where($id) {
+
     if (!is_numeric($id)) {
       die('Non-numeric variable!');
     }

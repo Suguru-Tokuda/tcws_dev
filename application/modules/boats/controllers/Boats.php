@@ -205,10 +205,10 @@ class Boats extends MX_Controller {
   function _process_delete_boat($boat_rental_id) {
     $this->load->module('boat_pics');
     $boat_pic_ids = $this->boat_pics->get_boat_pic_ids_by_boat_id($boat_rental_id);
-
     // loop through picture ids and delete
     foreach($boat_pic_ids as $key => $value) {
-      $picture_name = $this->boat_pics->get_picture_name_by_boat_pic_id($value);
+      $pic_name = $this->boat_pics->get_picture_name_by_boat_pic_id($value);
+      foreach ($pic_name as $picture_name) {
       $big_pic_path = './boat_big_pics'.$picture_name;
       $small_pic_path = './boat_pics'.$picture_name;
       // attemp to delete item pics
@@ -219,6 +219,8 @@ class Boats extends MX_Controller {
         unlink($small_pic_path);
       }
     }
+    }
+
     $this->boat_pics->_delete_where('boat_rental_id', $boat_rental_id);
     $this->_delete($boat_rental_id);
   }
