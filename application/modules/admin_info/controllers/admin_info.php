@@ -1,5 +1,5 @@
 <?php
-class admin_info extends MX_Controller {
+class Admin_info extends MX_Controller {
 
   function __construct() {
     parent::__construct();
@@ -8,6 +8,22 @@ class admin_info extends MX_Controller {
     $this->load->library('upload');
     $this->load->library('image_lib');
     $this->form_validation->set_ci_reference($this);
+  }
+
+  // Returns Admin's info
+  function get_admin_info() {
+    $query = $this->get_where(1);
+    $row = $query->row();
+    $data['first_name'] = $row->first_name;
+    $data['last_name'] = $row->last_name;
+    $data['phone'] = $row->phone;
+    $data['email'] = $row->email;
+    $data['company_name'] = $row->company_name;
+    $data['addresss'] = $row->address;
+    $data['city'] = $row->city;
+    $data['state'] = $row->state;
+    $data['description'] = $row->description;
+    return $data;
   }
 
   function view_admin_info() {
@@ -41,7 +57,7 @@ class admin_info extends MX_Controller {
       redirect('admin_info/view_admin_info');
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
-      $this->form_validation->set_rules('First_name', 'First Name', 'required');
+      $this->form_validation->set_rules('first_name', 'First Name', 'required');
       $this->form_validation->set_rules('last_name', 'Last Name', 'required');
       $this->form_validation->set_rules('phone', 'Phone', 'required');
       $this->form_validation->set_rules('email', 'Email', 'required');
@@ -50,7 +66,8 @@ class admin_info extends MX_Controller {
       $this->form_validation->set_rules('city', 'City', 'required');
       $this->form_validation->set_rules('state', 'State', 'required');
       $this->form_validation->set_rules('descritpion', 'Descritpion', 'required');
-    //  if ($this->form_validation->run()) {
+
+      if ($this->form_validation->run()) {
         $data = $this->fetch_data_from_post();
         if (is_numeric($id)) {
           // update
@@ -67,30 +84,29 @@ class admin_info extends MX_Controller {
           $this->session->set_flashdata('item', $value);
           redirect('admin_info/view_admin_info');
         }
-      } else {
-        echo validation_errors();
       }
-  //  }
-    if ((is_numeric($id)) && ($submit != "submit")) {
-      $data = $this->fetch_data_from_db($id);
-    } else {
-      $data = $this->fetch_data_from_post();
+
+      if ((is_numeric($id)) && ($submit != "submit")) {
+        $data = $this->fetch_data_from_db($id);
+      } else {
+        $data = $this->fetch_data_from_post();
+      }
+
+      if (!is_numeric($id)) {
+        $data['headline'] = "Add information";
+        $id = "";
+      } else {
+        $data['headline'] = "Update Information";
+      }
+
+      $data['id'] = $id;
+      $data['flash'] = $this->session->flashdata('item');
+
+      $data['states'] = $this->site_settings->_get_states_dropdown();
+      $data['view_file'] = "update_admin_info";
+      $this->load->module('templates');
+      $this->templates->admin($data);
     }
-
-    if (!is_numeric($id)) {
-      $data['headline'] = "Add information";
-      $id = "";
-    } else {
-      $data['headline'] = "Update Information";
-    }
-
-    $data['id'] = $id;
-    $data['flash'] = $this->session->flashdata('item');
-
-    $data['states'] = $this->site_settings->_get_states_dropdown();
-    $data['view_file'] = "update_admin_info";
-    $this->load->module('templates');
-    $this->templates->admin($data);
   }
 
   function upload_admin_image() {
@@ -106,7 +122,6 @@ class admin_info extends MX_Controller {
     $this->load->module('templates');
     $this->templates->admin($data);
   }
-
 
   function do_upload() {
     $this->load->module('site_security');
@@ -163,16 +178,16 @@ class admin_info extends MX_Controller {
     }
   }
 
-    function _generate_thumbnail($file_name) {
-      $config['image_library'] = 'gd2';
-      $config['source_image'] = './media/admin_pics/'.$file_name;
-      $config['new_image'] = './media/admin_pics_1/'.$file_name.$id;
-      $config['maintain_ratio'] = true;
-      $config['width'] = 200;
-      $config['height'] = 200;
-      $this->image_lib->initialize($config);
-      $this->image_lib->resize();
-    }
+  function _generate_thumbnail($file_name) {
+    $config['image_library'] = 'gd2';
+    $config['source_image'] = './media/admin_pics/'.$file_name;
+    $config['new_image'] = './media/admin_pics_1/'.$file_name.$id;
+    $config['maintain_ratio'] = true;
+    $config['width'] = 200;
+    $config['height'] = 200;
+    $this->image_lib->initialize($config);
+    $this->image_lib->resize();
+  }
 
   function fetch_data_from_post() {
     $data['first_name'] = $this->input->post('first_name', true);

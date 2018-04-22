@@ -26,7 +26,8 @@
     "dcjqaccordion": "^2.7.1",
     "jquery.scrollTo": "^2.1.2",
     "jquery.nicescroll": "^3.7.6",
-    "jquery.sparkline": "^2.1.2"
+    "jquery.sparkline": "^2.1.2",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47"
   },
   "devDependencies": {
     "jquery-ui": "^1.12.1",

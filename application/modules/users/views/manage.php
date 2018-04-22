@@ -21,7 +21,6 @@ $create_account_url = base_url()."users/create";
               <th>Usename</th>
               <th>First Name</th>
               <th>Last Name</th>
-              <th>Company</th>
               <th>Date Created</th>
               <th>Actions</th>
             </tr>
@@ -39,11 +38,10 @@ $create_account_url = base_url()."users/create";
                 <td><?= $row->userName ?></td>
                 <td><?= $row->firstName ?></td>
                 <td><?= $row->lastName ?></td>
-                <td class="center"><?= $row->company ?></td>
                 <td class="center"><?= $date_created ?></td>
                 <td class="center">
                   <a class="btn btn-info" href="<?= $edit_account_url ?>">
-                    <i class="fa fas fa-edit"></i>
+                    <i class="fa fas fa-edit"></i>&nbsp;&nbsp;Edit
                   </a>
                 </td>
               </tr>
