@@ -54,7 +54,6 @@ class Boats extends MX_Controller {
     $data['boat_maker'] = $data_from_db['maker'];
     $data['boat_year_made'] = $data_from_db['year_made'];
     $data['pics_query'] = $pics_query;
-    //$data['schedule_query'] = $schedule_query;
     $data['boat_rental_fee'] = number_format($data['boat_rental_fee'], 2);
     $data['currency_symbol'] = $currency_symbol;
     $data['view_file'] = "view_boat";
@@ -122,7 +121,6 @@ class Boats extends MX_Controller {
           // inseting to DB
           $code = $this->site_security->generate_random_string(6);
           $boat_url = url_title($data['boat_name']).$code;
-          //echo $boat_url; die();
           $data['boat_url'] = $boat_url;
           $data['status'] = 1; // 1: active, 0: inactive
           $this->_insert($data);
@@ -180,23 +178,32 @@ class Boats extends MX_Controller {
     }
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
-
     $submit = $this->input->post('submit', true);
 
     if ($submit == "cancel") {
       redirect('boats/create_boat/'.$boat_rental_id);
     } else if ($submit == "delete") {
-      $this->_process_delete_boat($boat_rental_id);
-      $flash_msg = "The boat was successfully deleted.";
-      $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
-      $this->session->set_flashdata('item', $value);
-      redirect('boats/manage_boats');
+      $this->load->module('boats_schedules');
+      $query = $this->boats_schedules->get_where_custom("boat_rental_id",$boat_rental_id);
+      if($query->num_rows()>0)
+      {
+        $flash_msg ="The boat cannot be deleted.";
+        $value = '<div class="alert alert-warning role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('item', $value);
+        redirect('boats/manage_boats');
+      }
+      else {
+        $this->_process_delete_boat($boat_rental_id);
+        $flash_msg = "The boat was successfully deleted.";
+        $value = '<div class="alert alert-warning role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('item', $value);
+        redirect('boats/manage_boats');
+      }
     }
   }
 
   function _process_delete_boat($boat_rental_id) {
     $this->load->module('boat_pics');
-  //  $this->load->module('boat_schedules');
     $boat_pic_ids = $this->boat_pics->get_boat_pic_ids_by_boat_id($boat_rental_id);
 
     // loop through picture ids and delete
@@ -212,8 +219,6 @@ class Boats extends MX_Controller {
         unlink($small_pic_path);
       }
     }
-
-    //$this->boat_schedules->_delete_where('boat_id', $boat_rental_id);
     $this->boat_pics->_delete_where('boat_rental_id', $boat_rental_id);
     $this->_delete($boat_rental_id);
   }
@@ -253,7 +258,7 @@ class Boats extends MX_Controller {
       redirect('boats/create_boat/'.$boat_rental_id);
     } else if ($submit == "upload") {
       $config['upload_path'] = './media/boats_big_pics';
-      $config['allowed_types'] = 'gif|jpg|png';
+      $config['allowed_types'] = 'gif|jpg|png|jpeg';
       $config['max_size'] = 2048;
       $config['max_width'] = 3036;
       $config['max_height'] = 1902;

@@ -68,6 +68,7 @@ class Boats_schedules extends MX_Controller {
       }
     }
   }
+}
 
   function get($order_by) {
     $this->load->model('mdl_boats_schedules');
@@ -141,7 +142,6 @@ class Boats_schedules extends MX_Controller {
     $query = $this->mdl_boats_schedules->_custom_query($mysql_query);
     return $query;
   }
-
 }
 /*  else {
   // insert
