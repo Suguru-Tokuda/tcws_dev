@@ -35,7 +35,7 @@ class Boats_schedules extends MX_Controller {
             $arr[] = array('startDate'=>$row->boat_start_date,'endDate'=> $row->boat_end_date);
           }
           foreach ($arr as $var) {
-            if($switchVal = "true")
+            if($switchVal = "false")
             {
               if($data['boat_start_date']< $var['startDate'] && $data['boat_end_date']< $var['startDate'])
               {
@@ -59,14 +59,12 @@ class Boats_schedules extends MX_Controller {
               {
                 $switchVal = "false";
               }
-            }
+
           }
         }
 
         echo($switchVal);
-      //  die();
-      //  return $switchVal;
-        // die();
+
       }
     }
   }
