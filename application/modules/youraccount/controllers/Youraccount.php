@@ -81,6 +81,15 @@ class Youraccount extends MX_Controller {
     $data['email'] = $this->input->post('email', true);
     $data['password'] = $this->input->post('password', true);
     $data['confirmPassword'] = $this->input->post('confirmPassword', true);
+
+    $data['signupFirstName'] = $this->input->post('signupFirstName', true);
+    $data['signupLastName'] = $this->input->post('signupLastName', true);
+    $data['signupUserName'] = $this->input->post('signupUserName', true);
+    $data['signUpEmail'] = $this->input->post('signUpEmail', true);
+    $data['signupUserName'] = $this->input->post('signupUserName', true);
+    $data['signUpEmail'] = $this->input->post('signUpEmail', true);
+    $data['signUpPassword'] = $this->input->post('signUpPassword', true);
+    $data['signUpconfirmPassword'] = $this->input->post('signUpconfirmPassword', true);
     $this->load->module('templates');
     $this->templates->login($data);
   }

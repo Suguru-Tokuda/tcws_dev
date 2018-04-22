@@ -207,7 +207,7 @@ class Enquiries extends MX_Controller {
   function _fetch_enquiries($folder_type) {
     // $mysql_query = "SELECT * FROM enquiries WHERE sent_to = 0 ORDER BY date_created DESC";
     $mysql_query = "
-    SELECT e.*, sa.firstName, sa.lastName, sa.company
+    SELECT e.*, sa.firstName, sa.lastName
     FROM enquiries e LEFT JOIN users sa ON e.sent_by = sa.id
     WHERE e.sent_to = 0
     ORDER BY e.date_created DESC

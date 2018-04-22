@@ -33,7 +33,7 @@ class Lesson_schedules extends MX_Controller {
     $mysql_query = "SELECT * FROM lesson_schedules WHERE lesson_id = $lesson_id ORDER BY lesson_start_date DESC";
     $lesson_capacity = $this->lessons->get_where($lesson_id)->row()->lesson_capacity;
     $lesson_name = $this->lessons->get_where($lesson_id)->row()->lesson_name;
-    
+
     $query = $this->_custom_query($mysql_query);
     $total_lesson_schedules = $query->num_rows();
 

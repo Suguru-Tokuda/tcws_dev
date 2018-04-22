@@ -40,7 +40,6 @@ $create_message_url = base_url()."enquiries/create";
 
               $customer_data['firstName'] = $row->firstName;
               $customer_data['lastName'] = $row->lastName;
-              $customer_data['company'] = $row->company;
               $open = $row->opened;
               $urgent = $row->urgent;
               $ranking = $row->ranking;

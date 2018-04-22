@@ -65,7 +65,6 @@ class Users extends MX_Controller {
     } else {
       $data['firstName'] = $optional_customer_data['firstName'];
       $data['lastName'] = $optional_customer_data['lastName'];
-      $data['company'] = $optional_customer_data['company'];
     }
     $data = $this->fetch_data_from_db($update_id);
     if ($data == "") {
@@ -73,14 +72,7 @@ class Users extends MX_Controller {
     } else {
       $firstName = trim(ucfirst($data['firstName']));
       $lastName = trim(ucfirst($data['lastName']));
-      $company = trim(ucfirst($data['company']));
-
-      $company_length = strlen($company);
-      if ($company_length >2) {
-        $customer_name = $company;
-      } else {
-        $customer_name = $firstName." ".$lastName;
-      }
+      $customer_name = $firstName." ".$lastName;
     }
     return $customer_name;
   }
@@ -149,11 +141,6 @@ class Users extends MX_Controller {
       $this->form_validation->set_rules('userName', 'Username', 'required');
       $this->form_validation->set_rules('firstName', 'First Name', 'required');
       $this->form_validation->set_rules('lastName', 'Last Name', 'required');
-      $this->form_validation->set_rules('address1', 'Address 1', 'required');
-      $this->form_validation->set_rules('city', 'City', 'required');
-      $this->form_validation->set_rules('state', 'State', 'required');
-      $this->form_validation->set_rules('zip', 'Zip', 'required');
-      $this->form_validation->set_rules('phone', 'Phone Number', 'required|numeric');
       $this->form_validation->set_rules('email', 'Email', 'required');
 
       if ($this->form_validation->run() == true) {
@@ -215,13 +202,6 @@ class Users extends MX_Controller {
     $data['userName'] = $this->input->post('userName', true);
     $data['firstName'] = $this->input->post('firstName', true);
     $data['lastName'] = $this->input->post('lastName', true);
-    $data['company'] = $this->input->post('company', true);
-    $data['address1'] = $this->input->post('address1', true);
-    $data['address2'] = $this->input->post('address2', true);
-    $data['city'] = $this->input->post('city', true);
-    $data['state'] = $this->input->post('state', true);
-    $data['zip'] = $this->input->post('zip', true);
-    $data['phone'] = $this->input->post('phone', true);
     $data['email'] = $this->input->post('email', true);
     return $data;
   }
@@ -238,13 +218,6 @@ class Users extends MX_Controller {
       $data['userName'] = $row->userName;
       $data['firstName'] = $row->firstName;
       $data['lastName'] = $row->lastName;
-      $data['company'] = $row->company;
-      $data['address1'] = $row->address1;
-      $data['address2'] = $row->address2;
-      $data['city'] = $row->city;
-      $data['state'] = $row->state;
-      $data['zip'] = $row->zip;
-      $data['phone'] = $row->phone;
       $data['email'] = $row->email;
       $data['date_made'] = $row->date_made;
       $data['password'] = $row->password;

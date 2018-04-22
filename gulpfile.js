@@ -138,29 +138,38 @@ gulp.task('publish-dashgum-custom-js', function() {
 gulp.task('compress-dashgum-footer-js', function() {
   var stream = gulp.src(paths.dashgumFooterJSSource)
   .pipe(order([
-    'jquery.js',
-    'jquery-1.8.3.min.js',
+    'fullcalendar.min.js',
     'jquery.fancybox.js',
-    'bootstrap.min.js',
     'jquery.dcjqaccordion.2.7.js',
     'jquery.scrollTo.min.js',
     'jquery.nicescroll.js',
     'jquery.sparkline.js',
+    'bootstrap-datepicker.js',
+    // 'date.js',
+    'daterangepicker.js',
+    'bootstrap-inputmask.min.js',
+    'form-component.js',
     'common-scripts.js',
-    'jquery.gritter.js',
+    'gritter-conf.js',
     'calendar-conf-events.js',
     'jquery-ui.js',
     'tasks.js',
     'jquery-ui-1.9.2.custom.min.js',
+    'jquery.ui.touch-punch.min.js',
     'bootstrap-switch.js',
+    'jquery.tagsinput.js',
     'jquery.transinput.js',
     'daterangepicker.js',
     'jquery.backstretch.min.js',
-    'rapahel-min.js',
+    'raphael-min.js',
     'morris.min.js',
+    'morris-conf.js',
     'Chart.js',
     'chartjs-conf.js',
+    'easy-pie-chart.js',
+    'sparkline-chart.js',
     'zabuto_calendar.js',
+    'jquery.gritter.js'
   ]))
   .pipe(concat('admin_footer.js'))
   .pipe(gulp.dest(paths.jsDest));
@@ -176,10 +185,10 @@ gulp.task('publish-dashgum-images', function() {
 gulp.task('compress-dashgum-header-js', function() {
   var stream = gulp.src(paths.dashgumHeaderJSSource)
   .pipe(order([
-    "jquery.js",
-    "moment.js",
+    "jquery.min.js",
+    "moment.min.js",
     "bootstrap.min.js",
-    "bootstra-datetimepicker.min.js",
+    "bootstrap-datetimepicker.min.js",
     "Chart.js"
   ]))
   .pipe(concat('admin_header.js'))
