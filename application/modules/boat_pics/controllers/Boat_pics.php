@@ -6,7 +6,7 @@ class Boat_pics extends MX_Controller {
   }
 
   function get_picture_name_by_boat_pic_id($id) {
-    $query = $this->get_where($id);$ids = [];
+    $query = $this->get_where($id);
     $picture_name = [];
     foreach($query->result() as $row) {
 
