@@ -132,27 +132,37 @@ class Cart extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  function _attempt_draw_checkout_btn($query) {
+  function _attempt_draw_checkout_btn($query,$lesson_query) {
     $data['query'] = $query;
+    $data['lesson_query'] = $lesson_query;
     $this->load->module('site_security');
     $shopper_id = $this->site_security->_get_user_id();
     $third_bit = $this->uri->segment(3);
 
     if (!is_numeric($shopper_id) AND ($third_bit == '')) {
-      $this->_draw_checkout_btn_fake($query);
+      $this->_draw_checkout_btn_fake($query,$lesson_query);
     } else {
-      $this->_draw_checkout_btn_real($query);
+      $this->_draw_checkout_btn_real($query,$lesson_query);
     }
   }
 
-  function _draw_checkout_btn_real($query) {
+  function _draw_checkout_btn_real($query,$lesson_query) {
     $this->load->module('paypal');
-    $this->paypal->_draw_checkout_btn($query);
+    $this->paypal->_draw_checkout_btn($query,$lesson_query);
   }
 
-  function _draw_checkout_btn_fake($query) {
+  function _draw_checkout_btn_fake($query,$lesson_query) {
+
+    if($query->num_rows() > 0 ){
     foreach($query->result() as $row) {
       $session_id = $row->session_id;
+    }
+    }
+    if($lesson_query->num_rows() > 0 )
+    {
+    foreach($lesson_query->result() as $row) {
+      $session_id = $row->session_id;
+    }
     }
 
     $data['checkout_token'] = $this->_create_checkout_token($session_id);

@@ -33,14 +33,23 @@ class Paypal extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  function _draw_checkout_btn($query) {
+  function _draw_checkout_btn($query,$lesson_query) {
     $this->load->module('site_settings');
     $this->load->module('site_security');
     $this->load->module('shipping');
 
-    foreach ($query->result() as $row) {
+    if($query->num_rows() > 0 ){
+    foreach($query->result() as $row) {
       $session_id = $row->session_id;
     }
+    }
+    if($lesson_query->num_rows() > 0 )
+    {
+    foreach($lesson_query->result() as $row) {
+      $session_id = $row->session_id;
+    }
+    }
+
     $on_test_mode = $this->_is_on_test_mode();
     if ($on_test_mode == true) {
       $data['form_location'] = "https://www.sandbox.paypal.com/cgi_bin/webscr";
@@ -49,12 +58,13 @@ class Paypal extends MX_Controller {
     }
     // the data is sent to paypal
     $data['return'] = base_url().'paypal/thankyou';
-    $data['cancel_return'] = base_rul().'paypal/cancel';
+    $data['cancel_return'] = base_url().'paypal/cancel';
     $data['shipping'] = $this->shipping->_get_shipping();
     $data['custom'] = $this->site_security->_encrypt_string($session_id);
     $data['paypal_email'] = $this->site_settings->_get_paypal_email();
     $data['currency_code'] = $this->site_settings->_get_currency_code();
     $data['query'] = $query;
+    $data['lesson_query;'] = $lesson_query;
     $this->load->view('checkout_btn', $data);
   }
 

@@ -9,6 +9,7 @@ echo form_hidden('return', $return);
 echo form_hidden('cancel_return', $cancel_return);
 
 $count = 0;
+if($query->num_rows() >0){
 foreach($query->result() as $row) {
   $count++;
   $item_title = $row->item_title;
@@ -31,6 +32,22 @@ foreach($query->result() as $row) {
     echo form_hidden('os1_'.$count, $item_size);
   }
 }
+}
+
+if($lesson_query->num_rows() >0){
+foreach($lesson_query->result() as $row) {
+  $count++;
+  $item_title = $row->lesson_name;
+  $price = $row->lesson_fee;
+  $item_qty = $row->booking_qty;
+
+  echo form_hidden('item_name_'.$count, $item_title);
+  echo form_hidden('amount_'.$count, $price);
+  echo form_hidden('item_qty_'.$count, $item_qty);
+}
+}
+
+
 echo form_hidden('shipping_'.$count, $shipping);
 ?>
 <div class="col-md-10 col-md-offset-1" style="text-align: center;">
