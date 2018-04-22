@@ -185,6 +185,7 @@ gulp.task('publish-dashgum-images', function() {
 gulp.task('compress-dashgum-header-js', function() {
   var stream = gulp.src(paths.dashgumHeaderJSSource)
   .pipe(order([
+    "tether.js",
     "jquery.min.js",
     "moment.min.js",
     "bootstrap.min.js",

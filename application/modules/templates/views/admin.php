@@ -30,7 +30,7 @@
     <?php
     include('admin_header.php');
     include('admin_side_bar.php');
-     ?>
+    ?>
     <!--main content start-->
     <section id="main-content">
       <section class="wrapper">
@@ -46,7 +46,7 @@
     <!--main content end-->
     <?php
     include('admin_footer.php');
-     ?>
+    ?>
   </section>
   <script src="<?php echo base_url(); ?>assets/js/admin_footer.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/common-scripts.js"></script>

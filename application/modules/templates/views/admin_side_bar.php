@@ -24,7 +24,7 @@
       </li>
       <li class="sub-menu">
         <a href="<?= base_url() ?>lessons/manage_lessons">
-          <i class="fa fa-anchor"></i>
+          <i class="fa fa-calendar"></i>
           <span>Manage Lessons</span>
         </a>
       </li>
@@ -60,13 +60,13 @@
       </li>
       <li class="sub-menu">
         <a href="<?= base_url() ?>users/manage">
-          <i class="fa fa-user"></i>
+          <i class="fa fa-users"></i>
           <span>Accounts</span>
         </a>
       </li>
       <li class="sub-menu">
         <a href="<?= base_url() ?>admin_info/view_admin_info">
-          <i class="fa fa-user"></i>
+          <i class="fa fa-home"></i>
           <span>My Info</span>
         </a>
       </li>
