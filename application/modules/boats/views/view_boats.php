@@ -19,9 +19,10 @@
         $boat_rental_id = $row->id;
         $boat_name = $row->boat_name;
         $boat_url = base_url().'boats/view_boat/'.$row->boat_url;
-        $picture_name = $this->boat_pics->get_where_custom("boat_rental_id", $boat_rental_id)->row(0)->picture_name;
-        if(isset($picture_name))
+        $pictures = $this->boat_pics->get_where_custom("boat_rental_id", $boat_rental_id);
+        if($pictures->result())
         {
+          $picture_name = $pictures->row(0)->picture_name;
           $picture_src = base_url().'media/boats_big_pics/'.$picture_name;
         }
         else {
