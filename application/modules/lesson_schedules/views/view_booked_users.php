@@ -5,11 +5,11 @@ if (isset($flash)) {
 }
  ?>
 <div class="form-panel">
-  <h4><?= $lesson_name ?></h4>
+  <!-- <h4><?= $lesson_name ?></h4> -->
   <a href="<?= base_url() ?>lesson_schedules/manage_lesson_schedules/<?= $lesson_id ?>" ><button type="button" class="btn">Back to Lesson Management</button></a>
   <?php
   $num_rows = $query->num_rows();
-  echo $pagination;
+  // echo $pagination;
   ?>
     <table class="table">
       <thead>

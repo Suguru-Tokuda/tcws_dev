@@ -18,6 +18,7 @@ if(is_numeric($boat_rental_id))
    <?php
    if (!empty($boat_rental_id)) {
      ?>
+     <a href="<?= base_url() ?>boats_schedules/view_schedules/<?= $boat_rental_id ?>" ><button type="button" class="btn btn-primary">View Schedule</button></a>
      <a href="<?= base_url() ?>boats/upload_boat_image/<?= $boat_rental_id ?>" ><button type="button" class="btn btn-primary">Manage Images</button></a>
      <a href="<?= base_url() ?>boats/view_boat/<?= $boat_rental_id?>" ><button type="button" class="btn btn-info">View Boats On Main Page</button></a>
      <a href="<?= base_url() ?>boats/deleteconf/<?= $boat_rental_id ?>" ><button type="button" class="btn btn-danger">Delete Boat</button></a>

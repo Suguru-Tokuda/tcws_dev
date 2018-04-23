@@ -22,7 +22,6 @@
                 echo $pagination;
                 ?>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Capacity</th>
             <th>Fee</th>
@@ -52,7 +51,6 @@
             }
            ?>
            <tr>
-             <td><?= $id ?></td>
              <td><?= $boat_name ?></td>
              <td><?= $boat_capacity ?></td>
              <td><?= $boat_fee ?></td>
