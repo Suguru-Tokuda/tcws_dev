@@ -18,7 +18,7 @@
           <h3 class="widget-title">About Us</h3>
           <ul>
             <li><a href="<?= base_url()."contactus" ?>">Contact us</a></li>
-            <li><a href="#">Community</a></li>
+            <li><a href="<?= base_url().'blog/view_blogs' ?>">Community</a></li>
           </ul>
         </section>
       </div>
