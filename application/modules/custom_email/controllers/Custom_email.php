@@ -18,7 +18,7 @@ class Custom_email extends MX_Controller
 
     $this->email->initialize($config);
     $this->email->from('info.twincitywatersports@gmail.com');
-    $this->email->to($data['userEmail']);
+    $this->email->to($data['to']);
     $this->email->subject($data['subject']);
     $this->email->message($data['message']);
     $this->email->set_newline("\r\n");

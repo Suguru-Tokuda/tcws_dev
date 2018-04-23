@@ -99,7 +99,7 @@ class Youraccount extends MX_Controller {
     if ($submit == "submit") {
 
       // process the form
-      $this->form_validation->set_rules('userId', 'User Id', 'required|min_length[5]|max_length[60]|callback_userName_check');
+      $this->form_validation->set_rules('userId', 'User Id', 'required|min_length[5]|max_length[60]|callback_username_check');
       $this->form_validation->set_rules('loginPassword', 'password', 'required|min_length[7]|max_length[35]');
 
       if ($this->form_validation->run() == true) {
@@ -135,11 +135,11 @@ class Youraccount extends MX_Controller {
     $submit = $this->input->post('submit', true);
     if ($submit == "submit") {
       // process the form
-      $this->form_validation->set_rules('userName', 'Username', 'required|callback_userId_check');
+      $this->form_validation->set_rules('userName', 'Username', 'required|callback_userid_check');
       if ($this->form_validation->run() == true) {
-        $this ->send_email();
+        $this ->success_email();
       }else{
-        $this->reset_password();
+        $this->resetpass();
       }
     }
   }
@@ -183,14 +183,14 @@ class Youraccount extends MX_Controller {
     }
   }
 
-  function reset_password(){
+  function recover_password(){
     $data['view_file'] = "account-password-recovery";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
 
-  function send_email(){
-    $data['view_file'] = "send_email";
+  function success_email(){
+    $data['view_file'] = "success_email";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
@@ -297,7 +297,7 @@ class Youraccount extends MX_Controller {
   }
 
   // a method to check if the userName exists.
-  function userName_check($str) {
+  function username_check($str) {
 
     $this->load->module('users');
     $this->load->module('site_security');
@@ -311,7 +311,7 @@ class Youraccount extends MX_Controller {
     $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
     $num_rows = $query->num_rows();
     if ($num_rows < 1) {
-      $this->form_validation->set_message('userName_check', $error_msg);
+      $this->form_validation->set_message('username_check', $error_msg);
       return false;
     }
 
@@ -325,7 +325,7 @@ class Youraccount extends MX_Controller {
     if ($result == true) {
       return true;
     } else {
-      $this->form_validation->set_message('userName_check', $error_msg);
+      $this->form_validation->set_message('username_check', $error_msg);
       return false;
     }
   }
@@ -344,7 +344,7 @@ class Youraccount extends MX_Controller {
     return $userName;
   }
 
-  function userId_check($str) {
+  function userid_check($str) {
 
     $this->load->module('users');
     $this->load->module('site_security');
@@ -366,7 +366,7 @@ class Youraccount extends MX_Controller {
       foreach ($query->result() as $row) {
         $userEmail = $row->email;
       }
-      if ($this->send_Email_custom($userEmail) == false)
+      if ($this->send_email_custom($userEmail) == false)
       {
         return false;
       }
@@ -376,47 +376,7 @@ class Youraccount extends MX_Controller {
     }
   }
 
-  function send_Email($userEmail){
-    $genString = $this->RandomString();
-    $mail = new PHPMailer();
-
-    $mail->isSMTP();
-    //$mail->SMTPDebug = 2;
-    $mail->Host = 'smtp.gmail.com';
-    $mail->SMTPAuth = true;
-    //Give sender email and password (account details) here
-    $mail->Username = '********@gmail.com';
-    $mail->Password = '**********@0@';
-    $mail->SMTPSecure = 'tls';
-    $mail->Port = 587;
-
-    $mail->smtpConnect([
-      'ssl' => [
-        'verify_peer' => false,
-        'verify_peer_name' => false,
-        'allow_self_signed' => true
-      ]
-    ]);
-    //Give sender email here
-    $mail->From = '*********@gmail.com';
-    $mail->FromName = 'twincitywatersports';
-    $mail->addAddress($userEmail);
-
-    $mail->Subject = "Forgot Password Recovery";
-    $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='" . PROJECT_HOME . "reset_password/?email=" . $userEmail . "&genString=" .$genString. "'>" . "Click Here" . "</a><br><br></p>Regards,<br> Admin.</div>";
-    //$mail->Body = 'This is my message';
-    $mail->MsgHTML($emailBody);
-    $mail->isHTML(true);
-
-    if(!$mail->send()) {
-      return false;
-    } else {
-      $this->update_genString($userEmail,$genString);
-      return true;
-    }
-  }
-
-  function send_Email_custom($userEmail){
+  function send_email_custom($userEmail){
     $genString = $this->RandomString();
     $email_data['to'] = $userEmail;
     $email_data['subject'] = "Forgot Password Recovery";
@@ -469,7 +429,7 @@ class Youraccount extends MX_Controller {
         }
         else{
           $error_message = "Gen Id Missing Something wrong";
-          $this->reset_password();
+          $this->recover_password();
         }
       }
       else{
