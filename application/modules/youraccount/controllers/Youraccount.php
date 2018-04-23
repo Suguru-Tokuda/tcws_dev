@@ -200,16 +200,15 @@ class Youraccount extends MX_Controller {
     $data = $this->fetch_data_from_post();
     unset($data['confirmPassword']);
     $password = $data['signUpPassword'];
-    $inset_data['firstName'] = $data['signupFirstName'];
-    $inset_data['lastName'] = $data['signupLastName'];
-    $inset_data['userName'] = $data['signupUserName'];
-    $inset_data['email'] = $data['signUpEmail'];
+    $insert_data['firstName'] = $data['signupFirstName'];
+    $insert_data['lastName'] = $data['signupLastName'];
+    $insert_data['userName'] = $data['signupUserName'];
+    $insert_data['email'] = $data['signUpEmail'];
     $password = $data['signUpPassword'];
     $this->load->module('site_security');
-    $inset_data['password'] = $this->site_security->_hash_string($password);
-    $inset_data['date_made'] = time();
-
-    $this->users->_insert($inset_data);
+    $insert_data['password'] = $this->site_security->_hash_string($password);
+    $insert_data['date_made'] = time();
+    $this->users->_insert($insert_data);
   }
 
   function _process_update_account($user_id) {
@@ -218,8 +217,6 @@ class Youraccount extends MX_Controller {
     $data['lastName'] = $this->input->post('firstName', true);
     $data['userName'] = $this->input->post('firstName', true);
     $data['email'] = $this->input->post('email', true);
-
-
   }
 
   function start() {
