@@ -2,7 +2,7 @@
 $first_bit = $this->uri->segment(1);
 $signin_form_location = base_url().$first_bit.'/submit_login';
 $signup_form_location = base_url().'youraccount/submit';
-$reset_form_location = base_url().'youraccount/resetPass';
+$reset_form_location = base_url().'youraccount/reset_password';
 if ($first_bit == "youraccount") {
   $label = "Sign in";
 } else {
