@@ -100,7 +100,11 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_renta
           ?>
         </ul>
       </div>
+    </br>
+  </br>
+
     </div>
+
 
     <!-- Product Info-->
     <div class="col-md-6">
@@ -110,10 +114,12 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_renta
       <p><?= nl2br($boat_description) ?></p>
       <p> Year Made: <?= nl2br($boat_year_made) ?></p>
       <p> Maker: <?= nl2br($boat_maker)?></p>
-      <p> Capacity: <?= nl2br($boat_capacity) ?></p>
+      <p> Capacity: <?= nl2br($boat_capacity) ?></p></br>
+    </br>
 
-    </div>
-  </div>
+</br>
+
+
 
  <script>
   $(function(e){
@@ -144,8 +150,8 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_renta
     });
   });
   </script>
-  <div class = "col-12 row">
-    <form method="post" id = "checkAvailability" >
+  <div class ="row">
+    <form method="post"  id = "checkAvailability" >
       <div class="form-group row">
         <label class="col-5 col-form-label" for="startDate-time-input" >Start Date and time</label>
         <div class="col-7">
@@ -165,8 +171,8 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_renta
       </div>
     </div>
   </div>
-
-
+    </div>
+  </div>
     <!-- Photoswipe container-->
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="pswp__bg"></div>
