@@ -194,9 +194,9 @@ class Cart extends MX_Controller {
     FROM store_basket sb LEFT JOIN item_pics si ON sb.item_id = si.item_id
     ";
     if ($shopper_id > 0) {
-      $where_condition = " WHERE sb.shopper_id = $shopper_id and si.priority = 1";
+      $where_condition = " WHERE sb.shopper_id = $shopper_id and ( si.priority is null or si.priority = 1)";
     } else {
-      $where_condition = " WHERE sb.session_id = '$session_id and si.priority = 1'";
+      $where_condition = " WHERE sb.session_id = '$session_id' and ( si.priority is null or si.priority = 1)";
     }
     $mysql_query.= $where_condition;
     $query = $this->store_basket->_custom_query($mysql_query);
@@ -211,9 +211,9 @@ class Cart extends MX_Controller {
     FROM lesson_basket sb LEFT JOIN lesson_pics si ON sb.lesson_id = si.lesson_id
     ";
     if ($shopper_id > 0) {
-      $where_condition = " WHERE sb.shopper_id = $shopper_id and si.priority = 1";
+      $where_condition = " WHERE sb.shopper_id = $shopper_id and ( si.priority is null or si.priority = 1)";
     } else {
-      $where_condition = " WHERE sb.session_id = '$session_id' and si.priority = 1";
+      $where_condition = " WHERE sb.session_id = '$session_id' and ( si.priority is null or si.priority = 1)";
     }
     $mysql_query.= $where_condition;
     $query = $this->lesson_basket->_custom_query($mysql_query);
