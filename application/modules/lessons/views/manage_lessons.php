@@ -36,7 +36,7 @@
           $this->load->module('lesson_schedules');
           foreach($query->result() as $row) {
             $edit_lesson_url = base_url()."lessons/create_lesson/".$row->id;
-            $view_lesson_url = base_url()."lessons/view_lesson/".$row->id;
+            $view_lesson_url = base_url()."lessons/view_lesson/".$row->lesson_url;
             $id = $row->id;
             $lesson_name = $row->lesson_name;
             $lesson_capacity = $row->lesson_capacity;

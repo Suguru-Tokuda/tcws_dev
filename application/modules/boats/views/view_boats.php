@@ -26,12 +26,13 @@
           $picture_src = base_url().'media/boats_big_pics/'.$picture_name;
         }
         else {
+          $picture_name = "unavailable";
           $picture_src = "";
         }
       ?>
       <div class="grid-item" style="position: absolute; left: 0px; top: 0px;">
         <div class="product-card">
-          <a class="product-thumb" href="<?= $boat_url ?>"><img src="<?= $picture_src ?>" alt="Product"></a>
+          <a class="product-thumb" href="<?= $boat_url ?>"><img src="<?= $picture_src ?>" alt="<?= $picture_name ?>"></a>
           <h3 class="product-title"><a href="<?= $boat_url ?>"><?= $boat_name ?></a></h3>
           <div class="product-buttons">
             <a href="<?= $boat_url ?>" class="btn btn-outline-primary btn-sm">View boat</a>
