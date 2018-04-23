@@ -113,6 +113,39 @@ class Store_items extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
+  function view_item($item_url) {
+    $this->load->module('site_security');
+    $this->load->module('site_settings');
+    $this->load->module('timedate');
+    // only those people with an update_id for an item can get in.
+    $item_id = $this->_get_item_id_from_item_url($item_url);
+    if (!is_numeric($item_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    // fetch the item details
+    $data = $this->fetch_data_from_db($item_id);
+    $data['date_made'] = $this->timedate->get_date($data['date_made'], 'datepicker_us');
+    $data['update_id'] = $item_id;
+    $data['pics_query'] = $this->_get_pics_by_update_id($item_id);
+
+    // build the breadcrumbs data array
+    $breadcrumbs_data['template'] = "public_bootstrap";
+    $breadcrumbs_data['current_page_title'] = $data['item_title'];
+    $breadcrumbs_data['breadcrumbs_array'] = $this->_generate_breadcrumbs_array($item_id);
+    $data['breadcrumbs_data'] = $breadcrumbs_data;
+
+    $data['flash'] = $this->session->flashdata('item');
+    $this->load->module('site_settings');
+    $currency_symbol = $this->site_settings->_get_currency_symbol();
+    $data['item_price_desc'] = $currency_symbol.number_format($data['item_price'], 2);
+    // this module helps to make a friendly URL
+    $data['view_module'] = "store_items";
+    $data['view_file'] = "view";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
+
   // method for pagination
   function get_target_pagination_base_url() {
     $first_bit = $this->uri->segment(1);
@@ -216,34 +249,34 @@ class Store_items extends MX_Controller {
     return $items;
   }
 
-  function view_item($item_id) {
-    $this->load->module('timedate');
-    // only those people with an update_id for an item can get in.
-    if (!is_numeric($item_id)) {
-      redirect('site_security/not_allowed');
-    }
-    // fetch the item details
-    $data = $this->fetch_data_from_db($item_id);
-    $data['date_made'] = $this->timedate->get_date($data['date_made'], 'datepicker_us');
-    $data['update_id'] = $item_id;
-    $data['pics_query'] = $this->_get_pics_by_update_id($item_id);
-
-    // build the breadcrumbs data array
-    $breadcrumbs_data['template'] = "public_bootstrap";
-    $breadcrumbs_data['current_page_title'] = $data['item_title'];
-    $breadcrumbs_data['breadcrumbs_array'] = $this->_generate_breadcrumbs_array($item_id);
-    $data['breadcrumbs_data'] = $breadcrumbs_data;
-
-    $data['flash'] = $this->session->flashdata('item');
-    $this->load->module('site_settings');
-    $currency_symbol = $this->site_settings->_get_currency_symbol();
-    $data['item_price_desc'] = $currency_symbol.number_format($data['item_price'], 2);
-    // this module helps to make a friendly URL
-    $data['view_module'] = "store_items";
-    $data['view_file'] = "view";
-    $this->load->module('templates');
-    $this->templates->public_bootstrap($data);
-  }
+  // function view_item_with_id($item_id) {
+  //   $this->load->module('timedate');
+  //   // only those people with an update_id for an item can get in.
+  //   if (!is_numeric($item_id)) {
+  //     redirect('site_security/not_allowed');
+  //   }
+  //   // fetch the item details
+  //   $data = $this->fetch_data_from_db($item_id);
+  //   $data['date_made'] = $this->timedate->get_date($data['date_made'], 'datepicker_us');
+  //   $data['update_id'] = $item_id;
+  //   $data['pics_query'] = $this->_get_pics_by_update_id($item_id);
+  //
+  //   // build the breadcrumbs data array
+  //   $breadcrumbs_data['template'] = "public_bootstrap";
+  //   $breadcrumbs_data['current_page_title'] = $data['item_title'];
+  //   $breadcrumbs_data['breadcrumbs_array'] = $this->_generate_breadcrumbs_array($item_id);
+  //   $data['breadcrumbs_data'] = $breadcrumbs_data;
+  //
+  //   $data['flash'] = $this->session->flashdata('item');
+  //   $this->load->module('site_settings');
+  //   $currency_symbol = $this->site_settings->_get_currency_symbol();
+  //   $data['item_price_desc'] = $currency_symbol.number_format($data['item_price'], 2);
+  //   // this module helps to make a friendly URL
+  //   $data['view_module'] = "store_items";
+  //   $data['view_file'] = "view";
+  //   $this->load->module('templates');
+  //   $this->templates->public_bootstrap($data);
+  // }
 
   function _get_pics_by_update_id($item_id) {
     $mysql_query = "

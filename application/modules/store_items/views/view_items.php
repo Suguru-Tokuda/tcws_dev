@@ -36,7 +36,9 @@
           $item_price = $row->item_price;
           $was_price = $row->was_price;
           $small_pic_path = base_url()."media/item_small_pics/".$index_pic_name;
-          $item_page = base_url().$parent_cat_url."/".$sub_cat_url."/".$item_url;
+          // $item_page = base_url().$parent_cat_url."/".$sub_cat_url."/".$item_url;
+          $item_page = base_url().'store_items/view_item/'.$item_url;
+
           ?>
           <div class="grid-item">
             <div class="product-card">
