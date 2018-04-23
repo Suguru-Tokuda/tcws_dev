@@ -54,6 +54,7 @@
       if ($video_name != "") {
         $video_path = base_url().'media/blog_videos/'.$video_name;
       ?>
+      <p style="margin-top: 50px;"></p>
       <video width="320" height="240" controls>
         <source src="<?= $video_path ?>" type="video/mp4">
       </video>

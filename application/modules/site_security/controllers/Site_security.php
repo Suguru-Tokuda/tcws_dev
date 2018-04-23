@@ -5,11 +5,6 @@ class Site_security extends MX_Controller {
     parent::__construct();
   }
 
-  function test() {
-    $length = 32;
-    echo $this->generate_random_string($length);
-  }
-
   function _check_admin_login_details($userName, $password) {
     $target_userName = "admin";
     $target_pass = "password";

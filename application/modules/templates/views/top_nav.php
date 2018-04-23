@@ -18,7 +18,7 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
       <a class="offcanvas-toggle menu-toggle" href="#mobile-menu" data-toggle="offcanvas"></a>
 
       <!-- Site Logo-->
-      <a class="site-logo" href="<?= base_url() ?>"><img src="img/logo/logo.png" alt="TWC"></a>
+      <a class="site-logo" href="<?= base_url() ?>"><img src="<?= base_url().'img/TCW_logo_004-01.png' ?>" alt="TWC"></a>
     </div>
   </div>
 
@@ -46,7 +46,11 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
         <li><a href="<?= base_url().'lessons/view_lessons'?>">View Lessons</a></li>
       </ul>
     </li>
-    <li class="<?php if ($second_bit === "boats") { echo 'active';} ?>"><a href="<?= base_url().'boats/view_boats'?>"><span>Boat Renting</span></a></li>
+    <li class="<?php if ($second_bit === "boats") { echo 'active';} ?>"><a href="#"><span>Boat Renting</span></a>
+      <ul class="sub-menu">
+        <li><a href="<?= base_url().'boats/view_boats'?>">View Rental Boats</a></li>
+      </ul>
+    </li>
     <li class="<?php if ($second_bit === "blog") { echo 'active';} ?>"><a href="#"><span>Community</span></a>
       <ul class="sub-menu">
         <li><a href="<?= base_url().'blog/view_blogs' ?>">Go to Board</a></li>

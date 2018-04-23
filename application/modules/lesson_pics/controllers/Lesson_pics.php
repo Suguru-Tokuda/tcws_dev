@@ -8,7 +8,8 @@ class Lesson_pics extends MX_Controller {
   function get_picture_name_by_lesson_pic_id($id) {
     $mysql_query = "SELECT picture_name FROM lesson_pics WHERE id = $id";
     $query = $this->_custom_query($mysql_query);
-    return $query->row()->picture_name();
+    $num_rows = $query->num_rows();
+    return $query->row()->picture_name;
   }
 
   function get_lesson_pic_ids_by_lesson_id($lesson_id) {

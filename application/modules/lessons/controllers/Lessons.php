@@ -199,6 +199,21 @@ class Lessons extends MX_Controller {
   function _process_delete_lesson($lesson_id) {
     $this->load->module('lesson_pics');
     $this->load->module('lesson_schedules');
+    $this->load->module('lesson_bookings');
+    $num_of_bookings = $this->lesson_bookings->_get_num_of_bookings_for_lesson_id($lesson_id);
+
+    if ($num_of_bookings > 0) {
+      $data['lesson_id'] = $lesson_id;
+      $data['headline'] = "Delete Lesson";
+      $flash_msg = "You cannot delete this lesson - you have members booked for this lesson already.";
+      $value= '<div class="alert alert-danger" role="alert">.'.$flash_msg.'</div>';
+      $this->session->set_flashdata('item', $value);
+      $data['flash'] = $this->session->flashdata('item');
+      $data['view_file'] = "lesson_deleteconf";
+      $this->load->module('templates');
+      $this->templates->admin($data);
+    }
+
     $lesson_pic_ids = $this->lesson_pics->get_lesson_pic_ids_by_lesson_id($lesson_id);
 
     // loop through picture ids and delete

@@ -5,6 +5,16 @@ class Lesson_bookings extends MX_Controller {
     parent::__construct();
   }
 
+  function _get_num_of_bookings_for_lesson_id($lesson_id) {
+    $mysql_query =
+    "SELECT COUNT(*) as count
+     FROM lesson_bookings lb JOIN lesson_schedules ls ON lb.lesson_schedule_id = ls.id
+     JOIN lessons l ON ls.lesson_id = l.id
+     WHERE l.id = $lesson_id";
+     $query = $this->_custom_query($mysql_query);
+     return $query->row()->count;
+  }
+
   function _get_num_of_bookings_for_lesson_schedule_id($lesson_schedule_id) {
       $mysql_query = "SELECT * FROM lesson_bookings WHERE lesson_schedule_id = ".$lesson_schedule_id;
       $query = $this->_custom_query($mysql_query);
