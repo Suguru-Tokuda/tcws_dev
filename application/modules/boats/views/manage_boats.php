@@ -22,7 +22,6 @@
                 echo $pagination;
                 ?>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Capacity</th>
             <th>Fee</th>
@@ -52,7 +51,6 @@
             }
            ?>
            <tr>
-             <td><?= $id ?></td>
              <td><?= $boat_name ?></td>
              <td><?= $boat_capacity ?></td>
              <td><?= $boat_fee ?></td>
@@ -61,10 +59,10 @@
              </td>
              <td class="center">
                <a class="btn btn-success" href="<?= $view_boat_url ?>">
-                 <i class="fa fa-external-link"></i>
+                 <i class="fa fa-external-link"></i>&nbsp;&nbsp;View
                </a>
                <a class="btn btn-info" href="<?= $edit_boat_url ?>">
-                 <i class="fa fa-edit"></i>
+                 <i class="fa fa-edit"></i>&nbsp;&nbsp;Edit
                </a>
              </td>
            </tr>

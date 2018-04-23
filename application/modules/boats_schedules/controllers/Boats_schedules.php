@@ -10,6 +10,23 @@ class Boats_schedules extends MX_Controller {
     $this->form_validation->set_ci_reference($this);
   }
 
+  function view_schedules($boat_rental_id)
+  {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $mysql_query = "SELECT u.firstName, u.lastName, u.email, br.boat_start_date, br.boat_end_date FROM users u JOIN boat_rental_schedules br ON u.id = br.user_id WHERE br.boat_rental_id = $boat_rental_id";
+    $query = $this->_custom_query($mysql_query);
+    $data['query'] = $query;
+    $data['boat_rental_id'] = $boat_rental_id;
+    $data['view_file'] = "view_schedules";
+    $data['headline'] = "View Members";
+    $data['num_of_users'] = $query->num_rows();
+    $this->load->module('templates');
+    $this->templates->admin($data);
+
+  }
+
   function create_boat_schedules($boat_rental_id)
   {
     $this->load->module('site_security');
