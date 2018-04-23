@@ -131,15 +131,15 @@ class Youraccount extends MX_Controller {
     }
   }
 
-  function forgotPass() {
+  function forgot_password() {
     $submit = $this->input->post('submit', true);
     if ($submit == "submit") {
       // process the form
       $this->form_validation->set_rules('userName', 'Username', 'required|callback_userId_check');
       if ($this->form_validation->run() == true) {
-        $this ->sendEmail();
+        $this ->send_email();
       }else{
-        $this->resetPass();
+        $this->reset_password();
       }
     }
   }
@@ -183,14 +183,14 @@ class Youraccount extends MX_Controller {
     }
   }
 
-  function resetPass(){
+  function reset_password(){
     $data['view_file'] = "account-password-recovery";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
 
-  function sendEmail(){
-    $data['view_file'] = "sendEmail";
+  function send_email(){
+    $data['view_file'] = "send_email";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
@@ -469,7 +469,7 @@ class Youraccount extends MX_Controller {
         }
         else{
           $error_message = "Gen Id Missing Something wrong";
-          $this->resetPass();
+          $this->reset_password();
         }
       }
       else{

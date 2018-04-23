@@ -1,6 +1,6 @@
 <?php
 $first_bit = $this->uri->segment(1);
-$forgotpass_form_location = base_url().'youraccount/update_password';
+$forgot_password_form_location = base_url().'youraccount/update_password';
 ?>
 <div class="container">
   <h3 class="col-10">Reset Password</h3>
@@ -13,7 +13,7 @@ $forgotpass_form_location = base_url().'youraccount/update_password';
   <div class="container padding-bottom-3x mb-2">
     <div class="row">
       <div class="col-md-6">
-        <form class="reset-box" method="post" action="<?= $forgotpass_form_location ?>">
+        <form class="reset-box" method="post" action="<?= $forgot_password_form_location ?>">
           <div class="col-sm-6">
             <div class="form-group">
               <label for="reg-pass">New Password</label>

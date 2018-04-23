@@ -35,7 +35,7 @@
           $this->load->module('boat_schedules');
           foreach($query->result() as $row) {
             $edit_boat_url = base_url()."boats/create_boat/".$row->id;
-            $view_boat_url = base_url()."boats/view_boat/".$row->id;
+            $view_boat_url = base_url()."boats/view_boat/".$row->boat_url;
             $id = $row->id;
             $boat_name = $row->boat_name;
             $boat_capacity = $row->boat_capacity;
@@ -61,10 +61,10 @@
              </td>
              <td class="center">
                <a class="btn btn-success" href="<?= $view_boat_url ?>">
-                 <i class="fa fa-external-link"></i>
+                 <i class="fa fa-external-link"></i>&nbsp;&nbsp;View
                </a>
                <a class="btn btn-info" href="<?= $edit_boat_url ?>">
-                 <i class="fa fa-edit"></i>
+                 <i class="fa fa-edit"></i>&nbsp;&nbsp;Edit
                </a>
              </td>
            </tr>

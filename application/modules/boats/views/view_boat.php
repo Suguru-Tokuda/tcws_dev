@@ -208,3 +208,5 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_renta
         </div>
       </div>
     </div>
+
+  </div>
