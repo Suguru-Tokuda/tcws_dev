@@ -18,7 +18,7 @@ class Paypal extends MX_Controller {
   }
 
   function _is_on_test_mode() {
-    return true; // set this to false if we are live!
+    return FALSE; // set this to false if we are live!
   }
 
   function thankyou() {
@@ -27,11 +27,11 @@ class Paypal extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  function cancel() {
-    $data['view_file'] = 'cancel';
-    $this->load->module('templates');
-    $this->templates->public_bootstrap($data);
-  }
+  // function cancel() {
+  //   $data['view_file'] = 'cancel';
+  //   $this->load->module('templates');
+  //   $this->templates->public_bootstrap($data);
+  // }
 
   function _draw_checkout_btn($query,$lesson_query) {
     $this->load->module('site_settings');
