@@ -298,7 +298,9 @@ class Store_items extends MX_Controller {
     $this->load->module('store_categories');
     $sub_cat_title = $this->store_categories->_get_cat_title($sub_cat_id);
     // get the sub cat URL
+    //TODO update _get_full_cat_url();
     $sub_cat_url = $this->store_categories->_get_full_cat_url($sub_cat_id);
+
     $breadcrumbs_array[$sub_cat_url] = $sub_cat_title;
     return $breadcrumbs_array;
   }

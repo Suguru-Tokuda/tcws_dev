@@ -14,15 +14,7 @@ class Admin_info extends MX_Controller {
   function get_admin_info() {
     $query = $this->get_where(1);
     $row = $query->row();
-    $data['first_name'] = $row->first_name;
-    $data['last_name'] = $row->last_name;
-    $data['phone'] = $row->phone;
-    $data['email'] = $row->email;
-    $data['company_name'] = $row->company_name;
-    $data['addresss'] = $row->address;
-    $data['city'] = $row->city;
-    $data['state'] = $row->state;
-    $data['description'] = $row->description;
+    $data = $this->fetch_data_from_db(1);
     return $data;
   }
 
@@ -34,9 +26,7 @@ class Admin_info extends MX_Controller {
     $query = $this->get("id");
     $total_rows = $query->num_rows();
 
-    // $pagination_data['template'] = "public_bootstrap";
-    // $pagination_data['total_rows'] = $total_rows;
-    // $pagination_data['offset_segment'] = 4;
+    $data['admin_id'] = $query->row()->id;
     $data['query'] = $query;
     $data['view_file'] = 'view_admin_info';
     $this->load->module('templates');
@@ -107,12 +97,17 @@ class Admin_info extends MX_Controller {
     $this->templates->admin($data);
   }
 
-  function upload_admin_image() {
-    $admin_id=1;
+  function upload_admin_image($admin_id) {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
+
     $data['num_rows'] = $admin_id;
-    $data['headline'] = "Upload Image";
+    $data['picture_name'] = $this->get_where($admin_id)->row()->picture_name;
+    if (!isset($data['picture_name'])) {
+      $data['headline'] = "Upload Image";
+    } else {
+      $data['headline'] = "Update Image";
+    }
     $date['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "upload_image";
     $data['id']=$admin_id;

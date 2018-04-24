@@ -5,11 +5,19 @@
         <section class="widget widget-light-skin">
           <h3 class="widget-title">Get In Touch With Us</h3>
           <p class="text-white">Phone: 123 456 7890</p>
-          <ul class="list-unstyled text-sm text-white">
-            <li><span class="opacity-50">Monday-Friday:</span> 9:00 am - 5:00 pm</li>
-            <li><span class="opacity-50">Saturday-Sunday:</span> 10.00 am - 5.00 pm</li>
-          </ul>
-          <p><a class="navi-link-light" href="#">twincitywatersports@gmail.com</a></p><a class="social-button shape-circle sb-facebook sb-light-skin" href="#"><i class="socicon-facebook"></i></a><a class="social-button shape-circle sb-twitter sb-light-skin" href="#"><i class="socicon-twitter"></i></a><a class="social-button shape-circle sb-instagram sb-light-skin" href="#"><i class="socicon-instagram"></i></a><a class="social-button shape-circle sb-google-plus sb-light-skin" href="#"><i class="socicon-googleplus"></i></a>
+          <p><a class="navi-link-light" href="#">twincitywatersports@gmail.com</a></p>
+          <a class="social-button shape-circle sb-facebook sb-light-skin" href="#">
+            <i class="socicon-facebook"></i>
+          </a>
+          <a class="social-button shape-circle sb-twitter sb-light-skin" href="#">
+            <i class="socicon-twitter"></i>
+          </a>
+          <a class="social-button shape-circle sb-instagram sb-light-skin" href="#">
+            <i class="socicon-instagram"></i>
+          </a>
+          <a class="social-button shape-circle sb-google-plus sb-light-skin" href="#">
+            <i class="socicon-googleplus"></i>
+          </a>
         </section>
       </div>
       <div class="col-lg-3 col-md-6">
