@@ -10,7 +10,8 @@
       $item_price = $row->item_price;
       $index_pic_name = $this->store_categories->_get_picture_name_by_item_url($item_url);
       $small_pic_path = base_url()."media/item_big_pics/".$index_pic_name;
-      $item_page = base_url()."$item_segments./$row->cat_url/$row->item_url";
+      // $item_page = base_url()."$item_segments./$row->cat_url/$row->item_url";
+      $item_page = base_url().'store_items/view_item/'.$item_url;
       ?>
 
       <div class="col-md-4 col-sm-6">

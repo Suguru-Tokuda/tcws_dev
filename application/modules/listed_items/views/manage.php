@@ -108,7 +108,7 @@ $create_item_url = base_url()."listed_items/create_item";
 <?php
 } else {
   ?>
-  <p style="margin-top: 34px;">You have no items listed</p>
+  <p style="margin-top: 34px; margin-bottom: 400px;">You have no items listed</p>
   <?php
 }
 ?>

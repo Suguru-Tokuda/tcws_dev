@@ -29,7 +29,7 @@ $create_item_url = base_url()."store_items/create";
             <?php
             foreach($query->result() as $row) {
               $edit_item_url = base_url()."store_items/create/".$row->id;
-              $view_item_url = base_url()."store_items/view/".$row->id;
+              $view_item_url = base_url()."store_items/view_item/".$row->item_url;
               if ($row->user_id == 0) {
                 $userName = "Admin";
               } else {
@@ -55,10 +55,10 @@ $create_item_url = base_url()."store_items/create";
                 </td>
                 <td class="center">
                   <a class="btn btn-success" href="<?= $view_item_url ?>">
-                    <i class="fa fas fa-search"></i>
+                    <i class="fa fas fa-search"></i>&nbsp;&nbsp;View
                   </a>
                   <a class="btn btn-info" href="<?= $edit_item_url ?>">
-                    <i class="fa fas fa-edit"></i>
+                    <i class="fa fas fa-edit"></i>&nbsp;&nbsp;Edit
                   </a>
                 </td>
               </tr>

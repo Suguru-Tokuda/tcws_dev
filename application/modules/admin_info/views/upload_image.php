@@ -49,7 +49,19 @@ $form_location = base_url().'admin_info/do_upload/'.$id;
       <div class="uploadBtn"><input type="file" name="userfile" id="file"></div>
     </div>
     <div class="form-action">
-      <button type="submit" name="submit" class="btn btn-primary" value="upload">Upload</button>
+      <button type="submit" name="submit" class="btn btn-primary" value="upload">
+        <?php
+        if (isset($picture_name)) {
+          ?>
+          Update
+          <?php
+        } else {
+          ?>
+          Upload
+          <?php
+        }
+         ?>
+      </button>
       <button type="submit" name="submit" class="btn" value="cancel">Back</button>
     </div>
   </form>
@@ -57,5 +69,11 @@ $form_location = base_url().'admin_info/do_upload/'.$id;
 }
   ?>
 <?php
+  if (isset($picture_name)) {
+    $picture_location = base_url().'/media/admin_pics/'.$picture_name;
+?>
+  <img style="margin-top: 40px;" src="<?= $picture_location ?>" alt="<?= $picture_name ?>" >
+<?php
+  }
 ?>
 </div>
