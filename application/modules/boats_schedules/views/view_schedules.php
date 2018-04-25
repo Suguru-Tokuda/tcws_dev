@@ -43,4 +43,5 @@ if (isset($flash)) {
         ?>
       </tbody>
     </table>
+    <?= $pagination ?>
   </div>

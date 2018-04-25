@@ -3,22 +3,7 @@ class Enquiries extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-  }
-
-  function fix() {
-    $this->load->module('site_security');
-    $query = $this->get('id');
-    foreach ($query->result() as $row) {
-      $data['code'] = $this->site_security->generate_random_string(6);
-      $this->_update($row->id, $data);
-    }
-    echo "finished";
-  }
-
-  function test() {
-    $firstName = "Suguru";
-    $lastName = "Tokuda";
-    $this->say_my_name($firstName);
+    $this->load->module('custom_pagination');
   }
 
   function _attempt_get_data_from_code($customer_id, $code) {
@@ -193,9 +178,19 @@ class Enquiries extends MX_Controller {
     $this->site_security->_make_sure_is_admin();
 
     $folder_type = "inbox";
-    $data['query'] = $this->_fetch_enquiries($folder_type);
+    $use_limit = false;
+    $query = $this->_fetch_enquiries($folder_type, $use_limit);
+    $total_enquiries = $query->num_rows();
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_enquiries;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->_get_pagination_limit();
+    $use_limit = true;
+    $query = $this->_fetch_enquiries($folder_type, $use_limit);
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
     $data['folder_type'] = ucfirst($folder_type);
-
+    $data['query'] = $query;
     // gettinf flash data
     $data['flash'] = $this->session->flashdata('item');
     // store_Accounts.php
@@ -204,7 +199,7 @@ class Enquiries extends MX_Controller {
     $this->templates->admin($data);
   }
 
-  function _fetch_enquiries($folder_type) {
+  function _fetch_enquiries($folder_type, $use_limit) {
     // $mysql_query = "SELECT * FROM enquiries WHERE sent_to = 0 ORDER BY date_created DESC";
     $mysql_query = "
     SELECT e.*, sa.firstName, sa.lastName
@@ -212,6 +207,11 @@ class Enquiries extends MX_Controller {
     WHERE e.sent_to = 0
     ORDER BY e.date_created DESC
     ";
+    if ($use_limit == true) {
+      $limit = $this->_get_pagination_limit();
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
     $query = $this->_custom_query($mysql_query);
     return $query;
   }
@@ -237,11 +237,9 @@ class Enquiries extends MX_Controller {
 
   // get data from database
   function fetch_data_from_db($update_id) {
-
     if (!is_numeric($update_id)) {
       redirect('site_security/not_allowed');
     }
-
     $query = $this->get_where($update_id);
     foreach($query->result() as $row) {
       $data['subject'] = $row->subject;
@@ -257,6 +255,29 @@ class Enquiries extends MX_Controller {
     }
     return $data;
   }
+
+  // beginning of pagination methods
+  function _get_pagination_limit() {
+    $limit = 20;
+    return $limit;
+  }
+
+  function _get_pagination_offset() {
+    $offset = $this->uri->segment(4);
+    if (!is_numeric($offset)) {
+      $offset = 0;
+    }
+    return $offset;
+  }
+
+  function get_target_pagination_base_url() {
+    $first_bit = $this->uri->segment(1);
+    $second_bit = $this->uri->segment(2);
+    $third_bit = $this->uri->segment(3);
+    $target_base_url = base_url().$first_bit."/".$second_bit."/".$third_bit;
+    return $target_base_url;
+  }
+  // end of pagination methods
 
   function get($order_by)
   {

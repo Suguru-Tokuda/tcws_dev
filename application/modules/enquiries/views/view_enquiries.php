@@ -20,6 +20,7 @@ $create_message_url = base_url()."enquiries/create";
         <h2><i class="fa fa-envelope "></i><?= $folder_type ?></h2>
       </div>
       <div class="box-content">
+        <?= $pagination ?>
         <table class="table table-striped table-bordered bootstrap-datatable datatable">
           <thead>
             <tr>
@@ -37,7 +38,6 @@ $create_message_url = base_url()."enquiries/create";
             $this->load->module('users');
             foreach($query->result() as $row) {
               $view_url = base_url()."enquiries/view/".$row->id;
-
               $customer_data['firstName'] = $row->firstName;
               $customer_data['lastName'] = $row->lastName;
               $open = $row->opened;

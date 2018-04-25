@@ -6,8 +6,9 @@ class Store_items extends MX_Controller {
     // These two lines are needed to display custom validation messages
     $this->load->library('form_validation');
     $this->load->module('custom_pagination');
+    $this->load->library('upload');
     $this->load->library('image_lib');
-    $this->form_validation->set_ci($this);
+    $this->form_validation->set_ci_reference($this);
   }
 
   // shows items based on the category_title
@@ -15,27 +16,46 @@ class Store_items extends MX_Controller {
     $this->load->module('store_categories');
     $this->load->module('site_settings');
     $cat_id = $this->store_categories->get_where_custom('cat_url', $cat_url)->row()->id;
-    $mysql_query = "SELECT si.id, si.item_title, si.item_url, si.item_price, si.was_price FROM store_items si JOIN store_cat_assign sca ON si.id = sca.item_id WHERE sca.cat_id = $cat_id AND si.status = 1;";
-    $query = $this->_custom_query($mysql_query);
-    $data['query'] = $query;
 
+    $use_limit = false;
+    $mysql_query = $this->_generate_mysql_query_for_category($use_limit, $cat_id);
+    $query = $this->_custom_query($mysql_query);
     $total_items = $query->num_rows();
-    $pagination_data['template'] = "public_bootstrap";
+
+    $use_limit = true;
+    $mysql_query = $this->_generate_mysql_query_for_category($use_limit, $cat_id);
+    $query = $this->_custom_query($mysql_query);
+    $pagination_data['template'] = "unishop";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_items;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_pagination_limit();
+    $pagination_data['limit'] = $this->_get_pagination_limit("main");
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
-
-    $showing_statement_data['limit'] = $this->get_pagination_limit();
+    $showing_statement_data['limit'] = $this->_get_pagination_limit("main");
     $showing_statement_data['offset'] = $this->_get_pagination_offset();
     $showing_statement_data['total_rows'] = $total_items;
+    $data['query'] = $query;
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['showing_statement'] = $this->custom_pagination->get_showing_statement($showing_statement_data);
     $data['view_file'] = "view_items";
-
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
+  }
+
+  function _generate_mysql_query_for_category($use_limit, $cat_id) {
+    //NOTE: use_limit can be true or false
+    $mysql_query = "SELECT DISTINCT si.id, si.item_url, si.item_price, si.item_title, si.was_price
+                    FROM store_items si
+                    JOIN store_cat_assign sca ON si.id = item_id
+                    JOIN store_categories sc ON sca.cat_id = sc.id
+                    WHERE sc.id = $cat_id";
+    if ($use_limit == true) {
+      $limit = $this->_get_pagination_limit("main");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+
+    return $mysql_query;
   }
 
   function search_items_by_keywords() {
@@ -46,7 +66,7 @@ class Store_items extends MX_Controller {
     $searchKeywords = explode(" ", $searchKeywords);
 
     if ($submit == "submit") {
-      $mysql_query = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN item_pics sp ON si.id = sp.item_id WHERE item_title LIKE '$searchKeywords[0]' OR item_description LIKE '$searchKeywords[0]'";
+      $mysql_query = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price FROM store_items si LEFT JOIN item_pics sp ON si.id = sp.item_id WHERE item_title LIKE '$searchKeywords[0]' OR item_description LIKE '$searchKeywords[0] AND status = 1'";
 
       if (sizeOf($searchKeywords) > 1) {
         for ($i = 1; $i < sizeOf($searchKeywords); $i++) {
@@ -89,28 +109,42 @@ class Store_items extends MX_Controller {
     $this->load->module('site_security');
     $this->load->module('site_settings');
 
-    $mysql_query = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, sp.picture_name FROM store_items si LEFT JOIN item_pics sp ON si.id = sp.item_id";
+    $use_limit = false;
+    $mysql_query = $this->_generate_mysql_query_for_view_all_items($use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $total_items = $query->num_rows();
 
-    $store_items_query = $this->_custom_query($mysql_query);
-    $total_items = $store_items_query->num_rows();
+    // fetch the items for this page
+    $use_limit = true;
+    $mysql_query = $this->_generate_mysql_query_for_view_all_items($use_limit);
+    $query = $this->_custom_query($mysql_query);
 
-    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['template'] = "unishop";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_items;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_pagination_limit();
+    $pagination_data['limit'] = $this->_get_pagination_limit("main");
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
-
-    $showing_statement_data['limit'] = $this->get_pagination_limit();
+    $showing_statement_data['limit'] = $this->_get_pagination_limit("main");
     $showing_statement_data['offset'] = $this->_get_pagination_offset();
     $showing_statement_data['total_rows'] = $total_items;
     $data['showing_statement'] = $this->custom_pagination->get_showing_statement($showing_statement_data);
-
+    $data['query'] = $query;
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['view_file'] = "view_items";
-    $data['query'] = $store_items_query;
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
+  }
+
+  function _generate_mysql_query_for_view_all_items($use_limit) {
+    //NOTE: use_limit can be true or false
+    $mysql_query = "SELECT DISTINCT si.id, si.item_url, si.item_price, si.item_title, si.was_price FROM store_items si JOIN item_pics sp ON si.id = sp.item_id";
+    if ($use_limit == true) {
+      $limit = $this->_get_pagination_limit("main");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
   }
 
   function view_item($item_url) {
@@ -154,9 +188,12 @@ class Store_items extends MX_Controller {
     $target_base_url = base_url().$first_bit."/".$second_bit."/".$third_bit;
     return $target_base_url;
   }
-
-  function get_pagination_limit() {
-    $limit = 20;
+  // $location is where you show the data: it's either "main" or "admin"
+  function _get_pagination_limit($location) {
+    if ($location == "main")
+    $limit = 6;
+    else if ($location == "admin")
+    $limit = 10;
     return $limit;
   }
 
@@ -248,35 +285,6 @@ class Store_items extends MX_Controller {
     }
     return $items;
   }
-
-  // function view_item_with_id($item_id) {
-  //   $this->load->module('timedate');
-  //   // only those people with an update_id for an item can get in.
-  //   if (!is_numeric($item_id)) {
-  //     redirect('site_security/not_allowed');
-  //   }
-  //   // fetch the item details
-  //   $data = $this->fetch_data_from_db($item_id);
-  //   $data['date_made'] = $this->timedate->get_date($data['date_made'], 'datepicker_us');
-  //   $data['update_id'] = $item_id;
-  //   $data['pics_query'] = $this->_get_pics_by_update_id($item_id);
-  //
-  //   // build the breadcrumbs data array
-  //   $breadcrumbs_data['template'] = "public_bootstrap";
-  //   $breadcrumbs_data['current_page_title'] = $data['item_title'];
-  //   $breadcrumbs_data['breadcrumbs_array'] = $this->_generate_breadcrumbs_array($item_id);
-  //   $data['breadcrumbs_data'] = $breadcrumbs_data;
-  //
-  //   $data['flash'] = $this->session->flashdata('item');
-  //   $this->load->module('site_settings');
-  //   $currency_symbol = $this->site_settings->_get_currency_symbol();
-  //   $data['item_price_desc'] = $currency_symbol.number_format($data['item_price'], 2);
-  //   // this module helps to make a friendly URL
-  //   $data['view_module'] = "store_items";
-  //   $data['view_file'] = "view";
-  //   $this->load->module('templates');
-  //   $this->templates->public_bootstrap($data);
-  // }
 
   function _get_pics_by_update_id($item_id) {
     $mysql_query = "
@@ -385,8 +393,8 @@ class Store_items extends MX_Controller {
   // '_' means private
   function _genrate_thumbnail($file_name) {
     $config['image_library'] = 'gd2';
-    $config['source_image'] = './media/big_pics/'.$file_name;
-    $config['new_image'] = './item_pics/'.$file_name;
+    $config['source_image'] = './media/item_big_pics/'.$file_name;
+    $config['new_image'] = './media/item_small_pics/'.$file_name;
     $config['maintain_ratio'] = true;
     $config['width'] = 200;
     $config['height'] = 200;
@@ -433,14 +441,15 @@ class Store_items extends MX_Controller {
     if ($submit == "cancel") {
       redirect('store_items/create/'.$item_id);
     } else if ($submit == "upload") {
-      $config['upload_path'] = '.media/item_big_pics/';
-      $config['allowed_types'] = 'gif|jpg|png';
+      $config['upload_path'] = './media/item_big_pics';
+      $config['allowed_types'] = 'gif|jpg|png|jpeg';
       $config['max_size'] = 2048;
       $config['max_width'] = 3036;
       $config['max_height'] = 1902;
       $file_name = $this->site_security->generate_random_string(16);
       $config['file_name'] = $file_name;
       $this->load->library('upload', $config);
+      $this->upload->initialize($config);
 
       if (!$this->upload->do_upload('userfile')) {
         $mysql_query = "SELECT * FROM item_pics WHERE item_id = $item_id";
@@ -455,7 +464,6 @@ class Store_items extends MX_Controller {
         $this->load->module('templates');
         $this->templates->admin($data);
       } else {
-
         // upload was successful
         $data = array('upload_data' => $this->upload->data());
         $upload_data = $data['upload_data'];
@@ -596,14 +604,12 @@ class Store_items extends MX_Controller {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $small_pic_id = $this->uri->segment(4);
-
+    $pic_id = $this->uri->segment(4);
     $data = $this->fetch_data_from_db($item_id);
+    $picture_name = $this->item_pics->get_where($pic_id)->row()->picture_name;
 
-    $picture_name = $this->item_pics->_get_picture_name_by_small_pic_id($small_pic_id);
-
-    $big_pic_path = './item_big_pics/'.$picture_name;
-    $small_pic_path = './item_small_pics/'.$picture_name;
+    $big_pic_path = './media/item_big_pics/'.$picture_name;
+    $small_pic_path = './media/item_small_pics/'.$picture_name;
 
     // checks if the file exists in the directory and if so, attemt to remove the images
     if (file_exists($big_pic_path)) {
@@ -614,13 +620,10 @@ class Store_items extends MX_Controller {
       unlink($small_pic_path);
     }
 
-    // delete every big pic that is linked to a small pic
-    $this->big_pics->_delete_where('small_pic_id', $small_pic_id);
-
     // reassign priority
-    $priority_for_deleted_pic = $this->item_pics->get_priority_for_item($small_pic_id, $item_id);
+    $priority_for_deleted_pic = $this->item_pics->get_priority_for_item($pic_id, $item_id);
     // delete small and big pics
-    $this->item_pics->_delete($small_pic_id);
+    $this->item_pics->_delete($pic_id);
     $query = $this->item_pics->get_where_custom('item_id', $item_id);
     foreach ($query->result() as $row) {
       if ($row->priority > $priority_for_deleted_pic) {
@@ -643,20 +646,42 @@ class Store_items extends MX_Controller {
 
     // gettinf flash data
     $data['flash'] = $this->session->flashdata('item');
-
     // getting data from DB
     // this means order by item_title
-    $mysql_query = "SELECT si.*, sa.userName  FROM store_items si
-    LEFT JOIN users sa ON si.user_id = sa.id;
-    ";
-    $data['query'] = $this->_custom_query($mysql_query);
+    $use_limit = false;
+    $mysql_query = $this->_generate_mysql_query_for_manage_store_items($use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $total_items = $query->num_rows();
 
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_items;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->_get_pagination_limit("admin");
+
+    $use_limit = true;
+    $mysql_query = $this->_generate_mysql_query_for_manage_store_items($use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+    $data['query'] = $query;
     // create a view file. Putting a php (html) into the admin template.
     $data['view_module'] = "store_items";
     // store_Items.php
     $data['view_file'] = "manage"; // manage.php
     $this->load->module('templates');
     $this->templates->admin($data);
+  }
+
+  function _generate_mysql_query_for_manage_store_items($use_limit) {
+    $mysql_query = "SELECT si.*, sa.userName  FROM store_items si
+    LEFT JOIN users sa ON si.user_id = sa.id
+    ";
+    if ($use_limit == true) {
+      $limit = 10;
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
   }
 
   function create() {
@@ -666,7 +691,6 @@ class Store_items extends MX_Controller {
 
     $item_id = $this->uri->segment(3);
     $submit = $this->input->post('submit', true);
-
     if ($submit == "cancel") {
       redirect('store_items/manage');
     } else if ($submit == "submit") {
@@ -740,14 +764,13 @@ class Store_items extends MX_Controller {
         }
       }
     }
-
     if ((is_numeric($item_id)) && ($submit != "submit")) {
       $data = $this->fetch_data_from_db($item_id);
     } else {
       $data = $this->fetch_data_from_post();
     }
 
-    if (!is_numeric($item_id)) {
+    if (!is_numeric($item_id) || $item_id == "") {
       $data['headline'] = "Add New Item";
     } else {
       $data['headline'] = "Update Item Details";
@@ -755,6 +778,9 @@ class Store_items extends MX_Controller {
 
     // pass update id into the page
     $data['update_id'] = $item_id;
+    if (isset($item_id)) {
+      $data['item_url'] = $this->get_where($item_id)->row()->item_url;
+    }
     $data['flash'] = $this->session->flashdata('item');
 
     // create a view file. Putting a php (html) into the admin template.
@@ -766,7 +792,7 @@ class Store_items extends MX_Controller {
   }
 
   function _get_categories() {
-    $mysql_query = "SELECT * FROM store_categories WHERE parent_cat_id != 0 ORDER BY id";
+    $mysql_query = "SELECT * FROM store_categories WHERE parent_cat_id = 0 ORDER BY id";
     $query = $this->_custom_query($mysql_query);
 
     $count = 0;

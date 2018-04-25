@@ -14,6 +14,7 @@ $create_item_url = base_url()."store_items/create";
             <h2><i class="fa fas fa-tag"></i> Items Inventory</h2>
           </div>
           <div class="box-content">
+            <?= $pagination ?>
             <table class="table table-striped table-bordered bootstrap-datatable datatable">
               <thead>
             <tr>
@@ -55,7 +56,7 @@ $create_item_url = base_url()."store_items/create";
                 </td>
                 <td class="center">
                   <a class="btn btn-success" href="<?= $view_item_url ?>">
-                    <i class="fa fas fa-search"></i>&nbsp;&nbsp;View
+                    <i class="fa fa-laptop"></i>&nbsp;&nbsp;View
                   </a>
                   <a class="btn btn-info" href="<?= $edit_item_url ?>">
                     <i class="fa fas fa-edit"></i>&nbsp;&nbsp;Edit

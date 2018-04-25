@@ -14,7 +14,6 @@ div.uploadBtn {
   background-size: 100%;
   cursor: pointer;
 }
-
 .imageUploadedOrNot {
   display: none;
 }
@@ -23,7 +22,6 @@ img#blankImg {
   max-width: 20%;
 }
 </style>
-<div class="container">
 <h1><?= $headline ?></h1>
 <div class="row mt">
   <div class="col-lg-12">
@@ -55,11 +53,10 @@ img#blankImg {
         <?php echo form_open_multipart('store_items/do_upload/'.$update_id);?>
         <div class="form-group">
           <label class="col-sm-2 col-sm-2 control-label" for="input">Image </label>
-          <!-- <div class="uploadBtn"> -->
-        
-          <input type="file" name="pic">
+          <div class="uploadBtn">
+          <input type="file" name="userfile" name="pic">
         </div>
-        <!--  <input type="file" name="userfile" id="file">-->
+         <!-- <input type="file" name="userfile" id="file"> -->
           <!-- </div> -->
         </div>
         <div class="form-actions">
@@ -91,7 +88,7 @@ if ($num_rows > 0) {
     $this->load->module('store_categories');
     foreach($query->result() as $row) {
       $delete_image_url = base_url()."/store_items/delete_image/".$row->id;
-      $picture_location = base_url()."/item_pics/".$row->picture_name;
+      $picture_location = base_url()."/media/item_small_pics/".$row->picture_name;
       $view_item_url = base_url()."/store_categories/view/".$row->id;
       $priority = $row->priority;
       ?>
@@ -108,4 +105,3 @@ if ($num_rows > 0) {
   <?php
 }
 ?>
-</div>

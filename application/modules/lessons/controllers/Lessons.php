@@ -12,20 +12,34 @@ class Lessons extends MX_Controller {
   }
 
   function view_lessons() {
-    $query = $this->get("lesson_name");
+    $use_limit = false;
+    $mysql_query = $this->_get_mysql_query_for_lessons($use_limit);
+    $query = $this->_custom_query($mysql_query);
     $total_lessons = $query->num_rows();
 
-    $pagination_data['template'] = "public_bootstrap";
+    $use_limit = true;
+    $mysql_query = $this->_get_mysql_query_for_lessons($use_limit);
+    $pagination_data['template'] = "unishop";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_lessons;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_pagination_limit();
+    $pagination_data['limit'] = $this->_get_pagination_limit();
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['query'] = $query;
     $data['view_file'] = "view_lessons";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
+  }
+
+  function _get_mysql_query_for_lessons($use_limit) {
+    $mysql_query = "SELECT DISTINCT * FROM lessons";
+    if ($use_limit == true) {
+      $limit = $this->_get_pagination_limit();
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
   }
 
   function view_lesson($lesson_url) {
@@ -39,10 +53,22 @@ class Lessons extends MX_Controller {
     if (!is_numeric($lesson_id)) {
       $this->site_security->not_allowed();
     }
-
     $data_from_db = $this->fetch_data_from_db($lesson_id);
     $pics_query = $this->lesson_pics->get_where_custom("lesson_id", $lesson_id);
-    $schedule_query = $this->lesson_schedules->get_where_custom("lesson_id", $lesson_id);
+    $use_limit = false;
+    $schedule_query = $this->_get_mysql_query_for_lesson_schedules($use_limit, $lesson_id);
+    $query = $this->_custom_query($schedule_query);
+    $total_schedules = $query->num_rows();
+
+    $pagination_data['template'] = "unishop";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_schedules;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->_get_pagination_limit();
+    $use_limit = true;
+    $schedule_query = $this->_get_mysql_query_for_lesson_schedules($use_limit, $lesson_id);
+    $schedule_query = $this->_custom_query($schedule_query);
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['flash'] = $this->session->flashdata('item');
     $currency_symbol = $this->site_settings->_get_currency_symbol();
@@ -63,6 +89,17 @@ class Lessons extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
+  function _get_mysql_query_for_lesson_schedules($use_limit, $lesson_id) {
+    $current_time = time();
+    $mysql_query = "SELECT * FROM lesson_schedules WHERE lesson_id = $lesson_id AND lesson_start_date >= $current_time";
+    if ($use_limit == true) {
+      $limit = $this->_get_pagination_limit();
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
+  }
+
   function manage_lessons() {
     $this->load->module('site_security');
     $this->load->module('site_settings');
@@ -75,7 +112,7 @@ class Lessons extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_lessons;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_pagination_limit();
+    $pagination_data['limit'] = $this->_get_pagination_limit();
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
@@ -432,10 +469,9 @@ class Lessons extends MX_Controller {
     return $data;
   }
 
-
   // beginning of pagination methods
-  function get_pagination_limit() {
-    $limit = 20;
+  function _get_pagination_limit() {
+    $limit = 10;
     return $limit;
   }
 

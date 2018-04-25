@@ -1,10 +1,10 @@
 <div class="container padding-bottom-2x mb-2">
-  <?= $pagination ?>
   <div class="row">
     <?php
     echo Modules::run('store_categories/_draw_categories');
      ?>
     <div class="col-xl-9 col-lg-8 order-lg-2">
+      <?= $pagination ?>
       <?php
       if (isset($keywords)) {
         echo $keywords;
@@ -70,4 +70,4 @@
         </div>
       </div>
     </div>
-    <?= $pagination ?>
+    <!-- <?= $pagination ?> -->

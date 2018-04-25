@@ -1,8 +1,13 @@
 <aside>
   <div id="sidebar"  class="nav-collapse">
-    <!-- sidebar menu start-->
     <ul class="sidebar-menu" id="nav-accordion">
-      <!--	  <p class="centered"><a><img class="img-circle" width="60"></a></p>-->
+      <?php
+      $this->load->module('admin_info');
+      $admin = $this->admin_info->get_admin_info();
+      $first_name = $admin->first_name;
+      $last_name = $admin->last_name;
+      $admin_name = $first_name.' '.$last_name;
+       ?>
       <h5 class="centered">Mark Cangelosi</h5>
       <li class="mt">
         <a href="<?= base_url() ?>dashboard/home">
@@ -38,18 +43,6 @@
         <a href="<?= base_url() ?>store_categories/manage">
           <i class="fa fa-bars"></i>
           <span>Manage Categories</span>
-        </a>
-      </li>
-      <li class="sub-menu">
-        <a class= "hidden-tablet" href="<?= base_url() ?>homepage_blocks/manage">
-          <i class="fa fa-star"></i>
-          <span>Homepage Offers</span>
-        </a>
-      </li>
-      <li class="sub-menu">
-        <a href="<?= base_url() ?>webpages/manage">
-          <i class="fa fa-file"></i>
-          <span>CMS</span>
         </a>
       </li>
       <li class="sub-menu">

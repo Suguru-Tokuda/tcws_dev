@@ -11,8 +11,8 @@
     <div class="isotope-grid cols-3 mb-2" style="position: relative; height: 1340px;">
       <div class="gutter-sizer"></div>
       <div class="grid-sizer"></div>
+      <?= $pagination ?>
       <!-- Product-->
-
       <?php
       $this->load->module('boat_pics');
       foreach($query->result() as $row) {
@@ -43,6 +43,5 @@
     }
     ?>
     </div>
-
   </div>
 </div>

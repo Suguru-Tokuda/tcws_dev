@@ -75,6 +75,7 @@ class Lesson_schedules extends MX_Controller {
         if (isset($lesson_schedule_id)) {
           // update
           $data['lesson_id'] = $lesson_id;
+          unset($data['lesson_date']);
           $this->_update($lesson_schedule_id, $data);
           $flash_msg = "The schedule was successfully updated.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';

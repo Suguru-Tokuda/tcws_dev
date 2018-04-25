@@ -102,14 +102,15 @@ if (isset($flash)) {
     <div class="col-md-6">
       <div class="padding-top-2x mt-2 hidden-md-up"></div>
       <h2 class="padding-top-1x text-normal"><?= $lesson_name ?></h2>
-      <span class="h2 d-block"><?= $currency_symbol.$lesson_fee.' / per' ?></span>
+      <span class="h2 d-block"><?= $currency_symbol.$lesson_fee.' / person' ?></span>
       <p>About Lesson: <?= nl2br($lesson_description) ?></p>
       <p>Location: <?= nl2br($address.', '.$city.', '.$state) ?></p>
       <p>Lesson Capacity: <?= nl2br($capacity) ?></p>
     </div>
   </div>
-  <div class="row">
+  <div class="row" style="margin-top: 50px;">
     <div class="table-responsive">
+      <?= $pagination ?>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -117,7 +118,7 @@ if (isset($flash)) {
             <th>Start Time</th>
             <th>End Time</th>
             <th>Availability</th>
-            <th></th>
+            <th>Number</th>
             <th></th>
           </tr>
         </thead>
@@ -155,7 +156,7 @@ if (isset($flash)) {
                     ?>
                     <?php
                   } else {
-                    for ($i = 1; $i <= $number_of_bookings; $i++) {
+                    for ($i = 1; $i <= $availability; $i++) {
                       ?>
                       <option value="<?= $i ?>"><?= $i ?></option>
                       <?php
