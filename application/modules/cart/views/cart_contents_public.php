@@ -38,7 +38,6 @@
     }
       ?>
 
-
     <?php
     if($lesson_query->num_rows() > 0){
     foreach ($lesson_query->result() as $row) {
@@ -51,7 +50,6 @@
           <?php
           if ($row->picture_name != '') {
             // echo $row->small_pic;
-
             ?>
             <img src="<?= base_url() ?>media/lesson_small_pics/<?= $row->picture_name ?>" title="<?= base_url() ?>media/lesson_small_pics/<?= $row->picture_name ?>">
             <?php
@@ -76,18 +74,6 @@
   }
     ?>
       <tr>
-        <tr style="margin-top: 12px;">
-          <td>
-            &nbsp;
-          </td>
-          <td>
-            Shipping:
-            <?php
-            $grand_total = $grand_total + $shipping;
-            ?>
-          </td>
-          <td><?= $currency_symbol.$shipping ?></td>
-        </tr>
         <tr>
           <td colspan="2" style="font-weight: bold; text-align: right;">Total</td>
           <td style="font-weight: bold;"><?= $currency_symbol.number_format($grand_total, 2) ?></td>

@@ -41,12 +41,11 @@ class Lesson_basket extends MX_Controller {
     $submit = $this->input->post('submit', true);
     if ($submit == "submit") {
       // process the form
-      $lesson_id = $this->input->post('lesson_id', true);
       $data = $this->_fetch_the_data();
+      $lesson_id = $this->input->post('lesson_id', true);
       $this->_insert($data);
       redirect('cart');
     }
-
   }
 
   function _fetch_the_data() {

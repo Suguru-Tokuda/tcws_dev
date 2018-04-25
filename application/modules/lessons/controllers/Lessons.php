@@ -23,7 +23,7 @@ class Lessons extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_lessons;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->_get_pagination_limit();
+    $pagination_data['limit'] = $this->get_pagination_limit("main");
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['query'] = $query;
@@ -35,7 +35,7 @@ class Lessons extends MX_Controller {
   function _get_mysql_query_for_lessons($use_limit) {
     $mysql_query = "SELECT DISTINCT * FROM lessons";
     if ($use_limit == true) {
-      $limit = $this->_get_pagination_limit();
+      $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();
       $mysql_query.= " LIMIT ".$offset.", ".$limit;
     }
@@ -64,7 +64,7 @@ class Lessons extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_schedules;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->_get_pagination_limit();
+    $pagination_data['limit'] = $this->get_pagination_limit("main");
     $use_limit = true;
     $schedule_query = $this->_get_mysql_query_for_lesson_schedules($use_limit, $lesson_id);
     $schedule_query = $this->_custom_query($schedule_query);
@@ -93,7 +93,7 @@ class Lessons extends MX_Controller {
     $current_time = time();
     $mysql_query = "SELECT * FROM lesson_schedules WHERE lesson_id = $lesson_id AND lesson_start_date >= $current_time";
     if ($use_limit == true) {
-      $limit = $this->_get_pagination_limit();
+      $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();
       $mysql_query.= " LIMIT ".$offset.", ".$limit;
     }
@@ -112,7 +112,7 @@ class Lessons extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_lessons;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->_get_pagination_limit();
+    $pagination_data['limit'] = $this->get_pagination_limit("admin");
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
@@ -470,8 +470,11 @@ class Lessons extends MX_Controller {
   }
 
   // beginning of pagination methods
-  function _get_pagination_limit() {
-    $limit = 10;
+  function get_pagination_limit($location) {
+    if ($location == "main")
+    $limit = 6;
+    else if ($location == "admin")
+    $limit = 20;
     return $limit;
   }
 
