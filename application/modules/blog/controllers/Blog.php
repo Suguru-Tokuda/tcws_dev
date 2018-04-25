@@ -21,7 +21,7 @@ class Blog extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $query->num_rows();
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->_get_pagination_limit();
+    $pagination_data['limit'] = $this->get_pagination_limit("main");
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['query'] = $query;
@@ -33,7 +33,7 @@ class Blog extends MX_Controller {
   function _get_mysql_query_for_blogs($use_limit) {
     $mysql_query = "SELECT DISTINCT * FROM blog ORDER BY date_published";
     if ($use_limit == true) {
-      $limit = $this->_get_pagination_limit();
+      $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();
       $mysql_query.= " LIMIT ".$offset.", ".$limit;
     }
@@ -48,15 +48,31 @@ class Blog extends MX_Controller {
 
     $query_for_all_blogs = $this->get('date_published');
 
-    $current_row = 0;
-    foreach ($query_for_all_blogs->result() as $row) {
-      if ($row->blog_url == $blog_url) {
-        $current_row++;
+    $blog_urls = array();
+    foreach($query_for_all_blogs->result() as $row) {
+      array_push($blog_urls, $row->blog_url);
+    }
+
+    for ($i = 0; $i < count($blog_urls); $i++) {
+      if ($blog_urls[$i] == $blog_url) {
+        $target_index = $i;
+        break;
       }
     }
-    if ($query_for_all_blogs->num_rows() > 1) {
-      $data['prev_blog_url'] = $query_for_all_blogs->row($current_row - 1)->blog_url;
-      $data['next_blog_url'] = $query_for_all_blogs->row($current_row + 1)->blog_url;
+
+    $prev_index = $target_index - 1;
+    $next_index = $target_index + 1;
+
+    if (isset($blog_urls[$prev_index])) {
+      $data['prev_blog_url'] = $blog_urls[$prev_index];
+    } else {
+      $data['prev_blog_url'] = "";
+    }
+
+    if (isset($blog_urls[$next_index])) {
+      $data['next_blog_url'] = $blog_urls[$next_index];
+    } else {
+      $data['next_blog_url'] = "";
     }
 
     $data['blog_id'] = $query->row()->id;
@@ -496,8 +512,11 @@ class Blog extends MX_Controller {
   }
 
   // beginning of pagination methods
-  function _get_pagination_limit() {
+  function get_pagination_limit($location) {
+    if ($location == "main")
     $limit = 6;
+    else if ($location == "admin")
+    $limit = 20;
     return $limit;
   }
 

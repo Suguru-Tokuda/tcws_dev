@@ -3,6 +3,7 @@ class Cart extends MX_Controller {
 
   function __construct() {
     parent::__construct();
+    $this->load->module('site_security');
   }
 
   function index() {
@@ -180,7 +181,6 @@ class Cart extends MX_Controller {
     } else {
       $view_file = 'cart_contents_admin';
     }
-    $data['shipping'] = $this->shipping->_get_shipping();
     $data['query'] = $query;
     $data['lesson_query'] = $lesson_query;
     $this->load->view($view_file, $data);

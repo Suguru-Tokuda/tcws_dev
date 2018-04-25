@@ -3,6 +3,7 @@ class Site_security extends MX_Controller {
 
   function __construct() {
     parent::__construct();
+    $this->load->library('encryption');
   }
 
   function _check_admin_login_details($userName, $password) {

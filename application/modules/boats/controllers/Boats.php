@@ -24,7 +24,7 @@ class Boats extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_boats;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->_get_pagination_limit();
+    $pagination_data['limit'] = $this->get_pagination_limit("main");
 
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
@@ -37,7 +37,7 @@ class Boats extends MX_Controller {
   function _get_mysql_query_for_boats($use_limit) {
     $mysql_query = "SELECT DISTINCT * FROM boat_rental ORDER BY boat_name";
     if ($use_limit == true) {
-      $limit = $this->_get_pagination_limit();
+      $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();
       $mysql_query.= " LIMIT ".$offset.", ".$limit;
     }
@@ -92,22 +92,37 @@ class Boats extends MX_Controller {
     $this->load->module('site_security');
     $this->load->module('site_settings');
     $this->site_security->_make_sure_is_admin();
-
-    $query = $this->get("boat_name");
+    $use_limit = false;
+    $mysql_query = $this->_generate_mysql_query_for_manage_boats($use_limit);
+    $query = $this->_custom_query($mysql_query);
     $total_boats = $query->num_rows();
 
     $pagination_data['template'] = "public_bootstrap";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_boats;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->_get_pagination_limit();
+    $pagination_data['limit'] = $this->get_pagination_limit("admin");
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $use_limit = true;
+    $mysql_query = $this->_generate_mysql_query_for_manage_boats($use_limit);
+    $query = $this->_custom_query($mysql_query);
 
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $query;
     $data['view_file'] = "manage_boats";
     $this->load->module('templates');
     $this->templates->admin($data);
+  }
+
+  function _generate_mysql_query_for_manage_boats($use_limit) {
+    $mysql_query = "SELECT * FROM boat_rental ORDER BY boat_name";
+    if ($use_limit == true) {
+      $limit = $this->get_pagination_limit("main");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
   }
 
   // need to pass $boat_rental_id or decide if it wants to take the boat_url
@@ -433,8 +448,11 @@ class Boats extends MX_Controller {
   }
 
   // beginning of pagination methods
-  function _get_pagination_limit() {
-    $limit = 6;
+  function get_pagination_limit($location) {
+    if ($location == "main")
+    $limit = 10;
+    else if ($location == "admin")
+    $limit = 20;
     return $limit;
   }
 

@@ -18,6 +18,8 @@ var paths = {
   unishopCustomJSSource: 'src/assets/js/unishop_js/custom/*.js',
   unishopVendorJSSource: 'src/assets/js/unishop_js/vendor/*.js',
   unishopVendorJSSource2: './assets/vendors/js/*.js',
+  unishopVendorHeaderJSSource: 'src/assets/js/unishop_js/vendor/header/*.js',
+  unishopVendorFooterJSSource: 'src/assets/js/unishop_js/vendor/footer/*.js',
   unishopFontsSource: 'src/assets/fonts/unishop_fonts/*',
   dashgumCustomCSSSource: 'src/assets/css/dashgum_css/custom/*.css',
   dashgumVendorCSSSource: 'src/assets/css/dashgum_css/vendor/*.css',
@@ -39,7 +41,9 @@ gulp.task('compress-unishiop-vendor-css', function() {
   gulp.src(paths.unishopVendorCSSSource)
   .pipe(order([
     "vendor.min.css",
-    "card.min.css"
+    "card.min.css",
+    "jquery.timepicker.css",
+    "site.js"
   ]))
   .pipe(concat('unishop.vendor.min.css'))
   .pipe(gulp.dest(paths.cssDest));
@@ -93,6 +97,32 @@ gulp.task('compress-unishop-vendor-js', function() {
   .pipe(order([
     "modernizr.min.js"
   ]))
+  .pipe(gulp.dest(paths.jsDest));
+  return stream;
+});
+
+gulp.task('compress-unishop-header-js', function() {
+  var stream = gulp.src(paths.unishopVendorHeaderJSSource)
+  .pipe(order([
+    "jquery.js",
+    "jquery-ui.js",
+    "modernizr.min.js",
+    "jquery.timepicker.js",
+    "bootstrap-datepicker.js",
+    "site.js",
+  ]))
+  .pipe(concat('unishop.vendor.header.js'))
+  .pipe(gulp.dest(paths.jsDest));
+  return stream;
+});
+
+gulp.task('compress-unishop-footer-js', function() {
+  var stream = gulp.src(paths.unishopVendorFooterJSSource)
+  .pipe(order([
+    "vendor.min.js",
+    "card.min.js"
+  ]))
+  .pipe(concat('unishop.vendor.header.js'))
   .pipe(gulp.dest(paths.jsDest));
   return stream;
 });

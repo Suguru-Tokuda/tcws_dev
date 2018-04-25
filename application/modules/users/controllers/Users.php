@@ -3,6 +3,7 @@ class Users extends MX_Controller {
 
   function __construct() {
     parent::__construct();
+    $this->load->module('custom_pagination');
   }
 
   function _generate_token($update_id) {
@@ -49,8 +50,27 @@ class Users extends MX_Controller {
 
     // getting data from DB
     // this means order by lastName
-    $data['query'] = $this->get('lastName');
+    $use_limit = false;
+    $mysql_query = $this->_get_mysql_query_for_manage_users($use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $total_users = $query->num_rows();;
 
+    $use_limit = true;
+    $mysql_query = $this->_get_mysql_query_for_manage_users($use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $total_users = $query->num_rows();
+
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_users;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_pagination_limit();
+    $showing_statement_data['limit'] = $this->get_pagination_limit("main");
+    $showing_statement_data['offset'] = $this->_get_pagination_offset();
+    $showing_statement_data['total_rows'] = $total_users;
+
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+    $data['query'] =  $query;
     // create a view file. Putting a php (html) into the admin template.
     $data['view_module'] = "users";
     // store_Accounts.php
@@ -58,6 +78,39 @@ class Users extends MX_Controller {
     $this->load->module('templates');
     $this->templates->admin($data);
   }
+
+  function _get_mysql_query_for_manage_users($use_limit) {
+    $mysql_query = "SELECT * FROM users ORDER BY lastName";
+    if ($use_limit == true) {
+      $limit = $this->get_pagination_limit("main");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
+  }
+
+  // method for pagination
+  function get_target_pagination_base_url() {
+    $first_bit = $this->uri->segment(1);
+    $second_bit = $this->uri->segment(2);
+    $third_bit = $this->uri->segment(3);
+    $target_base_url = base_url().$first_bit."/".$second_bit."/".$third_bit;
+    return $target_base_url;
+  }
+  // $location is where you show the data: it's either "main" or "admin"
+  function get_pagination_limit() {
+    $limit = 20;
+    return $limit;
+  }
+
+  function _get_pagination_offset() {
+    $offset = $this->uri->segment(4);
+    if (!is_numeric($offset)) {
+      $offset = 0;
+    }
+    return $offset;
+  }
+  // method for pagination
 
   function _get_customer_name($update_id, $optional_customer_data=NULL) {
     if (!isset($optional_customer_data)) {

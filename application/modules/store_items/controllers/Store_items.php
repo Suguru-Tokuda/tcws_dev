@@ -29,9 +29,9 @@ class Store_items extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_items;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->_get_pagination_limit("main");
+    $pagination_data['limit'] = $this->get_pagination_limit("main");
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
-    $showing_statement_data['limit'] = $this->_get_pagination_limit("main");
+    $showing_statement_data['limit'] = $this->get_pagination_limit("main");
     $showing_statement_data['offset'] = $this->_get_pagination_offset();
     $showing_statement_data['total_rows'] = $total_items;
     $data['query'] = $query;
@@ -50,7 +50,7 @@ class Store_items extends MX_Controller {
                     JOIN store_categories sc ON sca.cat_id = sc.id
                     WHERE sc.id = $cat_id";
     if ($use_limit == true) {
-      $limit = $this->_get_pagination_limit("main");
+      $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();
       $mysql_query.= " LIMIT ".$offset.", ".$limit;
     }
@@ -123,9 +123,10 @@ class Store_items extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_items;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->_get_pagination_limit("main");
+    $pagination_data['limit'] = $this->get_pagination_limit("main");
+
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
-    $showing_statement_data['limit'] = $this->_get_pagination_limit("main");
+    $showing_statement_data['limit'] = $this->get_pagination_limit("main");
     $showing_statement_data['offset'] = $this->_get_pagination_offset();
     $showing_statement_data['total_rows'] = $total_items;
     $data['showing_statement'] = $this->custom_pagination->get_showing_statement($showing_statement_data);
@@ -140,7 +141,7 @@ class Store_items extends MX_Controller {
     //NOTE: use_limit can be true or false
     $mysql_query = "SELECT DISTINCT si.id, si.item_url, si.item_price, si.item_title, si.was_price FROM store_items si JOIN item_pics sp ON si.id = sp.item_id";
     if ($use_limit == true) {
-      $limit = $this->_get_pagination_limit("main");
+      $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();
       $mysql_query.= " LIMIT ".$offset.", ".$limit;
     }
@@ -189,7 +190,7 @@ class Store_items extends MX_Controller {
     return $target_base_url;
   }
   // $location is where you show the data: it's either "main" or "admin"
-  function _get_pagination_limit($location) {
+  function get_pagination_limit($location) {
     if ($location == "main")
     $limit = 6;
     else if ($location == "admin")
@@ -657,7 +658,7 @@ class Store_items extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_items;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->_get_pagination_limit("admin");
+    $pagination_data['limit'] = $this->get_pagination_limit("admin");
 
     $use_limit = true;
     $mysql_query = $this->_generate_mysql_query_for_manage_store_items($use_limit);
