@@ -5,7 +5,7 @@
       $grand_total = 0;
       if($query->num_rows() > 0){
       foreach ($query->result() as $row) {
-        $sub_total = $row->price * $row->item_qty;
+        $sub_total = $row->boat_fee * $row->no_days;
         $sub_total_desc = number_format($sub_total, 2);
         $grand_total += $sub_total;
         ?>
@@ -24,12 +24,11 @@
             ?>
           </td>
           <td>
-            Item Number: <?= $row->item_id ?><br>
-            <b><?= $row->item_title ?></b><br>
-            Item Price: <?= $currency_symbol.$row->price ?><br><br>
-            QUANTITY: <?= $row->item_qty ?><br><br>
+            Boat Id: <?= $row->boat_id ?><br>
+            <b>Boat Name: <?= $row->boat_name ?></b><br>
+            Rental Price: <?= $currency_symbol.$row->boat_fee ?><br><br>
             <?php
-            echo anchor('store_basket/remove/'.$row->id, "Remove");
+            echo anchor('boat_basket/remove/'.$row->id, "Remove");
             ?>
           </td>
           <td><?= $currency_symbol.$sub_total_desc ?></td>
@@ -62,10 +61,10 @@
           ?>
         </td>
         <td>
-          Item Number: <?= $row->lesson_id ?><br>
-          <b><?= $row->lesson_name ?></b><br>
-          Item Price: <?= $currency_symbol.$row->lesson_fee ?><br><br>
-          QUANTITY: <?= $row->booking_qty ?><br><br>
+          Lesson Id: <?= $row->lesson_id ?><br>
+          <b>Lesson Name: <?= $row->lesson_name ?></b><br>
+          Lesson Price: <?= $currency_symbol.$row->lesson_fee ?><br><br>
+          Total Quantity: <?= $row->booking_qty ?><br><br>
           <?php
           echo anchor('lesson_basket/remove/'.$row->id, "Remove");
           ?>

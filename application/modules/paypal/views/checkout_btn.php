@@ -12,25 +12,13 @@ $count = 0;
 if($query->num_rows() >0){
 foreach($query->result() as $row) {
   $count++;
-  $item_title = $row->item_title;
-  $price = $row->price;
-  $item_qty = $row->item_qty;
-  $item_size = $row->item_size;
-  $item_color = $row->item_color;
+  $item_title = $row->boat_id;
+  $price = $row->boat_fee;
+  $item_qty = $row->no_days;
 
   echo form_hidden('item_name_'.$count, $item_title);
   echo form_hidden('amount_'.$count, $price);
   echo form_hidden('item_qty_'.$count, $item_qty);
-
-  if ($item_color != '') {
-    echo form_hidden('on0_'.$count, 'Color');
-    echo form_hidden('os0_'.$count, $item_color);
-  }
-
-  if ($item_size != '') {
-    echo form_hidden('on1_'.$count, 'Size');
-    echo form_hidden('os1_'.$count, $item_size);
-  }
 }
 }
 

@@ -44,6 +44,18 @@ class Boats extends MX_Controller {
     return $mysql_query;
   }
 
+  function fetch_limited_data_from_db($boat_id) {
+    $this->load->module('site_security');
+    if (!is_numeric($boat_id)) {
+      redirect(base_url());
+    }
+    $query = $this->get_where($boat_id);
+    $row = $query->row();
+    $data['boat_name'] = $row->boat_name;
+    $data['boat_rental_fee'] = $row->boat_rental_fee;
+    return $data;
+  }
+
   function view_boat($boat_url) {
     $this->load->module('site_security');
     $this->load->module('site_settings');
