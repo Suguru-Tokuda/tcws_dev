@@ -4,7 +4,7 @@ if (isset($flash)) {
 }
 
 $form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_rental_id;
-
+$booking_url = base_url().'boat_basket/add_to_basket';
 ?>
 <!-- Product Gallery-->
 <div class="container padding-bottom-3x mb-1">
@@ -121,37 +121,8 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_renta
 
 
 
- <script>
-  $(function(e){
-    $('#checkAvailability').on('submit',function(){
-      var startDate = $('#boat_start_date').val();
-      var endDate = $('#boat_end_date').val();
-      var id = "<?= nl2br($boat_rental_id)?>";
-      $.ajax({
-        url: "<?= base_url().'boats_schedules/create_boat_schedules/'.$boat_rental_id?>",
-        type: 'post',
-        data:{
-          'boat_start_date': startDate,
-          'boat_end_date' : endDate,
-          'boat_rental_id': id
-        },
-        success: function(data, status){
-
-          if(data === "true")
-          {
-            //redirect it to cart
-            alert(data);
-          }
-        },
-        error: function(error) {
-          alert(error);
-        }
-      });
-    });
-  });
-  </script>
   <div class ="row">
-    <form method="post"  id = "checkAvailability" >
+    <form method="post"  id = "checkAvailability" action="<?= $booking_url ?>">
       <div class="form-group row">
         <label class="col-5 col-form-label" for="startDate-time-input" >Start Date and time</label>
         <div class="col-7">
@@ -166,7 +137,10 @@ $form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_renta
       </div>
       <div class="form-group">
         <div class="col-md-offset-3 col-md-4">
-          <button class="btn btn-primary" name="submit" id = "boat_rental_id" value="<?= nl2br($boat_rental_id)?>">Check Availability</button>
+          <button class="btn btn-primary" name="submit" id="boat_rental_id" value="submit">Book Boat</button>
+          <input type="hidden" name="boat_name" value="<?php echo $boat_name  ?>">
+          <input type="hidden" name="boat_rental_id" value="<?php echo $boat_rental_id  ?>">
+          <input type="hidden" name="boat_fee" value="<?php echo $currency_symbol.$boat_rental_fee ?>">
         </form>
       </div>
     </div>
