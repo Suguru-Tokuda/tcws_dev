@@ -36,7 +36,6 @@ class Paypal extends MX_Controller {
   function _draw_checkout_btn($query,$lesson_query) {
     $this->load->module('site_settings');
     $this->load->module('site_security');
-    $this->load->module('shipping');
 
     if($query->num_rows() > 0 ){
     foreach($query->result() as $row) {
@@ -59,7 +58,6 @@ class Paypal extends MX_Controller {
     // the data is sent to paypal
     $data['return'] = base_url().'paypal/thankyou';
     $data['cancel_return'] = base_url().'paypal/cancel';
-    $data['shipping'] = $this->shipping->_get_shipping();
     $data['custom'] = $this->site_security->_encrypt_string($session_id);
     $data['paypal_email'] = $this->site_settings->_get_paypal_email();
     $data['currency_code'] = $this->site_settings->_get_currency_code();
