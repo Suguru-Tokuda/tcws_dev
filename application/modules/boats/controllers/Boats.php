@@ -12,20 +12,36 @@ class Boats extends MX_Controller {
   }
 
   function view_boats() {
-    $query = $this->get("boat_name");
+    $use_limit = false;
+    $mysql_query = $this->_get_mysql_query_for_boats($use_limit);
+    $query = $this->_custom_query($mysql_query);
     $total_boats = $query->num_rows();
 
-    $pagination_data['template'] = "public_bootstrap";
+    $use_limit = true;
+    $mysql_query = $this->_get_mysql_query_for_boats($use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $pagination_data['template'] = "unishop";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_boats;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_pagination_limit();
+    $pagination_data['limit'] = $this->_get_pagination_limit();
+
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['query'] = $query;
     $data['view_file'] = "view_boats";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
+  }
+
+  function _get_mysql_query_for_boats($use_limit) {
+    $mysql_query = "SELECT DISTINCT * FROM boat_rental ORDER BY boat_name";
+    if ($use_limit == true) {
+      $limit = $this->_get_pagination_limit();
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
   }
 
   function view_boat($boat_url) {
@@ -35,7 +51,6 @@ class Boats extends MX_Controller {
     //$this->load->module('boat_rental_schedules');
     $boat_rental_id = $this->get_where_custom("boat_url", $boat_url)->row(0)->id;
     $capacity = $this->get_where_custom("boat_url", $boat_url)->row(0)->boat_capacity;
-
 
     if (!is_numeric($boat_rental_id)) {
       $this->site_security->not_allowed();
@@ -73,7 +88,7 @@ class Boats extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_boats;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_pagination_limit();
+    $pagination_data['limit'] = $this->_get_pagination_limit();
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
@@ -406,8 +421,8 @@ class Boats extends MX_Controller {
   }
 
   // beginning of pagination methods
-  function get_pagination_limit() {
-    $limit = 20;
+  function _get_pagination_limit() {
+    $limit = 6;
     return $limit;
   }
 
@@ -428,15 +443,13 @@ class Boats extends MX_Controller {
   }
   // end of pagination methods
 
-  function get($order_by)
-  {
+  function get($order_by) {
     $this->load->model('mdl_boats');
     $query = $this->mdl_boats->get($order_by);
     return $query;
   }
 
-  function get_with_limit($limit, $offset, $order_by)
-  {
+  function get_with_limit($limit, $offset, $order_by) {
     if ((!is_numeric($limit)) || (!is_numeric($offset))) {
       die('Non-numeric variable!');
     }
@@ -446,8 +459,7 @@ class Boats extends MX_Controller {
     return $query;
   }
 
-  function get_where($id)
-  {
+  function get_where($id) {
     if (!is_numeric($id)) {
       die('Non-numeric variable!');
     }
@@ -457,21 +469,18 @@ class Boats extends MX_Controller {
     return $query;
   }
 
-  function get_where_custom($col, $value)
-  {
+  function get_where_custom($col, $value) {
     $this->load->model('mdl_boats');
     $query = $this->mdl_boats->get_where_custom($col, $value);
     return $query;
   }
 
-  function _insert($data)
-  {
+  function _insert($data) {
     $this->load->model('mdl_boats');
     $this->mdl_boats->_insert($data);
   }
 
-  function _update($id, $data)
-  {
+  function _update($id, $data) {
     if (!is_numeric($id)) {
       die('Non-numeric variable!');
     }
@@ -480,8 +489,7 @@ class Boats extends MX_Controller {
     $this->mdl_boats->_update($id, $data);
   }
 
-  function _delete($id)
-  {
+  function _delete($id) {
     if (!is_numeric($id)) {
       die('Non-numeric variable!');
     }
@@ -490,22 +498,19 @@ class Boats extends MX_Controller {
     $this->mdl_boats->_delete($id);
   }
 
-  function count_where($column, $value)
-  {
+  function count_where($column, $value) {
     $this->load->model('mdl_boats');
     $count = $this->mdl_boats->count_where($column, $value);
     return $count;
   }
 
-  function get_max()
-  {
+  function get_max() {
     $this->load->model('mdl_boats');
     $max_id = $this->mdl_boats->get_max();
     return $max_id;
   }
 
-  function _custom_query($mysql_query)
-  {
+  function _custom_query($mysql_query) {
     $this->load->model('mdl_boats');
     $query = $this->mdl_boats->_custom_query($mysql_query);
     return $query;
@@ -513,7 +518,6 @@ class Boats extends MX_Controller {
 
   // a method to check if the item name exists.
   function boat_check($str) {
-
     $boat_name = url_title($str);
     $mysql_query = "SELECT * FROM boat WHERE boat_name = '$str' AND  boat_name = '$boat_name'";
 

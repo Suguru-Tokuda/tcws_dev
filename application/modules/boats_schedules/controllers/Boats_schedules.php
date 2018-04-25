@@ -6,7 +6,6 @@ class Boats_schedules extends MX_Controller {
     $this->load->library('session');
     $this->load->library('form_validation');
     $this->load->module('custom_pagination');
-  //  $this->load->model('Mdl_boats_schedules');
     $this->form_validation->set_ci_reference($this);
   }
 
@@ -14,9 +13,21 @@ class Boats_schedules extends MX_Controller {
   {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
-
-    $mysql_query = "SELECT u.firstName, u.lastName, u.email, br.boat_start_date, br.boat_end_date FROM users u JOIN boat_rental_schedules br ON u.id = br.user_id WHERE br.boat_rental_id = $boat_rental_id";
+    $use_limit = false;
+    $mysql_query = $this->_generate_mysql_query_for_view_schedules($use_limit, $boat_rental_id);
     $query = $this->_custom_query($mysql_query);
+    $total_schedules = $query->num_rows();
+
+    $use_limit = true;
+    $mysql_query = $this->_generate_mysql_query_for_view_schedules($use_limit, $boat_rental_id);
+    $query = $this->_custom_query($mysql_query);
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_schedules;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->_get_pagination_limit();
+
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
     $data['query'] = $query;
     $data['boat_rental_id'] = $boat_rental_id;
     $data['view_file'] = "view_schedules";
@@ -24,7 +35,16 @@ class Boats_schedules extends MX_Controller {
     $data['num_of_users'] = $query->num_rows();
     $this->load->module('templates');
     $this->templates->admin($data);
+  }
 
+  function _generate_mysql_query_for_view_schedules($use_limit, $boat_rental_id) {
+    $mysql_query = "SELECT u.firstName, u.lastName, u.email, br.boat_start_date, br.boat_end_date FROM users u JOIN boat_rental_schedules br ON u.id = br.user_id WHERE br.boat_rental_id = $boat_rental_id";
+    if ($use_limit == true) {
+      $limit = $this->_get_pagination_limit();
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
   }
 
   function create_boat_schedules($boat_rental_id)
@@ -77,15 +97,38 @@ class Boats_schedules extends MX_Controller {
                 $switchVal = "false";
               }
 
+            }
           }
+          echo($switchVal);
         }
-
-        echo($switchVal);
-
       }
     }
   }
-}
+
+  // beginning of pagination methods
+  function _get_pagination_limit() {
+    $limit = 20;
+    return $limit;
+  }
+
+  function _get_pagination_offset() {
+    $offset = $this->uri->segment(4);
+    if (!is_numeric($offset)) {
+      $offset = 0;
+    }
+    return $offset;
+  }
+
+  function get_target_pagination_base_url() {
+    $first_bit = $this->uri->segment(1);
+    $second_bit = $this->uri->segment(2);
+    $third_bit = $this->uri->segment(3);
+    $target_base_url = base_url().$first_bit."/".$second_bit."/".$third_bit;
+    return $target_base_url;
+  }
+  // end of pagination methods
+
+
 
   function get($order_by) {
     $this->load->model('mdl_boats_schedules');
@@ -161,15 +204,15 @@ class Boats_schedules extends MX_Controller {
   }
 }
 /*  else {
-  // insert
-  //echo($data);
-    $this->_insert($data);
-    $flash_msg = "The boat was successfully booked.";
-    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-    $this->session->set_flashdata('item', $value);
-    return true;
-  }*/
-  //   foreach ($arr as $var) {
-  //     echo "\n", $var['startDate'], "\t\t", $var['endDate'];
-  //   }
-  // die();
+// insert
+//echo($data);
+$this->_insert($data);
+$flash_msg = "The boat was successfully booked.";
+$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+$this->session->set_flashdata('item', $value);
+return true;
+}*/
+//   foreach ($arr as $var) {
+//     echo "\n", $var['startDate'], "\t\t", $var['endDate'];
+//   }
+// die();

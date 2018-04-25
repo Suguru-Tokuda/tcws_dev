@@ -38,7 +38,8 @@ class Store_categories extends MX_Controller {
     $items_segments = $this->site_settings->_get_items_segments();
     $data = $this->fetch_data_from_db($cat_id);
     $cat_url = $data['cat_url'];
-    $full_cat_url = base_url().$items_segments.$cat_url;
+    // $full_cat_url = base_url().$items_segments.$cat_url;
+    $full_cat_url = base_url().'store_items/view_items_for_category/'.$cat_url;
     return $full_cat_url;
   }
 

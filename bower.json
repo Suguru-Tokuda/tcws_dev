@@ -32,6 +32,7 @@
   "devDependencies": {
     "jquery-ui": "^1.12.1",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
-    "tether": "^1.4.3"
+    "tether": "^1.4.3",
+    "jt.timepicker": "timepicker#^1.11.13"
   }
 }

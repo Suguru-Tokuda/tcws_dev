@@ -13,8 +13,7 @@ class Admin_info extends MX_Controller {
   // Returns Admin's info
   function get_admin_info() {
     $query = $this->get_where(1);
-    $row = $query->row();
-    $data = $this->fetch_data_from_db(1);
+    $data = $query->row();
     return $data;
   }
 

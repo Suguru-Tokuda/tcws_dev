@@ -10,18 +10,34 @@ class Blog extends MX_Controller {
 
   // display all the blogs
   function view_blogs() {
-    $query = $this->get("date_published");
-    $pagination_data['template'] = "public_bootstrap";
+    $use_limit = false;
+    $mysql_query = $this->_get_mysql_query_for_blogs($use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $total_blogs = $query->num_rows();
+
+    $use_limit = true;
+    $mysql_query = $this->_get_mysql_query_for_blogs($use_limit);
+    $pagination_data['template'] = "unishop";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $query->num_rows();
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_pagination_limit();
+    $pagination_data['limit'] = $this->_get_pagination_limit();
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['query'] = $query;
     $data['view_file'] = "view_blogs";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
+  }
+
+  function _get_mysql_query_for_blogs($use_limit) {
+    $mysql_query = "SELECT DISTINCT * FROM blog ORDER BY date_published";
+    if ($use_limit == true) {
+      $limit = $this->_get_pagination_limit();
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
   }
 
   // displays a specific blog for blog_url
@@ -480,8 +496,8 @@ class Blog extends MX_Controller {
   }
 
   // beginning of pagination methods
-  function get_pagination_limit() {
-    $limit = 20;
+  function _get_pagination_limit() {
+    $limit = 6;
     return $limit;
   }
 

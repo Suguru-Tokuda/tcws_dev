@@ -9,7 +9,7 @@
 <div class="container padding-bottom-3x mb-1">
   <div class="row justify-content-center">
     <div class="col-lg-10">
-
+      <?= $pagination ?>
       <?php
       $this->load->module('blog_pics');
       $this->load->module('timedate');

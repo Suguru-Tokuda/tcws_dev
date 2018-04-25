@@ -11,7 +11,6 @@ class Custom_pagination extends MX_Controller
   {
     //NOTE: for this to work, data must contain:
     //$template, $target_base_url, $total_rows, $offset_segment, $limit
-
     $template = $data['template'];
     $target_base_url = $data['target_base_url'];
     $total_rows = $data['total_rows'];
@@ -20,6 +19,8 @@ class Custom_pagination extends MX_Controller
 
     if ($template=="public_bootstrap") {
       $settings = $this->get_settings_for_public_bootstrap();
+    } else if ($template == "unishop") {
+      $settings = $this->get_settings_for_unishop();
     }
 
     $config['base_url'] = $target_base_url;
@@ -80,7 +81,7 @@ class Custom_pagination extends MX_Controller
 
   function get_settings_for_public_bootstrap()
   {
-    $settings['num_links'] = 12;
+    $settings['num_links'] = 6;
 
     $settings['full_tag_open'] = '<nav aria-label="Page navigation"><ul class="pagination">';
     $settings['full_tag_close'] = '</ul></nav>';
@@ -109,7 +110,37 @@ class Custom_pagination extends MX_Controller
     return $settings;
   }
 
-  function get_settings_for_some_template()
+  function get_settings_for_unishop() {
+    $settings['num_links'] = 6;
+
+    $settings['full_tag_open'] = '<nav class="pagination"><div class="column"><ul class="pages">';
+    $settings['full_tag_close'] = '</ul></div></nav>';
+
+    $settings['cur_tag_open'] = '<li class="active"><a href="#">';
+    $settings['cur_tag_close'] = '</a></li>';
+
+    $settings['num_tag_open'] = '<li>';
+    $settings['num_tag_close'] = '</li>';
+
+    $settings['first_link'] = 'First';
+    $settings['first_tag_open'] = '<li>';
+    $settings['first_tag_close'] = '</li>';
+
+    $settings['last_link'] = 'Last';
+    $settings['last_tag_open'] = '<li">';
+    $settings['last_tag_close'] = '</li>';
+
+    $settings['prev_link'] = '<span aria-hidden="true">&laquo;</span>';
+    $settings['prev_tag_open'] = '<li>';
+    $settings['prev_tag_close'] = '</li>';
+
+    $settings['next_link'] = '<span aria-hidden="true">&raquo;</span>';
+    $settings['next_tag_open'] = '<li>';
+    $settings['next_tag_close'] = '</li>';
+    return $settings;
+  }
+
+  function _get_settings_for_some_template()
   {
     $settings['num_links'] = '';
 
