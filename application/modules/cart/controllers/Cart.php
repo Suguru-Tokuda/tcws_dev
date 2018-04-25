@@ -21,7 +21,7 @@ class Cart extends MX_Controller {
     if (!is_numeric($shopper_id)) {
       $shoppe_id = 0;
     }
-    $table = "store_basket";
+    $table = "boat_basket";
     $lesson_table = "lesson_basket";
     //$date['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "cart";
@@ -191,7 +191,7 @@ class Cart extends MX_Controller {
     $this->load->module($table);
     $mysql_query = "
     SELECT sb.*, si.picture_name,si.priority
-    FROM store_basket sb LEFT JOIN item_pics si ON sb.item_id = si.item_id
+    FROM boat_basket sb LEFT JOIN boat_pics si ON sb.boat_id = si.boat_rental_id
     ";
     if ($shopper_id > 0) {
       $where_condition = " WHERE sb.shopper_id = $shopper_id and ( si.priority is null or si.priority = 1)";
@@ -199,7 +199,7 @@ class Cart extends MX_Controller {
       $where_condition = " WHERE sb.session_id = '$session_id' and ( si.priority is null or si.priority = 1)";
     }
     $mysql_query.= $where_condition;
-    $query = $this->store_basket->_custom_query($mysql_query);
+    $query = $this->boat_basket->_custom_query($mysql_query);
     return $query;
   }
 
