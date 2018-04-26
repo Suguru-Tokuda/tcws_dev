@@ -99,15 +99,18 @@ class Youraccount extends MX_Controller {
     if ($submit == "submit") {
 
       // process the form
-      $this->form_validation->set_rules('userId', 'User Id', 'required|min_length[5]|max_length[60]|callback_username_check');
-      $this->form_validation->set_rules('loginPassword', 'password', 'required|min_length[7]|max_length[35]');
+      // $this->form_validation->set_rules('userId', 'User Id', 'required|min_length[5]|max_length[60]|callback_username_check');
+      $this->form_validation->set_rules('userId', 'User Id', 'required');
+      // $this->form_validation->set_rules('loginPassword', 'password', 'required|min_length[7]|max_length[35]');
+      $this->form_validation->set_rules('loginPassword', 'password', 'required');
 
       if ($this->form_validation->run() == true) {
         // figure out the user_id
         $col1 = 'userName';
         $value1 = $this->input->post('userId', true);
         $col2 = 'email';
-        $value2 = $this->input->post('userId', true);;
+        $value2 = $this->input->post('userId', true);
+        $this->load->module('users');
         $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
         foreach ($query->result() as $row) {
           $user_id = $row->id;
@@ -125,7 +128,8 @@ class Youraccount extends MX_Controller {
 
         // send them to the private page
         $this->_in_you_go($user_id, $login_type);
-      } else {
+      }
+       else {
         redirect('youraccount/login');
       }
     }

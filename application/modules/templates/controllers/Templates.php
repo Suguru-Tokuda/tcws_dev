@@ -49,4 +49,10 @@ class Templates extends MX_Controller {
     $this->load->view('admin', $data);
   }
 
+  function show_time_picker() {
+    $data['view_file'] = "timepicker";
+    $this->public_bootstrap($data);
+    // $this->load->view('timepicker');
+  }
+
 }
