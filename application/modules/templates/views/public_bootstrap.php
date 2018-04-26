@@ -19,7 +19,6 @@
   <link href="<?php echo base_url(); ?>assets/css/unishop.vendor.min.css" rel="stylesheet">
   <link id="mainStyles" rel="stylesheet" media-"screen" href="<?php echo base_url(); ?>assets/css/unishop.custom.min.css">
   <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.header.js"></script>
-  <script src="<?php echo base_url(); ?>assets/js/modernizr.min.js"></script>
 </head>
 <!-- Body-->
 <body>
@@ -66,7 +65,9 @@
   <!-- Back To Top Button--><a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
   <!-- Backdrop-->
   <div class="site-backdrop"></div>
-  <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.footer.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/jquery.timepicker.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/unishop.custom.min.js"></script>
 </body>
 </html>

@@ -108,9 +108,9 @@ gulp.task('compress-unishop-header-js', function() {
     "jquery.js",
     "jquery-ui.js",
     "modernizr.min.js",
-    "jquery.timepicker.js",
-    "bootstrap-datepicker.js",
-    "site.js",
+    // "jquery.timepicker.js",
+    // "bootstrap-datepicker.js",
+    // "site.js",
   ]))
   .pipe(concat('unishop.vendor.header.js'))
   .pipe(gulp.dest(paths.jsDest));
@@ -121,9 +121,15 @@ gulp.task('compress-unishop-footer-js', function() {
   var stream = gulp.src(paths.unishopVendorFooterJSSource)
   .pipe(order([
     "vendor.min.js",
-    "card.min.js"
+    "card.min.js",
+
+
+    "jquery-ui.js",
+    "jquery.timepicker.js",
+    "bootstrap-datepicker.js",
+    "site.js"
   ]))
-  .pipe(concat('unishop.vendor.header.js'))
+  .pipe(concat('unishop.vendor.footer.js'))
   .pipe(gulp.dest(paths.jsDest));
   return stream;
 });

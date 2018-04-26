@@ -56,11 +56,23 @@ class Boats_schedules extends MX_Controller {
     $this->form_validation->set_rules('boat_start_date', 'Start Time', 'required');
     $this->form_validation->set_rules('boat_end_date', 'End Time', 'required');
     $data['boat_rental_id'] = $boat_rental_id;
-    $data['boat_start_date'] = strtotime($_POST['boat_start_date']);
-    $data['boat_end_date'] = strtotime($_POST['boat_end_date']);
+    $data['boat_date'] = strtotime($_POST['boat_date']);
+    // $data['boat_start_time'] = strtotime($_POST['boat_start_date']);
+    // $data['boat_end_time'] = strtotime($_POST['boat_end_date']);
     if ($this->form_validation->run())
     {
-      if($data['boat_start_date'] < $data['boat_end_date'])
+      // $mysql_query = "SELECT * FROM users u JOIN lesson_bookings lb ON u.id = lb.user_id WHERE lb.lesson_schedule_id = $lesson_schedule_id";
+      // $query = $this->_custom_query($mysql_query);
+      $query = $this->get_where_custom('boat_rental_id',$boat_rental_id);
+      f($query)
+      {
+        $arr = array();
+        foreach($query->result() as $row)
+        {
+          $arr[] = array('starttime'=>$row->boat_start_date,'endDate'=> $row->boat_end_date);
+        }
+      }
+      /*if($data['boat_start_date'] < $data['boat_end_date'])
       {
         $switchVal = "true";
         $query = $this->get_where_custom('boat_rental_id',$boat_rental_id);
@@ -102,7 +114,7 @@ class Boats_schedules extends MX_Controller {
           echo($switchVal);
         }
       }
-    }
+    }*/
   }
 
   // beginning of pagination methods

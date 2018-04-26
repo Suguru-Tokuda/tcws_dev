@@ -119,20 +119,39 @@ $booking_url = base_url().'boat_basket/add_to_basket';
 
 </br>
 
+<script>
+$(function() {
+$('#boat_date').datepicker({
+  'format': 'yyyy-m-d',
+   'autoclose': true
+});
+});
+$(function() {
+$('#boat_start_time').timepicker();
+});
+$(function() {
+$('#boat_end_time').timepicker();
+});
 
-
+</script>
   <div class ="row">
-    <form method="post"  id = "checkAvailability" action="<?= $booking_url ?>">
+    <form method="post" class ="col-12" id = "checkAvailability" action="<?= $booking_url ?>">
       <div class="form-group row">
-        <label class="col-5 col-form-label" for="startDate-time-input" >Start Date and time</label>
-        <div class="col-7">
-          <input class="form-control" type="datetime-local" name="boat_start_date" id="boat_start_date">
+        <label class="col-3 col-form-label" for="boat_date">Date</label>
+        <div class="col-9">
+          <input class="form-control date start span9" type="text" name="boat_date" id="boat_date">
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-5 col-form-label" for="endDate-time-input">End Date and time</label>
-        <div class="col-7">
-          <input class="form-control" type="datetime-local" name ="boat_end_date" id="boat_end_date">
+        <label class="col-3 col-form-label" for="boat_start_time" >Start time</label>
+        <div class="col-9">
+          <input class="form-control time" type="text" name="boat_start_time" id="boat_start_time">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="boat_end_time">End time</label>
+        <div class="col-9">
+          <input class="form-control time" type="text" name ="boat_end_time" id="boat_end_time">
         </div>
       </div>
       <div class="form-group">
