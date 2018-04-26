@@ -103,55 +103,60 @@ $booking_url = base_url().'boat_basket/add_to_basket';
     </br>
   </br>
 
-    </div>
+</div>
 
 
-    <!-- Product Info-->
-    <div class="col-md-6">
-      <div class="padding-top-2x mt-2 hidden-md-up"></div>
-      <h2 class="padding-top-1x text-normal"><?= $boat_name ?></h2>
-      <span class="h2 d-block"><?= $currency_symbol.$boat_rental_fee.' / per' ?></span>
-      <p><?= nl2br($boat_description) ?></p>
-      <p> Year Made: <?= nl2br($boat_year_made) ?></p>
-      <p> Maker: <?= nl2br($boat_maker)?></p>
-      <p> Capacity: <?= nl2br($boat_capacity) ?></p></br>
-    </br>
-
+<!-- Product Info-->
+<div class="col-md-6">
+  <div class="padding-top-2x mt-2 hidden-md-up"></div>
+  <h2 class="padding-top-1x text-normal"><?= $boat_name ?></h2>
+  <span class="h2 d-block"><?= $currency_symbol.$boat_rental_fee.' / per' ?></span>
+  <p><?= nl2br($boat_description) ?></p>
+  <p> Year Made: <?= nl2br($boat_year_made) ?></p>
+  <p> Maker: <?= nl2br($boat_maker)?></p>
+  <p> Capacity: <?= nl2br($boat_capacity) ?></p></br>
 </br>
 
-<script>
-$(function() {
-$('#boat_date').datepicker({
-  'format': 'yyyy-m-d',
-   'autoclose': true
-});
-});
-$(function() {
-$('#boat_start_time').timepicker();
-});
-$(function() {
-$('#boat_end_time').timepicker();
-});
+</div>
+</div>
 
-</script>
-  <div class ="row">
-    <form method="post" class ="col-12" id = "checkAvailability" action="<?= $booking_url ?>">
+<div class="row">
+  <div class="col-md-6"></div>
+  <div class="col-md-6">
+    <script>
+    $(function() {
+      $('#boat_date').datepicker({
+        'format': 'yyyy-m-d',
+        'autoclose': true
+      });
+    });
+    $(function() {
+      $('#boat_start_time').timepicker();
+    });
+    $(function() {
+      $('#boat_end_time').timepicker();
+    });
+
+    </script>
+
+    <form method="post" id = "checkAvailability" action="<?= $booking_url ?>">
+      <h4 style="margin-bottom: 20px;">Check Availability</h4>
       <div class="form-group row">
         <label class="col-3 col-form-label" for="boat_date">Date</label>
-        <div class="col-9">
-          <input class="form-control date start span9" type="text" name="boat_date" id="boat_date">
+        <div class="col-3">
+          <input class="form-control" type="text" name="boat_date" id="boat_date">
         </div>
       </div>
       <div class="form-group row">
         <label class="col-3 col-form-label" for="boat_start_time" >Start time</label>
-        <div class="col-9">
-          <input class="form-control time" type="text" name="boat_start_time" id="boat_start_time">
+        <div class="col-3">
+          <input class="form-control" type="text" name="boat_start_time" id="boat_start_time">
         </div>
       </div>
       <div class="form-group row">
         <label class="col-3 col-form-label" for="boat_end_time">End time</label>
-        <div class="col-9">
-          <input class="form-control time" type="text" name ="boat_end_time" id="boat_end_time">
+        <div class="col-3">
+          <input class="form-control" type="text" name ="boat_end_time" id="boat_end_time">
         </div>
       </div>
       <div class="form-group">
@@ -160,46 +165,47 @@ $('#boat_end_time').timepicker();
           <input type="hidden" name="boat_name" value="<?php echo $boat_name  ?>">
           <input type="hidden" name="boat_rental_id" value="<?php echo $boat_rental_id  ?>">
           <input type="hidden" name="boat_fee" value="<?php echo $currency_symbol.$boat_rental_fee ?>">
-        </form>
-      </div>
-    </div>
-  </div>
-    </div>
-  </div>
-    <!-- Photoswipe container-->
-    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="pswp__bg"></div>
-      <div class="pswp__scroll-wrap">
-        <div class="pswp__container">
-          <div class="pswp__item"></div>
-          <div class="pswp__item"></div>
-          <div class="pswp__item"></div>
         </div>
-        <div class="pswp__ui pswp__ui--hidden">
-          <div class="pswp__top-bar">
-            <div class="pswp__counter"></div>
-            <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-            <button class="pswp__button pswp__button--share" title="Share"></button>
-            <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-            <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-            <div class="pswp__preloader">
-              <div class="pswp__preloader__icn">
-                <div class="pswp__preloader__cut">
-                  <div class="pswp__preloader__donut"></div>
-                </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Photoswipe container-->
+  <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp__bg"></div>
+    <div class="pswp__scroll-wrap">
+      <div class="pswp__container">
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+      </div>
+      <div class="pswp__ui pswp__ui--hidden">
+        <div class="pswp__top-bar">
+          <div class="pswp__counter"></div>
+          <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+          <button class="pswp__button pswp__button--share" title="Share"></button>
+          <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+          <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+          <div class="pswp__preloader">
+            <div class="pswp__preloader__icn">
+              <div class="pswp__preloader__cut">
+                <div class="pswp__preloader__donut"></div>
               </div>
             </div>
           </div>
-          <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-            <div class="pswp__share-tooltip"></div>
-          </div>
-          <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-          <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
-          <div class="pswp__caption">
-            <div class="pswp__caption__center"></div>
-          </div>
+        </div>
+        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+          <div class="pswp__share-tooltip"></div>
+        </div>
+        <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+        <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+        <div class="pswp__caption">
+          <div class="pswp__caption__center"></div>
         </div>
       </div>
     </div>
-
   </div>
+
+</div>
+
+</div>

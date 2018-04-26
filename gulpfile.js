@@ -42,6 +42,7 @@ gulp.task('compress-unishiop-vendor-css', function() {
   .pipe(order([
     "vendor.min.css",
     "card.min.css",
+    "bootstrap-datepicker.css",
     "jquery.timepicker.css",
     "site.js"
   ]))
