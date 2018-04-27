@@ -7,8 +7,9 @@ class Paypal extends MX_Controller {
 
   function ipn_listener() {
     // the URL that accepts things that Paypal has posted
+//    header('HTTP/1.1 200 OK');
     $data['date_created'] = time();
-    // makes an array of data retruend from paypal
+    // makes an array of data retrieved from paypal
     foreach($_POST as $key => $value) {
       $posted_information[$key] = $value;
     }
@@ -27,11 +28,11 @@ class Paypal extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  // function cancel() {
-  //   $data['view_file'] = 'cancel';
-  //   $this->load->module('templates');
-  //   $this->templates->public_bootstrap($data);
-  // }
+  function cancel() {
+    $data['view_file'] = 'cancel';
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
 
   function _draw_checkout_btn($query,$lesson_query) {
     $this->load->module('site_settings');
