@@ -22,7 +22,7 @@ if (isset($flash)) {
               <label class="col-sm-2 control-label" for="typeahead">Recipient</label>
               <div class="col-sm-10">
                 <?php
-                $additional_dd_code = 'class="form-control "';
+                $additional_dd_code = 'class="form-control" required';
                 echo form_dropdown('sent_to', $options, $sent_to, $additional_dd_code);
                 ?>
               </div>
@@ -33,13 +33,13 @@ if (isset($flash)) {
           <div class="form-group">
               <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Subject</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" name="subject" value="<?= $subject ?>">
+                <input type="text" class="form-control" name="subject" value="<?= $subject ?>" required>
               </div>
           </div>
           <div class="form-group">
               <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Message</label>
               <div class="col-sm-10">
-                <textarea class="form-control" id="textarea3" rows="4" name="message"><?php
+                <textarea class="form-control" id="textarea3" rows="4" name="message" required><?php
                 echo $message;
                 ?></textarea>
               </div>

@@ -150,13 +150,13 @@ $booking_url = base_url().'boat_basket/add_to_basket';
       <div class="form-group row">
         <label class="col-3 col-form-label" for="boat_start_time" >Start time</label>
         <div class="col-3">
-          <input class="form-control" type="text" name="boat_start_time" id="boat_start_time">
+          <input class="form-control" type="text" name="boat_start_time" id="boat_start_time" required>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-3 col-form-label" for="boat_end_time">End time</label>
         <div class="col-3">
-          <input class="form-control" type="text" name ="boat_end_time" id="boat_end_time">
+          <input class="form-control" type="text" name ="boat_end_time" id="boat_end_time" required>
         </div>
       </div>
       <div class="form-group">

@@ -1,6 +1,4 @@
 <h1><?= $headline ?></h1>
-<?= validation_errors("<p style='color: red;'>", "</p>") ?>
-
 <?php
 if (isset($flash)) {
   echo $flash;
@@ -27,6 +25,9 @@ if (is_numeric($update_id)) { ?>
 
     <div class="box-content">
       <?php
+      if (isset($validation_errors)) {
+        echo $validation_errors;
+      }
       $form_location = base_url()."users/create/".$update_id
       ?>
       <form class="form-horizontal" method="post" action="<?= $form_location ?>">
@@ -34,61 +35,19 @@ if (is_numeric($update_id)) { ?>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="typeahead">Username</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control typeahead" name="userName" value="<?= $userName?>">
+              <input type="text" class="form-control typeahead" name="userName" value="<?= $userName?>" required>
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="typeahead">First Name</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control typeahead" name="firstName" value="<?= $firstName?>">
+              <input type="text" class="form-control typeahead" name="firstName" value="<?= $firstName?>" required>
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="typeahead">Last Name</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control typeahead" name="lastName" value="<?= $lastName?>">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="typeahead">Company</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control typeahead" name="company" value="<?= $company?>">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="typeahead">Address 1</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control typeahead" name="address1" value="<?= $address1?>">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="typeahead">Address 2</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control typeahead" name="address2" value="<?= $address2?>">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="typeahead">City</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control typeahead" name="city" value="<?= $city?>">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="typeahead">State</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control typeahead" name="state" value="<?= $state?>">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="typeahead">Zip</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control typeahead" name="zip" value="<?= $zip?>">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="typeahead">Phone</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control typeahead" name="phone" value="<?= $phone?>">
+              <input type="text" class="form-control typeahead" name="lastName" value="<?= $lastName?>" required>
             </div>
           </div>
           <div class="form-group">

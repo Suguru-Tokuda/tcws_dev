@@ -35,17 +35,17 @@ if (is_numeric($item_id)) {
 
   <form class="form-horizontal" action="<?= $form_location ?>" method="post">
     <fieldset>
-
       <!-- Form Name -->
-      <!-- <legend>Please submit the product details using the form below</legend> -->
       <?php
-      echo validation_errors("<p style='color: red;'>", "</p>");
+      if (isset($validation_errors)) {
+        echo $validation_errors;
+      }
       ?>
       <!-- Text input-->
       <div class="form-group">
         <label class="col-md-3 control-label" for="textinput">Item Title</label>
         <div class="col-md-4">
-          <input id="textinput" name="item_title" value="<?= $item_title ?>" type="text" placeholder="Enter item title" class="form-control input-md">
+          <input id="textinput" name="item_title" value="<?= $item_title ?>" type="text" placeholder="Enter item title" class="form-control input-md" required>
         </div>
       </div>
 
@@ -53,7 +53,7 @@ if (is_numeric($item_id)) {
       <div class="form-group">
         <label class="col-md-3 control-label" for="textinput">Price</label>
         <div class="col-md-4">
-          <input id="textinput" name="item_price" value="<?= $item_price ?>" type="text" placeholder="Enter price" class="form-control input-md">
+          <input id="textinput" name="item_price" value="<?= $item_price ?>" type="text" placeholder="Enter price" class="form-control input-md" required>
         </div>
       </div>
 
@@ -71,7 +71,6 @@ if (is_numeric($item_id)) {
             } else {
               $checked = "";
             }
-            // echo "cat_id: $value, checked: $checked<br>";
             ?>
             <!-- <label class="form-check-label"> -->
             <input type="checkbox" name="categories[]" value="<?= $value ?>" <?= $checked ?>> <?= ucwords($cat_title) ?>
@@ -92,7 +91,7 @@ if (is_numeric($item_id)) {
             if (!isset($status)) {
               $status = '';
             }
-            $additional_dd_code = 'class="form-control" id="status"';
+            $additional_dd_code = 'class="form-control" id="status" required';
             $options = array(
               '' => 'Please select...',
               '1' => 'Active',

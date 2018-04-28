@@ -1,7 +1,8 @@
 <h1><?= $headline ?></h1>
-<?= validation_errors("<p style='color: red;'>", "</p>") ?>
-
 <?php
+if (isset($validation_errors)) {
+  echo $validation_errors;
+}
 if (isset($flash)) {
   echo $flash;
 }
@@ -25,13 +26,13 @@ if (isset($flash)) {
           <div class="control-group">
             <label class="control-label" for="typeahead">Password</label>
             <div class="controls">
-              <input type="password" class="span6 typeahead" name="password">
+              <input type="password" class="span6 typeahead" name="password" required>
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="typeahead">Confirm Password</label>
             <div class="controls">
-              <input type="password" class="span6 typeahead" name="confirmPassword">
+              <input type="password" class="span6 typeahead" name="confirmPassword" required>
             </div>
           </div>
           <div class="form-actions">
@@ -42,4 +43,4 @@ if (isset($flash)) {
       </form>
 
     </div>
-  </div><!--/span-->
+  </div>

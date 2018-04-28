@@ -3,14 +3,18 @@ class Dvilsf extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    $this->load->library('form_validation');
-    $this->form_validation->set_ci_reference( $this );
-    $this->form_validation->CI =& $this;
+    // $this->load->library('form_validation');
+    // $this->form_validation->set_ci_reference( $this );
+    // $this->form_validation->CI =& $this;
   }
 
   function index() {
-    $data['userName'] = $this->input->post('userName', true);
+    $data['loginEmail'] = $this->input->post('loginEmail', true);
     $this->load->module('templates');
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $this->templates->login($data);
   }
 
@@ -19,11 +23,12 @@ class Dvilsf extends MX_Controller {
 
     if ($submit == "submit") {
       // process the form
-      $this->load->library('form_validation');
-      $this->form_validation->set_rules('userId', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_check');
-      $this->form_validation->set_rules('loginPassword', 'Password', 'required|min_length[7]|max_length[35]');
+      $this->load->module('custom_validation');
+      // $this->load->library('form_validation');
+      $this->custom_validation->set_rules('loginEmail', 'Username', 'min_length[5]|max_length[60]');
+      $this->custom_validation->set_rules('loginPassword', 'Password', 'min_length[7]|max_length[35]');
 
-      if ($this->form_validation->run() == true) {
+      if ($this->custom_validation->run() == true) {
         $this->_in_you_go();
       } else {
         $this->index();

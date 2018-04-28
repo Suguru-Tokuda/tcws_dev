@@ -9,6 +9,9 @@ if (is_numeric($lesson_id)) {
 <div class="form-panel">
   <h4 class="mb"><?= $headline ?></h4>
   <?php
+  if (isset($validation_errors)) {
+    echo $validation_errors;
+  }
   if (isset($flash)) {
     echo $flash;
   }
@@ -30,14 +33,14 @@ if (is_numeric($lesson_id)) {
     <div class="form-group">
       <label class="col-sm-2 control-label">Lesson Name</label>
       <div class="col-sm-5">
-        <input type="text" class="form-control" name="lesson_name" value="<?= $lesson_name ?>">
+        <input type="text" class="form-control" name="lesson_name" value="<?= $lesson_name ?>" required>
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-sm-2 control-label">Lesson Description</label>
       <div class="col-sm-5">
-        <textarea type="text" class="form-control" name="lesson_description" rows="10" placeholder="Write about the lesson" style="resize: none;"><?= $lesson_description; ?></textarea>
+        <textarea type="text" class="form-control" name="lesson_description" rows="10" placeholder="Write about the lesson" style="resize: none;" required><?= $lesson_description; ?></textarea>
       </div>
     </div>
 
@@ -45,28 +48,28 @@ if (is_numeric($lesson_id)) {
     <div class="form-group">
       <label class="col-sm-2 control-label">Capacity</label>
       <div class="col-sm-2">
-        <input type="text" class="form-control" name="lesson_capacity" value="<?= $lesson_capacity ?>">
+        <input type="text" class="form-control" name="lesson_capacity" value="<?= $lesson_capacity ?>" required>
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-sm-2 control-label">Lesson Fee</label>
       <div class="col-sm-4">
-        <input name="lesson_fee" value="<?= $lesson_fee ?>" type="text" placeholder="Enter Fee" class="form-control">
+        <input name="lesson_fee" value="<?= $lesson_fee ?>" type="text" placeholder="Enter Fee" class="form-control" required>
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-sm-2 control-label">Address</label>
       <div class="col-sm-5">
-        <input type="text" class="form-control" name="address" value="<?= $address ?>">
+        <input type="text" class="form-control" name="address" value="<?= $address ?>" required>
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-sm-2 control-label">City</label>
       <div class="col-sm-5">
-        <input type="text" class="form-control" name="city" value="<?= $city ?>">
+        <input type="text" class="form-control" name="city" value="<?= $city ?>" required>
       </div>
     </div>
 
@@ -76,7 +79,7 @@ if (is_numeric($lesson_id)) {
         <?php
         $state_key = array_search($state, $states);
         $selection = $state;
-        echo form_dropdown('state', $states, $state_key, 'class="form-control"');
+        echo form_dropdown('state', $states, $state_key, 'class="form-control" required');
         ?>
       </div>
     </div>
@@ -91,7 +94,7 @@ if (is_numeric($lesson_id)) {
           if (!isset($status)) {
             $status = '';
           }
-          $additional_dd_code = 'class="form-control" id="status"';
+          $additional_dd_code = 'class="form-control" id="status" required';
           $options = array(
             '' => 'Please select...',
             '1' => 'Active',

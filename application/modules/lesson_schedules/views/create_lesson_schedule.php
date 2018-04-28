@@ -8,6 +8,9 @@ if (is_numeric($lesson_schedule_id)) {
 <div class="form-panel">
   <h4 class="mb"><?= $headline ?></h4>
   <?php
+  if (isset($validation_errors)) {
+    echo $validation_errors;
+  }
   if (isset($flash)) {
     echo $flash;
   }

@@ -1,27 +1,79 @@
+<?php
+$this->load->module('admin_info');
+$admin = $this->admin_info->get_admin_info();
+if (isset($admin->phone)) {
+  $phone = $admin->phone;
+} else {
+  $phone = "";
+}
+if (isset($admin->email)) {
+  $email = $admin->email;
+} else {
+  $email = "";
+}
+if (isset($admin->company_name)) {
+  $company_name = $admin->company_name;
+} else {
+  $company_name = "";
+}
+if (isset($admin->facebook_link)) {
+  $facebook_link = $admin->facebook_link;
+} else {
+  $facebook_link = "";
+}
+if (isset($admin->twitter_link)) {
+  $twitter_link = $admin->twitter_link;
+} else {
+  $twitter_link = "";
+}
+if (isset($admin->instagram_link)) {
+  $instragam_link = $admin->instagram_link;
+} else {
+  $instagram_link = "";
+}
+?>
 <footer class="site-footer">
   <div class="container">
     <div class="row">
       <div class="col-lg-3 col-md-6">
         <section class="widget widget-light-skin">
           <h3 class="widget-title">Get In Touch With Us</h3>
-          <p class="text-white">Phone: 123 456 7890</p>
-          <p><a class="navi-link-light" href="#">twincitywatersports@gmail.com</a></p>
-          <a class="social-button shape-circle sb-facebook sb-light-skin" href="#">
-            <i class="socicon-facebook"></i>
-          </a>
-          <a class="social-button shape-circle sb-twitter sb-light-skin" href="#">
-            <i class="socicon-twitter"></i>
-          </a>
-          <a class="social-button shape-circle sb-instagram sb-light-skin" href="#">
-            <i class="socicon-instagram"></i>
-          </a>
-          <a class="social-button shape-circle sb-google-plus sb-light-skin" href="#">
-            <i class="socicon-googleplus"></i>
-          </a>
+          <?php
+          if ($phone != "") {
+            ?>
+            <p class="text-white">Phone: <?= $phone ?></p>
+            <?php
+          }
+          if ($email != "") {
+            ?>
+            <p><a class="navi-link-light" href="mailto:<?= $email ?>"><?= $email ?></a></p>
+            <?php
+          }
+          if ($facebook_link != "") {
+            ?>
+            <a class="social-button shape-circle sb-facebook sb-light-skin" href="<?= $facebook_link ?>">
+              <i class="socicon-facebook"></i>
+            </a>
+            <?php
+          }
+          if ($twitter_link != "") {
+            ?>
+            <a class="social-button shape-circle sb-twitter sb-light-skin" href="<?= $twitter_link ?>">
+              <i class="socicon-twitter"></i>
+            </a>
+            <?php
+          }
+          if ($instagram_link != "") {
+            ?>
+            <a class="social-button shape-circle sb-instagram sb-light-skin" href="<?= $instagram_link ?>">
+              <i class="socicon-instagram"></i>
+            </a>
+            <?php
+          }
+          ?>
         </section>
       </div>
       <div class="col-lg-3 col-md-6">
-        <!-- About Us-->
         <section class="widget widget-links widget-light-skin">
           <h3 class="widget-title">About Us</h3>
           <ul>
@@ -52,6 +104,12 @@
         }
         ?>
       </div>
-      <p class="footer-copyright">© <?= $our_company ?></p>
+      <?php
+      if ($company_name != "") {
+      ?>
+      <p class="footer-copyright">© <?= $company_name ?></p>
+      <?php
+    }
+      ?>
     </div>
   </footer>

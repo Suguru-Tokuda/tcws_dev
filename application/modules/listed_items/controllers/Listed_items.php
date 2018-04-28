@@ -3,11 +3,11 @@ class Listed_items extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    $this->load->library('form_validation');
+    // $this->load->library('custom_validation');
     $this->load->module('custom_pagination');
     $this->load->library('upload');
     $this->load->library('image_lib');
-    $this->form_validation->set_ci($this);
+    // $this->custom_validation->set_ci($this);
   }
 
   function _draw_listed_items() {
@@ -293,18 +293,12 @@ class Listed_items extends MX_Controller {
         redirect('listed_items/manage');
       } else if ($submit == "submit") {
         $status = $this->input->post('status', true);
+        $this->load->module('custom_validation');
         // do validation
-        $this->form_validation->set_rules('item_title', 'Item Title', 'required|max_length[240]');
-        $this->form_validation->set_rules('item_price', 'Item Price', 'required|numeric');
-        $this->form_validation->set_rules('categories[]', 'Categories', 'required');
-        if (isset($item_id)) {
-          $this->form_validation->set_rules('status', 'Status', 'required');
-        }
-        $this->form_validation->set_rules('item_description', 'Item Description', 'required');
-        $this->form_validation->set_rules('city', 'City', 'required');
-        $this->form_validation->set_rules('state', 'State', 'required');
+        $this->custom_validation->set_rules('item_title', 'Item Title', 'max_length[240]');
+        $this->custom_validation->set_rules('item_price', 'Item Price', 'numeric');
 
-        if ($this->form_validation->run() == true) {
+        if ($this->custom_validation->run() == true) {
           // get info from the post
           $data = $this->fetch_data_from_post();
           if (is_numeric($item_id)) {
@@ -371,6 +365,10 @@ class Listed_items extends MX_Controller {
         $data['headline'] = "Update Item Details";
       }
       // if the user is logged in, sends to the page to create an item
+      if ($this->session->has_userdata('validation_errors')) {
+        $data['validation_errors'] = $this->session->userdata('validation_errors');
+        $this->session->unset_userdata('validation_errors');
+      }
       $data['categories_options'] = $this->_get_categories();
       $data['states'] = $this->site_settings->_get_states_dropdown();
       $data['item_id'] = $item_id;

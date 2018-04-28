@@ -58,12 +58,10 @@ class Enquiries extends MX_Controller {
       redirect('enquiries/inbox');
     } else if ($submit == "submit") {
       // process the form
-      $this->load->library('form_validation');
-      $this->form_validation->set_rules('sent_to', 'Recipient', 'required');
-      $this->form_validation->set_rules('subject', 'Subject', 'required|max_length[250]');
-      $this->form_validation->set_rules('message', 'Message', 'required'); // callback is for checking if the item already exists
+      $this->load->module('custom_validation');
+      $this->custom_validation->set_rules('subject', 'Subject', 'required|max_length[250]');
 
-      if ($this->form_validation->run() == true) {
+      if ($this->custom_validation->run() == true) {
         // get the variables and assign into $data variable
         $data = $this->fetch_data_from_post();
         // convert the datepicker into a unix timestamp
@@ -99,6 +97,10 @@ class Enquiries extends MX_Controller {
 
     $data['options'] = $this->_fetch_customers_as_options();
     // pass update id into the enquiries
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $data['update_id'] = $update_id;
     $data['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "create";

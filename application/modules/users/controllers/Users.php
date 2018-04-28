@@ -144,11 +144,11 @@ class Users extends MX_Controller {
       redirect('users/create/'.$update_id);
     } elseif ($submit == "Submit") {
       // process the form
-      $this->load->library('form_validation');
-      $this->form_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
-      $this->form_validation->set_rules('confirmPassword', "Confirm Password", 'required|matches[password]');
+      $this->load->module('custom_validation');
+      $this->custom_validation->set_rules('password', 'Password', 'min_length[7]|max_length[35]');
+      $this->custom_validation->set_rules('confirmPassword', "Confirm Password", 'matches[password]');
 
-      if ($this->form_validation->run() == true) {
+      if ($this->custom_validation->run() == true) {
         // get the variables and assign into $data variable
         $data['password'] = $this->input->post('password', true);
         $this->load->module('site_security');
@@ -172,7 +172,10 @@ class Users extends MX_Controller {
 
     // create a view file. Putting a php (html) into the admin template.
     // store_Accounts.php
-    // $data['view_module'] = "store_Accounts";
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $data['view_file'] = "update_password"; // manage.php
     $this->load->module('templates');
     $this->templates->admin($data);
@@ -190,13 +193,14 @@ class Users extends MX_Controller {
       redirect('users/manage');
     } else if ($submit == "Submit") {
       // process the form
-      $this->load->library('form_validation');
-      $this->form_validation->set_rules('userName', 'Username', 'required');
-      $this->form_validation->set_rules('firstName', 'First Name', 'required');
-      $this->form_validation->set_rules('lastName', 'Last Name', 'required');
-      $this->form_validation->set_rules('email', 'Email', 'required');
-
-      if ($this->form_validation->run() == true) {
+      $this->load->module('custom_validation');
+      $this->custom_validation->set_rules('signupFirstName', 'First Name', 'min_length[5]|max_length[60]');
+      $this->custom_validation->set_rules('signupLastName', 'Last Name', 'min_length[5]|max_length[60]');
+      $this->custom_validation->set_rules('signupUserName', 'Username', 'min_length[5]|max_length[60]|user_exists_to_register');
+      $this->custom_validation->set_rules('signUpEmail', 'Email', 'valid_email|max_length[120]|email_exists_to_register');
+      $this->custom_validation->set_rules('signUpPassword', 'Password', 'min_length[7]|max_length[35]');
+      $this->custom_validation->set_rules('signUpconfirmPassword', 'Confirm Password', 'matches[signUpPassword]');
+      if ($this->custom_validation->run() == true) {
         // get the variables and assign into $data variable
         $data = $this->fetch_data_from_post();
 
@@ -241,10 +245,10 @@ class Users extends MX_Controller {
     $data['update_id'] = $update_id;
     $data['flash'] = $this->session->flashdata('account');
 
-    // create a view file. Putting a php (html) into the admin template.
-
-    // store_Accounts.php
-    // $data['view_module'] = "store_Accounts";
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $data['view_file'] = "create"; // manage.php
     $this->load->module('templates');
     $this->templates->admin($data);

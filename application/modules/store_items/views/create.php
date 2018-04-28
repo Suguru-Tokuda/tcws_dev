@@ -1,6 +1,6 @@
 <h1><?= $headline ?></h1>
-<?= validation_errors("<p style='color: red;'>", "</p>") ?>
 <?php
+
 if (isset($flash)) {
   echo $flash;
 }
@@ -29,6 +29,11 @@ if (is_numeric($update_id)) { ?>
   ?>
   <div class="col-lg-12">
     <div class="form-panel">
+      <?php
+      if (isset($validation_errors)) {
+        echo $validation_errors;
+      }
+       ?>
       <h4 class="mb"><i class="fa fas fa-edit"></i> Item Details</h4>
       <div class="box-content">
         <?php
@@ -39,14 +44,14 @@ if (is_numeric($update_id)) { ?>
             <div class="form-group">
               <label class="col-sm-2 control-label" for="typeahead">Item Title </label>
               <div class="col-sm-5">
-                <input type="text" class="form-control typeahead" name="item_title" value="<?= $item_title ?>">
+                <input type="text" class="form-control typeahead" name="item_title" value="<?= $item_title ?>" required>
               </div>
             </div>
 
             <div class="form-group">
               <label class="col-sm-2 col-sm-2 control-label" for="typeahead">Item Price </label>
               <div class="col-sm-5">
-                <input type="text" class="form-control  typeahead" name="item_price" value="<?= $item_price ?>">
+                <input type="text" class="form-control  typeahead" name="item_price" value="<?= $item_price ?>" required>
               </div>
             </div>
 
@@ -73,7 +78,7 @@ if (is_numeric($update_id)) { ?>
                     }
                     ?>
                     <div class="col-sm-3">
-                      <input class="form-check-input" type="checkbox" name="categories[]" value="<?= $value ?>" <?= $checked ?> > <?= ucwords($cat_title) ?></input>
+                      <input class="form-check-input" type="checkbox" name="categories[]" value="<?= $value ?>" <?= $checked ?>> <?= ucwords($cat_title) ?></input>
                     </div>
                     <?php
                   }
@@ -88,7 +93,7 @@ if (is_numeric($update_id)) { ?>
                   if (!isset($status)) {
                     $status = '';
                   }
-                  $additional_dd_code = 'id="status" class="form-control"';
+                  $additional_dd_code = 'id="status" class="form-control" required';
                   $options = array(
                     '' => 'Please select...',
                     '1' => 'Active',
@@ -102,7 +107,7 @@ if (is_numeric($update_id)) { ?>
               <div class="form-group" >
                 <label class="col-sm-2 col-sm-2 control-label" for="textinput">City (Location)</label>
                 <div class="col-sm-5">
-                  <input id="textinput" name="city" value="<?= $city ?>" type="text" placeholder="Enter city" class="form-control input-md">
+                  <input id="textinput" name="city" value="<?= $city ?>" type="text" placeholder="Enter city" class="form-control input-md" required>
                 </div>
               </div>
 
@@ -112,7 +117,7 @@ if (is_numeric($update_id)) { ?>
                   <?php
                   $state_key = array_search($state, $states);
                   $selection = $state;
-                  echo form_dropdown('state', $states, $state_key, 'class="form-control"');
+                  echo form_dropdown('state', $states, $state_key, 'class="form-control" required');
                   ?>
                 </div>
               </div>
@@ -120,7 +125,7 @@ if (is_numeric($update_id)) { ?>
               <div class="form-group hidden-phone">
                 <label class="col-sm-2 col-sm-2 control-label" for="textarea2">Item Description</label>
                 <div class="col-sm-5">
-                  <textarea class="form-control" id="textarea2" rows="5" name="item_description" ><?php echo $item_description; ?></textarea>
+                  <textarea class="form-control" id="textarea2" rows="5" name="item_description" required><?php echo $item_description; ?></textarea>
                 </div>
               </div>
 

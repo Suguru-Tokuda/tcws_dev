@@ -3,6 +3,13 @@ $first_bit = $this->uri->segment(1);
 $forgot_password_form_location = base_url().'youraccount/update_password';
 ?>
 <div class="container">
+  <?php
+  $this->load->module('custom_validation');
+  $validation_errors = $this->custom_validation->get_validation_errors();
+  if (isset($validation_errors)) {
+    echo $validation_errors;
+  }
+   ?>
   <h3 class="col-10">Reset Password</h3>
   <div id="validation-message">
     <?php if(!empty($error_message)) { ?>

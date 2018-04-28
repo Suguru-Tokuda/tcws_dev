@@ -48,10 +48,10 @@ class Homepage_offers extends MX_Controller {
     if ($submit == "Finished") {
       redirect('homepage_blocks/create/'.$update_id);
     } else if ($submit == "Submit") {
-      $this->load->library('form_validation');
-      $this->form_validation->set_rules('item_id', 'Item', 'required');
+      $this->load->module('custom_validation');
+      $this->custom_validation->set_rules('item_id', 'Item', 'required');
 
-      if ($this->form_validation->run() == true) {
+      if ($this->custom_validation->run() == true) {
         // attempt to insert
         if ($item_id != "") {
           $data['block_id'] = $update_id;

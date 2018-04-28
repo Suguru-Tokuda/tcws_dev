@@ -4,11 +4,9 @@ class Store_items extends MX_Controller {
   function __construct() {
     parent::__construct();
     // These two lines are needed to display custom validation messages
-    $this->load->library('form_validation');
     $this->load->module('custom_pagination');
     $this->load->library('upload');
     $this->load->library('image_lib');
-    $this->form_validation->set_ci_reference($this);
   }
 
   // shows items based on the category_title
@@ -696,18 +694,14 @@ class Store_items extends MX_Controller {
       redirect('store_items/manage');
     } else if ($submit == "submit") {
       // process the form
-      $this->load->library('form_validation');
-      $this->form_validation->set_rules('item_title', 'Item Title', 'required|max_length[240]|callback_item_check'); // callback is for checking if the item already exists
-      $this->form_validation->set_rules('item_price', 'Item Price', 'required|numeric');
-      $this->form_validation->set_rules('was_price', 'Was Price', 'numeric');
-      $this->form_validation->set_rules('categories[]', 'Categories', 'required');
-      // $this->form_validation->set_rules('status', 'Status', 'required|numeric');
-      $this->form_validation->set_rules('status', 'Status', 'required');
-      $this->form_validation->set_rules('city', 'City', 'required');
-      $this->form_validation->set_rules('state', 'State', 'required');
-      $this->form_validation->set_rules('item_description', 'Item Description', 'required');
-
-      if ($this->form_validation->run() == true) {
+      $this->load->module('custom_validation');
+      $this->custom_validation->set_rules('item_title', 'Item Title', 'max_length[240]'); // callback is for checking if the item already exists
+      $this->custom_validation->set_rules('item_price', 'Item Price', 'numeric');
+      if ($this->input->post('was_price') != "") {
+        $this->custom_validation->set_rules('was_price', 'Was Price', 'numeric');        
+      }
+      // $this->custom_validation->set_rules('status', 'Status', 'required|numeric');
+      if ($this->custom_validation->run() == true) {
         // get the variables and assign into $data variable
         $data = $this->fetch_data_from_post();
         // create a URL for an item but they need to be UNIQUE
@@ -783,7 +777,10 @@ class Store_items extends MX_Controller {
       $data['item_url'] = $this->get_where($item_id)->row()->item_url;
     }
     $data['flash'] = $this->session->flashdata('item');
-
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     // create a view file. Putting a php (html) into the admin template.
     $data['categories_options'] = $this->_get_categories();
     $data['states'] = $this->site_settings->_get_states_dropdown();
@@ -1014,7 +1011,7 @@ class Store_items extends MX_Controller {
     $num_rows = $query->num_rows();
 
     if ($num_rows > 0) {
-      $this->form_validation->set_message('item_check', 'The item title that you submitted is not available.');
+      $this->custom_validation->set_message('item_check', 'The item title that you submitted is not available.');
       return false;
     } else {
       return true;

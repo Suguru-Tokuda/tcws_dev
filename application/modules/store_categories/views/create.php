@@ -18,7 +18,7 @@ if (isset($flash)) {
         <label class="col-sm-2  control-label" for="typeahead">Parent Category</label>
         <div class="col-sm-5">
           <?php
-          $additional_dd_code = 'id="parent_cat_id"';
+          $additional_dd_code = 'id="parent_cat_id" required';
           echo form_dropdown('parent_cat_id', $options, $parent_cat_id, $additional_dd_code);
           ?>
         </div>
