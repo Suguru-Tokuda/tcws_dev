@@ -121,54 +121,91 @@ $booking_url = base_url().'boat_basket/add_to_basket';
 </div>
 
 <div class="row">
-  <div class="col-md-6"></div>
-  <div class="col-md-6">
+  <div class="col-md-12">
     <script>
-    $(function() {
-      $('#boat_date').datepicker({
-        'format': 'yyyy-m-d',
-        'autoclose': true
-      });
-    });
-    $(function() {
-      $('#boat_start_time').timepicker();
-    });
-    $(function() {
-      $('#boat_end_time').timepicker();
-    });
+      $(function() {
+        $('#boat_date').datepicker({
+          'format': 'mm/dd/yyyy',
+          'autoclose': true
+        });
 
-    </script>
+        $('#boat_start_time').timepicker({
+          'minTime': '06:00am',
+          'maxTime': '08:00pm',
+          'showDuration': true
+        });
+        $('#boat_start_time').on('changeTime', function(){
+          var boat_start_time = $('#boat_start_time').val();
+          $('#boat_end_time').timepicker({
+            'minTime': boat_start_time,
+            'maxTime': '08:00 PM',
+            'showDuration': true
+          });
+        })
+        $('#boat_end_time').timepicker();
+        });
+        $(function(e) {
+        $('#checkAvailability').on('submit',function(){
+          var boat_date = $('#boat_date').val();
+          var boat_start_time = $('#boat_start_time').val();
+          var boat_end_time = $('#boat_end_time').val();
+          var id = "<?= nl2br($boat_rental_id)?>";
+          $.ajax({
+          url: "<?= base_url().'boat_rental_schedules/create_boat_schedules/'.$boat_rental_id?>",
+          type: 'post',
+          dataType: 'json',
+          data:{
+            'boat_date': boat_date,
+            'boat_start_time': boat_start_time,
+            'boat_end_time': boat_end_time,
+            'boat_rental_id': id,
+          },
+          success: function(response){
+              alert('===');
+              alert(response);
 
-    <form method="post" id = "checkAvailability" action="<?= $booking_url ?>">
-      <h4 style="margin-bottom: 20px;">Check Availability</h4>
-      <div class="form-group row">
-        <label class="col-3 col-form-label" for="boat_date">Date</label>
-        <div class="col-3">
-          <input class="form-control" type="text" name="boat_date" id="boat_date">
+              },
+          error: function(error) {
+            alert(error);
+          }
+        });
+        });
+});
+
+      </script>
+
+      <form method="post" id = "checkAvailability">
+          <h4 style="margin-bottom: 20px;">Check Availability</h4>
+          <span>Minimum of two hours booking required</span>
+
+          <div class="form-group row">
+            <label class="col-4 col-form-label" for="boat_date">Date</label>
+            <div class="col-4">
+              <input class="form-control" type="text" name="boat_date" id="boat_date">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-4 col-form-label" for="boat_start_time" >Start time</label>
+            <div class="col-4">
+              <input class="form-control" type="text" name="boat_start_time" id="boat_start_time">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-4 col-form-label" for="boat_end_time">End time</label>
+            <div class="col-4">
+              <input class="form-control" type="text" name ="boat_end_time" id="boat_end_time">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-offset-3 col-md-4">
+              <button class="btn btn-primary" name="submit" id="boat_rental_id" value="submit">Book Boat</button>
+              <input type="hidden" name="boat_name" value="<?php echo $boat_name  ?>">
+              <input type="hidden" name="boat_rental_id" value="<?php echo $boat_rental_id  ?>">
+              <input type="hidden" name="boat_fee" value="<?php echo $currency_symbol.$boat_rental_fee ?>">
+            </div>
+          </form>
         </div>
       </div>
-      <div class="form-group row">
-        <label class="col-3 col-form-label" for="boat_start_time" >Start time</label>
-        <div class="col-3">
-          <input class="form-control" type="text" name="boat_start_time" id="boat_start_time" required>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-3 col-form-label" for="boat_end_time">End time</label>
-        <div class="col-3">
-          <input class="form-control" type="text" name ="boat_end_time" id="boat_end_time" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-md-offset-3 col-md-4">
-          <button class="btn btn-primary" name="submit" id="boat_rental_id" value="submit">Book Boat</button>
-          <input type="hidden" name="boat_name" value="<?php echo $boat_name  ?>">
-          <input type="hidden" name="boat_rental_id" value="<?php echo $boat_rental_id  ?>">
-          <input type="hidden" name="boat_fee" value="<?php echo $currency_symbol.$boat_rental_fee ?>">
-        </div>
-      </form>
-    </div>
-  </div>
 
   <!-- Photoswipe container-->
   <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
