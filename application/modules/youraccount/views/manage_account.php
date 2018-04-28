@@ -4,10 +4,12 @@ $form_location = base_url().'youraccount/update_account';
 <div class="container">
   <h1>Update Account</h1>
   <?php
+  if (isset($validation_errors)) {
+    echo $validation_errors;
+  }
   if (isset($flash)) {
     echo $flash;
   }
-  echo validation_errors("<p style='color: red;'>", "</p>");
   ?>
   <form class="form-horizontal" action="<?= $form_location ?>" method="post">
     <fieldset>

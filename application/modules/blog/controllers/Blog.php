@@ -4,8 +4,6 @@ class Blog extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->module('custom_pagination');
-    $this->load->library('form_validation');
-    $this->form_validation->set_ci_reference($this);
   }
 
   // display all the blogs
@@ -130,12 +128,10 @@ class Blog extends MX_Controller {
       redirect('blog/manage');
     } else if ($submit == "Submit") {
       // process the form
-      $this->load->library('form_validation');
-      $this->form_validation->set_rules('date_published', 'Date Published', 'required');
-      $this->form_validation->set_rules('blog_title', 'Blog Title', 'required|max_length[250]'); // callback is for checking if the item already exists
-      $this->form_validation->set_rules('blog_content', 'Blog Content', 'required');
+      $this->load->module('custom_validation');
+      $this->custom_validation->set_rules('blog_title', 'Blog Title', 'max_length[250]'); // callback is for checking if the item already exists
 
-      if ($this->form_validation->run() == true) {
+      if ($this->custom_validation->run() == true) {
         // get the variables and assign into $data variable
         $data = $this->fetch_data_from_post();
         // create a URL for an item but they need to be UNIQUE
@@ -191,9 +187,10 @@ class Blog extends MX_Controller {
     $data['flash'] = $this->session->flashdata('item');
 
     // create a view file. Putting a php (html) into the admin template.
-
-    // store_Items.php
-    // $data['view_module'] = "store_Items";
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $data['view_file'] = "create"; // manage.php
     $this->load->module('templates');
     $this->templates->admin($data);

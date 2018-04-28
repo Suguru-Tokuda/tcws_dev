@@ -4,10 +4,10 @@ class Youraccount extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    $this->load->library('form_validation');
+    // $this->load->library('custom_validation');
     $this->load->library('session');
     $this->load->module('custom_email');
-    $this->form_validation->set_ci($this);
+    // $this->custom_validation->set_ci($this);
   }
 
   function manage_account() {
@@ -16,6 +16,10 @@ class Youraccount extends MX_Controller {
     $user_id = $this->site_security->_get_user_id();
 
     $data = $this->fetch_data_from_db($user_id);
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $data['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "manage_account";
     $this->load->module('templates');
@@ -32,30 +36,33 @@ class Youraccount extends MX_Controller {
       $user_id = $this->site_security->_get_user_id();
       $user_data = $this->fetch_data_from_db($user_id);
       // process the form
-      $this->form_validation->set_rules('firstName', 'First Name', 'required|min_length[5]|max_length[60]');
-      $this->form_validation->set_rules('lastName', 'Last Name', 'required|min_length[5]|max_length[60]');
+      $this->load->module('custom_validation');
+      $this->custom_validation->set_rules('firstName', 'First Name', 'min_length[5]|max_length[60]');
+      $this->custom_validation->set_rules('lastName', 'Last Name', 'min_length[5]|max_length[60]');
 
       $input_user_name = $this->input->post('userName', true);
       $input_email = $this->input->post('email', true);
 
       // Checks if the username is unique only the value is different from the original.
       if ($input_user_name != $user_data['userName']) {
-        $this->form_validation->set_rules('userName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_existence_check');
+        $this->custom_validation->set_rules('userName', 'Username', 'min_length[5]|max_length[60]|callback_userName_existence_check');
       } else {
-        $this->form_validation->set_rules('userName', 'Username', 'required|min_length[5]|max_length[60]');
+        $this->custom_validation->set_rules('userName', 'Username', 'min_length[5]|max_length[60]');
       }
       // Checks if the email is unique only the value is different from the original.
       if ($input_email != $user_data['email']) {
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[120]');
+        $this->custom_validation->set_rules('email', 'Email', 'valid_email|max_length[120]');
       } else {
-        $this->form_validation->set_rules('email', 'Email', 'required|max_length[120]');
+        $this->custom_validation->set_rules('email', 'Email', 'max_length[120]');
       }
 
-      if ($this->form_validation->run() == true) {
+      if ($this->custom_validation->run() == true) {
         $this->_process_update_account($user_id);
         $flash_msg = "Account Information was successfully updated";
         $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
         $this->session->set_flashdata('item', $value);
+        redirect('youraccount/manage_account');
+      } else {
         redirect('youraccount/manage_account');
       }
     }
@@ -90,46 +97,35 @@ class Youraccount extends MX_Controller {
     $data['signUpEmail'] = $this->input->post('signUpEmail', true);
     $data['signUpPassword'] = $this->input->post('signUpPassword', true);
     $data['signUpconfirmPassword'] = $this->input->post('signUpconfirmPassword', true);
+    $this->load->library('session');
     $this->load->module('templates');
     $this->templates->login($data);
   }
 
   function submit_login() {
+    $this->load->module('custom_validation');
     $submit = $this->input->post('submit', true);
     if ($submit == "submit") {
-
       // process the form
-      // $this->form_validation->set_rules('userId', 'User Id', 'required|min_length[5]|max_length[60]|callback_username_check');
-      $this->form_validation->set_rules('userId', 'User Id', 'required');
-      // $this->form_validation->set_rules('loginPassword', 'password', 'required|min_length[7]|max_length[35]');
-      $this->form_validation->set_rules('loginPassword', 'password', 'required');
+      $this->custom_validation->set_rules('loginEmail', 'Email', 'min_length[5]|max_length[60]|valid_email|email_exists_to_login');
+      $this->custom_validation->set_rules('loginPassword', 'Password', 'min_length[7]|max_length[35]');
 
-      if ($this->form_validation->run() == true) {
-        // figure out the user_id
-        $col1 = 'userName';
-        $value1 = $this->input->post('userId', true);
-        $col2 = 'email';
-        $value2 = $this->input->post('userId', true);
+      if ($this->custom_validation->run() == true) {
+        // process to login
         $this->load->module('users');
-        $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
-        foreach ($query->result() as $row) {
-          $user_id = $row->id;
-        }
-
+        $email = $this->input->post('loginEmail', true);
         $remember = $this->input->post('remember', true);
         if ($remember == "remember") {
           $login_type = "longterm";
         } else {
           $login_type = "shortterm";
         }
-
         $data['last_login'] = time();
+        $user_id = $this->users->get_where_custom('email', $email)->row()->id;
         $this->users->_update($user_id, $data);
-
         // send them to the private page
         $this->_in_you_go($user_id, $login_type);
-      }
-       else {
+      } else {
         redirect('youraccount/login');
       }
     }
@@ -137,13 +133,14 @@ class Youraccount extends MX_Controller {
 
   function forgot_password() {
     $submit = $this->input->post('submit', true);
+    $this->load->module('custom_validation');
     if ($submit == "submit") {
       // process the form
-      $this->form_validation->set_rules('userName', 'Username', 'required|callback_userid_check');
-      if ($this->form_validation->run() == true) {
+      $this->custom_validation->set_rules('email', 'Email', 'valid_email|email_exists_to_login');
+      if ($this->custom_validation->run() == true) {
         $this ->success_email();
-      }else{
-        $this->resetpass();
+      } else {
+        redirect('youraccount/recover_password');
       }
     }
   }
@@ -166,16 +163,16 @@ class Youraccount extends MX_Controller {
 
   function submit() {
     $submit = $this->input->post('submit', true);
-
+    $this->load->module('custom_validation');
     if ($submit == "submit") {
       // process the form
-      $this->form_validation->set_rules('signupFirstName', 'First Name', 'required|min_length[5]|max_length[60]');
-      $this->form_validation->set_rules('signupLastName', 'Last Name', 'required|min_length[5]|max_length[60]');
-      $this->form_validation->set_rules('signupUserName', 'Username', 'required|min_length[5]|max_length[60]|callback_userName_existence_check');
-      $this->form_validation->set_rules('signUpEmail', 'Email', 'required|valid_email|max_length[120]|callback_email_existence_check');
-      $this->form_validation->set_rules('signUpPassword', 'Password', 'required|min_length[7]|max_length[35]');
-      $this->form_validation->set_rules('signUpconfirmPassword', 'Confirm Password', 'required|matches[signUpPassword]');
-      if ($this->form_validation->run() == true) {
+      $this->custom_validation->set_rules('signupFirstName', 'First Name', 'min_length[5]|max_length[60]');
+      $this->custom_validation->set_rules('signupLastName', 'Last Name', 'min_length[5]|max_length[60]');
+      $this->custom_validation->set_rules('signupUserName', 'Username', 'min_length[5]|max_length[60]|user_exists_to_register');
+      $this->custom_validation->set_rules('signUpEmail', 'Email', 'valid_email|max_length[120]|email_exists_to_register');
+      $this->custom_validation->set_rules('signUpPassword', 'Password', 'min_length[7]|max_length[35]');
+      $this->custom_validation->set_rules('signUpconfirmPassword', 'Confirm Password', 'matches[signUpPassword]');
+      if ($this->custom_validation->run() == true) {
         // insert a new account into DB
         $this->_process_create_account();
         $data['view_file'] = "account_create_success";
@@ -187,8 +184,12 @@ class Youraccount extends MX_Controller {
     }
   }
 
-  function recover_password(){
-    $data['view_file'] = "account-password-recovery";
+  function recover_password() {
+    $data['view_file'] = "account_password_recovery";
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
@@ -226,15 +227,21 @@ class Youraccount extends MX_Controller {
   function start() {
     $data = $this->fetch_data_from_post();
     $data['flash'] = $this->session->flashdata('item');
-    $data['view_module'] = "templates";
+    $data['view_module'] = "youraccount";
     $data['view_file'] = "signin_signup";
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
 
   function fetch_data_from_post() {
-    $data['userId'] = $this->input->post('userId', true);
+    $data['loginEmail'] = $this->input->post('loginEmail', true);
+    // $data['userId'] = $this->input->post('userId', true);
     $data['loginPassword'] = $this->input->post('loginPassword', true);
+    $data['remember'] = $this->input->post('remember', true);
 
     $data['signupFirstName'] = $this->input->post('signupFirstName', true);
     $data['signupLastName'] = $this->input->post('signupLastName', true);
@@ -277,7 +284,7 @@ class Youraccount extends MX_Controller {
     if ($num_rows == 0) {
       return true;
     } else if ($num_rows == 1) {
-      $this->form_validation->set_message('userName_existence_check', $error_msg);
+      $this->custom_validation->set_message('userName_existence_check', $error_msg);
       return false;
     }
   }
@@ -292,7 +299,7 @@ class Youraccount extends MX_Controller {
     if ($num_rows == 0) {
       return true;
     } else if ($num_rows == 1) {
-      $this->form_validation->set_message('email_existence_check', $error_msg);
+      $this->custom_validation->set_message('email_existence_check', $error_msg);
       return false;
     }
   }
@@ -312,7 +319,7 @@ class Youraccount extends MX_Controller {
     $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
     $num_rows = $query->num_rows();
     if ($num_rows < 1) {
-      $this->form_validation->set_message('username_check', $error_msg);
+      $this->custom_validation->set_message('username_check', $error_msg);
       return false;
     }
 
@@ -326,7 +333,7 @@ class Youraccount extends MX_Controller {
     if ($result == true) {
       return true;
     } else {
-      $this->form_validation->set_message('username_check', $error_msg);
+      $this->custom_validation->set_message('username_check', $error_msg);
       return false;
     }
   }
@@ -359,7 +366,7 @@ class Youraccount extends MX_Controller {
     $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
     $num_rows = $query->num_rows();
     if ($num_rows < 1) {
-      $this->form_validation->set_message('userName', $error_msg);
+      $this->custom_validation->set_message('userName', $error_msg);
       return false;
     }
     else
@@ -418,9 +425,9 @@ class Youraccount extends MX_Controller {
 
     if ($submit == "submit") {
       // process the form
-      $this->form_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
-      $this->form_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
-      if ($this->form_validation->run() == true) {
+      $this->custom_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
+      $this->custom_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
+      if ($this->custom_validation->run() == true) {
         // update password
         if ($this->_process_update_password() == true)
         {

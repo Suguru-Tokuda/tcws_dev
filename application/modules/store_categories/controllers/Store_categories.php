@@ -3,9 +3,7 @@ class Store_categories extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    $this->load->library('form_validation');
     $this->load->module('custom_pagination');
-    $this->form_validation->set_ci($this);
   }
 
   function _draw_categories() {
@@ -245,10 +243,6 @@ class Store_categories extends MX_Controller {
       redirect('store_categories/manage');
     } else if ($submit == "Submit") {
       // process the form
-      $this->load->library('form_validation');
-      $this->form_validation->set_rules('cat_title', 'Category Title', 'required'); // callback is for checking if the category already exists
-
-      if ($this->form_validation->run() == true) {
         // get the variables and assign into $data variable
         $data = $this->fetch_data_from_post();
         if ($data['cat_title'])
@@ -273,7 +267,6 @@ class Store_categories extends MX_Controller {
           // add the update data into the URL
           redirect('store_categories/create/'.$update_id);
         }
-      }
     }
 
     if ((is_numeric($update_id)) && ($submit != "Submit")) {

@@ -3,11 +3,9 @@ class Admin_info extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    $this->load->library('form_validation');
     $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
-    $this->form_validation->set_ci_reference($this);
   }
 
   // Returns Admin's info
@@ -45,17 +43,21 @@ class Admin_info extends MX_Controller {
       redirect('admin_info/view_admin_info');
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
-      $this->form_validation->set_rules('first_name', 'First Name', 'required');
-      $this->form_validation->set_rules('last_name', 'Last Name', 'required');
-      $this->form_validation->set_rules('phone', 'Phone', 'required|numeric');
-      $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-      $this->form_validation->set_rules('company_name', 'Company Name', 'required');
-      $this->form_validation->set_rules('address', 'Address', 'required');
-      $this->form_validation->set_rules('city', 'City', 'required');
-      $this->form_validation->set_rules('state', 'State', 'required');
-      $this->form_validation->set_rules('description', 'Description', 'required');
+      $this->load->module('custom_validation');
+      $this->custom_validation->set_rules('first_name', 'First Name', 'min_length[3]');
+      $this->custom_validation->set_rules('last_name', 'Last Name', 'min_length[3]');
+      $this->custom_validation->set_rules('phone', 'Phone', 'numeric');
+      $this->custom_validation->set_rules('email', 'Email', 'valid_email');
+      $this->custom_validation->set_rules('facebook_link', 'Facebook Link', 'min_length[5]');
+      $this->custom_validation->set_rules('twitter_link', 'Twitter Link', 'min_length[5]');
+      $this->custom_validation->set_rules('instagram_link', 'Instagram Link', 'min_length[5]');
+      $this->custom_validation->set_rules('company_name', 'Company Name', 'min_length[3]');
+      $this->custom_validation->set_rules('address', 'Address', 'min_length[5]');
+      $this->custom_validation->set_rules('city', 'City', 'min_length[3]');
+      $this->custom_validation->set_rules('state', 'State', 'min_length[2]');
+      $this->custom_validation->set_rules('description', 'Description', 'min_length[10]');
 
-      if ($this->form_validation->run()) {
+      if ($this->custom_validation->run()) {
         $data = $this->fetch_data_from_post();
         if (is_numeric($admin_id)) {
           $this->_update($admin_id, $data);
@@ -89,7 +91,10 @@ class Admin_info extends MX_Controller {
 
     $data['admin_id'] = $admin_id;
     $data['flash'] = $this->session->flashdata('item');
-
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $data['states'] = $this->site_settings->_get_states_dropdown();
     $data['view_file'] = "update_admin_info";
     $this->load->module('templates');
@@ -185,6 +190,9 @@ class Admin_info extends MX_Controller {
     $data['last_name'] = $this->input->post('last_name', true);
     $data['phone'] = $this->input->post('phone', true);
     $data['email'] = $this->input->post('email', true);
+    $data['facebook_link'] = $this->input->post('facebook_link', true);
+    $data['twitter_link'] = $this->input->post('twitter_link', true);
+    $data['instagram_link'] = $this->input->post('instagram_link', true);
     $data['company_name'] = $this->input->post('company_name', true);
     $data['address'] = $this->input->post('address', true);
     $data['city'] = $this->input->post('city', true);
@@ -208,6 +216,9 @@ class Admin_info extends MX_Controller {
       $data['last_name'] = $row->last_name;
       $data['phone'] = $row->phone;
       $data['email'] = $row->email;
+      $data['facebook_link'] = $row->twitter_link;
+      $data['twitter_link'] = $row->twitter_link;
+      $data['instagram_link'] = $row->instagram_link;
       $data['company_name'] = $row->company_name;
       $data['address'] = $row->address;
       $data['city'] = $row->city;

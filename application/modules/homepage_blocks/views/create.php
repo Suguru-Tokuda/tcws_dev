@@ -35,7 +35,7 @@ if (is_numeric($update_id)) { ?>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="typeahead">Offer Block Title </label>
             <div class="col-sm-10">
-              <input type="text" class=" form-control typeahead" name="block_title" value="<?= $block_title ?>">
+              <input type="text" class=" form-control typeahead" name="block_title" value="<?= $block_title ?>" required>
             </div>
           </div>
 

@@ -3,12 +3,12 @@ class Boats extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    $this->load->library('form_validation');
+    // $this->load->library('custom_validation');
     $this->load->module('custom_pagination');
     $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
-    $this->form_validation->set_ci_reference($this);
+    // $this->custom_validation->set_ci_reference($this);
   }
 
   function view_boats() {
@@ -78,7 +78,7 @@ class Boats extends MX_Controller {
     $data['boat_description'] = $data_from_db['boat_description'];
     $data['boat_capacity'] = $data_from_db['boat_capacity'];
     $data['boat_rental_fee'] = $data_from_db['boat_rental_fee'];
-    $data['boat_maker'] = $data_from_db['maker'];
+    $data['boat_make'] = $data_from_db['make'];
     $data['boat_year_made'] = $data_from_db['year_made'];
     $data['pics_query'] = $pics_query;
     $data['boat_rental_fee'] = number_format($data['boat_rental_fee'], 2);
@@ -141,16 +141,17 @@ class Boats extends MX_Controller {
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
       $status = $this->input->post('status', true);
-      $this->form_validation->set_rules('boat_name', 'Boat Name', 'required|max_length[240]');
-      $this->form_validation->set_rules('boat_description', 'Boat Description', 'required|max_length[240]');
-      $this->form_validation->set_rules('boat_capacity','Boat Capacity','required|max_length[240]');
-      $this->form_validation->set_rules('boat_rental_fee', 'Boat Fee', 'required|numeric');
-      $this->form_validation->set_rules('year_made', 'Year Made', 'required|max_length[240]');
-      $this->form_validation->set_rules('maker', 'Maker', 'required|max_length[240]');
+      $this->load->module('custom_validation');
+      $this->custom_validation->set_rules('boat_name', 'Boat Name', 'max_length[240]');
+      $this->custom_validation->set_rules('boat_description', 'Boat Description', 'max_length[240]');
+      $this->custom_validation->set_rules('boat_capacity','Boat Capacity','max_length[240]');
+      $this->custom_validation->set_rules('boat_rental_fee', 'Boat Fee', 'numeric');
+      $this->custom_validation->set_rules('year_made', 'Year Made', 'max_length[240]');
+      $this->custom_validation->set_rules('make', 'Make', 'max_length[240]');
       if (isset($boat_rental_id)) {
-        $this->form_validation->set_rules('status', 'Status', 'required');
+        $this->custom_validation->set_rules('status', 'Status', 'required');
       }
-      if ($this->form_validation->run()) {
+      if ($this->custom_validation->run()) {
         $data = $this->fetch_data_from_post();
         if (is_numeric($boat_rental_id)) {
           // update
@@ -171,8 +172,6 @@ class Boats extends MX_Controller {
           $this->session->set_flashdata('item', $value);
           redirect('boats/manage_boats');
         }
-      } else {
-        echo validation_errors();
       }
     }
 
@@ -191,7 +190,10 @@ class Boats extends MX_Controller {
 
     $data['boat_rental_id'] = $boat_rental_id;
     $data['flash'] = $this->session->flashdata('item');
-
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $data['states'] = $this->site_settings->_get_states_dropdown();
     $data['view_file'] = "create_boat";
     $this->load->module('templates');
@@ -424,7 +426,7 @@ class Boats extends MX_Controller {
     $data['boat_capacity'] = $this->input->post('boat_capacity', true);
     $data['boat_rental_fee'] = $this->input->post('boat_rental_fee', true);
     $data['year_made'] = $this->input->post('year_made', true);
-    $data['maker'] = $this->input->post('maker', true);
+    $data['make'] = $this->input->post('make', true);
     $this->load->module('site_settings');
 
     return $data;
@@ -442,7 +444,7 @@ class Boats extends MX_Controller {
     $data['boat_capacity'] = $row->boat_capacity;
     $data['boat_rental_fee'] = $row->boat_rental_fee;
     $data['year_made'] = $row->year_made;
-    $data['maker'] = $row->maker;
+    $data['make'] = $row->make;
     $data['status'] = $row->status;
     return $data;
   }
@@ -561,7 +563,7 @@ class Boats extends MX_Controller {
     $num_rows = $query->num_rows();
 
     if ($num_rows > 0) {
-      $this->form_validation->set_message('boat_check', 'The boat name that you submitted is not available.');
+      $this->custom_validation->set_message('boat_check', 'The boat name that you submitted is not available.');
       return false;
     } else {
       return true;

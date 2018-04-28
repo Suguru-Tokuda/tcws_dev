@@ -11,6 +11,11 @@ if(is_numeric($boat_rental_id))
 <div class="form-panel">
   <h4 class="mb"><?= $headline ?></h4>
   <?php
+  if (isset($validation_errors)) {
+    echo $validation_errors;
+  }
+  ?>
+  <?php
   if (isset($flash)) {
     echo $flash;
   }

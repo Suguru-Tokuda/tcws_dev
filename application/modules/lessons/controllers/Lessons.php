@@ -3,12 +3,12 @@ class Lessons extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    $this->load->library('form_validation');
+    // $this->load->library('custom_validation');
     $this->load->module('custom_pagination');
     $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
-    $this->form_validation->set_ci_reference($this);
+    // $this->custom_validation->set_ci_reference($this);
   }
 
   function view_lessons() {
@@ -138,17 +138,14 @@ class Lessons extends MX_Controller {
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
       $status = $this->input->post('status', true);
-      $this->form_validation->set_rules('lesson_name', 'Lesson Name', 'required|max_length[240]');
-      $this->form_validation->set_rules('lesson_description', 'Lesson Description', 'required|max_length[240]');
-      $this->form_validation->set_rules('lesson_capacity', 'Lesson Capacity', 'required|numeric');
-      $this->form_validation->set_rules('lesson_fee', 'Lesson Fee', 'required|numeric');
-      $this->form_validation->set_rules('address', 'Address', 'required|max_length[240]');
-      $this->form_validation->set_rules('city', 'City', 'required|max_length[240]');
-      $this->form_validation->set_rules('state', 'State', 'required');
-      if (isset($lesson_id)) {
-        $this->form_validation->set_rules('status', 'Status', 'required');
-      }
-      if ($this->form_validation->run()) {
+      $this->load->module('custom_validation');
+      $this->custom_validation->set_rules('lesson_name', 'Lesson Name', 'max_length[240]');
+      $this->custom_validation->set_rules('lesson_description', 'Lesson Description', 'max_length[240]');
+      $this->custom_validation->set_rules('lesson_capacity', 'Lesson Capacity', 'numeric');
+      $this->custom_validation->set_rules('lesson_fee', 'Lesson Fee', 'numeric');
+      $this->custom_validation->set_rules('address', 'Address', 'max_length[240]');
+      $this->custom_validation->set_rules('city', 'City', 'max_length[240]');
+      if ($this->custom_validation->run()) {
         $data = $this->fetch_data_from_post();
         if (is_numeric($lesson_id)) {
           // update
@@ -190,7 +187,10 @@ class Lessons extends MX_Controller {
 
     $data['lesson_id'] = $lesson_id;
     $data['flash'] = $this->session->flashdata('item');
-
+    if ($this->session->has_userdata('validation_errors')) {
+      $data['validation_errors'] = $this->session->userdata('validation_errors');
+      $this->session->unset_userdata('validation_errors');
+    }
     $data['states'] = $this->site_settings->_get_states_dropdown();
     $data['view_file'] = "create_lesson";
     $this->load->module('templates');
@@ -594,7 +594,7 @@ class Lessons extends MX_Controller {
     $num_rows = $query->num_rows();
 
     if ($num_rows > 0) {
-      $this->form_validation->set_message('lesson_check', 'The lesson name that you submitted is not available.');
+      $this->custom_validation->set_message('lesson_check', 'The lesson name that you submitted is not available.');
       return false;
     } else {
       return true;

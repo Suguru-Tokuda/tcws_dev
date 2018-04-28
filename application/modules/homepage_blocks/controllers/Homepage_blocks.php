@@ -208,10 +208,6 @@ class Homepage_blocks extends MX_Controller {
       }
 
       // process the form
-      $this->load->library('form_validation');
-      $this->form_validation->set_rules('block_title', 'Offer Block Title', 'required'); // callback is for checking if the homepage offer already exists
-
-      if ($this->form_validation->run() == true) {
         // get the variables and assign into $data variable
         $data = $this->fetch_data_from_post();
         if (is_numeric($update_id)) {
@@ -234,7 +230,6 @@ class Homepage_blocks extends MX_Controller {
           // add the update data into the URL
           redirect('homepage_blocks/create/'.$update_id);
         }
-      }
     }
 
     if ((is_numeric($update_id)) && ($submit != "Submit")) {

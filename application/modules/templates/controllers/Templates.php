@@ -17,7 +17,7 @@ class Templates extends MX_Controller {
   }
 
   function login($data) {
-    $data['view_module'] = "templates";
+    $data['view_module'] = "youraccount";
     $data['view_file'] = "signin_signup";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);

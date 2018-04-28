@@ -10,12 +10,16 @@ if ($first_bit == "youraccount") {
 }
 ?>
 <div class="container padding-bottom-3x mb-2">
+  <?php
+  if (isset($validation_errors))
+  echo $validation_errors;
+  ?>
   <div class="row">
     <div class="col-md-6">
       <form class="login-box" method="post" action="<?= $signin_form_location ?>">
         <h4 class="margin-bottom-1x"><?= $label ?></h4>
         <div class="form-group input-group">
-          <input class="form-control" type="text" id="userId" name="userId" placeholder="Username or Email" required><span class="input-group-addon"><i class="icon-mail"></i></span>
+          <input class="form-control" type="text" id="loginEmail" name="loginEmail" placeholder="Email" required><span class="input-group-addon"><i class="icon-mail"></i></span>
         </div>
         <div class="form-group input-group">
           <input class="form-control" name="loginPassword" id="loginPassword" type="password" placeholder="Password" required><span class="input-group-addon"><i class="icon-lock"></i></span>
@@ -25,8 +29,8 @@ if ($first_bit == "youraccount") {
             <?php
             if ($first_bit == "youraccount") {
               ?>
-              <input class="custom-control-input" type="checkbox" id="remember_me" value="remember-me" name="remember">
-              <label class="custom-control-label" for="remember_me">Remember me</label>
+              <input class="custom-control-input" type="checkbox" id="remember" value="remember" name="remember">
+              <label class="custom-control-label" for="remember">Remember me</label>
               <?php
             }
             ?>
@@ -87,12 +91,10 @@ if ($first_bit == "youraccount") {
             <button class="btn btn-primary margin-bottom-none" name="submit" value="submit" type="submit">Register</button>
           </div>
         </form>
-        <?php
-        echo validation_errors("<p style='color: red;'>", "</p>");
-        ?>
       </div>
       <?php
     }
     ?>
   </div>
+
 </div>

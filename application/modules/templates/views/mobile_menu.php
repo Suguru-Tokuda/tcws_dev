@@ -60,7 +60,6 @@
            ?>
           <li class="has-children"><span><a href="#"><?= $userName ?></a><span class="sub-menu-toggle"></span></span>
             <ul class="offcanvas-submenu">
-              <li><a href="<?= base_url() ?>youraccount/welcome"><span class="glyphicon glyphicon-envelope"></span> Your Messages</a></li>
               <li><a href="<?= base_url() ?>listed_items/manage"><span class="glyphicon glyphicon-tasks"></span> Your Items</a></li>
               <li><a href="<?= base_url() ?>youraccount/manageaccount"><span class="glyphicon glyphicon-file"></span> Manage Profile</a></li>
               <li class="divider"></li>
