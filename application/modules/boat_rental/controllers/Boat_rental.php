@@ -9,6 +9,50 @@ class Boat_rental extends MX_Controller {
     $this->load->library('image_lib');
   }
 
+  function view_my_rental_boats() {
+    $this->load->module('site_security');
+    $this->load->module('site_settings');
+    $this->site_security->_make_sure_logged_in();
+
+    $user_id = $this->site_security->_get_user_id();
+    $use_limit = false;
+    $mysql_query = $this->_get_mysql_query_for_view_my_rental_boats($user_id, $use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $total_rental_boats = $query->num_rows();
+
+    $pagination_data['template'] = "unishop";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_rental_boats;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_pagination_limit("admin");
+
+    $use_limit = true;
+    $mysql_query = $this->_get_mysql_query_for_view_my_rental_boats($user_id, $use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+    $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
+    $data['query'] = $query;
+    $data['view_file'] = "view_my_rental_boats";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
+
+  function _get_mysql_query_for_view_my_rental_boats($user_id, $use_limit) {
+    $mysql_query = "
+    SELECT br.id, br.boat_name, br.year_made, br.boat_rental_fee, br.boat_url, br.make, brs.boat_start_date, brs.boat_end_date
+    FROM boat_rental br
+    JOIN boat_rental_schedules brs ON br.id = brs.boat_rental_id
+    WHERE brs.user_id = $user_id
+    ORDER BY brs.boat_start_date
+    ";
+    if ($use_limit == true) {
+      $limit = $this->get_pagination_limit("admin");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
+  }
+
   function view_boat_rental() {
     $use_limit = false;
     $mysql_query = $this->_get_mysql_query_for_boat_rental($use_limit);

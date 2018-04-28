@@ -5,11 +5,21 @@ class Boat_pics extends MX_Controller {
     parent::__construct();
   }
 
+  function get_first_picture_name($id) {
+    $mysql_query = "SELECT * FROM boat_pics WHERE id = $id AND priority = 1";
+    $query = $this->_custom_query($mysql_query);
+    if ($query->num_rows() == 0) {
+      $picture_name = "";
+    } else {
+      $picture_name = $query->row()->picture_name;
+    }
+    return $picture_name;
+  }
+
   function get_picture_name_by_boat_pic_id($id) {
     $query = $this->get_where($id);
     $picture_name = [];
     foreach($query->result() as $row) {
-
       $picture_name[] = $row->picture_name;
     }
     return $picture_name;
@@ -18,9 +28,7 @@ class Boat_pics extends MX_Controller {
   function get_boat_pic_ids_by_boat_id($boat_rental_id) {
     $query = $this->get_where_custom("boat_rental_id",$boat_rental_id);
     $ids = [];
-
     foreach($query->result() as $row) {
-
       $ids[] = $row->id;
     }
     return $ids;

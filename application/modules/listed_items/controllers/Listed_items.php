@@ -3,11 +3,9 @@ class Listed_items extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    // $this->load->library('custom_validation');
     $this->load->module('custom_pagination');
     $this->load->library('upload');
     $this->load->library('image_lib');
-    // $this->custom_validation->set_ci($this);
   }
 
   function _draw_listed_items() {
@@ -60,23 +58,21 @@ class Listed_items extends MX_Controller {
 
       $user_id = $this->site_security->_get_user_id();
 
-      $mysql_query = "
-      SELECT si.item_title, si.id, si.item_url, si.item_price, si.status FROM
-      store_items si JOIN users sa ON si.user_id = sa.id
-      WHERE user_id = $user_id
-      ";
-
+      $use_limit = false;
+      $mysql_query = $this->_get_mysql_query_for_manage_items($use_limit);
       $query = $this->_custom_query($mysql_query);
       $total_items = $query->num_rows();
-      // $total_items = false;
 
-      $pagination_data['template'] = "public_bootstrap";
+      $pagination_data['template'] = "unishop";
       $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
       $pagination_data['total_rows'] = $total_items;
       $pagination_data['offset_segment'] = 4;
-      $pagination_data['limit'] = $this->get_limit();
+      $pagination_data['limit'] = $this->get_pagination_limit();
       $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
+      $use_limit = true;
+      $mysql_query = $this->_get_mysql_query_for_manage_items($use_limit);
+      $query = $this->_custom_query($mysql_query);
       $data['item_segments'] = $this->site_settings->_get_item_segments();
       $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
       $data['query'] = $query;
@@ -84,6 +80,20 @@ class Listed_items extends MX_Controller {
       $data['view_file'] = "manage";
       $this->load->module('templates');
       $this->templates->public_bootstrap($data);
+    }
+
+    function _get_mysql_query_for_manage_items($use_limit) {
+      $mysql_query = "
+      SELECT si.item_title, si.id, si.item_url, si.item_price, si.status FROM
+      store_items si JOIN users sa ON si.user_id = sa.id
+      WHERE user_id = $user_id
+      ";
+      if ($use_limit == true) {
+        $limit = $this->get_pagination_limit();
+        $offset = $this->_get_pagination_offset();
+        $mysql_query.= " LIMIT ".$offset.", ".$limit;
+      }
+      return $mysql_query;
     }
 
     function get_target_pagination_base_url() {
@@ -102,8 +112,8 @@ class Listed_items extends MX_Controller {
       WHERE user_id = $user_id
       ";
       if ($use_limit == true) {
-        $limit = $this->get_limit();
-        $offset = $this->_get_offset();
+        $limit = $this->get_pagination_limit();
+        $offset = $this->_get_pagination_offset();
         $mysql_query.= " LIMIT ".$offset.", ".$limit;
       }
       return $mysql_query;
@@ -182,10 +192,6 @@ class Listed_items extends MX_Controller {
           $insert_statement = "INSERT INTO item_pics (item_id, picture_name, priority) VALUES ($item_id, '$file_name', $priority)";
           $this->_custom_query($insert_statement);
 
-          // $small_pic_id = $this->_get_small_pic_id($item_id, $priority);
-          // $mysql_query = "INSERT INTO big_pics (small_pic_id, picture_name) VALUES ($small_pic_id, '$file_name')";
-          // $this->_custom_query($mysql_query);
-
           $data['headline'] = "Upload Success";
           $data['item_id'] = $item_id;
           $flash_msg = "The picture was successfully uploaded.";
@@ -204,13 +210,13 @@ class Listed_items extends MX_Controller {
       $this->load->module('big_pics');
 
       $item_url = $this->uri->segment(3);
-      $small_pic_id = $this->uri->segment(4);
+      $picture_id = $this->uri->segment(4);
       $this->site_security->_make_sure_logged_in();
       $item_id = $this->store_items->_get_item_id_from_item_url($item_url);
 
-      $picture_name = $this->item_pics->_get_picture_name_by_small_pic_id($small_pic_id);
+      $picture_name = $this->item_pics->_get_picture_name_by_small_pic_id($picture_id);
       $big_pic_path = './media/item_big_pics/'.$picture_name;
-      $small_pic_path = './media/item_pics/'.$picture_name;
+      $small_pic_path = './media/item_small_pics/'.$picture_name;
       // attemp to delete item small pics
       if (file_exists($big_pic_path)) {
         unlink($big_pic_path);
@@ -218,13 +224,10 @@ class Listed_items extends MX_Controller {
       if (file_exists($small_pic_path)) {
         unlink($small_pic_path);
       }
-      // delete every big pic that is linked to a small pic
-      $this->big_pics->_delete_where('small_pic_id', $small_pic_id);
-
       // reassign priority
-      $priority_for_deleted_pic = $this->item_pics->get_priority_for_item($small_pic_id, $item_id);
+      $priority_for_deleted_pic = $this->item_pics->get_priority_for_item($picture_id, $item_id);
       // delete small and big pics
-      $this->item_pics->_delete($small_pic_id);
+      $this->item_pics->_delete($picture_id);
       $query = $this->item_pics->get_where_custom('item_id', $item_id);
       foreach ($query->result() as $row) {
         if ($row->priority > $priority_for_deleted_pic) {
@@ -263,8 +266,8 @@ class Listed_items extends MX_Controller {
 
     function _generate_thumbnail($file_name) {
       $config['image_library'] = 'gd2';
-      $config['source_image'] = './media/big_pics/'.$file_name;
-      $config['new_image'] = './item_pics/'.$file_name;
+      $config['source_image'] = './media/item_big_pics/'.$file_name;
+      $config['new_image'] = './media/item_small_pics/'.$file_name;
       $config['maintain_ratio'] = true;
       $config['width'] = 200;
       $config['height'] = 200;
@@ -278,7 +281,6 @@ class Listed_items extends MX_Controller {
       $this->load->module('site_settings');
       $this->load->module('store_items');
       $this->site_security->_make_sure_logged_in();
-
       $submit = $this->input->post("submit", true);
       $user_id = $this->site_security->_get_user_id();
 
@@ -379,7 +381,8 @@ class Listed_items extends MX_Controller {
     }
 
     function _get_categories() {
-      $mysql_query = "SELECT * FROM store_categories WHERE parent_cat_id != 0 ORDER BY id";
+      // $mysql_query = "SELECT * FROM store_categories WHERE parent_cat_id != 0 ORDER BY id";
+      $mysql_query = "SELECT * FROM store_categories WHERE parent_cat_id = 0 ORDER BY id";
       $query = $this->_custom_query($mysql_query);
 
       $count = 0;
@@ -631,12 +634,12 @@ class Listed_items extends MX_Controller {
     }
 
     // method for pagination
-    function get_limit() {
-      $limit = 20;
+    function get_pagination_limit() {
+      $limit = 10;
       return $limit;
     }
 
-    function _get_offset() {
+    function _get_pagination_offset() {
       $offset = $this->uri->segment(4);
       if (!is_numeric($offset)) {
         $offset = 0;

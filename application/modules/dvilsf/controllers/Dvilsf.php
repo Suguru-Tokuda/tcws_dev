@@ -3,9 +3,6 @@ class Dvilsf extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    // $this->load->library('form_validation');
-    // $this->form_validation->set_ci_reference( $this );
-    // $this->form_validation->CI =& $this;
   }
 
   function index() {

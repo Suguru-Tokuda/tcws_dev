@@ -9,10 +9,6 @@ class Item_pics extends MX_Controller {
     $mysql_query = "SELECT picture_name FROM item_pics WHERE id = $id";
     $query = $this->_custom_query($mysql_query);
     return $query->row()->picture_name;
-    // foreach($query->result() as $row) {
-    //   $picture_name = $row->picture_name;
-    // }
-    // return $picture_name;
   }
 
   function _delete_where($col, $value) {

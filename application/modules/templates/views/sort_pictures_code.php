@@ -27,11 +27,11 @@ $(document).ready(function() {
 function saveChanges() {
   var $num = $('#sortlist > li').size(); // get the length of the array (list)
   $dataString = "number=" +$num;
-  for($x=1;$x<=$num;$x++)
-  {
+  for($x=1;$x<=$num;$x++) {
     var $id = $('#sortlist li:nth-child('+$x+') ').attr('id');
-    $dataString = $dataString + "&order"+$x+"="+$id;
-  }           $.ajax({
+    $dataString = $dataString + "&order" + $x + "=" + $id;
+  }
+  $.ajax({
     type: "POST",
     url: "<?php echo $start_of_target_url.$first_bit; ?>/sort",
     data: $dataString

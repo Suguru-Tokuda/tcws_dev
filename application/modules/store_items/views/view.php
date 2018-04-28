@@ -130,7 +130,7 @@ if (isset($flash)) {
             $email = $this->admin_info->get_admin_info()->email;
           } else {
             $this->load->module('users');
-            $email = $this->users->get_where($use_id)->row()->email;
+            $email = $this->users->get_where($user_id)->row()->email;
           }
            ?>
           <a class="btn btn-primary" href="mailto:<?= $email ?>" ><i class="icon-mail"></i> Contact Seller</a>
