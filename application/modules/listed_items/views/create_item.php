@@ -25,10 +25,10 @@ if (is_numeric($item_id)) {
         <div class="box-content">
           <a href="<?= base_url() ?>listed_items/upload_image/<?= $item_url ?>" ><button type="button" class="btn btn-primary">Manage Images</button></a>
           <a href="<?= base_url() ?>listed_items/deleteconf/<?= $item_url ?>" ><button type="button" class="btn btn-danger">Delete Item</button></a>
-          <a href="<?= base_url() ?>store_items/view/<?= $item_url?>" ><button type="button" class="btn btn-default">View Item In Shop</button></a>
+          <a href="<?= base_url() ?>store_items/view/<?= $item_url?>" ><button type="button" class="btn btn-secondary">View Item In Shop</button></a>
         </div>
-      </div><!--/span-->
-    </div><!--/row-->
+      </div>
+    </div>
     <?php
   }
   ?>
@@ -60,7 +60,7 @@ if (is_numeric($item_id)) {
       <!-- categories - dropdown or checkbox -->
       <div class="form-group">
         <label class="col-md-3 control-label" for="textinput">Categories</label>
-        <div class="col-md-4 form-check" style="margin-top: 8px;">
+        <div class="form-group" style="margin-top: 8px;">
           <?php
           $this->load->module('store_categories');
           foreach($categories_options as $key => $value) { // value is cat_id
@@ -72,83 +72,87 @@ if (is_numeric($item_id)) {
               $checked = "";
             }
             ?>
-            <!-- <label class="form-check-label"> -->
-            <input type="checkbox" name="categories[]" value="<?= $value ?>" <?= $checked ?>> <?= ucwords($cat_title) ?>
-            <!-- </label> -->
-            <?php
-          }
-          ?>
-        </div>
-      </div>
-      <?php
-      // shows inactive section only when editing
-      if (is_numeric($item_id)) {
-        ?>
-        <div class="form-group">
-          <label class="col-md-3 control-label" for="typeahead">Satus </label>
-          <div class="col-md-2">
-            <?php
-            if (!isset($status)) {
-              $status = '';
-            }
-            $additional_dd_code = 'class="form-control" id="status" required';
-            $options = array(
-              '' => 'Please select...',
-              '1' => 'Active',
-              '0' => 'Inactive',
-            );
-            echo form_dropdown('status', $options, $status, $additional_dd_code);
-            ?>
+            <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="checkbox" name="categories[]" id="<?= $value ?>" value="<?= $value ?>" <?= $checked ?> >
+            <label class="custom-control-label" for="<?= $value ?>"><?= ucwords($cat_title) ?></label>
           </div>
-        </div>
-        <?php
-      }
+          <?php
+        }
+        ?>
+      </div>
+    </div>
+    <?php
+    // shows inactive section only when editing
+    if (is_numeric($item_id)) {
       ?>
-
       <div class="form-group">
-        <label class="col-md-3 control-label" for="textarea2">Item Description</label>
-        <div class="controls col-md-4">
-          <textarea type="text" class="form-control" id="textarea2" rows="10" name="item_description" placeholder="Write about the item" style="resize: none" ><?php echo $item_description; ?></textarea>
-        </div>
-      </div>
-
-      <!-- Text input-->
-      <div class="form-group" >
-        <label class="col-md-3 control-label" for="textinput">City (Location)</label>
-        <div class="col-md-4">
-          <input id="textinput" name="city" value="<?= $city ?>" type="text" placeholder="Enter city" class="form-control input-md">
-        </div>
-      </div>
-
-      <!-- Text input-->
-      <div class="form-group">
-        <label class="col-md-3 control-label" for="textinput">State</label>
+        <label class="col-md-3 control-label" for="typeahead">Satus </label>
         <div class="col-md-2">
           <?php
-          $state_key = array_search($state, $states);
-          $selection = $state;
-          echo form_dropdown('state', $states, $state_key, 'class="form-control"');
+          if (!isset($status)) {
+            $status = '';
+          }
+          $additional_dd_code = 'class="form-control" id="status" required';
+          $options = array(
+            '' => 'Please select...',
+            '1' => 'Active',
+            '0' => 'Inactive',
+          );
+          echo form_dropdown('status', $options, $status, $additional_dd_code);
           ?>
         </div>
       </div>
-
-      <!-- hidden value (only when a user is creating a new item) -->
       <?php
-      if ($item_id == "") {
-        ?>
-        <input type="hidden" name="status" value="1" >
-        <?php
-      }
-      ?>
-      <!-- Button -->
-      <div class="form-group">
-        <!-- <label class="col-md-4 control-label" for="singlebutton"></label> -->
-        <div class="col-md-offset-3 col-md-4">
-          <button id="singlebutton" name="submit" value="submit" class="btn btn-primary">Proceed</button>
-          <button name="submit" value="cancel" type="submit" class="btn btn-default">Cancel</button>
-        </div>
-      </div>
+    }
+    ?>
 
-    </fieldset>
-  </form>
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="textarea2">Item Description</label>
+      <div class="controls col-md-4">
+        <textarea type="text" class="form-control" id="textarea2" rows="10" name="item_description" placeholder="Write about the item" style="resize: none" ><?php echo $item_description; ?></textarea>
+      </div>
+    </div>
+
+    <!-- Text input-->
+    <div class="form-group" >
+      <label class="col-md-3 control-label" for="textinput">City (Location)</label>
+      <div class="col-md-4">
+        <input id="textinput" name="city" value="<?= $city ?>" type="text" placeholder="Enter city" class="form-control input-md">
+      </div>
+    </div>
+
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="textinput">State</label>
+      <div class="col-md-2">
+        <?php
+        $state_key = array_search($state, $states);
+        $selection = $state;
+        echo form_dropdown('state', $states, $state_key, 'class="form-control"');
+        ?>
+      </div>
+    </div>
+
+    <!-- hidden value (only when a user is creating a new item) -->
+    <?php
+    if ($item_id == "") {
+      ?>
+      <input type="hidden" name="status" value="1" >
+      <?php
+    }
+    ?>
+    <!-- Button -->
+    <div class="form-group">
+      <!-- <label class="col-md-4 control-label" for="singlebutton"></label> -->
+      <div class="col-md-offset-3 col-md-4">
+        <button id="singlebutton" name="submit" value="submit" class="btn btn-primary">Proceed</button>
+        <?php
+        $cancel_link = base_url().'/listed_items/manage';
+         ?>
+         <a class="btn btn-default" href="<?= $cancel_link; ?>">Cancel</a>
+      </div>
+    </div>
+
+  </fieldset>
+</form>
 </div>

@@ -89,7 +89,7 @@ $form_location = base_url().'listed_items/do_upload/'.$item_url;
           // $view_item_url = base_url()."/store_categories/view/".$row->id;
           $priority = $row->priority;
           ?>
-          <li class="sort list-group-item col-md-3" style="height: 200px;" id="<?= $row->id?>">
+          <li class="sort col-md-3" style="height: 200px; margin-bottom: 100px;" id="<?= $row->id?>">
             <!-- <p><?= $priority ?>/<?= $num_rows ?> </p> -->
             <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" class="img-responsive">
             <?php

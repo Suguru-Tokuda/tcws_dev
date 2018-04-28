@@ -35,8 +35,6 @@ foreach($lesson_query->result() as $row) {
 }
 }
 
-
-echo form_hidden('shipping_'.$count, $shipping);
 ?>
 <div class="col-md-10 col-md-offset-1" style="text-align: center;">
   <button class="btn btn-success" name="submit" value="submit" type=submit>

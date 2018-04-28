@@ -81,7 +81,7 @@ class Custom_validation extends MX_Controller {
         if ($check === "numeric") {
           if (!is_numeric($value_to_test)) {
             $retVal = false;
-            array_push($this->validation_errors, $name_to_show.' has to be numeric');
+            array_push($this->validation_errors, $name_to_show.' has to be a number.');
           }
         }
 

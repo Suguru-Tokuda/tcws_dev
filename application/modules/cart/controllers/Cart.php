@@ -173,7 +173,6 @@ class Cart extends MX_Controller {
   function _draw_cart_content($query, $lesson_query, $user_type) {
     // NOTE: user_type can be 'public' or 'admin'
     $this->load->module('site_settings');
-    $this->load->module('shipping');
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
 
     if ($user_type == 'public') {

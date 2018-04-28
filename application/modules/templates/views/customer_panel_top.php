@@ -1,17 +1,4 @@
 <?php
-// function _attempt_make_active($link_text) {
-//   if ((current_url() == base_url().'youraccount/welcome') AND ($link_text == "Your Messages")) {
-//     echo ' class="active"';
-//   } else if ((current_url() == base_url().'youraccount/youroders') AND ($link_text == "Your Orders")) {
-//     echo ' class="active"';
-//   } else if ((current_url() == base_url().'listed_items/manage') AND ($link_text == "Your Items")) {
-//     echo ' class="active"';
-//   } else if ((current_url() == base_url().'youraccount/yourprofile') AND ($link_text == "Your Profile")) {
-//     echo ' class="active"';
-//   } else if ((current_url() == base_url().'youraccount/logout') AND ($link_text == "Log out")) {
-//     echo ' class="active"';
-//   }
-// }
 function _attempt_make_active($link_text) {
   if ((current_url() == base_url().'youraccount/welcome') AND ($link_text == "Your Messages")) {
        echo ' class="active"';

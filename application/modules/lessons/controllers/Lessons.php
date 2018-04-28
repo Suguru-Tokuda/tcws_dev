@@ -3,12 +3,56 @@ class Lessons extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    // $this->load->library('custom_validation');
     $this->load->module('custom_pagination');
     $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
-    // $this->custom_validation->set_ci_reference($this);
+  }
+
+
+  function view_my_lessons() {
+    $this->load->module('site_security');
+    $this->load->module('site_settings');
+    $this->site_security->_make_sure_logged_in();
+
+    $user_id = $this->site_security->_get_user_id();
+    $use_limit = false;
+    $mysql_query = $this->_get_mysql_query_for_view_my_lessons($user_id, $use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $total_lessons = $query->num_rows();
+
+    $pagination_data['template'] = "unishop";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_lessons;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_pagination_limit("admin");
+
+    $use_limit = true;
+    $mysql_query = $this->_get_mysql_query_for_view_my_lessons($user_id, $use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+    $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
+    $data['query'] = $query;
+    $data['view_file'] = "view_my_lessons";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
+
+  function _get_mysql_query_for_view_my_lessons($user_id, $use_limit) {
+    $mysql_query = "
+    SELECT l.lesson_name, l.lesson_url, l.id AS lesson_id, l.lesson_fee, lb.lesson_booking_qty, ls.lesson_start_date, ls.lesson_end_date
+    FROM lessons l
+    JOIN lesson_schedules ls ON l.id = ls.lesson_id
+    JOIN lesson_bookings lb ON ls.id = lb.lesson_schedule_id
+    WHERE lb.user_id = $user_id
+    ORDER BY ls.lesson_start_date
+    ";
+    if ($use_limit == true) {
+      $limit = $this->get_pagination_limit("admin");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
   }
 
   function view_lessons() {
