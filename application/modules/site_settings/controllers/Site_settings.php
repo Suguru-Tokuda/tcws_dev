@@ -27,7 +27,7 @@ class Site_settings extends MX_Controller {
   }
 
   function _get_paypal_email() {
-    $email = "sfstboy@gmail.com";
+    $email = "twincitywatersports@gmail.com";
     return $email;
   }
 
