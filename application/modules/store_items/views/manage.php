@@ -31,10 +31,17 @@ $create_item_url = base_url()."store_items/create";
             foreach($query->result() as $row) {
               $edit_item_url = base_url()."store_items/create/".$row->id;
               $view_item_url = base_url()."store_items/view_item/".$row->item_url;
-              if ($row->user_id == 0) {
-                $userName = "Admin";
+              $user_id = $row->user_id;
+              if ($user_id == 0) {
+                $user_name = "Admin";
               } else {
-                $userName = $row->userName;
+                $this->load->module('users');
+                $user_query = $this->users->get_where($user_id);
+                if ($user_query->num_rows() == 0) {
+                  $user_name = "Unknown";
+                } else {
+                  $user_name = $this->users->get_where($user_id)->row()->userName;
+                }
               }
               $status = $row->status;
               $status_string = "";
@@ -48,7 +55,7 @@ $create_item_url = base_url()."store_items/create";
               ?>
               <tr>
                 <td><?= $row->item_title ?></td>
-                <td><?= $userName ?></td>
+                <td><?= $user_name ?></td>
                 <td class="center"><?= $row->item_price ?></td>
                 <td class="center"><?= $row->was_price ?></td>
                 <td>

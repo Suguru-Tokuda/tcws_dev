@@ -1,31 +1,28 @@
 <?php
-class Boats extends MX_Controller {
+class Boat_rental extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    // $this->load->library('custom_validation');
     $this->load->module('custom_pagination');
     $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
-    // $this->custom_validation->set_ci_reference($this);
   }
 
-  function view_boats() {
+  function view_boat_rental() {
     $use_limit = false;
-    $mysql_query = $this->_get_mysql_query_for_boats($use_limit);
+    $mysql_query = $this->_get_mysql_query_for_boat_rental($use_limit);
     $query = $this->_custom_query($mysql_query);
-    $total_boats = $query->num_rows();
+    $total_boat_rental = $query->num_rows();
 
     $use_limit = true;
-    $mysql_query = $this->_get_mysql_query_for_boats($use_limit);
+    $mysql_query = $this->_get_mysql_query_for_boat_rental($use_limit);
     $query = $this->_custom_query($mysql_query);
     $pagination_data['template'] = "unishop";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
-    $pagination_data['total_rows'] = $total_boats;
+    $pagination_data['total_rows'] = $total_boat_rental;
     $pagination_data['offset_segment'] = 4;
     $pagination_data['limit'] = $this->get_pagination_limit("main");
-
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['query'] = $query;
@@ -34,7 +31,7 @@ class Boats extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  function _get_mysql_query_for_boats($use_limit) {
+  function _get_mysql_query_for_boat_rental($use_limit) {
     $mysql_query = "SELECT DISTINCT * FROM boat_rental ORDER BY boat_name";
     if ($use_limit == true) {
       $limit = $this->get_pagination_limit("main");
@@ -88,34 +85,34 @@ class Boats extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  function manage_boats() {
+  function manage_boat_rental() {
     $this->load->module('site_security');
     $this->load->module('site_settings');
     $this->site_security->_make_sure_is_admin();
     $use_limit = false;
-    $mysql_query = $this->_generate_mysql_query_for_manage_boats($use_limit);
+    $mysql_query = $this->_generate_mysql_query_for_manage_boat_rental($use_limit);
     $query = $this->_custom_query($mysql_query);
-    $total_boats = $query->num_rows();
+    $total_boat_rental = $query->num_rows();
 
     $pagination_data['template'] = "public_bootstrap";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
-    $pagination_data['total_rows'] = $total_boats;
+    $pagination_data['total_rows'] = $total_boat_rental;
     $pagination_data['offset_segment'] = 4;
     $pagination_data['limit'] = $this->get_pagination_limit("admin");
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $use_limit = true;
-    $mysql_query = $this->_generate_mysql_query_for_manage_boats($use_limit);
+    $mysql_query = $this->_generate_mysql_query_for_manage_boat_rental($use_limit);
     $query = $this->_custom_query($mysql_query);
 
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $query;
-    $data['view_file'] = "manage_boats";
+    $data['view_file'] = "manage_rental_boats";
     $this->load->module('templates');
     $this->templates->admin($data);
   }
 
-  function _generate_mysql_query_for_manage_boats($use_limit) {
+  function _generate_mysql_query_for_manage_boat_rental($use_limit) {
     $mysql_query = "SELECT * FROM boat_rental ORDER BY boat_name";
     if ($use_limit == true) {
       $limit = $this->get_pagination_limit("main");
@@ -137,7 +134,7 @@ class Boats extends MX_Controller {
     $boat_rental_id = $this->uri->segment(3);
 
     if ($submit == "cancel") {
-      redirect('boats/manage_boats');
+      redirect('boat_rental/manage_boat_rental');
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
       $status = $this->input->post('status', true);
@@ -159,7 +156,7 @@ class Boats extends MX_Controller {
           $flash_msg = "The boat details were successfully updatd.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
           $this->session->set_flashdata('item', $value);
-          redirect('boats/create_boat/'.$boat_rental_id); // sending back to create_boat page
+          redirect('boat_rental/create_boat/'.$boat_rental_id); // sending back to create_boat page
         } else {
           // inseting to DB
           $code = $this->site_security->generate_random_string(6);
@@ -170,7 +167,7 @@ class Boats extends MX_Controller {
           $flash_msg = "The Boat was successfully added.";
           $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
           $this->session->set_flashdata('item', $value);
-          redirect('boats/manage_boats');
+          redirect('boat_rental/manage_boat_rental');
         }
       }
     }
@@ -225,23 +222,23 @@ class Boats extends MX_Controller {
     $submit = $this->input->post('submit', true);
 
     if ($submit == "cancel") {
-      redirect('boats/create_boat/'.$boat_rental_id);
+      redirect('boat_rental/create_boat/'.$boat_rental_id);
     } else if ($submit == "delete") {
-      $this->load->module('boats_schedules');
-      $query = $this->boats_schedules->get_where_custom("boat_rental_id",$boat_rental_id);
+      $this->load->module('boat_rental_schedules');
+      $query = $this->boat_rental_schedules->get_where_custom("boat_rental_id",$boat_rental_id);
       if($query->num_rows()>0)
       {
         $flash_msg ="The boat cannot be deleted.";
         $value = '<div class="alert alert-warning role="alert">'.$flash_msg.'</div>';
         $this->session->set_flashdata('item', $value);
-        redirect('boats/manage_boats');
+        redirect('boat_rental/manage_boat_rental');
       }
       else {
         $this->_process_delete_boat($boat_rental_id);
         $flash_msg = "The boat was successfully deleted.";
         $value = '<div class="alert alert-warning role="alert">'.$flash_msg.'</div>';
         $this->session->set_flashdata('item', $value);
-        redirect('boats/manage_boats');
+        redirect('boat_rental/manage_boat_rental');
       }
     }
   }
@@ -301,9 +298,9 @@ class Boats extends MX_Controller {
 
     $submit = $this->input->post('submit', true);
     if ($submit == "cancel") {
-      redirect('boats/create_boat/'.$boat_rental_id);
+      redirect('boat_rental/create_boat/'.$boat_rental_id);
     } else if ($submit == "upload") {
-      $config['upload_path'] = './media/boats_big_pics';
+      $config['upload_path'] = './media/boat_rental_big_pics';
       $config['allowed_types'] = 'gif|jpg|png|jpeg';
       $config['max_size'] = 2048;
       $config['max_width'] = 3036;
@@ -342,7 +339,7 @@ class Boats extends MX_Controller {
         $value= '<div class="alert alert-success" role="alert">.'.$flash_msg.'</div>';
         $this->session->set_flashdata('item', $value);
 
-        redirect(base_url()."/boats/upload_boat_image/".$boat_rental_id);
+        redirect(base_url()."/boat_rental/upload_boat_image/".$boat_rental_id);
       }
     }
   }
@@ -384,7 +381,7 @@ class Boats extends MX_Controller {
     $flash_msg = "The image was successfully deleted.";
     $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
     $this->session->set_flashdata('item', $value);
-    redirect(base_url()."boats/upload_boat_image/".$boat_rental_id);
+    redirect(base_url()."boat_rental/upload_boat_image/".$boat_rental_id);
   }
 
   function _generate_thumbnail($file_name) {
@@ -476,8 +473,8 @@ class Boats extends MX_Controller {
   // end of pagination methods
 
   function get($order_by) {
-    $this->load->model('mdl_boats');
-    $query = $this->mdl_boats->get($order_by);
+    $this->load->model('mdl_boat_rental');
+    $query = $this->mdl_boat_rental->get($order_by);
     return $query;
   }
 
@@ -486,8 +483,8 @@ class Boats extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_boats');
-    $query = $this->mdl_boats->get_with_limit($limit, $offset, $order_by);
+    $this->load->model('mdl_boat_rental');
+    $query = $this->mdl_boat_rental->get_with_limit($limit, $offset, $order_by);
     return $query;
   }
 
@@ -496,20 +493,20 @@ class Boats extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_boats');
-    $query = $this->mdl_boats->get_where($id);
+    $this->load->model('mdl_boat_rental');
+    $query = $this->mdl_boat_rental->get_where($id);
     return $query;
   }
 
   function get_where_custom($col, $value) {
-    $this->load->model('mdl_boats');
-    $query = $this->mdl_boats->get_where_custom($col, $value);
+    $this->load->model('mdl_boat_rental');
+    $query = $this->mdl_boat_rental->get_where_custom($col, $value);
     return $query;
   }
 
   function _insert($data) {
-    $this->load->model('mdl_boats');
-    $this->mdl_boats->_insert($data);
+    $this->load->model('mdl_boat_rental');
+    $this->mdl_boat_rental->_insert($data);
   }
 
   function _update($id, $data) {
@@ -517,8 +514,8 @@ class Boats extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_boats');
-    $this->mdl_boats->_update($id, $data);
+    $this->load->model('mdl_boat_rental');
+    $this->mdl_boat_rental->_update($id, $data);
   }
 
   function _delete($id) {
@@ -526,25 +523,25 @@ class Boats extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_boats');
-    $this->mdl_boats->_delete($id);
+    $this->load->model('mdl_boat_rental');
+    $this->mdl_boat_rental->_delete($id);
   }
 
   function count_where($column, $value) {
-    $this->load->model('mdl_boats');
-    $count = $this->mdl_boats->count_where($column, $value);
+    $this->load->model('mdl_boat_rental');
+    $count = $this->mdl_boat_rental->count_where($column, $value);
     return $count;
   }
 
   function get_max() {
-    $this->load->model('mdl_boats');
-    $max_id = $this->mdl_boats->get_max();
+    $this->load->model('mdl_boat_rental');
+    $max_id = $this->mdl_boat_rental->get_max();
     return $max_id;
   }
 
   function _custom_query($mysql_query) {
-    $this->load->model('mdl_boats');
-    $query = $this->mdl_boats->_custom_query($mysql_query);
+    $this->load->model('mdl_boat_rental');
+    $query = $this->mdl_boat_rental->_custom_query($mysql_query);
     return $query;
   }
 

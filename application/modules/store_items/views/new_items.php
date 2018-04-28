@@ -8,6 +8,7 @@
       $item_title = $row->item_title;
       $item_url = $row->item_url;
       $item_price = $row->item_price;
+      $was_price = $row->was_price;
       $index_pic_name = $this->store_categories->_get_picture_name_by_item_url($item_url);
       $small_pic_path = base_url()."media/item_big_pics/".$index_pic_name;
       // $item_page = base_url()."$item_segments./$row->cat_url/$row->item_url";
@@ -21,11 +22,16 @@
           </div></a>
           <div class="card-body text-center">
             <h4 class="card-title"><?= $item_title ?></h4>
+            <?php
+            if ($was_price > 0) { ?>
+              <del><?= $currency_symbol.$was_price ?></del>
+              <?php
+            }
+            ?>
             <p class="text-muted"><?= $currency_symbol.$item_price ?></p><a class="btn btn-outline-primary btn-sm" href="<?= $item_page ?>">View Item</a>
           </div>
         </div>
       </div>
-
       <?php
     }
     ?>

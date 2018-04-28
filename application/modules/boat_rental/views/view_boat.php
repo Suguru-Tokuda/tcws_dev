@@ -3,7 +3,7 @@ if (isset($flash)) {
   echo $flash;
 }
 
-$form_location = base_url().'boats_schedules/create_boat_schedules/'.$boat_rental_id;
+$form_location = base_url().'boat_rental_schedules/create_boat_schedules/'.$boat_rental_id;
 $booking_url = base_url().'boat_basket/add_to_basket';
 ?>
 <!-- Product Gallery-->
@@ -20,7 +20,7 @@ $booking_url = base_url().'boat_basket/add_to_basket';
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."media/boats_big_pics/".$picture_name;
+            $picture_location = base_url()."media/boat_rental_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <div class="gallery-item active"><a href="<?= $picture_location ?>" data-hash="one" data-size="1000x667"></a></div>
@@ -48,7 +48,7 @@ $booking_url = base_url().'boat_basket/add_to_basket';
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."media/boats_big_pics/".$picture_name;
+            $picture_location = base_url()."media/boat_rental_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <div data-hash="one"><img src="<?= $picture_location ?>" alt="<?= $picture_name ?>"></div>
@@ -76,7 +76,7 @@ $booking_url = base_url().'boat_basket/add_to_basket';
           $counter = 0;
           foreach($pics_query->result() as $row) {
             $picture_name = $row->picture_name;
-            $picture_location = base_url()."media/boats_big_pics/".$picture_name;
+            $picture_location = base_url()."media/boat_rental_big_pics/".$picture_name;
             if ($counter == 0) {
               ?>
               <li class="active"><a href="#one"><img src="<?= $picture_location ?>" alt="<?= $picture_name ?>"></a></li>
@@ -113,7 +113,7 @@ $booking_url = base_url().'boat_basket/add_to_basket';
   <span class="h2 d-block"><?= $currency_symbol.$boat_rental_fee.' / per' ?></span>
   <p><?= nl2br($boat_description) ?></p>
   <p> Year Made: <?= nl2br($boat_year_made) ?></p>
-  <p> Maker: <?= nl2br($boat_maker)?></p>
+  <p> Maker: <?= nl2br($boat_make)?></p>
   <p> Capacity: <?= nl2br($boat_capacity) ?></p></br>
 </br>
 

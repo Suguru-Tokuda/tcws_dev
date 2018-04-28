@@ -50,12 +50,12 @@ class boat_basket extends MX_Controller {
 
   function _fetch_the_data() {
     $this->load->module('site_security');
-    $this->load->module('boats');
+    $this->load->module('boat_rental');
     $shopper_id = $this->site_security->_get_user_id();
     $start_time = $this->input->post('boat_start_date', true);
     $end_time = $this->input->post('boat_end_date', true);
     $boat_id = $this->input->post('boat_rental_id', true);
-    $boat_data = $this->boats->fetch_limited_data_from_db($boat_id);
+    $boat_data = $this->boat_rental->fetch_limited_data_from_db($boat_id);
     $boat_fee = $boat_data['boat_rental_fee'];
     $start_time = strtotime($start_time);
     $end_time = strtotime($end_time);

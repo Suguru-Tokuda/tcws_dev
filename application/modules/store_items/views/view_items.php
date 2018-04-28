@@ -60,7 +60,7 @@
                     <?php
                   }
                   ?>
-                  $<?= number_format($item_price, 2) ?></h4>
+                  <?= $currency_symbol.number_format($item_price, 2) ?></h4>
                 </div>
               </div>
               <?php

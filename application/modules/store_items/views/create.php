@@ -131,7 +131,10 @@ if (is_numeric($update_id)) { ?>
 
               <div class="form-actions">
                 <button type="submit" class="btn btn-primary" name="submit" value="submit">Submit</button>
-                <button type="submit" class="btn" name="submit" value="cancel">Cancel</button>
+                <?php
+                $cancel_link = base_url().'/store_items/manage';
+                 ?>
+                <a class="btn btn-default" href="<?= $cancel_link; ?>">Cancel</a>
               </div>
             </fieldset>
           </form>

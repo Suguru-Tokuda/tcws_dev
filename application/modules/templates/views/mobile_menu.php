@@ -41,11 +41,11 @@
         </li>
         <li class="has-children"><span><a href="#"><span>Boat Rent</span></a><span class="sub-menu-toggle"></span></span>
           <ul class="offcanvas-submenu">
-              <li><a href="<?= base_url().'boats/view_boats'?>">View Rental Boats</a></li>
+              <li><a href="<?= base_url().'boat_rental/view_boat_rental'?>">View Rental Boats</a></li>
               <?php
               if ($user_id > 0) {
                 ?>
-                <li><a href="<?= base_url().'boats/view_rental_boat_schedules'?>">Your Rental Boat Schedules</a></li>
+                <li><a href="<?= base_url().'boat_rental/view_rental_boat_schedules'?>">Your Rental Boat Schedules</a></li>
                 <?php
               }
               ?>

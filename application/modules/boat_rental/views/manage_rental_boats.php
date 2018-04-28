@@ -1,18 +1,18 @@
 <section class="wrapper">
-  <h3>Manage boats</h3>
+  <h3>Manage boat_rental</h3>
   <?php
   if (isset($flash)) {
     echo $flash;
   }
-  $create_boat_url = base_url()."boats/create_boat";
+  $create_boat_url = base_url()."boat_rental/create_boat";
   ?>
 
-    <a href="<?= $create_boat_url ?>"<button class="btn btn-primary" type="submit">Add New boats</button></a>
+    <a href="<?= $create_boat_url ?>"<button class="btn btn-primary" type="submit">Add New boat_rental</button></a>
 
     <div class="row-fluid sortable">
       <div class="box span12">
         <div class="green-panel" data-original-title>
-          <h2><i class="fa fa-tag "></i>boats</h2>
+          <h2><i class="fa fa-tag "></i>boat_rental</h2>
         </div>
         <div class="box-content">
           <table class="table table-striped table-bordered bootstrap-datatable datatable">
@@ -33,8 +33,8 @@
           <?php
           $this->load->module('boat_schedules');
           foreach($query->result() as $row) {
-            $edit_boat_url = base_url()."boats/create_boat/".$row->id;
-            $view_boat_url = base_url()."boats/view_boat/".$row->boat_url;
+            $edit_boat_url = base_url()."boat_rental/create_boat/".$row->id;
+            $view_boat_url = base_url()."boat_rental/view_boat/".$row->boat_url;
             $id = $row->id;
             $boat_name = $row->boat_name;
             $boat_capacity = $row->boat_capacity;

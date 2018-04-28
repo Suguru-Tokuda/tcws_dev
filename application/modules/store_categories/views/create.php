@@ -35,7 +35,10 @@ if (isset($flash)) {
     </div>
     <div class="form-actions">
       <button type="submit" class="btn btn-primary" name="submit" value="Submit">Submit</button>
-      <button type="submit" class="btn" name="submit" value="Cancel">Cancel</button>
+      <?php
+      $cancel_link = base_url().'/store_categories/manage';
+       ?>
+      <a href="<?= $cancel_link ?>" class="btn btn-default">Cancel</a>
     </div>
   </form>
 </div>
