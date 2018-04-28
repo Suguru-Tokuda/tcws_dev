@@ -14,9 +14,9 @@ class Lesson_pics extends MX_Controller {
 
   function get_lesson_pic_ids_by_lesson_id($lesson_id) {
     $query = $this->get_where($lesson_id);
-    $ids = [];
+    $ids = array();
     foreach($query->result() as $row) {
-      $ids[] = $row->id;
+      array_push($ids,$row->id);
     }
     return $ids;
   }

@@ -18,18 +18,18 @@ class Boat_pics extends MX_Controller {
 
   function get_picture_name_by_boat_pic_id($id) {
     $query = $this->get_where($id);
-    $picture_name = [];
+    $picture_name = array();
     foreach($query->result() as $row) {
-      $picture_name[] = $row->picture_name;
+      array_push($picture_name,$row->picture_name);
     }
     return $picture_name;
   }
 
   function get_boat_pic_ids_by_boat_id($boat_rental_id) {
     $query = $this->get_where_custom("boat_rental_id",$boat_rental_id);
-    $ids = [];
+    $ids = array();
     foreach($query->result() as $row) {
-      $ids[] = $row->id;
+      array_push($ids,$row->id);
     }
     return $ids;
   }
