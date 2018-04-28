@@ -52,7 +52,6 @@ class Store_items extends MX_Controller {
       $offset = $this->_get_pagination_offset();
       $mysql_query.= " LIMIT ".$offset.", ".$limit;
     }
-
     return $mysql_query;
   }
 
@@ -319,7 +318,7 @@ class Store_items extends MX_Controller {
     } else {
       $refer_url = $_SERVER['HTTP_REFERER'];
     }
-    //http://localhost/practice/pre_owned_items/Big_boats
+    //http://localhost/practice/pre_owned_items/Big_boat_rental
     $this->load->module('site_settings');
     $this->load->module('store_cat_assign');
     $this->load->module('store_categories');
@@ -698,7 +697,7 @@ class Store_items extends MX_Controller {
       $this->custom_validation->set_rules('item_title', 'Item Title', 'max_length[240]'); // callback is for checking if the item already exists
       $this->custom_validation->set_rules('item_price', 'Item Price', 'numeric');
       if ($this->input->post('was_price') != "") {
-        $this->custom_validation->set_rules('was_price', 'Was Price', 'numeric');        
+        $this->custom_validation->set_rules('was_price', 'Was Price', 'numeric');
       }
       // $this->custom_validation->set_rules('status', 'Status', 'required|numeric');
       if ($this->custom_validation->run() == true) {
@@ -842,8 +841,8 @@ class Store_items extends MX_Controller {
     ";
 
     $query = $this->store_items->_custom_query($mysql_query);
-
     foreach ($query->result() as $row) {
+      $data['user_id'] = $row->user_id;
       $data['item_title'] = $row->item_title;
       $data['item_url'] = $row->item_url;
       $data['item_price'] = $row->item_price;

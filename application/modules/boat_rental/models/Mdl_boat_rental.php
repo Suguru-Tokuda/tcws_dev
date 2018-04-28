@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Mdl_boats extends CI_Model {
+class Mdl_boat_rental extends CI_Model {
 
   function __construct() {
     parent::__construct();

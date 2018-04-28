@@ -118,7 +118,10 @@ if (isset($flash)) {
              }
                 ?>
             </button>
-            <button type="submit" class="btn" name="submit" value="Cancel">Cancel</button>
+            <?php
+            $cancel_link = base_url().'/blog/manage';
+             ?>
+            <a class="btn btn-default" href="<?= $cancel_link; ?>">Cancel</a>
           </div>
         </fieldset>
       </form>

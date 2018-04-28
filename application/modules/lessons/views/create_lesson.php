@@ -122,7 +122,10 @@ if (is_numeric($lesson_id)) {
           }
           ?>
         </button>
-        <button name="submit" value="cancel" class="btn btn-default">Cancel</button>
+        <?php
+          $cancel_link = base_url().'/lessons/manage_lessons';
+         ?>
+        <a href="<?= $cancel_link; ?>" class="btn btn-default">Cancel</a>
       </div>
     </div>
   </form>

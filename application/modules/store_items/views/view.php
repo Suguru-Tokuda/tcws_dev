@@ -104,19 +104,36 @@ if (isset($flash)) {
     <div class="col-md-6">
       <div class="padding-top-2x mt-2 hidden-md-up"></div>
       <h2 class="padding-top-1x text-normal"><?= $item_title ?></h2>
-      <span class="h2 d-block"><?= $item_price_desc ?></span>
+      <span class="h2 d-block">
+        <?php
+        if ($was_price != 0.0) {
+         ?>
+        <del class="text-muted text-normal"><?= $was_price ?></del>&nbsp;
+        <?php
+        }
+         ?>
+        <?= $item_price_desc ?></span>
       <p><?= nl2br($item_description) ?></p>
       <div class="padding-bottom-1x mb-2">
         <span class="text-medium">Posted On:</span> <?= $date_made ?>
       </div>
       <div class="padding-bottom-1x mb-2">
-        <span class="text-medium">Categories:&nbsp;</span>
+        <span class="text-medium">Location:&nbsp;<?= $city.', '.$state ?></span>
         <!-- <a class="navi-link" href="#">Men’s shoes,</a> -->
       </div>
       <hr class="mb-3">
       <div class="d-flex flex-wrap justify-content-between">
         <div class="sp-buttons mt-2 mb-2">
-          <button class="btn btn-primary" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product"><i class="icon-mail"></i> Contact Seller</button>
+          <?php
+          if ($user_id == 0) {
+            $this->load->module('admin_info');
+            $email = $this->admin_info->get_admin_info()->email;
+          } else {
+            $this->load->module('users');
+            $email = $this->users->get_where($use_id)->row()->email;
+          }
+           ?>
+          <a class="btn btn-primary" href="mailto:<?= $email ?>" ><i class="icon-mail"></i> Contact Seller</a>
         </div>
       </div>
     </div>

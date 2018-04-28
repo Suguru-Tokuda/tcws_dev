@@ -1,12 +1,10 @@
 <?php
-class Boats_schedules extends MX_Controller {
+class Boat_rental_schedules extends MX_Controller {
 
   function __construct() {
     parent::__construct();
     $this->load->library('session');
-    // $this->load->library('form_validation');
     $this->load->module('custom_pagination');
-    // $this->form_validation->set_ci_reference($this);
   }
 
   function view_schedules($boat_rental_id)
@@ -60,7 +58,6 @@ class Boats_schedules extends MX_Controller {
       // $mysql_query = "SELECT * FROM users u JOIN lesson_bookings lb ON u.id = lb.user_id WHERE lb.lesson_schedule_id = $lesson_schedule_id";
       // $query = $this->_custom_query($mysql_query);
       $query = $this->get_where_custom('boat_rental_id',$boat_rental_id);
-      f($query)
       {
         $arr = array();
         foreach($query->result() as $row)
@@ -112,6 +109,8 @@ class Boats_schedules extends MX_Controller {
       }
     }*/
 
+  }
+
   // beginning of pagination methods
   function _get_pagination_limit() {
     $limit = 20;
@@ -138,8 +137,8 @@ class Boats_schedules extends MX_Controller {
 
 
   function get($order_by) {
-    $this->load->model('mdl_boats_schedules');
-    $query = $this->mdl_boats_schedules->get($order_by);
+    $this->load->model('mdl_boat_rental_schedules');
+    $query = $this->mdl_boat_rental_schedules->get($order_by);
     return $query;
   }
 
@@ -148,8 +147,8 @@ class Boats_schedules extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_boats_schedules');
-    $query = $this->mdl_boats_schedules->get_with_limit($limit, $offset, $order_by);
+    $this->load->model('mdl_boat_rental_schedules');
+    $query = $this->mdl_boat_rental_schedules->get_with_limit($limit, $offset, $order_by);
     return $query;
   }
 
@@ -158,20 +157,20 @@ class Boats_schedules extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_boats_schedules');
-    $query = $this->mdl_boats_schedules->get_where($id);
+    $this->load->model('mdl_boat_rental_schedules');
+    $query = $this->mdl_boat_rental_schedules->get_where($id);
     return $query;
   }
 
   function get_where_custom($col, $value) {
-    $this->load->model('mdl_boats_schedules');
-    $query = $this->mdl_boats_schedules->get_where_custom($col, $value);
+    $this->load->model('mdl_boat_rental_schedules');
+    $query = $this->mdl_boat_rental_schedules->get_where_custom($col, $value);
     return $query;
   }
 
   function _insert($data) {
-    $this->load->model('mdl_boats_schedules');
-    $this->mdl_boats_schedules->_insert($data);
+    $this->load->model('mdl_boat_rental_schedules');
+    $this->mdl_boat_rental_schedules->_insert($data);
   }
 
   function _update($id, $data) {
@@ -179,8 +178,8 @@ class Boats_schedules extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_boats_schedules');
-    $this->mdl_boats_schedules->_update($id, $data);
+    $this->load->model('mdl_boat_rental_schedules');
+    $this->mdl_boat_rental_schedules->_update($id, $data);
   }
 
   function _delete($id) {
@@ -188,25 +187,25 @@ class Boats_schedules extends MX_Controller {
       die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_boats_schedules');
-    $this->mdl_boats_schedules->_delete($id);
+    $this->load->model('mdl_boat_rental_schedules');
+    $this->mdl_boat_rental_schedules->_delete($id);
   }
 
   function count_where($column, $value) {
-    $this->load->model('mdl_boats_schedules');
-    $count = $this->mdl_boats_schedules->count_where($column, $value);
+    $this->load->model('mdl_boat_rental_schedules');
+    $count = $this->mdl_boat_rental_schedules->count_where($column, $value);
     return $count;
   }
 
   function get_max() {
-    $this->load->model('mdl_boats_schedules');
-    $max_id = $this->mdl_boats_schedules->get_max();
+    $this->load->model('mdl_boat_rental_schedules');
+    $max_id = $this->mdl_boat_rental_schedules->get_max();
     return $max_id;
   }
 
   function _custom_query($mysql_query) {
-    $this->load->model('mdl_boats_schedules');
-    $query = $this->mdl_boats_schedules->_custom_query($mysql_query);
+    $this->load->model('mdl_boat_rental_schedules');
+    $query = $this->mdl_boat_rental_schedules->_custom_query($mysql_query);
     return $query;
   }
 }

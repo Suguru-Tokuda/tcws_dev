@@ -1,12 +1,12 @@
 <?php
 $this->load->module('site_security');
 $this->load->module('store_items');
-$this->load->module('boats');
+$this->load->module('boat_rental');
 $this->load->module('lessons');
 $this->load->module('blog');
 $user_id = $this->site_security->_get_user_id();
 $pagination_limit_for_items = $this->store_items->get_pagination_limit("main");
-$pagination_limit_for_boats = $this->boats->get_pagination_limit("main");
+$pagination_limit_for_boat_rental = $this->boat_rental->get_pagination_limit("main");
 $pagination_limit_for_lessons = $this->lessons->get_pagination_limit("main");
 $pagination_limit_for_blog = $this->blog->get_pagination_limit("main");
 $signin_signup_url = base_url()."youraccount/start";
@@ -54,9 +54,9 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
         <li><a href="<?= base_url().'lessons/view_lessons/'.$pagination_limit_for_lessons?>">View Lessons</a></li>
       </ul>
     </li>
-    <li class="<?php if ($second_bit === "boats") { echo 'active';} ?>"><a href="#"><span>Boat Renting</span></a>
+    <li class="<?php if ($second_bit === "boat_rental") { echo 'active';} ?>"><a href="#"><span>Boat Renting</span></a>
       <ul class="sub-menu">
-        <li><a href="<?= base_url().'boats/view_boats/'.$pagination_limit_for_boats?>">View Rental Boats</a></li>
+        <li><a href="<?= base_url().'boat_rental/view_boat_rental/'.$pagination_limit_for_boat_rental?>">View Rental Boats</a></li>
       </ul>
     </li>
     <li class="<?php if ($second_bit === "blog") { echo 'active';} ?>"><a href="#"><span>Community</span></a>

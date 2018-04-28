@@ -6,11 +6,7 @@ if (isset($flash)) {
  ?>
 <div class="form-panel">
   <h4>Booking Schedule</h4>
-  <a href="<?= base_url() ?>boats/create_boat/<?= $boat_rental_id ?>" ><button type="button" class="btn">Back to Boat Management</button></a>
-  <?php
-  $num_rows = $query->num_rows();
-  echo $num_rows;
-  ?>
+  <a href="<?= base_url() ?>boat_rental/create_boat/<?= $boat_rental_id ?>" ><button type="button" class="btn">Back to Boat Management</button></a>
     <table class="table">
       <thead>
         <tr>

@@ -18,12 +18,12 @@
       foreach($query->result() as $row) {
         $boat_rental_id = $row->id;
         $boat_name = $row->boat_name;
-        $boat_url = base_url().'boats/view_boat/'.$row->boat_url;
+        $boat_url = base_url().'boat_rental/view_boat/'.$row->boat_url;
         $pictures = $this->boat_pics->get_where_custom("boat_rental_id", $boat_rental_id);
         if($pictures->result())
         {
           $picture_name = $pictures->row(0)->picture_name;
-          $picture_src = base_url().'media/boats_big_pics/'.$picture_name;
+          $picture_src = base_url().'media/boat_rental_big_pics/'.$picture_name;
         }
         else {
           $picture_name = "unavailable";
