@@ -59,7 +59,7 @@ class Listed_items extends MX_Controller {
       $user_id = $this->site_security->_get_user_id();
 
       $use_limit = false;
-      $mysql_query = $this->_get_mysql_query_for_manage_items($use_limit);
+      $mysql_query = $this->_get_mysql_query_for_manage_items($user_id, $use_limit);
       $query = $this->_custom_query($mysql_query);
       $total_items = $query->num_rows();
 
@@ -71,7 +71,7 @@ class Listed_items extends MX_Controller {
       $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
       $use_limit = true;
-      $mysql_query = $this->_get_mysql_query_for_manage_items($use_limit);
+      $mysql_query = $this->_get_mysql_query_for_manage_items($user_id, $use_limit);
       $query = $this->_custom_query($mysql_query);
       $data['item_segments'] = $this->site_settings->_get_item_segments();
       $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
@@ -82,7 +82,7 @@ class Listed_items extends MX_Controller {
       $this->templates->public_bootstrap($data);
     }
 
-    function _get_mysql_query_for_manage_items($use_limit) {
+    function _get_mysql_query_for_manage_items($user_id, $use_limit) {
       $mysql_query = "
       SELECT si.item_title, si.id, si.item_url, si.item_price, si.status FROM
       store_items si JOIN users sa ON si.user_id = sa.id
