@@ -39,12 +39,12 @@ var paths = {
 
 gulp.task('compress-unishiop-vendor-css', function() {
   gulp.src(paths.unishopVendorCSSSource)
+  .pipe(ignore.exclude(['./styles.min.css.map', './site.css']))
   .pipe(order([
     "vendor.min.css",
     "card.min.css",
     "bootstrap-datepicker.css",
     "jquery.timepicker.css",
-    "site.js"
   ]))
   .pipe(concat('unishop.vendor.min.css'))
   .pipe(gulp.dest(paths.cssDest));
@@ -108,9 +108,6 @@ gulp.task('compress-unishop-header-js', function() {
     "jquery.js",
     "jquery-ui.js",
     "modernizr.min.js",
-    // "jquery.timepicker.js",
-    // "bootstrap-datepicker.js",
-    // "site.js",
   ]))
   .pipe(concat('unishop.vendor.header.js'))
   .pipe(gulp.dest(paths.jsDest));
@@ -122,12 +119,9 @@ gulp.task('compress-unishop-footer-js', function() {
   .pipe(order([
     "vendor.min.js",
     "card.min.js",
-
-
     "jquery-ui.js",
     "jquery.timepicker.js",
     "bootstrap-datepicker.js",
-    "site.js"
   ]))
   .pipe(concat('unishop.vendor.footer.js'))
   .pipe(gulp.dest(paths.jsDest));

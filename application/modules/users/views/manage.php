@@ -13,9 +13,7 @@ $create_account_url = base_url()."users/create";
         <h2><i class="fa fas fa-briefcase"></i><span class="break"></span>Members</h2>
         </div>
       <div class="box-content">
-
         <table class="table table-striped table-bordered bootstrap-datatable datatable">
-
           <thead>
             <tr>
               <th>Usename</th>
@@ -25,7 +23,6 @@ $create_account_url = base_url()."users/create";
               <th>Actions</th>
             </tr>
           </thead>
-
           <tbody>
             <?php
             $this->load->module('timedate');
@@ -50,7 +47,6 @@ $create_account_url = base_url()."users/create";
             ?>
           </tbody>
         </table>
-
       </div>
     </div><!--/span-->
   </div><!--/row-->

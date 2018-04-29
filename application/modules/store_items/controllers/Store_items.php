@@ -63,42 +63,41 @@ class Store_items extends MX_Controller {
     $searchKeywords = explode(" ", $searchKeywords);
 
     if ($submit == "submit") {
-      $mysql_query = "SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price FROM store_items si LEFT JOIN item_pics sp ON si.id = sp.item_id WHERE item_title LIKE '$searchKeywords[0]' OR item_description LIKE '$searchKeywords[0] AND status = 1'";
-
-      if (sizeOf($searchKeywords) > 1) {
-        for ($i = 1; $i < sizeOf($searchKeywords); $i++) {
-          $mysql_query.= " OR item_title LIKE '$searchKeywords[$i]' OR item_description LIKE '$searchKeywords[$i]'";
-        }
-      }
-
-      $store_items_query = $this->_custom_query($mysql_query);
-      $total_items = $store_items_query->num_rows();
-
-      $pagination_data['template'] = "public_bootstrap";
-      $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
-      $pagination_data['total_rows'] = $total_items;
-      $pagination_data['offset_segment'] = 4;
-      $pagination_data['limit'] = $this->get_pagination_limit();
-      $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
-
-      $showing_statement_data['limit'] = $this->get_pagination_limit();
-      $showing_statement_data['offset'] = $this->_get_pagination_offset();
-      $showing_statement_data['total_rows'] = $total_items;
-      $data['showing_statement'] = $this->custom_pagination->get_showing_statement($showing_statement_data);
-
+      $use_limit = false;
+      $mysql_query = $this->_get_mysql_query_for_search_items_by_keywords($searchKeywords, $use_limit);
+      $query = $this->_custom_query($mysql_query);
       $keywords = "";
       foreach($searchKeywords as $value) {
         $keywords.= $value." ";
       }
-
+      $data['query'] = $query;
       $data['keywords'] = "<b>Keyword(s)</b>: ".$keywords;
       $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
       $data['view_file'] = "view_items";
-      $data['query'] = $store_items_query;
-
       $this->load->module('templates');
       $this->templates->public_bootstrap($data);
     }
+  }
+
+  function _get_mysql_query_for_search_items_by_keywords($searchKeywords, $use_limit) {
+    $mysql_query = "
+    SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price
+    FROM store_items si
+    LEFT JOIN item_pics sp ON si.id = sp.item_id
+    WHERE item_title LIKE '$searchKeywords[0]'
+    OR item_description LIKE '$searchKeywords[0] AND status = 1'"
+    ;
+    if (sizeOf($searchKeywords) > 1) {
+      for ($i = 1; $i < sizeOf($searchKeywords); $i++) {
+        $mysql_query.= " OR item_title LIKE '$searchKeywords[$i]' OR item_description LIKE '$searchKeywords[$i]'";
+      }
+    }
+    if ($use_limit == true) {
+      $limit = $this->get_pagination_limit("main");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
   }
 
   // a function that shows all items in database.
@@ -536,6 +535,9 @@ class Store_items extends MX_Controller {
     // attempt to delete item sizes
     $this->load->module("store_item_sizes");
     $this->store_item_sizes->_delete_for_item($item_id);
+    // attemp to delete cat assign for the item_id
+    $this->load->module('store_cat_assign');
+    $this->store_cat_assign->_custom_delete('user_id', $item_id);
     // attempt to delete item big & small pics
     $data = $this->fetch_data_from_db($item_id);
 
@@ -971,6 +973,11 @@ class Store_items extends MX_Controller {
 
     $this->load->model('mdl_store_items');
     $this->mdl_store_items->_delete($id);
+  }
+
+  function _delete_custom($col, $val) {
+    $mysql_query = "DELETE FROM store_items WHERE $col = '$value'";
+    $this->_custom_query($mysql_query);
   }
 
   function count_where($column, $value)

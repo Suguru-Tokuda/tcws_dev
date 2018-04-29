@@ -12,7 +12,7 @@ $pagination_limit_for_blog = $this->blog->get_pagination_limit("main");
 $signin_signup_url = base_url()."youraccount/start";
 $search_form_location = base_url()."store_items/search_items_by_keywords";
 ?>
-<header class="navbar navbar-sticky sticky-top">
+<header class="navbar navbar-sticky">
   <form class="site-search" action="<?= $search_form_location ?>" method="post">
     <input type="text" name="searchKeywords" placeholder="Type to search...">
     <div class="search-tools"><span class="clear-search">Clear</span><span class="close-search"><i class="icon-cross"></i></span></div>

@@ -46,7 +46,7 @@ class Users extends MX_Controller {
     $this->site_security->_make_sure_is_admin();
 
     // gettinf flash data
-    $data['flash'] = $this->session->flashdata('account');
+    $data['flash'] = $this->session->flashdata('user');
 
     // getting data from DB
     // this means order by lastName
@@ -159,7 +159,7 @@ class Users extends MX_Controller {
         // These two lines show the alert for the successful account details change.
         $flash_msg = "The account password was successfully updated.";
         $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-        $this->session->set_flashdata('account', $value);
+        $this->session->set_flashdata('user', $value);
         // add the update data into the URL
         redirect('users/create/'.$update_id);
       }
@@ -168,7 +168,7 @@ class Users extends MX_Controller {
     $data['headline'] = "Update Account Password";
     // pass update id into the page
     $data['update_id'] = $update_id;
-    $data['flash'] = $this->session->flashdata('account');
+    $data['flash'] = $this->session->flashdata('user');
 
     // create a view file. Putting a php (html) into the admin template.
     // store_Accounts.php
@@ -210,7 +210,7 @@ class Users extends MX_Controller {
           // These two lines show the alert for the successful account details change.
           $flash_msg = "The account details were successfully updated.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-          $this->session->set_flashdata('account', $value);
+          $this->session->set_flashdata('user', $value);
           // add the update data into the URL
           redirect('users/create/'.$update_id);
         } else {
@@ -223,7 +223,7 @@ class Users extends MX_Controller {
 
           $flash_msg = "The account was successfully added.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-          $this->session->set_flashdata('account', $value);
+          $this->session->set_flashdata('user', $value);
           // add the update data into the URL
           redirect('users/create/'.$update_id);
         }
@@ -243,7 +243,7 @@ class Users extends MX_Controller {
     }
     // pass update id into the page
     $data['update_id'] = $update_id;
-    $data['flash'] = $this->session->flashdata('account');
+    $data['flash'] = $this->session->flashdata('user');
 
     if ($this->session->has_userdata('validation_errors')) {
       $data['validation_errors'] = $this->session->userdata('validation_errors');
@@ -261,6 +261,57 @@ class Users extends MX_Controller {
     $data['lastName'] = $this->input->post('lastName', true);
     $data['email'] = $this->input->post('email', true);
     return $data;
+  }
+
+  function deleteconf($user_id) {
+    if (!is_numeric($user_id)) {
+      redirect('site_security/not_allowed');
+    }
+    $this->load->library('session');
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $data['headline'] = "Delete User";
+    $data['user_id'] = $user_id;
+    $data['flash'] = $this->session->flashdata('user');
+    $data['view_file'] = "deleteconf";
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function delete($user_id) {
+    if (!is_numeric($user_id)) {
+      redirect('site_security/not_allowed');
+    }
+    $this->load->library('session');
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+    $submit = $this->input->post('submit', true);
+
+    if ($submit == "cancel") {
+      redirect('users/create/'.$user_id) ;
+    } else if ($submit == "delete") {
+      $this->_process_delete($user_id);
+      $flash_msg = "The user was successfully deleted.";
+      $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+      $this->session->set_flashdata('user', $value);
+      redirect('users/manage');
+    }
+  }
+
+  function _process_delete($user_id) {
+    $this->load->module('store_items');
+    $this->load->module('store_cat_assign');
+
+    $query = $this->store_items->get_where_custom('user_id', $user_id);
+    // delete all the items associated
+    if ($query->num_rows() > 0) {
+      foreach($query->result() as $row) {
+        $item_id = $row->id;
+        $this->store_items->_process_delete($item_id);
+      }
+    }
+    $this->_delete($user_id);
   }
 
   // get data from database

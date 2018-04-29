@@ -13,8 +13,8 @@ if (is_numeric($update_id)) { ?>
         <a href="<?= base_url() ?>users/update_password/<?= $update_id ?>" ><button type="button" class="btn btn-primary">Update Password</button></a>
         <a href="<?= base_url() ?>users/deleteconf/<?= $update_id ?>" ><button type="button" class="btn btn-danger">Delete Account</button></a>
       </div>
-    </div><!--/span-->
-  </div><!--/row-->
+    </div>
+  </div>
   <?php
 }
 ?>

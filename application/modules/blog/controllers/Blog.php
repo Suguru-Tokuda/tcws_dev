@@ -29,7 +29,7 @@ class Blog extends MX_Controller {
   }
 
   function _get_mysql_query_for_blogs($use_limit) {
-    $mysql_query = "SELECT DISTINCT * FROM blog ORDER BY date_published";
+    $mysql_query = "SELECT DISTINCT * FROM blog ORDER BY date_published DESC";
     if ($use_limit == true) {
       $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();
