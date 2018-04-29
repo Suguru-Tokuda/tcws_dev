@@ -21,7 +21,7 @@ if (is_numeric($lesson_id)) {
     ?>
     <a href="<?= base_url() ?>lesson_schedules/manage_lesson_schedules/<?= $lesson_id ?>" ><button type="button" class="btn btn-warning"><i class="fa fa-calendar"></i>&nbsp;&nbsp;Manage Schedules for the Lesson</button></a>
     <a href="<?= base_url() ?>lessons/upload_lesson_image/<?= $lesson_id ?>" ><button type="button" class="btn btn-primary"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Manage Images</button></a>
-    <a href="<?= base_url() ?>lessons/view_lesson/<?= $lesson_id?>" ><button type="button" class="btn btn-info"><i class="fa fa-laptop"></i>&nbsp;&nbsp;View Lesson On Main Page</button></a>
+    <a href="<?= base_url() ?>lessons/view_lesson/<?= $lesson_url ?>" ><button type="button" class="btn btn-info"><i class="fa fa-laptop"></i>&nbsp;&nbsp;View Lesson On Main Page</button></a>
     <a href="<?= base_url() ?>lessons/deleteconf/<?= $lesson_id ?>" ><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Delete Lesson</button></a>
     <a href="<?= base_url() ?>lessons/manage_lessons" ><button type="button" class="btn btn-default"><i class="fa fa-table"></i>&nbsp;&nbsp;Back to All Lessons</button></a>
     <p style="margin-top: 20px;"></p>

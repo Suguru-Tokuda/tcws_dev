@@ -9,30 +9,33 @@ echo form_hidden('return', $return);
 echo form_hidden('cancel_return', $cancel_return);
 
 $count = 0;
-if($query->num_rows() >0){
-foreach($query->result() as $row) {
-  $count++;
-  $item_title = $row->boat_id;
-  $price = $row->boat_fee;
-  $item_qty = $row->no_days;
+if($query->num_rows() > 0){
+  foreach($query->result() as $row) {
+    $count++;
+    $item_title = $row->boat_id;
+    $price = $row->boat_fee;
+    $start_date = $row->booking_start_date;
+    $end_date = $row->booking_end_date;
+    $no_hours = ($end_date - $start_date) / 3600;
+    $item_qty = $no_hours;
 
-  echo form_hidden('item_name_'.$count, $item_title);
-  echo form_hidden('amount_'.$count, $price);
-  echo form_hidden('item_qty_'.$count, $item_qty);
-}
+    echo form_hidden('item_name_'.$count, $item_title);
+    echo form_hidden('amount_'.$count, $price);
+    echo form_hidden('item_qty_'.$count, $item_qty);
+  }
 }
 
-if($lesson_query->num_rows() >0){
-foreach($lesson_query->result() as $row) {
-  $count++;
-  $item_title = $row->lesson_name;
-  $price = $row->lesson_fee;
-  $item_qty = $row->booking_qty;
+if($lesson_query->num_rows() > 0){
+  foreach($lesson_query->result() as $row) {
+    $count++;
+    $item_title = $row->lesson_name;
+    $price = $row->lesson_fee;
+    $item_qty = $row->booking_qty;
 
-  echo form_hidden('item_name_'.$count, $item_title);
-  echo form_hidden('amount_'.$count, $price);
-  echo form_hidden('item_qty_'.$count, $item_qty);
-}
+    echo form_hidden('item_name_'.$count, $item_title);
+    echo form_hidden('amount_'.$count, $price);
+    echo form_hidden('item_qty_'.$count, $item_qty);
+  }
 }
 
 ?>

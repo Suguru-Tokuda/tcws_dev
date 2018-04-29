@@ -93,13 +93,13 @@ if (isset($admin->instagram_link)) {
             </ul>
           </section>
         </div>
-        <div class="col-lg-3 col-md-6">
+        <!-- <div class="col-lg-3 col-md-6">
           <section class="widget widget-links widget-light-skin">
             <h3 class="widget-title">Internal</h3>
             <ul>
               <li><a href="<?= base_url()?>dvilsf">Admin</a></li>
             </ul>
-          </div>
+          </div> -->
           <?php
         }
         ?>

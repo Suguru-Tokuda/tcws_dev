@@ -36,6 +36,7 @@
           foreach($query->result() as $row) {
             $edit_lesson_url = base_url()."lessons/create_lesson/".$row->id;
             $view_lesson_url = base_url()."lessons/view_lesson/".$row->lesson_url;
+            $lesson_schedules_url = base_url()."lesson_schedules/manage_lesson_schedules/".$row->id;
             $id = $row->id;
             $lesson_name = $row->lesson_name;
             $lesson_capacity = $row->lesson_capacity;
@@ -67,6 +68,9 @@
                </a>
                <a class="btn btn-info" href="<?= $edit_lesson_url ?>">
                  <i class="fa fa-edit"></i>&nbsp;&nbsp;Edit
+               </a>
+               <a class="btn btn-danger" href="<?= $lesson_schedules_url ?>">
+                 <i class="fa fa-calendar"></i>&nbsp;&nbsp;Schedules
                </a>
              </td>
            </tr>
