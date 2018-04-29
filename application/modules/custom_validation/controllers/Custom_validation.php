@@ -138,7 +138,7 @@ class Custom_validation extends MX_Controller {
 
   function _check_user_exists($userName) {
     $this->load->module('users');
-    $query = $this->users->get_where_custom('userName', $userName);
+    $query = $this->users->get_where_custom('user_name', $userName);
     if ($query->num_rows() > 0) {
       return true;
     } else {

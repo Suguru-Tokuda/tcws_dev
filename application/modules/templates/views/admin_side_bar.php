@@ -43,19 +43,19 @@
         </a>
       </li> -->
       <li class="sub-menu">
-        <a href="<?= base_url().'/store_items/manage/'.$pagination_limit_for_items ?>">
+        <a href="<?= base_url().'store_items/manage/'.$pagination_limit_for_items ?>">
           <i class="fa fa-tag"></i>
           <span>Manage Items</span>
         </a>
       </li>
       <li class="sub-menu">
-        <a href="<?= base_url().'/lessons/manage_lessons/'.$pagination_limit_for_lessons ?>">
+        <a href="<?= base_url().'lessons/manage_lessons/'.$pagination_limit_for_lessons ?>">
           <i class="fa fa-calendar"></i>
           <span>Manage Lessons</span>
         </a>
       </li>
       <li class="sub-menu">
-        <a href="<?= base_url().'/boat_rental/manage_boat_rental/'.$pagination_limit_for_boat_rental ?>">
+        <a href="<?= base_url().'boat_rental/manage_boat_rental/'.$pagination_limit_for_boat_rental ?>">
           <i class="fa fa-anchor"></i>
           <span>Manage Boats</span>
         </a>
@@ -67,13 +67,13 @@
         </a>
       </li>
       <li class="sub-menu">
-        <a href="<?= base_url().'/blog/manage/'.$pagination_limit_for_blog ?>">
+        <a href="<?= base_url().'blog/manage/'.$pagination_limit_for_blog ?>">
           <i class="fa fa-file"></i>
           <span>Manage Blog</span>
         </a>
       </li>
       <li class="sub-menu">
-        <a href="<?= base_url().'/users/manage/'.$pagination_limit_for_users ?>">
+        <a href="<?= base_url().'users/manage/'.$pagination_limit_for_users ?>">
           <i class="fa fa-users"></i>
           <span>Accounts</span>
         </a>

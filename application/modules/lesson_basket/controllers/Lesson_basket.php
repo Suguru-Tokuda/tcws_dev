@@ -6,7 +6,6 @@ class Lesson_basket extends MX_Controller {
   }
 
   function remove() {
-
     $update_id = $this->uri->segment(3);
     $allowed = $this->_make_sure_remove_allowed($update_id);
 
@@ -27,7 +26,6 @@ class Lesson_basket extends MX_Controller {
     $customer_session_id = $this->session->session_id;
     $this->load->module('site_security');
     $customer_shopper_id = $this->site_security->_get_user_id();
-
 
     if (($session_id == $customer_session_id) OR ($shopper_id == $customer_shopper_id)) {
       return true;
@@ -58,8 +56,6 @@ class Lesson_basket extends MX_Controller {
     $lesson_schedule_id = $this->input->post('lesson_schedule_id', true);
     $lesson_start_date = $this->input->post('lesson_start_date', true);
     $lesson_end_date = $this->input->post('lesson_end_date', true);
-
-
     if (!is_numeric($shopper_id)) {
       $shopper_id = 0;
     }

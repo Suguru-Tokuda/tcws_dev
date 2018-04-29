@@ -673,7 +673,7 @@ class Store_items extends MX_Controller {
   }
 
   function _generate_mysql_query_for_manage_store_items($use_limit) {
-    $mysql_query = "SELECT si.*, sa.userName  FROM store_items si
+    $mysql_query = "SELECT si.*, sa.user_name  FROM store_items si
     LEFT JOIN users sa ON si.user_id = sa.id
     ";
     if ($use_limit == true) {
@@ -864,7 +864,7 @@ class Store_items extends MX_Controller {
 
   function get_user_by_item_id($item_id) {
     $mysql_query = "
-    SELECT sa.id as user_id, sa.userName as userName, sa.email as email FROM users sa
+    SELECT sa.id as user_id, sa.user_name as user_name, sa.email as email FROM users sa
     JOIN store_items si on sa.id = si.user_id
     WHERE si.id = ?
     ";
@@ -878,14 +878,14 @@ class Store_items extends MX_Controller {
     foreach($query->result() as $row) {
       $data['email'] = $row->email;
       $data['user_id'] = $row->user_id;
-      $data['userName'] = $row->userName;
+      $data['user_name'] = $row->user_name;
     }
     $this->load->module('site_settings');
     if (!isset($data['email'])) {
       $data['email'] = $this->site_settings->_get_email_for_admin_seller();
     }
-    if (!isset($data['userName'])) {
-      $data['userName'] = "TCWS Admin";
+    if (!isset($data['user_name'])) {
+      $data['user_name'] = "TCWS Admin";
     }
     if (!isset($data['user_id'])) {
       $data['user_id'] = 0;

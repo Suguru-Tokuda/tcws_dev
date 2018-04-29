@@ -1,5 +1,4 @@
-<section class="wrapper">
-  <h3>Manage Lessons</h3>
+  <h1>Manage Lessons</h1>
   <?php
   if (isset($flash)) {
     echo $flash;
@@ -79,4 +78,3 @@
     </div>
   </div>
 </div>
-</section>

@@ -6,7 +6,6 @@ class boat_basket extends MX_Controller {
   }
 
   function remove() {
-
     $update_id = $this->uri->segment(3);
     $allowed = $this->_make_sure_remove_allowed($update_id);
 
@@ -28,32 +27,40 @@ class boat_basket extends MX_Controller {
     $this->load->module('site_security');
     $customer_shopper_id = $this->site_security->_get_user_id();
 
-
     if (($session_id == $customer_session_id) OR ($shopper_id == $customer_shopper_id)) {
       return true;
     } else {
       return false;
     }
-
   }
 
-  function add_to_basket() {
-    $submit = $this->input->post('submit', true);
-    if ($submit == "submit") {
+  function add_to_basket($data) {
+    // $submit = $this->input->post('submit', true);
+    // if ($submit == "submit") {
       // process the form
-      $lesson_id = $this->input->post('boat_rental_id', true);
-      $data = $this->_fetch_the_data();
+      // $lesson_id = $this->input->post('boat_rental_id', true);
+      // $data = $this->_fetch_the_data();
       $this->_insert($data);
       redirect('cart');
-    }
+    // }
   }
 
   function _fetch_the_data() {
     $this->load->module('site_security');
     $this->load->module('boat_rental');
+    $this->load->module('time_date');
     $shopper_id = $this->site_security->_get_user_id();
+
+    $boat_date = $this->input->post('boat_date', true);
     $start_time = $this->input->post('boat_start_date', true);
     $end_time = $this->input->post('boat_end_date', true);
+
+    $boat_start_date_str = $data['boat_date'].' '.$data['boat_start_time'];
+    $boat_end_date_str = $data['boat_date'].' '.$data['boat_end_time'];
+
+    $boat_start_date = $this->timedate->make_timestamp_from_datetime($boat_start_date_str);
+    $boat_end_date = $this->timedate->make_timestamp_from_datetime($boat_end_date_str);
+
     $boat_id = $this->input->post('boat_rental_id', true);
     $boat_data = $this->boat_rental->fetch_limited_data_from_db($boat_id);
     $boat_fee = $boat_data['boat_rental_fee'];
@@ -61,7 +68,7 @@ class boat_basket extends MX_Controller {
     $end_time = strtotime($end_time);
     $difference = $end_time - $start_time;
     $total_date= round($difference / 86400);
-        $total_fee = $boat_fee * $total_date;
+    $total_fee = $boat_fee * $total_date;
     if (!is_numeric($shopper_id)) {
       $shopper_id = 0;
     }
@@ -69,14 +76,20 @@ class boat_basket extends MX_Controller {
     $data['boat_name'] = $this->input->post('boat_name', true);
     $data['boat_fee'] = $total_fee;
     $data['boat_id'] =  $this->input->post('boat_rental_id', true);
-    $data['booking_start_date'] = $start_time;
-    $data['booking_end_date'] =  $end_time;
+    $data['booking_start_date'] = $boat_start_date;
+    $data['booking_end_date'] =  $boat_end_date;
     $data['date_added'] = time();
-    $data['no_days'] = $total_date;
+    // $data['no_days'] = $total_date;
     $data['shopper_id'] = $shopper_id;
     $data['ip_address'] = $this->input->ip_address();
     return $data;
+  }
 
+  function fetch_date_from_post() {
+    $data['boat_date'] = $this->input->post('boat_date', true);
+    $data['boat_start_time'] = $this->input->post('boat_start_time', true);
+    $data['boat_end_time'] = $this->input->post('boat_end_time', true);
+    return $data;
   }
 
   function _get_value($value_type, $update_id) {
@@ -119,41 +132,6 @@ class boat_basket extends MX_Controller {
     } else if ($num_rows == 0) {
       return false;
     }
-  }
-
-  function test() {
-    $session_id = $this->session->session_id;
-    echo $session_id;
-    echo "<hr>";
-    $this->load->module('site_security');
-    $shopper_id = $this->site_security->_get_user_id();
-    echo "You are shopper ID: $shopper_id";
-    echo "<br>";
-    $start_time = $this->input->post('boat_start_date', true);
-    echo "You book start time: $start_time";
-    echo "<br>";
-    $end_time = $this->input->post('boat_end_date', true);
-    echo "You book end date: $end_time";
-    echo "<br>";
-    $boat_name = $this->input->post('boat_name', true);
-    echo "You boat name: $boat_name";
-    echo "<br>";
-    $boat_fee = $this->input->post('boat_fee', true);
-    $boat_fee = $boat_fee;
-    echo "You boat fee: $boat_fee";
-    echo "<br>";
-    $boat_rental_id = $this->input->post('boat_rental_id', true);
-    echo "You Rental Id: $boat_rental_id";
-    echo "<br>";
-    //Convert them to timestamps.
-    $start_time = strtotime($start_time);
-    $end_time = strtotime($end_time);
-    //Calculate the difference.
-    $difference = $end_time - $start_time;
-    $total_date= round($difference / 86400);
-    echo "No of Days: $total_date";
-    $total_fee = ($boat_fee * $total_date);
-    echo "Total Fee: $total_fee";
   }
 
   function get($order_by)

@@ -32,9 +32,9 @@ $create_account_url = base_url()."users/create";
               $date_created = $this->timedate->get_date($row->date_made, 'datepicker_us');
               ?>
               <tr>
-                <td><?= $row->userName ?></td>
-                <td><?= $row->firstName ?></td>
-                <td><?= $row->lastName ?></td>
+                <td><?= $row->user_name ?></td>
+                <td><?= $row->first_name ?></td>
+                <td><?= $row->last_name ?></td>
                 <td class="center"><?= $date_created ?></td>
                 <td class="center">
                   <a class="btn btn-info" href="<?= $edit_account_url ?>">
@@ -48,5 +48,5 @@ $create_account_url = base_url()."users/create";
           </tbody>
         </table>
       </div>
-    </div><!--/span-->
-  </div><!--/row-->
+    </div>
+  </div>

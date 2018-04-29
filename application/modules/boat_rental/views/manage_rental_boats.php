@@ -1,26 +1,25 @@
-<section class="wrapper">
-  <h3>Manage boat_rental</h3>
-  <?php
-  if (isset($flash)) {
-    echo $flash;
-  }
-  $create_boat_url = base_url()."boat_rental/create_boat";
-  ?>
+<h1>Manage Boats</h1>
+<?php
+if (isset($flash)) {
+  echo $flash;
+}
+$create_boat_url = base_url()."boat_rental/create_boat";
+?>
 
-    <a href="<?= $create_boat_url ?>"<button class="btn btn-primary" type="submit">Add New boat_rental</button></a>
+<a href="<?= $create_boat_url ?>"<button class="btn btn-primary" type="submit">Add New boat_rental</button></a>
 
-    <div class="row-fluid sortable">
-      <div class="box span12">
-        <div class="green-panel" data-original-title>
-          <h2><i class="fa fa-tag "></i>boat_rental</h2>
-        </div>
-        <div class="box-content">
-          <table class="table table-striped table-bordered bootstrap-datatable datatable">
-            <thead>
-              <?php
-                $num_rows = $query->num_rows();
-                echo $pagination;
-                ?>
+<div class="row-fluid sortable">
+  <div class="box span12">
+    <div class="green-panel" data-original-title>
+      <h2><i class="fa fa-tag "></i>boat_rental</h2>
+    </div>
+    <div class="box-content">
+      <table class="table table-striped table-bordered bootstrap-datatable datatable">
+        <thead>
+          <?php
+          $num_rows = $query->num_rows();
+          echo $pagination;
+          ?>
           <tr>
             <th>Name</th>
             <th>Capacity</th>
@@ -49,29 +48,28 @@
               $status_label = "default";
               $status_desc = "Inactive";
             }
-           ?>
-           <tr>
-             <td><?= $boat_name ?></td>
-             <td><?= $boat_capacity ?></td>
-             <td><?= $boat_fee ?></td>
-             <td>
-               <span class="label label-<?=$status_label ?>"><?= $status_desc ?></span>
-             </td>
-             <td class="center">
-               <a class="btn btn-success" href="<?= $view_boat_url ?>">
-                 <i class="fa fa-external-link"></i>&nbsp;&nbsp;View
-               </a>
-               <a class="btn btn-info" href="<?= $edit_boat_url ?>">
-                 <i class="fa fa-edit"></i>&nbsp;&nbsp;Edit
-               </a>
-             </td>
-           </tr>
-           <?php
-         }
             ?>
+            <tr>
+              <td><?= $boat_name ?></td>
+              <td><?= $boat_capacity ?></td>
+              <td><?= $boat_fee ?></td>
+              <td>
+                <span class="label label-<?=$status_label ?>"><?= $status_desc ?></span>
+              </td>
+              <td class="center">
+                <a class="btn btn-success" href="<?= $view_boat_url ?>">
+                  <i class="fa fa-external-link"></i>&nbsp;&nbsp;View
+                </a>
+                <a class="btn btn-info" href="<?= $edit_boat_url ?>">
+                  <i class="fa fa-edit"></i>&nbsp;&nbsp;Edit
+                </a>
+              </td>
+            </tr>
+            <?php
+          }
+          ?>
         </tbody>
       </table>
     </div>
   </div>
 </div>
-</section>

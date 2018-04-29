@@ -1,5 +1,4 @@
 <h1>Manage Items</h1>
-
 <?php
 if (isset($flash)) {
   echo $flash;
@@ -40,7 +39,7 @@ $create_item_url = base_url()."store_items/create";
                 if ($user_query->num_rows() == 0) {
                   $user_name = "Unknown";
                 } else {
-                  $user_name = $this->users->get_where($user_id)->row()->userName;
+                  $user_name = $this->users->get_where($user_id)->row()->user_name;
                 }
               }
               $status = $row->status;

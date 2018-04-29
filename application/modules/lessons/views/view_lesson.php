@@ -138,7 +138,7 @@ if (isset($flash)) {
             $availability = $capacity - $number_of_bookings;
             $booking_url = base_url().'lesson_basket/add_to_basket';
             ?>
-            <form class"reset-box" method="post" action="<?= $booking_url ?>"
+            <form class"reset-box" method="post" action="<?= $booking_url ?>">
             <tr>
               <td><?= $lesson_date ?></td>
               <td><?= $start_time ?></td>

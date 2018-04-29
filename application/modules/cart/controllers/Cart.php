@@ -26,7 +26,6 @@ class Cart extends MX_Controller {
     $lesson_table = "lesson_basket";
     //$date['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "cart";
-
     $data['query'] = $this->_fetch_cart_content($session_id, $shopper_id, $table);
     $data['lesson_query'] = $this->_fetch_lesson_cart_content($session_id, $shopper_id, $lesson_table);
     // count the number of items in the cart
@@ -76,38 +75,38 @@ class Cart extends MX_Controller {
     return $session_id;
   }
 
-  function test() {
-    $string = "Hello blue sky";
-    $this->load->module('site_security');
-    $encrypted_string = $this->site_security->_encrypt_string($string);
-    $decrypted_string = $this->site_security->_decrypt_string($encrypted_string);
+  // function test() {
+  //   $string = "Hello blue sky";
+  //   $this->load->module('site_security');
+  //   $encrypted_string = $this->site_security->_encrypt_string($string);
+  //   $decrypted_string = $this->site_security->_decrypt_string($encrypted_string);
+  //
+  //   echo "string is $string<hr>";
+  //   echo "encrypted string is $encrypted_string<hr>";
+  //   echo "decrypted string is $decrypted_string<hr>";
+  // }
 
-    echo "string is $string<hr>";
-    echo "encrypted string is $encrypted_string<hr>";
-    echo "decrypted string is $decrypted_string<hr>";
-  }
-
-  function test2() {
-    $string = "Hello blue sky";
-    $this->load->module('site_security');
-
-    $third_bit = $this->uri->segment(3);
-    if ($third_bit != '') {
-      $encrypted_string = $third_bit;
-    } else {
-      $encrypted_string = $this->site_security->_encrypt_string($string);
-    }
-
-    $decrypted_string = $this->site_security->_decrypt_string($encrypted_string);
-
-    echo "string is $string<hr>";
-    echo "encrypted string is $encrypted_string<hr>";
-    echo "decrypted string is $decrypted_string<hr>";
-
-    // create new encrypted string
-    $new_encrypted_string = $this->site_security->_encrypt_string($string);
-    echo anchor('cart/test2/'.$new_encrypted_string, 'refresh');
-  }
+  // function test2() {
+  //   $string = "Hello blue sky";
+  //   $this->load->module('site_security');
+  //
+  //   $third_bit = $this->uri->segment(3);
+  //   if ($third_bit != '') {
+  //     $encrypted_string = $third_bit;
+  //   } else {
+  //     $encrypted_string = $this->site_security->_encrypt_string($string);
+  //   }
+  //
+  //   $decrypted_string = $this->site_security->_decrypt_string($encrypted_string);
+  //
+  //   echo "string is $string<hr>";
+  //   echo "encrypted string is $encrypted_string<hr>";
+  //   echo "decrypted string is $decrypted_string<hr>";
+  //
+  //   // create new encrypted string
+  //   $new_encrypted_string = $this->site_security->_encrypt_string($string);
+  //   echo anchor('cart/test2/'.$new_encrypted_string, 'refresh');
+  // }
 
   function submit_choice() {
     $submit = $this->input->post('submit', true);
