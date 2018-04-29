@@ -271,6 +271,7 @@ class Boat_rental extends MX_Controller {
     }
 
     $data['boat_rental_id'] = $boat_rental_id;
+    $data['boat_url'] = $this->get_where($boat_rental_id)->row()->boat_url;
     $data['flash'] = $this->session->flashdata('item');
     if ($this->session->has_userdata('validation_errors')) {
       $data['validation_errors'] = $this->session->userdata('validation_errors');

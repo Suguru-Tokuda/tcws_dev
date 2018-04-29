@@ -91,7 +91,8 @@ class Lessons extends MX_Controller {
     $this->load->module('site_settings');
     $this->load->module('lesson_pics');
     $this->load->module('lesson_schedules');
-    $lesson_id = $this->get_where_custom("lesson_url", $lesson_url)->row(0)->id;
+    $lesson = $this->get_where_custom("lesson_url", $lesson_url)->row(0);
+    $lesson_id = $lesson->id;
     $capacity = $this->get_where_custom("lesson_url", $lesson_url)->row(0)->lesson_capacity;
 
     if (!is_numeric($lesson_id)) {
@@ -230,6 +231,7 @@ class Lessons extends MX_Controller {
     }
 
     $data['lesson_id'] = $lesson_id;
+    $data['lesson_url'] = $this->get_where($lesson_id)->row()->lesson_url;
     $data['flash'] = $this->session->flashdata('item');
     if ($this->session->has_userdata('validation_errors')) {
       $data['validation_errors'] = $this->session->userdata('validation_errors');

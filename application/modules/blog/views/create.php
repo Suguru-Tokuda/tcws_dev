@@ -24,7 +24,7 @@ if (isset($flash)) {
               <?php
             }
             ?>
-            <a href="<?= base_url().$blog_url ?>" ><button type="button" class="btn btn-info"><i class="fa fa-search"></i>&nbsp;&nbsp;View Blog Entry In Main Page</button></a>
+            <a href="<?= base_url().'blog/view_blog/'.$blog_url ?>" ><button type="button" class="btn btn-info"><i class="fa fa-laptop"></i>&nbsp;&nbsp;View Blog Entry In Main Page</button></a>
           </div>
         </div>
       </div>

@@ -22,8 +22,8 @@ if (isset($flash)) {
       <tbody>
         <?php
         foreach($query->result() as $row) {
-          $first_name = $row->firstName;
-          $last_name = $row->lastName;
+          $first_name = $row->first_name;
+          $last_name = $row->last_name;
           $email = $row->email;
           ?>
           <tr>

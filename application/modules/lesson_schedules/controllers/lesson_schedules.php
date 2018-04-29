@@ -10,7 +10,7 @@ class Lesson_schedules extends MX_Controller {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $mysql_query = "SELECT u.firstName, u.lastName, u.email FROM users u JOIN lesson_bookings lb ON u.id = lb.user_id WHERE lb.lesson_schedule_id = $lesson_schedule_id";
+    $mysql_query = "SELECT u.first_name, u.last_name, u.email FROM users u JOIN lesson_bookings lb ON u.id = lb.user_id WHERE lb.lesson_schedule_id = $lesson_schedule_id";
     $query = $this->_custom_query($mysql_query);
 
     $data['query'] = $query;
