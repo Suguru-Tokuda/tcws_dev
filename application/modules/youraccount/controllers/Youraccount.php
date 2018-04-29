@@ -37,17 +37,17 @@ class Youraccount extends MX_Controller {
       $user_data = $this->fetch_data_from_db($user_id);
       // process the form
       $this->load->module('custom_validation');
-      $this->custom_validation->set_rules('firstName', 'First Name', 'min_length[5]|max_length[60]');
-      $this->custom_validation->set_rules('lastName', 'Last Name', 'min_length[5]|max_length[60]');
+      $this->custom_validation->set_rules('first_name', 'First Name', 'min_length[5]|max_length[60]');
+      $this->custom_validation->set_rules('last_name', 'Last Name', 'min_length[5]|max_length[60]');
 
-      $input_user_name = $this->input->post('userName', true);
+      $input_user_name = $this->input->post('user_name', true);
       $input_email = $this->input->post('email', true);
 
       // Checks if the username is unique only the value is different from the original.
-      if ($input_user_name != $user_data['userName']) {
-        $this->custom_validation->set_rules('userName', 'Username', 'min_length[5]|max_length[60]|callback_userName_existence_check');
+      if ($input_user_name != $user_data['user_name']) {
+        $this->custom_validation->set_rules('user_name', 'Username', 'min_length[5]|max_length[60]|callback_user_name_existence_check');
       } else {
-        $this->custom_validation->set_rules('userName', 'Username', 'min_length[5]|max_length[60]');
+        $this->custom_validation->set_rules('user_name', 'Username', 'min_length[5]|max_length[60]');
       }
       // Checks if the email is unique only the value is different from the original.
       if ($input_email != $user_data['email']) {
@@ -84,7 +84,7 @@ class Youraccount extends MX_Controller {
 
   // login function
   function login() {
-    $data['userName'] = $this->input->post('userName', true);
+    $data['user_name'] = $this->input->post('user_name', true);
     $data['email'] = $this->input->post('email', true);
     $data['password'] = $this->input->post('password', true);
     $data['confirmPassword'] = $this->input->post('confirmPassword', true);
@@ -154,8 +154,8 @@ class Youraccount extends MX_Controller {
     } else {
       // set a session variable
       $this->session->set_userdata('user_id', $user_id);
-      $userName = $this->getUserNameById($user_id);
-      $this->session->set_userdata('userName', $userName);
+      $user_name = $this->getUserNameById($user_id);
+      $this->session->set_userdata('user_name', $user_name);
     }
     // send the user to the private page
     redirect('youraccount/welcome');
@@ -205,9 +205,9 @@ class Youraccount extends MX_Controller {
     $data = $this->fetch_data_from_post();
     unset($data['confirmPassword']);
     $password = $data['signUpPassword'];
-    $insert_data['firstName'] = $data['signupFirstName'];
-    $insert_data['lastName'] = $data['signupLastName'];
-    $insert_data['userName'] = $data['signupUserName'];
+    $insert_data['first_name'] = $data['signupFirstName'];
+    $insert_data['last_name'] = $data['signupLastName'];
+    $insert_data['user_name'] = $data['signupUserName'];
     $insert_data['email'] = $data['signUpEmail'];
     $password = $data['signUpPassword'];
     $this->load->module('site_security');
@@ -218,9 +218,9 @@ class Youraccount extends MX_Controller {
 
   function _process_update_account($user_id) {
     $this->load->module('users');
-    $data['firstName'] = $this->input->post('firstName', true);
-    $data['lastName'] = $this->input->post('firstName', true);
-    $data['userName'] = $this->input->post('firstName', true);
+    $data['first_name'] = $this->input->post('first_name', true);
+    $data['last_name'] = $this->input->post('first_name', true);
+    $data['user_name'] = $this->input->post('first_name', true);
     $data['email'] = $this->input->post('email', true);
   }
 
@@ -258,33 +258,33 @@ class Youraccount extends MX_Controller {
     $this->load->module('users');
     $query = $this->users->get_where($user_id);
     $result = $query->row();
-    $data['firstName'] = $result->firstName;
-    $data['lastName'] = $result->lastName;
-    $data['userName'] = $result->userName;
+    $data['first_name'] = $result->first_name;
+    $data['last_name'] = $result->last_name;
+    $data['user_name'] = $result->user_name;
     $data['email'] = $result->email;
     $data['password'] = $result->password;
     return $data;
   }
 
   function fetch_data_from_post_for_update() {
-    $data['userName'] = $this->input->post('userName', true);
+    $data['user_name'] = $this->input->post('user_name', true);
     $data['email'] = $this->input->post('email', true);
     $data['password'] = $this->input->post('password', true);
     $data['confirmPassword'] = $this->input->post('confirmPassword', true);
     return $data;
   }
 
-  function userName_existence_check($str) {
+  function user_name_existence_check($str) {
     $this->load->module('users');
 
     $error_msg = "$str already exists";
 
-    $query = $this->users->get_where_custom('userName', $str);
+    $query = $this->users->get_where_custom('user_name', $str);
     $num_rows = $query->num_rows();
     if ($num_rows == 0) {
       return true;
     } else if ($num_rows == 1) {
-      $this->custom_validation->set_message('userName_existence_check', $error_msg);
+      $this->custom_validation->set_message('user_name_existence_check', $error_msg);
       return false;
     }
   }
@@ -304,7 +304,7 @@ class Youraccount extends MX_Controller {
     }
   }
 
-  // a method to check if the userName exists.
+  // a method to check if the user_name exists.
   function username_check($str) {
 
     $this->load->module('users');
@@ -312,7 +312,7 @@ class Youraccount extends MX_Controller {
 
     $error_msg = "You did not enter a correct username and/or password.";
 
-    $col1 = 'userName';
+    $col1 = 'user_name';
     $value1 = $str;
     $col2 = 'email';
     $value2 = $str;
@@ -344,12 +344,12 @@ class Youraccount extends MX_Controller {
 
     $query = $this->users->get_where($user_id);
     foreach ($query->result() as $row) {
-      $userName = $row->userName;
+      $user_name = $row->user_name;
     }
-    if (!isset($userName)) {
-      $userName = "";
+    if (!isset($user_name)) {
+      $user_name = "";
     }
-    return $userName;
+    return $user_name;
   }
 
   function userid_check($str) {
@@ -359,14 +359,14 @@ class Youraccount extends MX_Controller {
 
     $error_msg = "Please enter valid user id.";
 
-    $col1 = 'userName';
+    $col1 = 'user_name';
     $value1 = $str;
     $col2 = 'email';
     $value2 = $str;
     $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
     $num_rows = $query->num_rows();
     if ($num_rows < 1) {
-      $this->custom_validation->set_message('userName', $error_msg);
+      $this->custom_validation->set_message('user_name', $error_msg);
       return false;
     }
     else

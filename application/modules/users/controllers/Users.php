@@ -49,7 +49,7 @@ class Users extends MX_Controller {
     $data['flash'] = $this->session->flashdata('user');
 
     // getting data from DB
-    // this means order by lastName
+    // this means order by last_name
     $use_limit = false;
     $mysql_query = $this->_get_mysql_query_for_manage_users($use_limit);
     $query = $this->_custom_query($mysql_query);
@@ -80,7 +80,7 @@ class Users extends MX_Controller {
   }
 
   function _get_mysql_query_for_manage_users($use_limit) {
-    $mysql_query = "SELECT * FROM users ORDER BY lastName";
+    $mysql_query = "SELECT * FROM users ORDER BY last_name";
     if ($use_limit == true) {
       $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();
@@ -116,16 +116,16 @@ class Users extends MX_Controller {
     if (!isset($optional_customer_data)) {
       $data = $this->fetch_data_from_db($update_id);
     } else {
-      $data['firstName'] = $optional_customer_data['firstName'];
-      $data['lastName'] = $optional_customer_data['lastName'];
+      $data['first_name'] = $optional_customer_data['first_name'];
+      $data['last_name'] = $optional_customer_data['last_name'];
     }
     $data = $this->fetch_data_from_db($update_id);
     if ($data == "") {
       $customer_name = "Unknown";
     } else {
-      $firstName = trim(ucfirst($data['firstName']));
-      $lastName = trim(ucfirst($data['lastName']));
-      $customer_name = $firstName." ".$lastName;
+      $first_name = trim(ucfirst($data['first_name']));
+      $last_name = trim(ucfirst($data['last_name']));
+      $customer_name = $first_name." ".$last_name;
     }
     return $customer_name;
   }
@@ -194,16 +194,15 @@ class Users extends MX_Controller {
     } else if ($submit == "Submit") {
       // process the form
       $this->load->module('custom_validation');
-      $this->custom_validation->set_rules('signupFirstName', 'First Name', 'min_length[5]|max_length[60]');
-      $this->custom_validation->set_rules('signupLastName', 'Last Name', 'min_length[5]|max_length[60]');
-      $this->custom_validation->set_rules('signupUserName', 'Username', 'min_length[5]|max_length[60]|user_exists_to_register');
-      $this->custom_validation->set_rules('signUpEmail', 'Email', 'valid_email|max_length[120]|email_exists_to_register');
-      $this->custom_validation->set_rules('signUpPassword', 'Password', 'min_length[7]|max_length[35]');
-      $this->custom_validation->set_rules('signUpconfirmPassword', 'Confirm Password', 'matches[signUpPassword]');
+      $this->custom_validation->set_rules('user_name', 'Username', 'min_length[5]|max_length[60]|user_exists_to_register');
+      $this->custom_validation->set_rules('first_name', 'First Name', 'min_length[5]|max_length[60]');
+      $this->custom_validation->set_rules('last_name', 'Last Name', 'min_length[5]|max_length[60]');
+      $this->custom_validation->set_rules('email', 'Email', 'valid_email|max_length[120]|email_exists_to_register');
+      $this->custom_validation->set_rules('password', 'Password', 'min_length[7]|max_length[35]');
+      $this->custom_validation->set_rules('confirm_password', 'Confirm Password', 'matches[password]');
       if ($this->custom_validation->run() == true) {
         // get the variables and assign into $data variable
         $data = $this->fetch_data_from_post();
-
         if (is_numeric($update_id)) {
           //update the account details
           $this->_update($update_id, $data);
@@ -215,6 +214,7 @@ class Users extends MX_Controller {
           redirect('users/create/'.$update_id);
         } else {
           // insert a new account into DB
+          unset($data['confirm_password']);
           $data['date_made'] = time();
           $this->_insert($data);
           $update_id = $this->get_max(); //get the ID of the new account
@@ -256,10 +256,12 @@ class Users extends MX_Controller {
 
   // get data from POST method
   function fetch_data_from_post() {
-    $data['userName'] = $this->input->post('userName', true);
-    $data['firstName'] = $this->input->post('firstName', true);
-    $data['lastName'] = $this->input->post('lastName', true);
+    $data['user_name'] = $this->input->post('user_name', true);
+    $data['first_name'] = $this->input->post('first_name', true);
+    $data['last_name'] = $this->input->post('last_name', true);
     $data['email'] = $this->input->post('email', true);
+    $data['password'] = $this->input->post('password', true);
+    $data['confirm_password'] = $this->input->post('confirm_password', true);
     return $data;
   }
 
@@ -323,9 +325,9 @@ class Users extends MX_Controller {
 
     $query = $this->get_where($update_id);
     foreach($query->result() as $row) {
-      $data['userName'] = $row->userName;
-      $data['firstName'] = $row->firstName;
-      $data['lastName'] = $row->lastName;
+      $data['user_name'] = $row->user_name;
+      $data['first_name'] = $row->first_name;
+      $data['last_name'] = $row->last_name;
       $data['email'] = $row->email;
       $data['date_made'] = $row->date_made;
       $data['password'] = $row->password;

@@ -101,6 +101,7 @@ class Boat_rental extends MX_Controller {
     $this->load->module('site_security');
     $this->load->module('site_settings');
     $this->load->module('boat_pics');
+    $this->load->library('session');
     //$this->load->module('boat_rental_schedules');
     $boat_rental_id = $this->get_where_custom("boat_url", $boat_url)->row(0)->id;
     $capacity = $this->get_where_custom("boat_url", $boat_url)->row(0)->boat_capacity;
@@ -112,6 +113,23 @@ class Boat_rental extends MX_Controller {
     $data_from_db = $this->fetch_data_from_db($boat_rental_id);
     $pics_query = $this->boat_pics->get_where_custom("boat_rental_id", $boat_rental_id);
     //$schedule_query = $this->boat_rental_schedules->get_where_custom("boat_rental_id", $boat_rental_id);
+    if ($this->session->has_userdata('time_order_validation_msg')) {
+      $data['time_order_validation_msg'] = $this->session->userdata('time_order_validation_msg');
+      $this->session->unset_userdata('time_order_validation_msg');
+    }
+    if ($this->session->has_userdata('time_gap_validation_msg')) {
+      $data['time_gap_validation_msg'] = $this->session->userdata('time_gap_validation_msg');
+      $this->session->unset_userdata('time_gap_validation_msg');
+    }
+    if ($this->session->has_userdata('boat_availability_validation_msg')) {
+      $data['boat_availability_validation_msg'] = $this->session->userdata('boat_availability_validation_msg');
+      $this->session->unset_userdata('boat_availability_validation_msg');
+    }
+    $boat_date_data = $this->get_date_from_session();
+
+    $data['boat_date'] = $boat_date_data['boat_date'];
+    $data['boat_start_time'] = $boat_date_data['boat_start_time'];
+    $data['boat_end_time'] = $boat_date_data['boat_end_time'];
     $data['flash'] = $this->session->flashdata('item');
     $currency_symbol = $this->site_settings->_get_currency_symbol();
     $data['boat_rental_id'] = $boat_rental_id;
@@ -127,6 +145,29 @@ class Boat_rental extends MX_Controller {
     $data['view_file'] = "view_boat";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
+  }
+
+  // retrieve date data from session
+  function get_date_from_session() {
+    if ($this->session->has_userdata('boat_date')) {
+      $data['boat_date'] = $this->session->userdata('boat_date');
+      $this->session->unset_userdata('boat_date');
+    } else {
+      $data['boat_date'] = "";
+    }
+    if ($this->session->has_userdata('boat_start_time')) {
+      $data['boat_start_time'] = $this->session->userdata('boat_start_time');
+      $this->session->unset_userdata('boat_start_time');
+    } else {
+      $data['boat_start_time'] = "";
+    }
+    if ($this->session->has_userdata('boat_end_time')) {
+      $data['boat_end_time'] = $this->session->userdata('boat_end_time');
+      $this->session->unset_userdata('boat_end_time');
+    } else {
+      $data['boat_end_time'] = "";
+    }
+    return $data;
   }
 
   function manage_boat_rental() {

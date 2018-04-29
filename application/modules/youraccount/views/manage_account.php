@@ -18,7 +18,7 @@ $form_location = base_url().'youraccount/update_account';
       <div class="form-group">
         <label class="col-md-4 control-label" for="textinput">First Name</label>
         <div class="col-md-4">
-          <input id="textinput" name="firstName" value="<?= $firstName ?>" type="text" class="form-control input-md" required="">
+          <input id="textinput" name="first_name" value="<?= $first_name ?>" type="text" class="form-control input-md" required="">
         </div>
       </div>
 
@@ -26,7 +26,7 @@ $form_location = base_url().'youraccount/update_account';
       <div class="form-group">
         <label class="col-md-4 control-label" for="textinput">Last Name</label>
         <div class="col-md-4">
-          <input id="textinput" name="lastName" value="<?= $lastName ?>" type="text" class="form-control input-md" required="">
+          <input id="textinput" name="last_name" value="<?= $last_name ?>" type="text" class="form-control input-md" required="">
         </div>
       </div>
 
@@ -34,7 +34,7 @@ $form_location = base_url().'youraccount/update_account';
       <div class="form-group">
         <label class="col-md-4 control-label" for="textinput">Username</label>
         <div class="col-md-4">
-          <input id="textinput" name="userName" value="<?= $userName ?>" type="text" class="form-control input-md" required="">
+          <input id="textinput" name="user_name" value="<?= $user_name ?>" type="text" class="form-control input-md" required="">
         </div>
       </div>
 

@@ -22,8 +22,8 @@ $userName = $this->session->userdata('userName');
               </div>
             </li>
             <li><a href="<?= base_url() ?>listed_items/manage"><span class="glyphicon glyphicon-tasks"></span> My Items</a></li>
-            <li><a href="<?= base_url() ?>lessons/view_my_lessons"><span class="glyphicon glyphicon-tasks"></span> My Lessons</a></li>
-            <li><a href="<?= base_url() ?>boat_rental/view_my_rental_boats"><span class="glyphicon glyphicon-tasks"></span> My Boat Rental Schedules</a></li>
+            <li><a href="<?= base_url() ?>lessons/view_my_lessons"><span class="glyphicon glyphicon-tasks"></span> My Booked Lessons</a></li>
+            <li><a href="<?= base_url() ?>boat_rental/view_my_rental_boats"><span class="glyphicon glyphicon-tasks"></span> My Booked Rental Boats</a></li>
             <li><a href="<?= base_url() ?>youraccount/manage_account"><span class="glyphicon glyphicon-file"></span> Manage Profile</a></li>
             <li class="sub-menu-separator"></li>
             <li><a href="<?= base_url() ?>youraccount/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a><li>
@@ -32,6 +32,7 @@ $userName = $this->session->userdata('userName');
           }
           ?>
         </div>
+        <div class="account"><a href="<?= base_url() ?>cart"></a><i class="icon-bag"></i></div>
         <div class="search"><i class="icon-search"></i></div>
       </div>
     </div>
