@@ -58,15 +58,46 @@ class Paypal extends MX_Controller {
     // inspect IPN validation result and act accordingly
     if (strcmp ($res, "VERIFIED") == 0) {
       // The IPN is verified, process it
-
+        $this->load->module('site_security');
         $data['date_created'] = time();
         // makes an array of data retrieved from paypal
         foreach($_POST as $key => $value) {
+          if ($key=='custom') {
+            $customer_session_id = $this->site_security->_decrypt_string($value);
+            $value = $customer_session_id;
+          }
           $posted_information[$key] = $value;
         }
 
         $data['posted_information'] = serialize($posted_information);
         $this->_insert($data);
+        $max_id = $this->get_max();
+        $mysql_query1 = "SELECT * FROM lesson_basket WHERE session_id='$customer_session_id'";
+        $query = $this->_custom_query($mysql_query1);
+        foreach($query->result() as $row) {
+          $data['schedule_id'] = $row->schedule_id;
+          $data['shopper_id'] = $row->shopper_id;
+          $data['booking_qty'] = $row->booking_qty;
+          $this->load->module('lesson_bookings');
+          $this->lesson_bookings->_insert($data);
+        }
+
+        $delete_query1 = "DELETE FROM lesson_basket WHERE session_id='$customer_session_id'";
+        $query = $this->_custom_query($delete_query1);
+
+        $mysql_query2 = "SELECT * FROM boat_basket WHERE session_id='$customer_session_id'";
+        $query = $this->_custom_query($mysql_query2);
+        foreach($query->result() as $row) {
+          $data['boat_id'] = $row->boat_id;
+          $data['shopper_id'] = $row->shopper_id;
+          $data['booking_start_date'] = $row->booking_start_date;
+          $data['booking_end_date'] = $row->booking_end_date;
+          $this->load->module('boat_rental_schedules');
+          $this->boat_rental_schedules->_insert($data);
+        }
+
+        $delete_query2 = "DELETE FROM boat_basket WHERE session_id='$customer_session_id'";
+        $query = $this->_custom_query($delete_query2);
 
     } else if (strcmp ($res, "INVALID") == 0) {
       // IPN invalid, log for manual investigation
