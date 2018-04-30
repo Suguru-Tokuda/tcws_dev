@@ -9,10 +9,11 @@ class Custom_email extends MX_Controller
 
   function _custom_email_intiate($data) {
     $config['protocol'] = "smtp";
-    $config['smtp_host'] = "ssl://smtp.googlemail.com";
+    $config['smtp_host'] = "ssl://mail.twincitywatersports.com";
     $config['smtp_port'] = "465";
-    $config['smtp_user'] = 'info.twincitywatersports@gmail.com';
+    $config['smtp_user'] = 'info.twincitywatersports@twincitywatersports.com';
     $config['smtp_pass'] = 'TwinCity1';
+    $config['smtp_timeout'] = 65;
     $config['mailtype'] = "html";
     $config['charset'] = "iso-8859-1";
 
