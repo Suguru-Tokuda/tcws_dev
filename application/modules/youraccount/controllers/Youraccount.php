@@ -1,5 +1,5 @@
 <?php
-define("PROJECT_HOME","http://localhost/twincitywatersports/youraccount/");
+define("PROJECT_HOME","http://twincitywatersports.com/youraccount/");
 class Youraccount extends MX_Controller {
 
   function __construct() {
@@ -136,14 +136,17 @@ class Youraccount extends MX_Controller {
     $this->load->module('custom_validation');
     if ($submit == "submit") {
       // process the form
+      $email = $this->input->post('email', true);
       $this->custom_validation->set_rules('email', 'Email', 'valid_email|email_exists_to_login');
       if ($this->custom_validation->run() == true) {
+      if ( $this->send_email_custom($email) == true) {
         $this ->success_email();
-      } else {
-        redirect('youraccount/recover_password');
+          } else {
+       redirect('youraccount/recover_password');
       }
     }
   }
+}
 
   function _in_you_go($user_id, $login_type) {
     // NOTE: the login_type can be longterm or shortterm
@@ -390,8 +393,7 @@ class Youraccount extends MX_Controller {
     $email_data['subject'] = "Forgot Password Recovery";
     $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='" . PROJECT_HOME . "reset_password/?email=" . $userEmail . "&genString=" .$genString. "'>" . "Click Here" . "</a><br><br></p>Regards,<br> Admin.</div>";
     $email_data['message'] = $emailBody;
-    if(!$this->custom_email->_custom_email_intiate($email_data)) {
-      $this->email->print_debugger();
+    if($this->custom_email->_custom_email_intiate($email_data) == false) {
       return false;
     } else {
       $this->update_genString($userEmail,$genString);
@@ -404,7 +406,7 @@ class Youraccount extends MX_Controller {
     $str = '';
     $max = mb_strlen($keyspace, '8bit') - 1;
     for ($i = 0; $i < $length; ++$i) {
-      $str .= $keyspace[random_int(0, $max)];
+      $str .= $keyspace[rand(0, $max)];
     }
     return $str;
   }
@@ -425,9 +427,9 @@ class Youraccount extends MX_Controller {
 
     if ($submit == "submit") {
       // process the form
-      $this->custom_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
-      $this->custom_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
-      if ($this->custom_validation->run() == true) {
+      //$this->custom_validation->set_rules('signUpPassword', 'Password', 'min_length[7]|max_length[35]');
+      //$this->custom_validation->set_rules('signUpconfirmPassword', 'Confirm Password', 'matches[signUpPassword]');
+  //   if ($this->custom_validation->run() == true) {
         // update password
         if ($this->_process_update_password() == true)
         {
@@ -439,10 +441,10 @@ class Youraccount extends MX_Controller {
           $error_message = "Gen Id Missing Something wrong";
           $this->recover_password();
         }
-      }
-      else{
-        $this->reset_password();
-      }
+    //  }
+    //  else{
+    //    $this->reset_password();
+    //  }
     }
   }
 
