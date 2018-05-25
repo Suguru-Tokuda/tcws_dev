@@ -4,6 +4,7 @@ class Lesson_schedules extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->module('custom_pagination');
+    $this->load->module('custom_validation');
   }
 
   function view_booked_users($lesson_id, $lesson_schedule_id) {
@@ -65,7 +66,6 @@ class Lesson_schedules extends MX_Controller {
     if ($submit == "cancel") {
       redirect('lesson_schedules/manage_lesson_schedules/'.$lesson_id);
     } else if ($submit == "submit") {
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('lesson_start_time', 'Start Time', 'min_length[7]|max_length[8]');
       $this->custom_validation->set_rules('lesson_end_time', 'End Time', 'min_length[7]|max_length[8]');
       if ($this->custom_validation->run()) {
@@ -109,9 +109,8 @@ class Lesson_schedules extends MX_Controller {
     $data['lesson_schedule_id'] = $lesson_schedule_id;
     $data['view_file'] = "create_lesson_schedule";
     $data['flash'] = $this->session->flashdata('item');
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $this->load->module('templates');
     $this->templates->admin($data);

@@ -5,7 +5,7 @@
       <td></td>
     </tr>
     <tr>
-      <td colspan="2">Username: <?= $userName ?></td>
+      <td colspan="2">Username: <?= $user_name ?></td>
       <td>
       </td>
     </tr>

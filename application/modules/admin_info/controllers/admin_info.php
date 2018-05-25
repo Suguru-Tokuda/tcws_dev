@@ -6,6 +6,7 @@ class Admin_info extends MX_Controller {
     $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
+    $this->load->module('custom_validation');
   }
 
   // Returns Admin's info
@@ -21,8 +22,8 @@ class Admin_info extends MX_Controller {
     $this->site_security->_make_sure_is_admin();
 
     $query = $this->get("id");
-    $total_rows = $query->num_rows();
 
+    $data['flash'] = $this->session->flashdata('admin');
     $data['admin_id'] = $query->row()->id;
     $data['query'] = $query;
     $data['view_file'] = 'view_admin_info';
@@ -43,7 +44,6 @@ class Admin_info extends MX_Controller {
       redirect('admin_info/view_admin_info');
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('first_name', 'First Name', 'min_length[3]');
       $this->custom_validation->set_rules('last_name', 'Last Name', 'min_length[3]');
       $this->custom_validation->set_rules('phone', 'Phone', 'numeric');
@@ -90,15 +90,71 @@ class Admin_info extends MX_Controller {
     }
 
     $data['admin_id'] = $admin_id;
-    $data['flash'] = $this->session->flashdata('item');
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    $data['flash'] = $this->session->flashdata('admin');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $data['states'] = $this->site_settings->_get_states_dropdown();
     $data['view_file'] = "update_admin_info";
     $this->load->module('templates');
     $this->templates->admin($data);
+  }
+
+  function update_password($admin_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($admin_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $data['current_password'] = $this->input->post('current_password', true);
+    $data['new_password'] = $this->input->post('new_password', true);
+    $data['confirm_new_password'] = $this->input->post('confirm_new_password', true);
+
+    $data['flash'] = $this->session->flashdata('admin');
+    $data['admin_id'] = $admin_id;
+    $data['view_file'] = "update_password";
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
+    }
+
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function do_update_password($admin_id) {
+    $this->load->module('site_security');
+
+    $this->custom_validation->set_rules('current_password', 'Current Password', 'min_length[8]');
+    $this->custom_validation->set_rules('new_password', 'New Password', 'min_length[8]');
+    $this->custom_validation->set_rules('confirm_new_password', 'Confirm New Password', 'matches[new_password]');
+
+    if ($this->custom_validation->run()) {
+      $current_password = $this->input->post('current_password', true);
+      // check if the curent password is right.
+      $this->load->module('site_security');
+      $mysql_query = "SELECT * FROM admin_info WHERE id = ?";
+      $hashed_password = $this->db->query($mysql_query, array($admin_id))->row()->password;
+
+      if (!$this->site_security->_verify_hash($current_password, $hashed_password)) {
+        $this->custom_validation->add_validation_error("The current password doesn't match.");
+        redirect('admin_info/update_password/'.$admin_id);
+      }
+
+      $new_password = $this->input->post('new_password', true);
+      $hashed_new_password = $this->site_security->_hash_string($new_password);
+
+      $mysql_statement = "UPDATE admin_info SET password = ?";
+      $this->db->query($mysql_statement, array($hashed_new_password));
+
+      $flash_msg = "Password was successfully updated.";
+      $value = '<div class="alert alert-success">'.$flash_msg.'</div>';
+      $this->session->set_flashdata('admin', $value);
+      redirect('admin_info/view_admin_info');
+    } else {
+      redirect('update_password/'.$admin_id);
+    }
   }
 
   function upload_admin_image($admin_id) {
@@ -112,10 +168,9 @@ class Admin_info extends MX_Controller {
     } else {
       $data['headline'] = "Update Image";
     }
-    $date['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('admin');
     $data['view_file'] = "upload_image";
-    $data['id']=$admin_id;
-    $data['sort_this'] = true;
+    $data['admin_id'] = $admin_id;
     $this->load->module('templates');
     $this->templates->admin($data);
   }
@@ -152,7 +207,7 @@ class Admin_info extends MX_Controller {
         $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
         $data['headline'] = "Upload Error";
         $data['id'] = $admin_id;
-        $date['flash'] = $this->session->flashdata('item');
+        $date['flash'] = $this->session->flashdata('admin');
         $data['view_file'] = "upload_image";
         $this->load->module('templates');
         $this->templates->admin($data);

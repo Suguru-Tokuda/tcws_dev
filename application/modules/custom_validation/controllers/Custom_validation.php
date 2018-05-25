@@ -113,32 +113,47 @@ class Custom_validation extends MX_Controller {
       }
     }
     if ($retVal == false) {
-      $this->set_validation_errors('<p style="color: red; margin-bottom: 0px;">', "</p>");
+      foreach ($this->validation_errors as $error_msg) {
+        $this->add_validation_error($error_msg);
+      }
     }
     return $retVal;
   }
 
-  function set_validation_errors($prefix, $suffix) {
-    $this->load->library('session');
-    $str = "";
-    foreach($this->validation_errors as $error) {
-      $str.= $prefix.$error.$suffix."<br>";
+  function add_validation_error($error_msg) {
+    if ($this->session->has_userdata('validation_errors')) {
+      $validation_errors = $this->session->userdata('validation_errors');
+    } else {
+      $validation_errors = array();
     }
-    $this->session->set_userdata('validation_errors', $str);
+    array_push($validation_errors, $error_msg);
+    $this->session->set_userdata('validation_errors', $validation_errors);
   }
 
-  function get_validation_errors() {
+  // returns a string
+  function get_validation_errors($prefix, $suffix) {
     $this->load->library('session');
     $validation_errors = $this->session->userdata('validation_errors');
+    $validation_error_msg = "";
+    // concatenate prefix and suffix to each error message
+    for ($i = 0; $i < sizeof($validation_errors); $i++) {
+      $error_msg = $validation_errors[$i];
+      $validation_error_msg .= $prefix.$error_msg.$suffix.'<br>';
+    }
     $this->validation_list = array();
     $this->validation_errors = array();
     $this->session->unset_userdata('validation_errors');
-    return $validation_errors;
+    return $validation_error_msg;
   }
 
-  function _check_user_exists($userName) {
+  // returns true if session has validation_errors
+  function has_validation_errors() {
+    return $this->session->has_userdata('validation_errors');
+  }
+
+  function _check_user_exists($user_name) {
     $this->load->module('users');
-    $query = $this->users->get_where_custom('user_name', $userName);
+    $query = $this->users->get_where_custom('user_name', $user_name);
     if ($query->num_rows() > 0) {
       return true;
     } else {

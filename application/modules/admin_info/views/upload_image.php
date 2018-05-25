@@ -22,10 +22,10 @@ img#blankImg {
 }
 </style>
 <?php
-$form_location = base_url().'admin_info/do_upload/'.$id;
+$form_location = base_url().'admin_info/do_upload/'.$admin_id;
 ?>
 <div class="form-panel">
-  <h4><?= $headline ?></h4>
+  <h3><?= $headline ?></h3>
   <?php
   if (isset($flash)) {
     echo $flash;
@@ -62,7 +62,7 @@ $form_location = base_url().'admin_info/do_upload/'.$id;
         }
          ?>
       </button>
-      <button type="submit" name="submit" class="btn" value="cancel">Back</button>
+      <button type="submit" name="submit" class="btn btn-default" value="cancel">Back</button>
     </div>
   </form>
   <?php

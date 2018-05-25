@@ -6,8 +6,12 @@
   </div>
 </div>
 <div class="container padding-bottom-3x">
-  <?= $pagination ?>
   <div class="row">
+    <div class="col-sm-3">
+<?php echo Modules::run('youraccount/_draw_account_navbar'); ?>
+    </div>
+    <div class="col-sm-9">
+    <?= $pagination ?>
     <?php
     $num_rows = $query->num_rows();
     if ($num_rows > 0) {
@@ -73,4 +77,5 @@
    }
       ?>
   </div>
+</div>
 </div>

@@ -4,6 +4,7 @@ class Enquiries extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->module('custom_pagination');
+    $this->load->module('custom_validation');
   }
 
   function _attempt_get_data_from_code($customer_id, $code) {
@@ -58,7 +59,6 @@ class Enquiries extends MX_Controller {
       redirect('enquiries/inbox');
     } else if ($submit == "submit") {
       // process the form
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('subject', 'Subject', 'required|max_length[250]');
 
       if ($this->custom_validation->run() == true) {
@@ -97,9 +97,8 @@ class Enquiries extends MX_Controller {
 
     $data['options'] = $this->_fetch_customers_as_options();
     // pass update id into the enquiries
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $data['update_id'] = $update_id;
     $data['flash'] = $this->session->flashdata('item');

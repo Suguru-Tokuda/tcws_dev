@@ -3,8 +3,8 @@ class Store_items extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    // These two lines are needed to display custom validation messages
     $this->load->module('custom_pagination');
+    $this->load->module('custom_validation');
     $this->load->library('upload');
     $this->load->library('image_lib');
   }
@@ -529,6 +529,7 @@ class Store_items extends MX_Controller {
   }
 
   function _process_delete($item_id) {
+
     // attempt to delete item colors
     $this->load->module("store_item_colors");
     $this->store_item_colors->_delete_for_item($item_id);
@@ -537,7 +538,7 @@ class Store_items extends MX_Controller {
     $this->store_item_sizes->_delete_for_item($item_id);
     // attemp to delete cat assign for the item_id
     $this->load->module('store_cat_assign');
-    $this->store_cat_assign->_custom_delete('user_id', $item_id);
+    $this->store_cat_assign->_custom_delete('item_id', $item_id);
     // attempt to delete item big & small pics
     $data = $this->fetch_data_from_db($item_id);
 
@@ -695,7 +696,6 @@ class Store_items extends MX_Controller {
       redirect('store_items/manage');
     } else if ($submit == "submit") {
       // process the form
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('item_title', 'Item Title', 'max_length[240]'); // callback is for checking if the item already exists
       $this->custom_validation->set_rules('item_price', 'Item Price', 'numeric');
       if ($this->input->post('was_price') != "") {
@@ -778,9 +778,8 @@ class Store_items extends MX_Controller {
       $data['item_url'] = $this->get_where($item_id)->row()->item_url;
     }
     $data['flash'] = $this->session->flashdata('item');
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     // create a view file. Putting a php (html) into the admin template.
     $data['categories_options'] = $this->_get_categories();

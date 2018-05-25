@@ -4,6 +4,7 @@ class Boat_rental extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->module('custom_pagination');
+    $this->load->module('custom_validation');
     $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
@@ -130,7 +131,7 @@ class Boat_rental extends MX_Controller {
     $data['boat_date'] = $boat_date_data['boat_date'];
     $data['boat_start_time'] = $boat_date_data['boat_start_time'];
     $data['boat_end_time'] = $boat_date_data['boat_end_time'];
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('boat');
     $currency_symbol = $this->site_settings->_get_currency_symbol();
     $data['boat_rental_id'] = $boat_rental_id;
     $data['boat_name'] = $data_from_db['boat_name'];
@@ -173,6 +174,7 @@ class Boat_rental extends MX_Controller {
   function manage_boat_rental() {
     $this->load->module('site_security');
     $this->load->module('site_settings');
+    $this->load->module('session');
     $this->site_security->_make_sure_is_admin();
     $use_limit = false;
     $mysql_query = $this->_generate_mysql_query_for_manage_boat_rental($use_limit);
@@ -189,7 +191,7 @@ class Boat_rental extends MX_Controller {
     $use_limit = true;
     $mysql_query = $this->_generate_mysql_query_for_manage_boat_rental($use_limit);
     $query = $this->_custom_query($mysql_query);
-
+    $data['flash'] = $this->session->flashdata('boat');
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $query;
     $data['view_file'] = "manage_rental_boats";
@@ -223,7 +225,6 @@ class Boat_rental extends MX_Controller {
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
       $status = $this->input->post('status', true);
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('boat_name', 'Boat Name', 'max_length[240]');
       $this->custom_validation->set_rules('boat_description', 'Boat Description', 'max_length[240]');
       $this->custom_validation->set_rules('boat_capacity','Boat Capacity','max_length[240]');
@@ -271,11 +272,12 @@ class Boat_rental extends MX_Controller {
     }
 
     $data['boat_rental_id'] = $boat_rental_id;
-    $data['boat_url'] = $this->get_where($boat_rental_id)->row()->boat_url;
-    $data['flash'] = $this->session->flashdata('item');
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if (is_numeric($boat_rental_id)) {
+      $data['boat_url'] = $this->get_where($boat_rental_id)->row()->boat_url;
+    }
+    $data['flash'] = $this->session->flashdata('boat');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $data['states'] = $this->site_settings->_get_states_dropdown();
     $data['view_file'] = "create_boat";
@@ -293,7 +295,7 @@ class Boat_rental extends MX_Controller {
 
     $data['boat_rental_id'] = $boat_rental_id;
     $data['headline'] = "Delete Boat";
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('boat');
     $data['view_file'] = "boat_deleteconf";
     $this->load->module('templates');
     $this->templates->admin($data);
@@ -366,7 +368,7 @@ class Boat_rental extends MX_Controller {
     $data['boat_rental_id'] = $boat_rental_id;
     $data['num_rows'] = $query->num_rows(); // number of pictures that an item has
     $data['headline'] = "Manage Image";
-    $date['flash'] = $this->session->flashdata('item');
+    $date['flash'] = $this->session->flashdata('boat');
     $data['view_file'] = "upload_boat_image";
     $data['sort_this'] = true;
     $this->load->module('templates');
@@ -404,7 +406,7 @@ class Boat_rental extends MX_Controller {
         $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
         $data['headline'] = "Upload Error";
         $data['boat_rental_id'] = $boat_rental_id;
-        $date['flash'] = $this->session->flashdata('item');
+        $date['flash'] = $this->session->flashdata('boat');
         $data['view_file'] = "upload_boat_image";
         $this->load->module('templates');
         $this->templates->admin($data);

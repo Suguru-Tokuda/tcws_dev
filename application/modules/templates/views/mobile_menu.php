@@ -2,11 +2,11 @@
 <div class="offcanvas-container" id="mobile-menu">
     <?php
     if ($user_id > 0) {
-      $userName = $this->session->userdata('userName');
+      $user_name = $this->session->userdata('user_name');
     ?>
     <a class="account-link" href="#">
       <div class="user-info">
-        <h6 class="user-name"><?= $userName ?></h6>
+        <h6 class="user-name"><?= $user_name ?></h6>
       </div></a>
       <?php
     }
@@ -58,7 +58,7 @@
           <?php
         } else if ($user_id > 0) {
            ?>
-          <li class="has-children"><span><a href="#"><?= $userName ?></a><span class="sub-menu-toggle"></span></span>
+          <li class="has-children"><span><a href="#"><?= $user_name ?></a><span class="sub-menu-toggle"></span></span>
             <ul class="offcanvas-submenu">
               <li><a href="<?= base_url() ?>listed_items/manage"><span class="glyphicon glyphicon-tasks"></span> My Items</a></li>
               <li><a href="<?= base_url() ?>lessons/view_my_lessons"><span class="glyphicon glyphicon-tasks"></span> My Booked Lessons</a></li>

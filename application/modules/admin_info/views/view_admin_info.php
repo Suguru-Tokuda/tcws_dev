@@ -17,7 +17,8 @@
       <?php
     } else {
       $row = $query->row();
-      $update_admin_info_url = base_url()."admin_info/update_admin_info/".$row->id;
+      $update_admin_info_url = base_url()."admin_info/update_admin_info/".$admin_id;
+      $update_password_url = base_url()."admin_info/update_password/".$admin_id;
       $first_name = $row->first_name;
       $last_name = $row->last_name;
       $phone = $row->phone;
@@ -31,90 +32,69 @@
       $state = $row->state;
       $description = $row->description;
       ?>
-      <a href="<?= $update_admin_info_url ?>"><button class="btn btn-primary" type="submit">Update Info</button></a>
-      <a href="<?= $upload_image_url ?>"><button class="btn btn-primary" type="submit">Upload image</button></a>
+      <a href="<?= $update_admin_info_url ?>"><button class="btn btn-primary" type="submit"><i class="fa fa-info" ></i>&nbsp;&nbsp;Update Info</button></a>
+      <a href="<?= $update_password_url ?>"><button class="btn btn-success" type="submit"><i class="fa fa-lock" ></i>&nbsp;&nbsp;Update Password</button></a>
+      <a href="<?= $upload_image_url ?>"><button class="btn btn-warning" type="submit"><i class="fa fa-file-picture-o"></i>&nbsp;&nbsp;Upload image</button></a>
       <div class="form-horizontal">
         <div class="form-group">
           <label class="col-sm-2 control-label">First Name</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="first_name" style="border: 0px;" value="<?= $first_name ?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $first_name ?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">Last Name</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="last_name" style="border: 0px;" value="<?= $last_name ?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $last_name ?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">Phone</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="phone" style="border: 0px;" value="<?= $phone ?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $phone ?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">Email</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="email" style="border: 0px;" value="<?= $email?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $email?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">Facebook Link</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="facebook_link" style="border: 0px;" value="<?= $facebook_link ?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $facebook_link ?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">Twitter Link</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="twitter_link" style="border: 0px;" value="<?= $twitter_link ?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $twitter_link ?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">Instagram Link</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="instagram_link" style="border: 0px;" value="<?= $instagram_link ?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $instagram_link ?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">Company Name</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="company_name" style="border: 0px;" value="<?= $company_name ?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $company_name ?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">Address</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="address" style="border: 0px;" value="<?= $address ?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $address ?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">City</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="city" style="border: 0px;" value="<?= $city ?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $city ?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">State</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" name="state" style="border: 0px;" value="<?= $state ?>" readonly>
-          </div>
+          <label class="col-sm-5 control-label"><?= $state ?></label>
         </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">Description</label>
           <div class="col-sm-5">
-            <textarea type="text" class="form-control" name="description" rows="10" style="resize: none; border: 0px;" readonly><?= $description ?></textarea>
+            <textarea type="text" class="form-control" name="description" rows="10" style="resize: none;" readonly><?= $description ?></textarea>
           </div>
         </div>
       </div>
