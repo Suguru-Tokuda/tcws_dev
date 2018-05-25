@@ -48,8 +48,8 @@ class Paypal extends MX_Controller {
     // please download 'cacert.pem' from "https://curl.haxx.se/docs/caextract.html" and set
     // the directory path of the certificate as shown below:
     // curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__) . '/cacert.pem');
-    if ( !($res = curl_exec($ch)) ) {
       // error_log("Got " . curl_error($ch) . " when processing IPN data");
+   if ( !($res = curl_exec($ch)) ) {
       curl_close($ch);
       exit;
     }
@@ -62,7 +62,7 @@ class Paypal extends MX_Controller {
         $data['date_created'] = time();
         // makes an array of data retrieved from paypal
         foreach($_POST as $key => $value) {
-          if ($key=='custom') {
+          if($key=='custom') {
             $customer_session_id = $this->site_security->_decrypt_string($value);
             $value = $customer_session_id;
           }
@@ -71,38 +71,59 @@ class Paypal extends MX_Controller {
 
         $data['posted_information'] = serialize($posted_information);
         $this->_insert($data);
-        $max_id = $this->get_max();
-        $mysql_query1 = "SELECT * FROM lesson_basket WHERE session_id='$customer_session_id'";
-        $query = $this->_custom_query($mysql_query1);
-        foreach($query->result() as $row) {
-          $data['schedule_id'] = $row->schedule_id;
-          $data['shopper_id'] = $row->shopper_id;
-          $data['booking_qty'] = $row->booking_qty;
-          $this->load->module('lesson_bookings');
-          $this->lesson_bookings->_insert($data);
-        }
-
-        $delete_query1 = "DELETE FROM lesson_basket WHERE session_id='$customer_session_id'";
-        $query = $this->_custom_query($delete_query1);
-
-        $mysql_query2 = "SELECT * FROM boat_basket WHERE session_id='$customer_session_id'";
-        $query = $this->_custom_query($mysql_query2);
-        foreach($query->result() as $row) {
-          $data['boat_id'] = $row->boat_id;
-          $data['shopper_id'] = $row->shopper_id;
-          $data['booking_start_date'] = $row->booking_start_date;
-          $data['booking_end_date'] = $row->booking_end_date;
-          $this->load->module('boat_rental_schedules');
-          $this->boat_rental_schedules->_insert($data);
-        }
-
-        $delete_query2 = "DELETE FROM boat_basket WHERE session_id='$customer_session_id'";
-        $query = $this->_custom_query($delete_query2);
-
+        $this->update_details($customer_session_id);
     } else if (strcmp ($res, "INVALID") == 0) {
       // IPN invalid, log for manual investigation
     }
 
+  }
+
+ function update_details($customer_session_id) {
+   $this->load->module('site_security');
+   $table = "boat_basket";
+   $lesson_table = "lesson_basket";
+   $mysql_query = "SELECT * FROM boat_basket WHERE session_id=$customer_session_id";
+   $mysql_query1 = "SELECT * FROM lesson_basket WHERE session_id=$customer_session_id";
+
+   $query = $this->_custom_query($mysql_query1);
+   $this->load->module('lesson_bookings');
+   foreach($query->result() as $row) {
+     $data['lesson_schedule_id'] = $row->schedule_id;
+     $data['user_id'] = $row->shopper_id;
+     $data['lesson_booking_qty'] = $row->booking_qty;
+     $this->lesson_bookings->_insert($data);
+   }
+
+   $query = $this->_custom_query($mysql_query);
+   $this->load->module('boat_rental_schedules');
+   foreach($query->result() as $row) {
+     $data['boat_rental_id'] = $row->boat_id;
+     $data['user_id'] = $row->shopper_id;
+     $data['boat_start_date'] = $row->booking_start_date;
+     $data['boat_end_date'] = $row->booking_end_date;
+     $this->boat_rental_schedules->_insert($data);
+   }
+
+   $this->_delete_lesson_basket_content($customer_session_id);
+   $this->_delete_boat_basket_content($customer_session_id);
+
+ }
+
+
+  function _delete_lesson_basket_content($customer_session_id) {
+    // fetch the contents of the shopping cart
+    $this->load->module('lesson_basket');
+    $mysql_query = "
+    DELETE FROM lesson_basket WHERE session_id = $customer_session_id";
+    $query = $this->lesson_basket->_custom_query($mysql_query);
+  }
+
+  function _delete_boat_basket_content($customer_session_id) {
+    // fetch the contents of the shopping cart
+    $this->load->module('boat_basket');
+    $mysql_query = "
+    DELETE FROM boat_basket WHERE session_id = $customer_session_id";
+    $query = $this->boat_basket->_custom_query($mysql_query);
   }
 
   function _is_on_test_mode() {

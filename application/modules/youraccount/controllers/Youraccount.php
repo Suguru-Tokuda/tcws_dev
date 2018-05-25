@@ -183,11 +183,14 @@ class Youraccount extends MX_Controller {
     $submit = $this->input->post('submit', true);
     if ($submit == "submit") {
       // process the form
+      $email = $this->input->post('email', true);
       $this->custom_validation->set_rules('email', 'Email', 'valid_email|email_exists_to_login');
       if ($this->custom_validation->run() == true) {
-        $this ->success_email();
-      } else {
-        redirect('youraccount/recover_password');
+        if ( $this->send_email_custom($email) == true) {
+          $this ->success_email();
+        } else {
+          redirect('youraccount/recover_password');
+        }
       }
     }
   }
@@ -434,8 +437,7 @@ class Youraccount extends MX_Controller {
     $email_data['subject'] = "Forgot Password Recovery";
     $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='".base_url()."reset_password/?email=".$userEmail."&genString=".$genString."'>"."Click Here"."</a><br><br></p>Regards,<br> Admin.</div>";
     $email_data['message'] = $emailBody;
-    if(!$this->custom_email->_custom_email_intiate($email_data)) {
-      $this->email->print_debugger();
+    if($this->custom_email->_custom_email_intiate($email_data) == false) {
       return false;
     } else {
       $this->update_genString($userEmail,$genString);
@@ -459,8 +461,8 @@ class Youraccount extends MX_Controller {
 
     if ($submit == "submit") {
       // process the form
-      $this->custom_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
-      $this->custom_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
+      $this->custom_validation->set_rules('signUpPassword', 'Password', 'min_length[7]|max_length[35]');
+      $this->custom_validation->set_rules('signUpconfirmPassword', 'Confirm Password', 'matches[signUpPassword]');
       if ($this->custom_validation->run() == true) {
         // update password
         if ($this->_process_update_password() == true)
