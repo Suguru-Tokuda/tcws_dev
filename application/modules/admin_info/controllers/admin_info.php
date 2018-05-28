@@ -378,7 +378,7 @@ class Admin_info extends MX_Controller {
 
     $logo_name = $query->row()->logo_name;
 
-    $logo_path = './madia/logos/'.$logo_name;
+    $logo_path = './media/logos/'.$logo_name;
 
     if (file_exists($logo_path)) {
       unlink($logo_path);

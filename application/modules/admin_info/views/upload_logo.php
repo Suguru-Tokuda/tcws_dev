@@ -57,8 +57,10 @@ $form_location = base_url().'admin_info/do_upload_logo/'.$admin_id;
       $logo_location = base_url().'media/logos/'.$logo_name;
       $delete_form = base_url().'admin_info/delete_logo/'.$admin_id;
       ?>
-      <img src="<?= $logo_location ?>" title="<?= $logo_name ?>" style="width: 200px;"><br>
-      <a href="<?= $delete_form ?>">Remove</a>
+      <div style="margin-top: 20px;">
+        <img src="<?= $logo_location ?>" title="<?= $logo_name ?>" style="width: 200px;"><br>
+        <a href="<?= $delete_form ?>">Remove</a>
+      </div>
       <?php
     }
       ?>
