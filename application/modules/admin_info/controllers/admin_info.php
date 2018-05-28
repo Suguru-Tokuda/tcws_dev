@@ -6,6 +6,7 @@ class Admin_info extends MX_Controller {
     $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
+    $this->load->module('custom_validation');
   }
 
   // Returns Admin's info
@@ -21,8 +22,8 @@ class Admin_info extends MX_Controller {
     $this->site_security->_make_sure_is_admin();
 
     $query = $this->get("id");
-    $total_rows = $query->num_rows();
 
+    $data['flash'] = $this->session->flashdata('admin');
     $data['admin_id'] = $query->row()->id;
     $data['query'] = $query;
     $data['view_file'] = 'view_admin_info';
@@ -43,7 +44,6 @@ class Admin_info extends MX_Controller {
       redirect('admin_info/view_admin_info');
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('first_name', 'First Name', 'min_length[3]');
       $this->custom_validation->set_rules('last_name', 'Last Name', 'min_length[3]');
       $this->custom_validation->set_rules('phone', 'Phone', 'numeric');
@@ -90,15 +90,71 @@ class Admin_info extends MX_Controller {
     }
 
     $data['admin_id'] = $admin_id;
-    $data['flash'] = $this->session->flashdata('item');
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    $data['flash'] = $this->session->flashdata('admin');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $data['states'] = $this->site_settings->_get_states_dropdown();
     $data['view_file'] = "update_admin_info";
     $this->load->module('templates');
     $this->templates->admin($data);
+  }
+
+  function update_password($admin_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($admin_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $data['current_password'] = $this->input->post('current_password', true);
+    $data['new_password'] = $this->input->post('new_password', true);
+    $data['confirm_new_password'] = $this->input->post('confirm_new_password', true);
+
+    $data['flash'] = $this->session->flashdata('admin');
+    $data['admin_id'] = $admin_id;
+    $data['view_file'] = "update_password";
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
+    }
+
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function do_update_password($admin_id) {
+    $this->load->module('site_security');
+
+    $this->custom_validation->set_rules('current_password', 'Current Password', 'min_length[8]');
+    $this->custom_validation->set_rules('new_password', 'New Password', 'min_length[8]');
+    $this->custom_validation->set_rules('confirm_new_password', 'Confirm New Password', 'matches[new_password]');
+
+    if ($this->custom_validation->run()) {
+      $current_password = $this->input->post('current_password', true);
+      // check if the curent password is right.
+      $this->load->module('site_security');
+      $mysql_query = "SELECT * FROM admin_info WHERE id = ?";
+      $hashed_password = $this->db->query($mysql_query, array($admin_id))->row()->password;
+
+      if (!$this->site_security->_verify_hash($current_password, $hashed_password)) {
+        $this->custom_validation->add_validation_error("The current password doesn't match.");
+        redirect('admin_info/update_password/'.$admin_id);
+      }
+
+      $new_password = $this->input->post('new_password', true);
+      $hashed_new_password = $this->site_security->_hash_string($new_password);
+
+      $mysql_statement = "UPDATE admin_info SET password = ?";
+      $this->db->query($mysql_statement, array($hashed_new_password));
+
+      $flash_msg = "Password was successfully updated.";
+      $value = '<div class="alert alert-success">'.$flash_msg.'</div>';
+      $this->session->set_flashdata('admin', $value);
+      redirect('admin_info/view_admin_info');
+    } else {
+      redirect('update_password/'.$admin_id);
+    }
   }
 
   function upload_admin_image($admin_id) {
@@ -112,10 +168,9 @@ class Admin_info extends MX_Controller {
     } else {
       $data['headline'] = "Update Image";
     }
-    $date['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('admin');
     $data['view_file'] = "upload_image";
-    $data['id']=$admin_id;
-    $data['sort_this'] = true;
+    $data['admin_id'] = $admin_id;
     $this->load->module('templates');
     $this->templates->admin($data);
   }
@@ -152,7 +207,7 @@ class Admin_info extends MX_Controller {
         $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
         $data['headline'] = "Upload Error";
         $data['id'] = $admin_id;
-        $date['flash'] = $this->session->flashdata('item');
+        $date['flash'] = $this->session->flashdata('admin');
         $data['view_file'] = "upload_image";
         $this->load->module('templates');
         $this->templates->admin($data);
@@ -160,7 +215,6 @@ class Admin_info extends MX_Controller {
         $data = array('upload_data' => $this->upload->data());
         $upload_data = $data['upload_data'];
         $file_name = $upload_data['file_name'];
-        $this->_generate_thumbnail($file_name);
         // insert into db
         $insert_statement = "UPDATE admin_info set picture_name = '$file_name' WHERE id = $admin_id";
         $this->_custom_query($insert_statement);
@@ -172,17 +226,6 @@ class Admin_info extends MX_Controller {
         redirect(base_url()."/admin_info/view_admin_info");
       }
     }
-  }
-
-  function _generate_thumbnail($file_name) {
-    $config['image_library'] = 'gd2';
-    $config['source_image'] = './media/admin_pics/'.$file_name;
-    $config['new_image'] = './media/admin_pics_1/'.$file_name.$admin_id;
-    $config['maintain_ratio'] = true;
-    $config['width'] = 200;
-    $config['height'] = 200;
-    $this->image_lib->initialize($config);
-    $this->image_lib->resize();
   }
 
   function fetch_data_from_post() {
@@ -207,7 +250,7 @@ class Admin_info extends MX_Controller {
   function fetch_data_from_db($admin_id) {
     $this->load->module('site_security');
     if (!is_numeric($admin_id)) {
-      redirect(base_url());
+      redirect('site_security/not_allowed');
     }
     $query = $this->get_where($admin_id);
     if ($query->num_rows() > 0) {
@@ -236,8 +279,245 @@ class Admin_info extends MX_Controller {
       $data['city'] = "";
       $data['state'] = "";
       $data['description'] = "";
+      $data['facebook_link'] = "";
+      $data['twitter_link'] = "";
+      $data['instagram_link'] = "";
     }
     return $data;
+  }
+
+  // logo pics
+  function upload_logo($admin_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($admin_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $mysql_query = "SELECT * FROM admin_info WHERE id = ?";
+    $admin = $this->db->query($mysql_query, array($admin_id))->row();
+    $logo_name = $admin->logo_name;
+
+    if (!isset($logo_name) || empty($logo_name)) {
+      $data['headline'] = "Upload Logo";
+    } else {
+      $data['headline'] = "Update Logo";
+      $data['logo_name'] = $logo_name;
+    }
+    $data['admin_id'] = $admin_id;
+    $data['flash'] = $this->session->flashdata('admin');
+    $data['view_file'] = "upload_logo";
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function do_upload_logo($admin_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($admin_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $submit = $this->input->post('submit', true);
+    if ($submit == "cancel") {
+      redirect('admin_info/view_admin_info/');
+    } else if ($submit == "upload") {
+      $config['upload_path'] = './media/logos';
+      $config['allowed_types'] = 'gif|jpg|png|jpeg';
+      $config['max_size'] = 2048;
+      $file_name = $this->site_security->generate_random_string(16);
+      $config['file_name'] = $file_name;
+      $this->upload->initialize($config);
+
+      if (!$this->upload->do_upload('userfile')) {
+        // upload failure.
+        $mysql_query = "SELECT * FROM admin_info WHERE id = ?";
+        $admin = $this->db->query($mysql_query, array($admin_id))->row();
+        $logo_name = $admin->logo_name;
+
+        if (isset($logo_name) || is_empty($logo_name)) {
+          $data['headline'] = "Upload Logo";
+        } else {
+          $data['headline'] = "Update Logo";
+          $data['logo_name'] = $logo_name;
+        }
+        $data['admin_id'] = $admin_id;
+        $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
+        $data['flash'] = $this->session->flashdata('admin');
+        $data['view_file'] = "upload_logo";
+        $this->load->module('templates');
+        $this->templates->admin($data);
+      } else {
+        $data = array('upload_data' => $this->upload->data());
+        $upload_data = $data['upload_data'];
+        $file_name = $upload_data['file_name'];
+
+        // update db
+        $update_statement = "UPDATE admin_info SET logo_name = ? WHERE id = ?";
+        $this->db->query($update_statement, array($file_name, $admin_id));
+        $flash_msg = "The logo was successfully uploaded.";
+        $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('admin', $value);
+
+        redirect('admin_info/view_admin_info/');
+      }
+    }
+  }
+
+  function delete_logo($admin_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+    if (!is_numeric($admin_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $mysql_query = "SELECT * FROM admin_info WHERE id = ?";
+    $query = $this->db->query($mysql_query, array($admin_id));
+
+    $logo_name = $query->row()->logo_name;
+
+    $logo_path = './media/logos/'.$logo_name;
+
+    if (file_exists($logo_path)) {
+      unlink($logo_path);
+    }
+
+    // update database
+    $update_statement = "UPDATE admin_info SET logo_name = '' WHERE id = ?";
+    $this->db->query($update_statement, array($admin_id));
+
+    $flash_msg = "The logo was successfully deleted.";
+    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+    $this->session->set_flashdata('admin', $value);
+    redirect('admin_info/view_admin_info');
+  }
+
+  // carousel photos
+  function upload_carousel($admin_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($admin_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
+    $query =$this->db->query($mysql_query);
+    $data['query'] = $query;
+    $data['headline'] = "Carousel Pictures";
+    $data['admin_id'] = $admin_id;
+    $data['flash'] = $this->session->flashdata('admin');
+    $data['view_file'] ="upload_carousel";
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function do_upload_carousel($admin_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($admin_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $submit = $this->input->post('submit', true);
+    if ($submit == "cancel") {
+      redirect('admin_info/view_admin_info/');
+    } else if ($submit == "upload") {
+      $config['upload_path'] = './media/carousel';
+      $config['allowed_types'] = 'gif|jpg|png|jpeg';
+      $config['max_size'] = 2048;
+      $file_name = $this->site_security->generate_random_string(16);
+      $config['file_name'] = $file_name;
+      $this->upload->initialize($config);
+
+      if (!$this->upload->do_upload('userfile')) {
+        // upload failure
+        $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
+        $query =$this->db->query($mysql_query);
+        $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
+        $data['query'] = $query;
+        $data['headline'] = "Carousel Pictures";
+        $data['admin_id'] = $admin_id;
+        $data['flash'] = $this->session->flashdata('admin');
+        $data['view_file'] ="upload_carousel";
+        $this->load->module('templates');
+        $this->templates->admin($data);
+      } else {
+        $data = array('upload_data' => $this->upload->data());
+        $upload_data = $data['upload_data'];
+        $file_name = $upload_data['file_name'];
+
+        $priority_to_assign = $this->_get_greatest_carousel_priority() + 1;
+        $insert_statement = "INSERT INTO carousel (picture_name, priority) VALUES (?, ?)";
+        $this->db->query($insert_statement, array($file_name, $priority_to_assign));
+
+        $flash_msg ="A carousel picture was successfully uploaded.";
+        $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('admin', $value);
+        redirect('admin_info/upload_carousel/'.$admin_id);
+      }
+    }
+  }
+
+  function _get_greatest_carousel_priority() {
+    $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
+    $query = $this->db->query($mysql_query);
+    $num_rows = $query->num_rows();
+    if ($num_rows < 1) {
+      return 0;
+    } else {
+      $priority = 0;
+      // finds the greatest priority and returns it
+      foreach ($query->result() as $row) {
+        if ($priority < $row->priority)
+        $priority = $row->priority;
+      }
+      return $priority;
+    }
+  }
+
+  function delete_carousel($admin_id, $carousel_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($carousel_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $mysql_query = "SELECT * FROM carousel WHERE id = ?";
+    $target_carousel = $this->db->query($mysql_query, array($carousel_id))->row();
+    $target_priority = $target_carousel->priority;
+    $picture_id = $target_carousel->id;
+    $picture_name = $target_carousel->picture_name;
+    $picture_path ='./media/carousel/'.$picture_name;
+
+    if (file_exists($picture_path)) {
+      unlink($picture_path);
+    }
+
+    // update database
+    $delete_statement = "DELETE FROM carousel WHERE id = ?";
+    $this->db->query($delete_statement, array($picture_id));
+
+    $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
+    $query = $this->db->query($mysql_query);
+
+    foreach ($query->result() as $row) {
+      if ($row->priority > $target_priority) {
+        $new_priority = $row->priority - 1;
+        $id = $row->id;
+        $update_statement = "UPDATE carousel SET priority = ? WHERE id = ?";
+        $this->db->query($update_statement, array($new_priority, $id));
+      }
+    }
+
+    $flash_msg = "The picture was successfully deleted.";
+    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+    $this->session->set_flashdata('admin', $value);
+    redirect('admin_info/upload_carousel/'.$admin_id);
   }
 
   function get($order_by) {

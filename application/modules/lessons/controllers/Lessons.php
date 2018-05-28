@@ -4,11 +4,11 @@ class Lessons extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->module('custom_pagination');
+    $this->load->module('custom_validation');
     $this->load->library('session');
     $this->load->library('upload');
     $this->load->library('image_lib');
   }
-
 
   function view_my_lessons() {
     $this->load->module('site_security');
@@ -91,6 +91,7 @@ class Lessons extends MX_Controller {
     $this->load->module('site_settings');
     $this->load->module('lesson_pics');
     $this->load->module('lesson_schedules');
+
     $lesson = $this->get_where_custom("lesson_url", $lesson_url)->row(0);
     $lesson_id = $lesson->id;
     $capacity = $this->get_where_custom("lesson_url", $lesson_url)->row(0)->lesson_capacity;
@@ -115,7 +116,7 @@ class Lessons extends MX_Controller {
     $schedule_query = $this->_custom_query($schedule_query);
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('lesson');
     $currency_symbol = $this->site_settings->_get_currency_symbol();
     $data['lesson_name'] = $data_from_db['lesson_name'];
     $data['lesson_description'] = $data_from_db['lesson_description'];
@@ -148,6 +149,7 @@ class Lessons extends MX_Controller {
   function manage_lessons() {
     $this->load->module('site_security');
     $this->load->module('site_settings');
+    $this->load->library('session');
     $this->site_security->_make_sure_is_admin();
 
     $query = $this->get("lesson_name");
@@ -163,6 +165,7 @@ class Lessons extends MX_Controller {
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $query;
     $data['view_file'] = "manage_lessons";
+    $data['flash'] = $this->session->flashdata('lesson');
     $this->load->module('templates');
     $this->templates->admin($data);
   }
@@ -183,7 +186,6 @@ class Lessons extends MX_Controller {
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
       $status = $this->input->post('status', true);
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('lesson_name', 'Lesson Name', 'max_length[240]');
       $this->custom_validation->set_rules('lesson_description', 'Lesson Description', 'max_length[240]');
       $this->custom_validation->set_rules('lesson_capacity', 'Lesson Capacity', 'numeric');
@@ -197,7 +199,7 @@ class Lessons extends MX_Controller {
           $this->_update($lesson_id, $data);
           $flash_msg = "The lesson details were successfully updatd.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-          $this->session->set_flashdata('item', $value);
+          $this->session->set_flashdata('lesson', $value);
           redirect('lessons/create_lesson/'.$lesson_id); // sending back to create_lesson page
         } else {
           // inseting to DB
@@ -209,11 +211,9 @@ class Lessons extends MX_Controller {
           $this->_insert($data);
           $flash_msg = "The Lesson was successfully added.";
           $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
-          $this->session->set_flashdata('item', $value);
+          $this->session->set_flashdata('lesson', $value);
           redirect('lessons/manage_lessons');
         }
-      } else {
-        echo validation_errors();
       }
     }
 
@@ -231,11 +231,13 @@ class Lessons extends MX_Controller {
     }
 
     $data['lesson_id'] = $lesson_id;
-    $data['lesson_url'] = $this->get_where($lesson_id)->row()->lesson_url;
-    $data['flash'] = $this->session->flashdata('item');
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if (is_numeric($lesson_id)) {
+      $data['lesson_url'] = $this->get_where($lesson_id)->row()->lesson_url;
+    }
+
+    $data['flash'] = $this->session->flashdata('lesson');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $data['states'] = $this->site_settings->_get_states_dropdown();
     $data['view_file'] = "create_lesson";
@@ -253,7 +255,7 @@ class Lessons extends MX_Controller {
 
     $data['lesson_id'] = $lesson_id;
     $data['headline'] = "Delete Lesson";
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('lesson');
     $data['view_file'] = "lesson_deleteconf";
     $this->load->module('templates');
     $this->templates->admin($data);
@@ -274,7 +276,7 @@ class Lessons extends MX_Controller {
       $this->_process_delete_lesson($lesson_id);
       $flash_msg = "The lesson was successfully deleted.";
       $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
-      $this->session->set_flashdata('item', $value);
+      $this->session->set_flashdata('lesson', $value);
       redirect('lessons/manage_lessons');
     }
   }
@@ -291,7 +293,7 @@ class Lessons extends MX_Controller {
       $flash_msg = "You cannot delete this lesson - you have members booked for this lesson already.";
       $value= '<div class="alert alert-danger" role="alert">.'.$flash_msg.'</div>';
       $this->session->set_flashdata('item', $value);
-      $data['flash'] = $this->session->flashdata('item');
+      $data['flash'] = $this->session->flashdata('lesson');
       $data['view_file'] = "lesson_deleteconf";
       $this->load->module('templates');
       $this->templates->admin($data);
@@ -332,7 +334,7 @@ class Lessons extends MX_Controller {
     $data['lesson_id'] = $lesson_id;
     $data['num_rows'] = $query->num_rows(); // number of pictures that an item has
     $data['headline'] = "Manage Image";
-    $date['flash'] = $this->session->flashdata('item');
+    $date['flash'] = $this->session->flashdata('lesson');
     $data['view_file'] = "upload_lesson_image";
     $data['sort_this'] = true;
     $this->load->module('templates');
@@ -370,7 +372,7 @@ class Lessons extends MX_Controller {
         $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
         $data['headline'] = "Upload Error";
         $data['lesson_id'] = $lesson_id;
-        $date['flash'] = $this->session->flashdata('item');
+        $date['flash'] = $this->session->flashdata('lesson');
         $data['view_file'] = "upload_lesson_image";
         $this->load->module('templates');
         $this->templates->admin($data);

@@ -2,12 +2,26 @@
 $this->load->module('site_security');
 $user_id = $this->site_security->_get_user_id();
 $signin_signup_url = base_url()."youraccount/start";
-$userName = $this->session->userdata('userName');
+$my_page_url = base_url()."youraccount/view_account";
+$user_name = $this->session->userdata('user_name');
 ?>
 <div class="toolbar">
   <div class="inner" >
     <div class="tools">
-      <div class="account"><a href="#"></a><i class="icon-head"></i>
+      <div class="account">
+        <!-- <a href="#"></a><i class="icon-head"></i> -->
+        <a href="
+        <?php if ($user_id == "") {
+          ?>
+          <?= $signin_signup_url ?>
+          <?php
+        } else {
+        ?>
+        <?= $my_page_url ?>
+        <?php
+      }
+         ?>
+        "></a><i class="icon-head"></i>
         <ul class="toolbar-dropdown">
           <?php
           if ($user_id == "") {
@@ -18,7 +32,7 @@ $userName = $this->session->userdata('userName');
             ?>
             <li class="sub-menu-user">
               <div class="user-info">
-                <h6 class="user-name"><?= $userName?></h6><span class="text-xs text-muted"></span>
+                <h6 class="user-name"><?= $user_name?></h6><span class="text-xs text-muted"></span>
               </div>
             </li>
             <li><a href="<?= base_url() ?>listed_items/manage"><span class="glyphicon glyphicon-tasks"></span> My Items</a></li>

@@ -107,7 +107,7 @@ if (is_numeric($admin_id)) {
     </div>
 
     <div class="form-group">
-      <div class="col-md-offset-3 col-md-4">
+      <div class="col-sm-offset-2 col-sm-4">
         <button name="submit" type ="submit" value="submit" class="btn btn-primary">Save</button>
         <button name="submit" value="cancel" class="btn btn-default">Cancel</button>
       </div>

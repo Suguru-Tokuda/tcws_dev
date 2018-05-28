@@ -80,15 +80,10 @@ class Paypal extends MX_Controller {
 
  function update_details($customer_session_id) {
    $this->load->module('site_security');
-//   $session_id = $customer_session_id;
-//   $shopper_id = $this->site_security->_get_user_id();
-   // if (!is_numeric($shopper_id)) {
-   //   $shopper_id = 0;
-   // }
    $table = "boat_basket";
    $lesson_table = "lesson_basket";
-   $mysql_query = "SELECT * FROM boat_basket WHERE session_id='$customer_session_id'";
-   $mysql_query1 = "SELECT * FROM lesson_basket WHERE session_id='$customer_session_id'";
+   $mysql_query = "SELECT * FROM boat_basket WHERE session_id=$customer_session_id";
+   $mysql_query1 = "SELECT * FROM lesson_basket WHERE session_id=$customer_session_id";
 
    $query = $this->_custom_query($mysql_query1);
    $this->load->module('lesson_bookings');

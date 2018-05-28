@@ -94,7 +94,7 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
-//
+
 // $active_group = 'default';
 // $query_builder = TRUE;
 //

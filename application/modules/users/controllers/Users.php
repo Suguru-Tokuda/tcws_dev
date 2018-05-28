@@ -4,6 +4,7 @@ class Users extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->module('custom_pagination');
+    $this->load->module('custom_validation');
   }
 
   function _generate_token($update_id) {
@@ -144,7 +145,6 @@ class Users extends MX_Controller {
       redirect('users/create/'.$update_id);
     } elseif ($submit == "Submit") {
       // process the form
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('password', 'Password', 'min_length[7]|max_length[35]');
       $this->custom_validation->set_rules('confirmPassword', "Confirm Password", 'matches[password]');
 
@@ -172,9 +172,8 @@ class Users extends MX_Controller {
 
     // create a view file. Putting a php (html) into the admin template.
     // store_Accounts.php
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $data['view_file'] = "update_password"; // manage.php
     $this->load->module('templates');
@@ -193,7 +192,6 @@ class Users extends MX_Controller {
       redirect('users/manage');
     } else if ($submit == "Submit") {
       // process the form
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('user_name', 'Username', 'min_length[5]|max_length[60]|user_exists_to_register');
       $this->custom_validation->set_rules('first_name', 'First Name', 'min_length[5]|max_length[60]');
       $this->custom_validation->set_rules('last_name', 'Last Name', 'min_length[5]|max_length[60]');
@@ -245,9 +243,8 @@ class Users extends MX_Controller {
     $data['update_id'] = $update_id;
     $data['flash'] = $this->session->flashdata('user');
 
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $data['view_file'] = "create"; // manage.php
     $this->load->module('templates');
@@ -318,7 +315,6 @@ class Users extends MX_Controller {
 
   // get data from database
   function fetch_data_from_db($update_id) {
-
     if (!is_numeric($update_id)) {
       redirect('site_security/not_allowed');
     }

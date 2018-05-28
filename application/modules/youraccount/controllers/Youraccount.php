@@ -1,13 +1,43 @@
 <?php
-define("PROJECT_HOME","http://localhost/twincitywatersports/youraccount/");
 class Youraccount extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    // $this->load->library('custom_validation');
+    $this->load->module('custom_validation');
     $this->load->library('session');
     $this->load->module('custom_email');
-    // $this->custom_validation->set_ci($this);
+  }
+
+  function _draw_account_navbar() {
+    $this->load->module('site_security');
+    $this->load->module('listed_items');
+    $this->load->module('lessons_bookings');
+    $this->load->module('boat_rental_schedules');
+
+    $this->site_security->_make_sure_logged_in();
+    $user_id = $this->site_security->_get_user_id();
+
+    $data = $this->fetch_data_from_db($user_id);
+    $items_query = $this->listed_items->get_where_custom('user_id', $user_id);
+    $data['num_of_items'] = $items_query->num_rows();
+    $current_time = time();
+
+    $mysql_query = "SELECT * FROM lesson_bookings lb JOIN lesson_schedules ls ON lb.lesson_schedule_id = ls.id  WHERE user_id = ? AND ls.lesson_start_date >= ?";
+    $lesson_query = $this->db->query($mysql_query, array($user_id, $current_time));
+    $data['num_of_lessons'] = $lesson_query->num_rows();
+
+    $mysql_query = "SELECT * FROM boat_rental_schedules WHERE user_id = ? AND boat_start_date >= ?";
+    $boat_rental_query = $this->db->query($mysql_query, array($user_id, $current_time));
+    $data['num_of_rental_boats'] = $boat_rental_query->num_rows();;
+    $this->load->view('account_navbar', $data);
+  }
+
+  function view_account() {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_logged_in();
+    $data['view_file'] = "view_account";
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
   }
 
   function manage_account() {
@@ -16,9 +46,8 @@ class Youraccount extends MX_Controller {
     $user_id = $this->site_security->_get_user_id();
 
     $data = $this->fetch_data_from_db($user_id);
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $data['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "manage_account";
@@ -36,7 +65,6 @@ class Youraccount extends MX_Controller {
       $user_id = $this->site_security->_get_user_id();
       $user_data = $this->fetch_data_from_db($user_id);
       // process the form
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('first_name', 'First Name', 'min_length[5]|max_length[60]');
       $this->custom_validation->set_rules('last_name', 'Last Name', 'min_length[5]|max_length[60]');
 
@@ -56,7 +84,7 @@ class Youraccount extends MX_Controller {
         $this->custom_validation->set_rules('email', 'Email', 'max_length[120]');
       }
 
-      if ($this->custom_validation->run() == true) {
+      if ($this->custom_validation->run()) {
         $this->_process_update_account($user_id);
         $flash_msg = "Account Information was successfully updated";
         $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
@@ -79,7 +107,8 @@ class Youraccount extends MX_Controller {
     $this->load->module('site_security');
     $this->site_security->_make_sure_logged_in();
     $data['flash'] = $this->session->flashdata('item');
-    redirect('listed_items/manage');
+    redirect('youraccount/view_account');
+    // redirect('listed_items/manage');
   }
 
   // login function
@@ -97,31 +126,43 @@ class Youraccount extends MX_Controller {
     $data['signUpEmail'] = $this->input->post('signUpEmail', true);
     $data['signUpPassword'] = $this->input->post('signUpPassword', true);
     $data['signUpconfirmPassword'] = $this->input->post('signUpconfirmPassword', true);
-    $this->load->library('session');
+    // get validation message
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
+    }
     $this->load->module('templates');
     $this->templates->login($data);
   }
 
   function submit_login() {
-    $this->load->module('custom_validation');
     $submit = $this->input->post('submit', true);
     if ($submit == "submit") {
       // process the form
       $this->custom_validation->set_rules('loginEmail', 'Email', 'min_length[5]|max_length[60]|valid_email|email_exists_to_login');
       $this->custom_validation->set_rules('loginPassword', 'Password', 'min_length[7]|max_length[35]');
 
-      if ($this->custom_validation->run() == true) {
+      if ($this->custom_validation->run()) {
         // process to login
         $this->load->module('users');
+        $this->load->module('site_security');
+
         $email = $this->input->post('loginEmail', true);
+        $login_password = $this->input->post('loginPassword', true);
         $remember = $this->input->post('remember', true);
+
+        if (!$this->_check_login($email, $login_password)) {
+          $this->custom_validation->add_validation_error("Email and password don't match.");
+          redirect('youraccount/login');
+        }
+
         if ($remember == "remember") {
           $login_type = "longterm";
         } else {
           $login_type = "shortterm";
         }
+        $mysql_query = "SELECT * FROM users WHERE email = ?";
         $data['last_login'] = time();
-        $user_id = $this->users->get_where_custom('email', $email)->row()->id;
+        $user_id = $this->db->query($mysql_query, array($email))->row()->id;
         $this->users->_update($user_id, $data);
         // send them to the private page
         $this->_in_you_go($user_id, $login_type);
@@ -131,16 +172,31 @@ class Youraccount extends MX_Controller {
     }
   }
 
+  function _check_login($email, $password) {
+    $this->load->site_security;
+    $mysql_query = 'SELECT * FROM users WHERE email = ?';
+    $hashed_password = $this->db->query($mysql_query, array($email))->row()->password;
+    return $this->site_security->_verify_hash($password, $hashed_password);
+  }
+
   function forgot_password() {
     $submit = $this->input->post('submit', true);
-    $this->load->module('custom_validation');
     if ($submit == "submit") {
       // process the form
+      $email = $this->input->post('email', true);
       $this->custom_validation->set_rules('email', 'Email', 'valid_email|email_exists_to_login');
       if ($this->custom_validation->run() == true) {
+<<<<<<< HEAD
         $this->success_email();
       } else {
         redirect('youraccount/recover_password');
+=======
+        if ( $this->send_email_custom($email) == true) {
+          $this ->success_email();
+        } else {
+          redirect('youraccount/recover_password');
+        }
+>>>>>>> 8dbebcedc274cac1df23459b3306dc873b5b5300
       }
     }
   }
@@ -163,7 +219,6 @@ class Youraccount extends MX_Controller {
 
   function submit() {
     $submit = $this->input->post('submit', true);
-    $this->load->module('custom_validation');
     if ($submit == "submit") {
       // process the form
       $this->custom_validation->set_rules('signupFirstName', 'First Name', 'min_length[5]|max_length[60]');
@@ -186,9 +241,8 @@ class Youraccount extends MX_Controller {
 
   function recover_password() {
     $data['view_file'] = "account_password_recovery";
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
@@ -229,9 +283,8 @@ class Youraccount extends MX_Controller {
     $data['flash'] = $this->session->flashdata('item');
     $data['view_module'] = "youraccount";
     $data['view_file'] = "signin_signup";
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
@@ -274,12 +327,13 @@ class Youraccount extends MX_Controller {
     return $data;
   }
 
-  function user_name_existence_check($str) {
+  // returns true if the username eixsts
+  function user_name_existence_check($userName) {
     $this->load->module('users');
 
-    $error_msg = "$str already exists";
+    $error_msg = "$userName already exists";
 
-    $query = $this->users->get_where_custom('user_name', $str);
+    $query = $this->users->get_where_custom('user_name', $userName);
     $num_rows = $query->num_rows();
     if ($num_rows == 0) {
       return true;
@@ -289,12 +343,12 @@ class Youraccount extends MX_Controller {
     }
   }
 
-  function email_existence_check($str) {
+  // returns true if email exists
+  function email_existence_check($email) {
     $this->load->module('users');
+    $error_msg = "$email already exists";
 
-    $error_msg = "$str already exists";
-
-    $query = $this->users->get_where_custom('email', $str);
+    $query = $this->users->get_where_custom('email', $email);
     $num_rows = $query->num_rows();
     if ($num_rows == 0) {
       return true;
@@ -305,17 +359,16 @@ class Youraccount extends MX_Controller {
   }
 
   // a method to check if the user_name exists.
-  function username_check($str) {
-
+  function username_check($userName) {
     $this->load->module('users');
     $this->load->module('site_security');
 
     $error_msg = "You did not enter a correct username and/or password.";
 
     $col1 = 'user_name';
-    $value1 = $str;
+    $value1 = $userName;
     $col2 = 'email';
-    $value2 = $str;
+    $value2 = $userName;
     $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
     $num_rows = $query->num_rows();
     if ($num_rows < 1) {
@@ -338,7 +391,7 @@ class Youraccount extends MX_Controller {
     }
   }
 
-  // method to get userid by user_id
+  // method to get userName by user_id
   function getUserNameById($user_id) {
     $this->load->module('users');
 
@@ -352,11 +405,10 @@ class Youraccount extends MX_Controller {
     return $user_name;
   }
 
+  // returns true if user exists.
   function userid_check($str) {
-
     $this->load->module('users');
     $this->load->module('site_security');
-
     $error_msg = "Please enter valid user id.";
 
     $col1 = 'user_name';
@@ -385,28 +437,18 @@ class Youraccount extends MX_Controller {
   }
 
   function send_email_custom($userEmail){
-    $genString = $this->RandomString();
+    $this->load->module('site_security');
+    $genString = $this->site_security->generate_random_string(32);
     $email_data['to'] = $userEmail;
     $email_data['subject'] = "Forgot Password Recovery";
-    $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='" . PROJECT_HOME . "reset_password/?email=" . $userEmail . "&genString=" .$genString. "'>" . "Click Here" . "</a><br><br></p>Regards,<br> Admin.</div>";
+    $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='".base_url()."reset_password/?email=".$userEmail."&genString=".$genString."'>"."Click Here"."</a><br><br></p>Regards,<br> Admin.</div>";
     $email_data['message'] = $emailBody;
-    if(!$this->custom_email->_custom_email_intiate($email_data)) {
-      $this->email->print_debugger();
+    if($this->custom_email->_custom_email_intiate($email_data) == false) {
       return false;
     } else {
       $this->update_genString($userEmail,$genString);
       return true;
     }
-  }
-
-  function RandomString($length=32, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
-  {
-    $str = '';
-    $max = mb_strlen($keyspace, '8bit') - 1;
-    for ($i = 0; $i < $length; ++$i) {
-      $str .= $keyspace[random_int(0, $max)];
-    }
-    return $str;
   }
 
   function update_genString($userEmail,$genString){
@@ -425,8 +467,8 @@ class Youraccount extends MX_Controller {
 
     if ($submit == "submit") {
       // process the form
-      $this->custom_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
-      $this->custom_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
+      $this->custom_validation->set_rules('signUpPassword', 'Password', 'min_length[7]|max_length[35]');
+      $this->custom_validation->set_rules('signUpconfirmPassword', 'Confirm Password', 'matches[signUpPassword]');
       if ($this->custom_validation->run() == true) {
         // update password
         if ($this->_process_update_password() == true)

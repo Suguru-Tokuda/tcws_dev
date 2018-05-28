@@ -6,11 +6,11 @@ class Site_security extends MX_Controller {
     $this->load->library('encryption');
   }
 
-  function _check_admin_login_details($userName, $password) {
-    $target_userName = "admin";
+  function _check_admin_login_details($user_name, $password) {
+    $target_user_name = "admin";
     $target_pass = "password";
 
-    if (($userName == $target_userName) && ($password == $target_pass)) {
+    if (($user_name == $target_user_name) && ($password == $target_pass)) {
       return true;
     } else {
       return false;

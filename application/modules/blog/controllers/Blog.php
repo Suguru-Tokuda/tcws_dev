@@ -4,6 +4,7 @@ class Blog extends MX_Controller {
   function __construct() {
     parent::__construct();
     $this->load->module('custom_pagination');
+    $this->load->module('custom_validation');
   }
 
   // display all the blogs
@@ -102,7 +103,7 @@ class Blog extends MX_Controller {
     $this->site_security->_make_sure_is_admin();
 
     // gettinf flash data
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('blog');
 
     // getting data from DB
     // this means order by blog_title
@@ -128,7 +129,6 @@ class Blog extends MX_Controller {
       redirect('blog/manage');
     } else if ($submit == "Submit") {
       // process the form
-      $this->load->module('custom_validation');
       $this->custom_validation->set_rules('blog_title', 'Blog Title', 'max_length[250]'); // callback is for checking if the item already exists
 
       if ($this->custom_validation->run() == true) {
@@ -184,12 +184,11 @@ class Blog extends MX_Controller {
 
     // pass update id into the blog
     $data['blog_id'] = $blog_id;
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('blog');
 
     // create a view file. Putting a php (html) into the admin template.
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $data['view_file'] = "create"; // manage.php
     $this->load->module('templates');
@@ -210,7 +209,7 @@ class Blog extends MX_Controller {
 
     $data['headline'] = "Delete Blog";
     $data['blog_id'] = $blog_id;
-    $date['flash'] = $this->session->flashdata('item');
+    $date['flash'] = $this->session->flashdata('blog');
     $data['view_file'] = "deleteconf";
     $this->load->module('templates');
     $this->templates->admin($data);
@@ -236,7 +235,7 @@ class Blog extends MX_Controller {
     $data['num_rows'] = $query->num_rows();
     $data['headline'] = "Manage Image";
     $data['blog_id'] = $blog_id;
-    $date['flash'] = $this->session->flashdata('item');
+    $date['flash'] = $this->session->flashdata('blog');
     $data['view_file'] = "upload_image";
     $this->load->module('templates');
     $this->templates->admin($data);
@@ -278,7 +277,7 @@ class Blog extends MX_Controller {
         $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
         $data['headline'] = "Upload Error";
         $data['blog_id'] = $blog_id;
-        $date['flash'] = $this->session->flashdata('item');
+        $date['flash'] = $this->session->flashdata('blog');
         $data['view_file'] = "upload_image";
         $this->load->module('templates');
         $this->templates->admin($data);
@@ -324,7 +323,7 @@ class Blog extends MX_Controller {
     $data['video_name'] = $data['query']->row()->video_name;
     $data['headline'] = "Update Video";
     $data['blog_id'] = $blog_id;
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('blog');
     $data['view_file'] = "upload_video";
     $this->load->module('templates');
     $this->templates->admin($data);
@@ -356,7 +355,7 @@ class Blog extends MX_Controller {
         $data['video_name'] = $this->get($blog_id)->row()->video_name;
         $data['headline'] = "Upload Error";
         $data['blog_id'] = $blog_id;
-        $data['flash'] = $this->session->flashdata('item');
+        $data['flash'] = $this->session->flashdata('blog');
         $data['view_file'] = "upload_video";
         $this->load->module('templates');
         $this->templates->admin($data);

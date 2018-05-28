@@ -22,10 +22,10 @@ img#blankImg {
 }
 </style>
 <?php
-$form_location = base_url().'admin_info/do_upload/'.$id;
+$form_location = base_url().'admin_info/do_upload/'.$admin_id;
 ?>
 <div class="form-panel">
-  <h4><?= $headline ?></h4>
+  <h3><?= $headline ?></h3>
   <?php
   if (isset($flash)) {
     echo $flash;
@@ -37,10 +37,10 @@ $form_location = base_url().'admin_info/do_upload/'.$id;
   }
   ?>
   <?php
-  if ($num_rows == 1) {
+  if (isset($picture_name)) {
     ?>
     <div class="imageUploadedOrNot">
-      <h5>Here's the display of your image: </h5>
+      <h5>Preview: </h5>
       <img src="#" id="blankImg">
     </div>
     <?php echo form_open_multipart($form_location);?>
@@ -50,19 +50,9 @@ $form_location = base_url().'admin_info/do_upload/'.$id;
     </div>
     <div class="form-action">
       <button type="submit" name="submit" class="btn btn-primary" value="upload">
-        <?php
-        if (isset($picture_name)) {
-          ?>
-          Update
-          <?php
-        } else {
-          ?>
-          Upload
-          <?php
-        }
-         ?>
+        <?php if (isset($picture_name)) { ?>Update<?php } else { ?>Upload<?php }?>
       </button>
-      <button type="submit" name="submit" class="btn" value="cancel">Back</button>
+      <button type="submit" name="submit" class="btn btn-default" value="cancel">Back</button>
     </div>
   </form>
   <?php

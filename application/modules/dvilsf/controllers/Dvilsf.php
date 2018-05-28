@@ -3,14 +3,14 @@ class Dvilsf extends MX_Controller {
 
   function __construct() {
     parent::__construct();
+    $this->load->module('custom_validation');
   }
 
   function index() {
     $data['loginEmail'] = $this->input->post('loginEmail', true);
     $this->load->module('templates');
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
     $this->templates->login($data);
   }
@@ -20,17 +20,30 @@ class Dvilsf extends MX_Controller {
 
     if ($submit == "submit") {
       // process the form
-      $this->load->module('custom_validation');
-      // $this->load->library('form_validation');
       $this->custom_validation->set_rules('loginEmail', 'Username', 'min_length[5]|max_length[60]');
       $this->custom_validation->set_rules('loginPassword', 'Password', 'min_length[7]|max_length[35]');
 
-      if ($this->custom_validation->run() == true) {
-        $this->_in_you_go();
+      if ($this->custom_validation->run()) {
+        $email = $this->input->post('loginEmail', true);
+        $password = $this->input->post('loginPassword', true);
+        if ($this->_check_login($email, $password)) {
+          $this->_in_you_go();
+        } else {
+          $this->custom_validation->add_validation_error("Email and password don't match. Try again.");
+          redirect('dvilsf/index');
+        }
       } else {
         $this->index();
       }
     }
+  }
+
+  function _check_login($email, $password) {
+    $this->load->module('admin_info');
+    $this->load->module('site_security');
+    $mysql_query = "SELECT * FROM admin_info WHERE email = ?";
+    $hashed_password = $this->db->query($mysql_query, array($email))->row()->password;
+    return $this->site_security->_verify_hash($password, $hashed_password);
   }
 
   function _in_you_go() {
@@ -45,7 +58,7 @@ class Dvilsf extends MX_Controller {
     redirect(base_url());
   }
 
-  function userName_check($str) {
+  function user_name_check($str) {
     $this->load->module('site_security');
     $error_msg = "You did not enter a correct username and/or password.";
     $password = $this->input->post('loginPassword', true);
@@ -53,7 +66,7 @@ class Dvilsf extends MX_Controller {
     $result = $this->site_security->_check_admin_login_details($str, $password);
 
     if ($result == false) {
-      $this->form_validation->set_message('userName_check', $error_msg);
+      $this->form_validation->set_message('user_name_check', $error_msg);
       return false;
     } else {
       return true;
