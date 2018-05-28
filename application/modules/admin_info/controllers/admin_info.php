@@ -322,7 +322,7 @@ class Admin_info extends MX_Controller {
 
     $submit = $this->input->post('submit', true);
     if ($submit == "cancel") {
-      redirect('admin_info/view_admin_info/'.$admin_id);
+      redirect('admin_info/view_admin_info/');
     } else if ($submit == "upload") {
       $config['upload_path'] = './media/logos';
       $config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -395,8 +395,129 @@ class Admin_info extends MX_Controller {
   }
 
   // carousel photos
-  function upload_carousel_pictures($admin_id) {
+  function upload_carousel($admin_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
 
+    if (!is_numeric($admin_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
+    $query =$this->db->query($mysql_query);
+    $data['query'] = $query;
+    $data['headline'] = "Carousel Pictures";
+    $data['admin_id'] = $admin_id;
+    $data['flash'] = $this->session->flashdata('admin');
+    $data['view_file'] ="upload_carousel";
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function do_upload_carousel($admin_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($admin_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $submit = $this->input->post('submit', true);
+    if ($submit == "cancel") {
+      redirect('admin_info/view_admin_info/');
+    } else if ($submit == "upload") {
+      $config['upload_path'] = './media/carousel';
+      $config['allowed_types'] = 'gif|jpg|png|jpeg';
+      $config['max_size'] = 2048;
+      $file_name = $this->site_security->generate_random_string(16);
+      $config['file_name'] = $file_name;
+      $this->upload->initialize($config);
+
+      if (!$this->upload->do_upload('userfile')) {
+        // upload failure
+        $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
+        $query =$this->db->query($mysql_query);
+        $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
+        $data['query'] = $query;
+        $data['headline'] = "Carousel Pictures";
+        $data['admin_id'] = $admin_id;
+        $data['flash'] = $this->session->flashdata('admin');
+        $data['view_file'] ="upload_carousel";
+        $this->load->module('templates');
+        $this->templates->admin($data);
+      } else {
+        $data = array('upload_data' => $this->upload->data());
+        $upload_data = $data['upload_data'];
+        $file_name = $upload_data['file_name'];
+
+        $priority_to_assign = $this->_get_greatest_carousel_priority() + 1;
+        $insert_statement = "INSERT INTO carousel (picture_name, priority) VALUES (?, ?)";
+        $this->db->query($insert_statement, array($file_name, $priority_to_assign));
+
+        $flash_msg ="A carousel picture was successfully uploaded.";
+        $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('admin', $value);
+        redirect('admin_info/upload_carousel/'.$admin_id);
+      }
+    }
+  }
+
+  function _get_greatest_carousel_priority() {
+    $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
+    $query = $this->db->query($mysql_query);
+    $num_rows = $query->num_rows();
+    if ($num_rows < 1) {
+      return 0;
+    } else {
+      $priority = 0;
+      // finds the greatest priority and returns it
+      foreach ($query->result() as $row) {
+        if ($priority < $row->priority)
+        $priority = $row->priority;
+      }
+      return $priority;
+    }
+  }
+
+  function delete_carousel($admin_id, $carousel_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    if (!is_numeric($carousel_id)) {
+      redirect('site_security/not_allowed');
+    }
+
+    $mysql_query = "SELECT * FROM carousel WHERE id = ?";
+    $target_carousel = $this->db->query($mysql_query, array($carousel_id))->row();
+    $target_priority = $target_carousel->priority;
+    $picture_id = $target_carousel->id;
+    $picture_name = $target_carousel->picture_name;
+    $picture_path ='./media/carousel/'.$picture_name;
+
+    if (file_exists($picture_path)) {
+      unlink($picture_path);
+    }
+
+    // update database
+    $delete_statement = "DELETE FROM carousel WHERE id = ?";
+    $this->db->query($delete_statement, array($picture_id));
+
+    $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
+    $query = $this->db->query($mysql_query);
+
+    foreach ($query->result() as $row) {
+      if ($row->priority > $target_priority) {
+        $new_priority = $row->priority - 1;
+        $id = $row->id;
+        $update_statement = "UPDATE carousel SET priority = ? WHERE id = ?";
+        $this->db->query($update_statement, array($new_priority, $id));
+      }
+    }
+
+    $flash_msg = "The picture was successfully deleted.";
+    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+    $this->session->set_flashdata('admin', $value);
+    redirect('admin_info/upload_carousel/'.$admin_id);
   }
 
   function get($order_by) {

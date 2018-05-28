@@ -8,7 +8,7 @@
   $update_password_url = base_url()."admin_info/update_password/".$admin_id;
   $upload_image_url = base_url()."admin_info/upload_admin_image/".$admin_id;
   $upload_logo_url = base_url()."admin_info/upload_logo/".$admin_id;
-  $upload_carousel_photos_url = base_url()."admin_info/upload_carousel_pics/".$admin_id;
+  $upload_carousel_photos_url = base_url()."admin_info/upload_carousel/".$admin_id;
   ?>
   <p style="margin-top: 30px;">
     <?php

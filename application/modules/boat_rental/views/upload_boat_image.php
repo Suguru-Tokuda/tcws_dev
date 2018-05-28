@@ -76,7 +76,7 @@ if ($num_rows > 0) {
       $priority = $row->priority;
       ?>
       <li style="width: 250px;" id="<?= $row->id?>">
-          <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px">
+          <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px;">
           <?php
           echo anchor(base_url().'boat_rental/delete_image/'.$boat_rental_id.'/'.$row->id, 'Remove');
           ?>

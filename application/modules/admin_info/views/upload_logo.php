@@ -26,6 +26,14 @@ $form_location = base_url().'admin_info/do_upload_logo/'.$admin_id;
  ?>
  <div class="form-panel">
    <h4 class="mb"><?= $headline ?></h4>
+   <?php
+   if (isset($flash)) { echo $flash; }
+   if (isset($error)) {
+     foreach ($error as $value) {
+       echo $value;
+     }
+   }
+    ?>
    <?php echo form_open_multipart($form_location); ?>
    <div class="form-group">
      <label class="control-label">Image</label>
@@ -39,19 +47,8 @@ $form_location = base_url().'admin_info/do_upload_logo/'.$admin_id;
      <button type="submit" name="submit" class="btn btn-primary" value="upload">
        <?php if (isset($logo_name)) { ?>Update <?php } else { ?> Upload <?php } ?>
      </button>
-     <button type="submit" name="submit" class="btn btn-default" value="cancel">Cancel</button>
+     <button type="submit" name="submit" class="btn btn-default" value="cancel">Back</button>
    </div>
-
-   <?php
-   if (isset($flash)) {
-     echo $flash;
-   }
-   if (isset($error)) {
-     foreach ($error as $value) {
-       echo $value;
-     }
-   }
-    ?>
     <?php
     if (isset($logo_name)) {
       $logo_location = base_url().'media/logos/'.$logo_name;

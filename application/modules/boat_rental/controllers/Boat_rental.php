@@ -174,7 +174,6 @@ class Boat_rental extends MX_Controller {
   function manage_boat_rental() {
     $this->load->module('site_security');
     $this->load->module('site_settings');
-    $this->load->module('session');
     $this->site_security->_make_sure_is_admin();
     $use_limit = false;
     $mysql_query = $this->_generate_mysql_query_for_manage_boat_rental($use_limit);
