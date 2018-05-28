@@ -190,10 +190,7 @@ class Boat_rental extends MX_Controller {
     $use_limit = true;
     $mysql_query = $this->_generate_mysql_query_for_manage_boat_rental($use_limit);
     $query = $this->_custom_query($mysql_query);
-<<<<<<< HEAD
 
-=======
->>>>>>> 8dbebcedc274cac1df23459b3306dc873b5b5300
     $data['flash'] = $this->session->flashdata('boat');
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $query;
@@ -276,20 +273,11 @@ class Boat_rental extends MX_Controller {
 
     $data['boat_rental_id'] = $boat_rental_id;
     if (is_numeric($boat_rental_id)) {
-<<<<<<< HEAD
-      $data['boat_url'] = $this->get_where($boat_rental_id)->row()->boat_url;      
-    }
-    $data['flash'] = $this->session->flashdata('boat');
-    if ($this->session->has_userdata('validation_errors')) {
-      $data['validation_errors'] = $this->session->userdata('validation_errors');
-      $this->session->unset_userdata('validation_errors');
-=======
       $data['boat_url'] = $this->get_where($boat_rental_id)->row()->boat_url;
     }
     $data['flash'] = $this->session->flashdata('boat');
     if ($this->custom_validation->has_validation_errors()) {
       $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
->>>>>>> 8dbebcedc274cac1df23459b3306dc873b5b5300
     }
     $data['states'] = $this->site_settings->_get_states_dropdown();
     $data['view_file'] = "create_boat";
@@ -417,11 +405,7 @@ class Boat_rental extends MX_Controller {
         $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
         $data['headline'] = "Upload Error";
         $data['boat_rental_id'] = $boat_rental_id;
-<<<<<<< HEAD
-        $date['flash'] = $this->session->flashdata('boat');
-=======
         $data['flash'] = $this->session->flashdata('boat');
->>>>>>> 8dbebcedc274cac1df23459b3306dc873b5b5300
         $data['view_file'] = "upload_boat_image";
         $this->load->module('templates');
         $this->templates->admin($data);
@@ -439,11 +423,7 @@ class Boat_rental extends MX_Controller {
         $data['headline'] = "Upload Success";
         $data['boat_rental_id'] = $boat_rental_id;
         $flash_msg = "The picture was successfully uploaded.";
-<<<<<<< HEAD
-        $value= '<div class="alert alert-success" role="alert">.'.$flash_msg.'</div>';
-=======
         $value= '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
->>>>>>> 8dbebcedc274cac1df23459b3306dc873b5b5300
         $this->session->set_flashdata('boat', $value);
 
         redirect("/boat_rental/upload_boat_image/".$boat_rental_id);
@@ -488,11 +468,7 @@ class Boat_rental extends MX_Controller {
     $flash_msg = "The image was successfully deleted.";
     $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
     $this->session->set_flashdata('boat', $value);
-<<<<<<< HEAD
-    redirect(base_url()."boat_rental/upload_boat_image/".$boat_rental_id);
-=======
     redirect("boat_rental/upload_boat_image/".$boat_rental_id);
->>>>>>> 8dbebcedc274cac1df23459b3306dc873b5b5300
   }
 
   function _generate_thumbnail($file_name) {
