@@ -59,7 +59,6 @@ class Cart extends MX_Controller {
   }
 
   function _check_and_get_session_id($checkout_token) {
-
     $session_id = $this->_get_session_id_from_token($checkout_token);
     if ($session_id == '') {
       redirect(base_url());
@@ -120,6 +119,7 @@ class Cart extends MX_Controller {
   }
 
   function go_to_checkout() {
+    echo "here"; die();
     $this->load->module('site_security');
     $shopper_id = $this->site_security->_get_user_id();
     if (!is_numeric($shopper_id)) {

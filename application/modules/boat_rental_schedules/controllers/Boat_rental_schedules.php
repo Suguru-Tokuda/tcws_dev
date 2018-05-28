@@ -36,7 +36,7 @@ class Boat_rental_schedules extends MX_Controller {
   }
 
   function _generate_mysql_query_for_view_schedules($use_limit, $boat_rental_id) {
-    $mysql_query = "SELECT u.firstName, u.lastName, u.email, br.boat_start_date, br.boat_end_date FROM users u JOIN boat_rental_schedules br ON u.id = br.user_id WHERE br.boat_rental_id = $boat_rental_id";
+    $mysql_query = "SELECT u.first_name, u.last_name, u.email, br.boat_start_date, br.boat_end_date FROM users u JOIN boat_rental_schedules br ON u.id = br.user_id WHERE br.boat_rental_id = $boat_rental_id";
     if ($use_limit == true) {
       $limit = $this->_get_pagination_limit();
       $offset = $this->_get_pagination_offset();

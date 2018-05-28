@@ -130,7 +130,7 @@ class Boat_rental extends MX_Controller {
     $data['boat_date'] = $boat_date_data['boat_date'];
     $data['boat_start_time'] = $boat_date_data['boat_start_time'];
     $data['boat_end_time'] = $boat_date_data['boat_end_time'];
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('boat');
     $currency_symbol = $this->site_settings->_get_currency_symbol();
     $data['boat_rental_id'] = $boat_rental_id;
     $data['boat_name'] = $data_from_db['boat_name'];
@@ -190,6 +190,7 @@ class Boat_rental extends MX_Controller {
     $mysql_query = $this->_generate_mysql_query_for_manage_boat_rental($use_limit);
     $query = $this->_custom_query($mysql_query);
 
+    $data['flash'] = $this->session->flashdata('boat');
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $query;
     $data['view_file'] = "manage_rental_boats";
@@ -240,7 +241,7 @@ class Boat_rental extends MX_Controller {
           $this->_update($boat_rental_id, $data);
           $flash_msg = "The boat details were successfully updatd.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-          $this->session->set_flashdata('item', $value);
+          $this->session->set_flashdata('boat', $value);
           redirect('boat_rental/create_boat/'.$boat_rental_id); // sending back to create_boat page
         } else {
           // inseting to DB
@@ -251,7 +252,7 @@ class Boat_rental extends MX_Controller {
           $this->_insert($data);
           $flash_msg = "The Boat was successfully added.";
           $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
-          $this->session->set_flashdata('item', $value);
+          $this->session->set_flashdata('boat', $value);
           redirect('boat_rental/manage_boat_rental');
         }
       }
@@ -271,8 +272,10 @@ class Boat_rental extends MX_Controller {
     }
 
     $data['boat_rental_id'] = $boat_rental_id;
-    $data['boat_url'] = $this->get_where($boat_rental_id)->row()->boat_url;
-    $data['flash'] = $this->session->flashdata('item');
+    if (is_numeric($boat_rental_id)) {
+      $data['boat_url'] = $this->get_where($boat_rental_id)->row()->boat_url;      
+    }
+    $data['flash'] = $this->session->flashdata('boat');
     if ($this->session->has_userdata('validation_errors')) {
       $data['validation_errors'] = $this->session->userdata('validation_errors');
       $this->session->unset_userdata('validation_errors');
@@ -293,7 +296,7 @@ class Boat_rental extends MX_Controller {
 
     $data['boat_rental_id'] = $boat_rental_id;
     $data['headline'] = "Delete Boat";
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('boat');
     $data['view_file'] = "boat_deleteconf";
     $this->load->module('templates');
     $this->templates->admin($data);
@@ -316,14 +319,14 @@ class Boat_rental extends MX_Controller {
       {
         $flash_msg ="The boat cannot be deleted.";
         $value = '<div class="alert alert-warning role="alert">'.$flash_msg.'</div>';
-        $this->session->set_flashdata('item', $value);
+        $this->session->set_flashdata('boat', $value);
         redirect('boat_rental/manage_boat_rental');
       }
       else {
         $this->_process_delete_boat($boat_rental_id);
         $flash_msg = "The boat was successfully deleted.";
         $value = '<div class="alert alert-warning role="alert">'.$flash_msg.'</div>';
-        $this->session->set_flashdata('item', $value);
+        $this->session->set_flashdata('boat', $value);
         redirect('boat_rental/manage_boat_rental');
       }
     }
@@ -366,7 +369,7 @@ class Boat_rental extends MX_Controller {
     $data['boat_rental_id'] = $boat_rental_id;
     $data['num_rows'] = $query->num_rows(); // number of pictures that an item has
     $data['headline'] = "Manage Image";
-    $date['flash'] = $this->session->flashdata('item');
+    $date['flash'] = $this->session->flashdata('boat');
     $data['view_file'] = "upload_boat_image";
     $data['sort_this'] = true;
     $this->load->module('templates');
@@ -404,7 +407,7 @@ class Boat_rental extends MX_Controller {
         $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
         $data['headline'] = "Upload Error";
         $data['boat_rental_id'] = $boat_rental_id;
-        $date['flash'] = $this->session->flashdata('item');
+        $date['flash'] = $this->session->flashdata('boat');
         $data['view_file'] = "upload_boat_image";
         $this->load->module('templates');
         $this->templates->admin($data);
@@ -423,7 +426,7 @@ class Boat_rental extends MX_Controller {
         $data['boat_rental_id'] = $boat_rental_id;
         $flash_msg = "The picture was successfully uploaded.";
         $value= '<div class="alert alert-success" role="alert">.'.$flash_msg.'</div>';
-        $this->session->set_flashdata('item', $value);
+        $this->session->set_flashdata('boat', $value);
 
         redirect(base_url()."/boat_rental/upload_boat_image/".$boat_rental_id);
       }
@@ -466,7 +469,7 @@ class Boat_rental extends MX_Controller {
     }
     $flash_msg = "The image was successfully deleted.";
     $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-    $this->session->set_flashdata('item', $value);
+    $this->session->set_flashdata('boat', $value);
     redirect(base_url()."boat_rental/upload_boat_image/".$boat_rental_id);
   }
 
