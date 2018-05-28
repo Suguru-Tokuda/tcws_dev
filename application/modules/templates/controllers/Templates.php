@@ -16,6 +16,13 @@ class Templates extends MX_Controller {
     $this->load->view('breadcrumbs_public_bootstrap', $data);
   }
 
+  function _draw_carousel() {
+    $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
+    $query = $this->db->query($mysql_query);
+    $data['query'] = $query;
+    $this->load->view('carousel', $data);
+  }
+
   function login($data) {
     $data['view_module'] = "youraccount";
     $data['view_file'] = "signin_signup";

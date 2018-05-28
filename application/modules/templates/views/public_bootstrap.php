@@ -47,7 +47,8 @@
     <!-- Main Slider-->
     <?php
     if (!isset($page_url)) {
-      require_once('carousel.php');
+      echo Modules::run('templates/_draw_carousel');
+      // require_once('carousel.php');
     } else if (isset($view_file)) {
       $this->load->view($view_module.'/'.$view_file);
     }

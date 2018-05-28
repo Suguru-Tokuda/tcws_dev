@@ -186,17 +186,11 @@ class Youraccount extends MX_Controller {
       $email = $this->input->post('email', true);
       $this->custom_validation->set_rules('email', 'Email', 'valid_email|email_exists_to_login');
       if ($this->custom_validation->run() == true) {
-<<<<<<< HEAD
-        $this->success_email();
-      } else {
-        redirect('youraccount/recover_password');
-=======
         if ( $this->send_email_custom($email) == true) {
-          $this ->success_email();
+          $this->success_email();
         } else {
           redirect('youraccount/recover_password');
         }
->>>>>>> 8dbebcedc274cac1df23459b3306dc873b5b5300
       }
     }
   }
