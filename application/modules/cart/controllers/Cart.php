@@ -20,7 +20,7 @@ class Cart extends MX_Controller {
     }
 
     if (!is_numeric($shopper_id)) {
-      $shoppe_id = 0;
+      $shopper_id = 0;
     }
     $table = "boat_basket";
     $lesson_table = "lesson_basket";
@@ -123,7 +123,7 @@ class Cart extends MX_Controller {
     $this->load->module('site_security');
     $shopper_id = $this->site_security->_get_user_id();
     if (!is_numeric($shopper_id)) {
-      $shoppe_id = 0;
+      $shopper_id = 0;
     }
     $data['checkout_token'] = $this->uri->segment(3);
     $date['flash'] = $this->session->flashdata('item');

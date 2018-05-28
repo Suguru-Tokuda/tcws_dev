@@ -46,15 +46,8 @@
     <!-- Page Content-->
     <!-- Main Slider-->
     <?php
-    if (isset($page_content)) {
-      if ($page_url == "") { // means it's in homepage
-        ?>
-        <?php
-        require_once('carousel.php');
-      } else {
-        ?>
-        <?php
-      }
+    if (!isset($page_url)) {
+      require_once('carousel.php');
     } else if (isset($view_file)) {
       $this->load->view($view_module.'/'.$view_file);
     }

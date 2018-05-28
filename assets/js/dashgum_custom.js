@@ -1,27 +1,28 @@
-// $(document).ready(function () {
-//   $("#date-popover").popover({html: true, trigger: "manual"});
-//   $("#date-popover").hide();
-//   $("#date-popover").click(function (e) {
-//     $(this).hide();
-//   });
-//
-//   $("#my-calendar").zabuto_calendar({
-//     action: function () {
-//       return myDateFunction(this.id, false);
-//     },
-//     action_nav: function () {
-//       return myNavFunction(this.id);
-//     },
-//     ajax: {
-//       url: "show_data.php?action=1",
-//       modal: true
-//     },
-//     legend: [
-//       {type: "text", label: "Special event", badge: "00"},
-//       {type: "block", label: "Regular event", }
-//     ]
-//   });
-// });
+$(document).ready(function () {
+  $("#date-popover").popover({html: true, trigger: "manual"});
+  $("#date-popover").hide();
+  $("#date-popover").click(function (e) {
+    $(this).hide();
+  });
+
+  $("#my-calendar").zabuto_calendar({
+    action: function () {
+      return myDateFunction(this.id, false);
+    },
+    action_nav: function () {
+      return myNavFunction(this.id);
+    },
+    ajax: {
+      url: "show_data.php?action=1",
+      modal: true
+    },
+    legend: [
+      {type: "text", label: "Special event", badge: "00"},
+      {type: "block", label: "Regular event", }
+    ]
+  });
+});
+
 
 function myNavFunction(id) {
   $("#date-popover").hide();
@@ -35,7 +36,7 @@ $(function() {
   jQuery(".fancybox").fancybox();
 });
 
-// $.backstretch("assets/img/login-bg.jpg", {speed: 500});
+$.backstretch("assets/img/login-bg.jpg", {speed: 500});
 
 function getTime()
 {
@@ -58,10 +59,10 @@ function checkTime(i)
   }
   return i;
 }
-// $.backstretch("assets/img/login-bg.jpg", {speed: 500});
-// jQuery(document).ready(function() {
-//   TaskList.initTaskWidget();
-// });
+$.backstretch("assets/img/login-bg.jpg", {speed: 500});
+jQuery(document).ready(function() {
+  TaskList.initTaskWidget();
+});
 
 $(function() {
   $( "#sortable" ).sortable();
@@ -72,4 +73,14 @@ $(function() {
 
 $(function(){
   $('select.styled').customSelect();
+});
+$(function() {
+  $("#file").change(function() {
+    var reader = new FileReader();
+    reader.onload = function(image) {
+      $('.imageUploadedOrNot').show(0);
+      $('#blankImg').attr('src', image.target.result);
+    }
+    reader.readAsDataURL(this.files[0]); // this refers to $('#file')
+  });
 });

@@ -176,7 +176,6 @@ gulp.task('compress-dashgum-footer-js', function() {
     'jquery.nicescroll.js',
     'jquery.sparkline.js',
     'bootstrap-datepicker.js',
-    // 'date.js',
     'daterangepicker.js',
     'bootstrap-inputmask.min.js',
     'form-component.js',
