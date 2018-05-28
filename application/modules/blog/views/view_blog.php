@@ -80,9 +80,9 @@
         ?>
         <div class="column text-left">
           <?php
-          if ($prev_blog_url != "") {
+          if ($next_blog_url != "") {
             ?>
-            <a class="btn btn-outline-secondary btn-sm" href="<?= $prev_url ?>"><i class="icon-arrow-left"></i>&nbsp;Prev</a>
+            <a class="btn btn-outline-secondary btn-sm" href="<?= $next_blog_url ?>"><i class="icon-arrow-left"></i>&nbsp;Prev</a>
             <?php
           }
           ?>
@@ -90,9 +90,9 @@
         <div class="column"><a class="btn btn-outline-secondary view-all" href="<?= base_url().'blog/view_blogs' ?>" data-toggle="tooltip" data-placement="top" title="" data-original-title="All posts"><i class="icon-menu"></i></a></div>
         <div class="column text-right">
           <?php
-          if ($next_blog_url != "") {
+          if ($prev_blog_url != "") {
             ?>
-            <a class="btn btn-outline-secondary btn-sm" href="<?= $next_url ?>">Next&nbsp;<i class="icon-arrow-right"></i></a>
+            <a class="btn btn-outline-secondary btn-sm" href="<?= $prev_blog_url ?>">Next&nbsp;<i class="icon-arrow-right"></i></a>
             <?php
           }
           ?>

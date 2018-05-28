@@ -16,7 +16,7 @@
   }
   ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <!-- <link href="<?php echo base_url(); ?>assets/css/unishop.vendor.min.css" rel="stylesheet"> -->
+  <link href="<?php echo base_url(); ?>assets/css/unishop.vendor.min.css" rel="stylesheet">
 
   <link href="<?php echo base_url(); ?>assets/css/vendor.min.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/card.min.css" rel="stylesheet">

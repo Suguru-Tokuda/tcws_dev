@@ -1,3 +1,15 @@
+<?php
+$url_segment = $this->uri->segment(2);
+$view_active_boats_url = base_url().'boat_rental/view_my_rental_boats';
+$view_all_boats_url = base_url().'boat_rental/view_all_rental_boats';
+if ($url_segment == "view_my_rental_boats") {
+  $view_css_class = "btn btn-primary";
+  $view_all_class = "btn btn-outline-primary";
+} else if ($url_segment == "view_all_rental_boats") {
+  $view_css_class = "btn btn-outline-primary";
+  $view_all_class = "btn btn-primary";
+}
+ ?>
 <div class="page-title">
   <div class="container">
     <div class="column">
@@ -12,6 +24,8 @@
     </div>
     <div class="col-sm-9">
     <?= $pagination ?>
+    <a class="<?= $view_css_class ?>" href="<?= $view_active_boats_url ?>">View Active</a>
+    <a class="<?= $view_all_class ?>" href="<?= $view_all_boats_url ?>">View All</a>
     <?php
     $num_rows = $query->num_rows();
     if ($num_rows > 0) {

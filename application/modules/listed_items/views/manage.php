@@ -55,10 +55,6 @@ $create_item_url = base_url()."listed_items/create_item";
                     $edit_item_url = base_url()."listed_items/create_item/".$item_url;
                     $picture_name = $this->store_items->_get_small_pic_by_item_url($item_url);
                     $image_location = base_url()."/media/item_small_pics/".$picture_name;
-                    // $cat_url = $this->store_items->_get_cat_url_by_item_url($item_url);
-                    // if (isset($cat_url)) {
-                    //   $view_item_url = base_url()."$item_segments./$cat_url/$row->item_url";
-                    // }
                     $view_item_url = base_url().'store_items/view_item/'.$item_url;
                     $id = $row->id;
                     $item_title = $row->item_title;
@@ -95,10 +91,10 @@ $create_item_url = base_url()."listed_items/create_item";
                     </td>
                     <td class="span1" width="15%;" style="text-align: center; padding: 50px 0;">
                       <a class="btn btn-info" href="<?= $view_item_url ?>">
-                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View
+                        <i class="fa fa-laptop" aria-hidden="true"></i> View
                       </a>
                       <a class="btn btn-success" href="<?= $edit_item_url ?>">
-                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                        <i class="fa fa-edit" aria-hidden="true"></i> Edit
                       </a>
                       <i class="halflings-icon white edit"></i>
                     </a>

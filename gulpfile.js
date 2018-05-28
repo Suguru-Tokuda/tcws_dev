@@ -45,6 +45,7 @@ gulp.task('compress-unishiop-vendor-css', function() {
     "card.min.css",
     "bootstrap-datepicker.css",
     "jquery.timepicker.css",
+    "font-awesome.css"
   ]))
   .pipe(concat('unishop.vendor.min.css'))
   .pipe(gulp.dest(paths.cssDest));

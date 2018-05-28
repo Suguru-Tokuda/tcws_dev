@@ -28,7 +28,7 @@ class Youraccount extends MX_Controller {
 
     $mysql_query = "SELECT * FROM boat_rental_schedules WHERE user_id = ? AND boat_start_date >= ?";
     $boat_rental_query = $this->db->query($mysql_query, array($user_id, $current_time));
-    $data['num_of_rental_boats'] = $boat_rental_query->num_rows();;
+    $data['num_of_rental_boats'] = $boat_rental_query->num_rows();
     $this->load->view('account_navbar', $data);
   }
 

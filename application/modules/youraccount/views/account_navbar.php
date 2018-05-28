@@ -22,7 +22,7 @@ $logout_url = base_url().'youraccount/logout';
    <a class="list-group-item <?php if ($url_segment === "lessons") { echo "active"; } ?> <?php if ($num_of_lessons > 0) {?>with-badge<?php }?>" href="<?= $lessons_url ?>">
      <i class="icon-tag"></i>My Booked Lessons<?php if ($num_of_lessons > 0) { ?><span class="badge badge-primary badge-pill"><?= $num_of_lessons ?></span><?php }?>
    </a>
-   <a class="list-group-item <?php if ($url_segment === "rental_boats") { echo "active"; } ?> <?php if ($num_of_rental_boats > 0) {?>with-badge<?php }?>" href="<?= $boats_url ?>">
+   <a class="list-group-item <?php if ($url_segment === "boat_rental") { echo "active"; } ?> <?php if ($num_of_rental_boats > 0) {?>with-badge<?php }?>" href="<?= $boats_url ?>">
      <i class="icon-anchor"></i>My Rental Boats<?php if ($num_of_rental_boats > 0) { ?><span class="badge badge-primary badge-pill"><?= $num_of_rental_boats ?></span><?php }?>
    </a>
    <a class="list-group-item <?php if ($url_segment2 === "manage_account") { echo "active"; } ?>" href="<?= $manage_profile_url ?>">
