@@ -164,6 +164,9 @@ class Lessons extends MX_Controller {
     $data['capacity'] = $capacity;
     $data['currency_symbol'] = $currency_symbol;
     $data['view_file'] = "view_lesson";
+    if ($this->custom_validation->has_validation_errors()) {
+      $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
+    }
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }

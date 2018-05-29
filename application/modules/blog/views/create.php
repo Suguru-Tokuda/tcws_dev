@@ -1,12 +1,12 @@
 <h1><?= $headline ?></h1>
-<?= validation_errors("<p style='color: red;'>", "</p>") ?>
-
 <?php
+if (isset($validation_errors)) {
+  echo $validation_errors;
+}
 if (isset($flash)) {
   echo $flash;
 }
 ?>
-
 <div class="row mt">
   <div class="col-lg-12">
     <?php

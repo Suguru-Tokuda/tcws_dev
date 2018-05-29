@@ -109,8 +109,13 @@ if (isset($flash)) {
     </div>
   </div>
   <div class="row" style="margin-top: 50px;">
+    <?php
+    if (isset($validation_errors)) {
+      echo $validation_errors;
+    }
+    ?>
+    <?= $pagination ?>
     <div class="table-responsive">
-      <?= $pagination ?>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -136,47 +141,39 @@ if (isset($flash)) {
             $lesson_end_date  = $row->lesson_end_date;
             $number_of_bookings = $this->lesson_bookings->_get_num_of_bookings_for_lesson_schedule_id($lesson_schedule_id);
             $availability = $capacity - $number_of_bookings;
-            $booking_url = base_url().'lesson_basket/add_to_basket';
+            $form_location = base_url().'lesson_basket/add_to_basket';
             ?>
-            <form class"reset-box" method="post" action="<?= $booking_url ?>">
+            <form class"reset-box" method="post" action="<?= $form_location ?>">
             <tr>
               <td><?= $lesson_date ?></td>
               <td><?= $start_time ?></td>
               <td><?= $end_time ?></td>
               <td><?= $availability.'/'.$capacity ?></td>
               <td>
-                <select class="form-control" name="booking_qty">
+                <select class="form-control" name="booking_qty" required>
                   <?php
                   if ($availability > 5) {
-                    for ($i = 1; $i <= 5; $i++) {
-                      ?>
+                    for ($i = 1; $i <= 5; $i++) { ?>
                       <option value="<?= $i ?>"><?= $i ?></option>
-                      <?php
-                    }
-                    ?>
-                    <?php
+                      <?php }
                   } else {
-                    for ($i = 1; $i <= $availability; $i++) {
-                      ?>
-                      <option value="<?= $i ?>"><?= $i ?></option>
-                      <?php
+                    for ($i = 1; $i <= $availability; $i++) { ?>
+                      <option value="<?= $i ?>"><?= $i ?></option> <?php
                     }
                   }
                     ?>
                   </select>
                 </td>
               <td><button class="btn btn-primary" name="submit" value="submit" type="submit">Book Lesson</button></td>
-                <!-- <a class="btn btn-primary" href="<?= $booking_url ?>">Book Lesson</a></td> -->
               </tr>
-              <input type="hidden" name="lesson_schedule_id" value="<?php echo $lesson_schedule_id ?>">
-              <input type="hidden" name="lesson_id" value="<?php echo $lesson_id ?>">
-              <input type="hidden" name="lesson_start_date" value="<?php echo $lesson_start_date ?>">
-              <input type="hidden" name="lesson_end_date" value="<?php echo $lesson_end_date ?>">
+              <input type="hidden" name="lesson_schedule_id" value="<?= $lesson_schedule_id ?>">
+              <input type="hidden" name="lesson_id" value="<?= $lesson_id ?>">
+              <input type="hidden" name="lesson_start_date" value="<?= $lesson_start_date ?>">
+              <input type="hidden" name="lesson_end_date" value="<?= $lesson_end_date ?>">
               </form>
                       <?php
                     }
                     ?>
-
                   </tbody>
                 </table>
               </div>

@@ -6,8 +6,8 @@ class Cart extends MX_Controller {
     $this->load->module('site_security');
   }
 
+  // shows the cart page
   function index() {
-    $this->load->module('site_security');
     $session_id = $this->session->session_id;
     $shopper_id = $this->site_security->_get_user_id();
 
@@ -38,7 +38,6 @@ class Cart extends MX_Controller {
   }
 
   function _create_checkout_token($session_id) {
-    $this->load->module('site_security');
     $encrypted_string = $this->site_security->_encrypt_string($session_id);
     // remove dodgy characters
     $checkedout_token = str_replace('+', '-plus-', $encrypted_string);
@@ -48,7 +47,6 @@ class Cart extends MX_Controller {
   }
 
   function _get_session_id_from_token($checkout_token) {
-    $this->load->module('site_security');
     // remove dodgy characters
     $session_id = str_replace('-plus-', '+', $checkout_token);
     $session_id = str_replace('-fwrd-', '/', $session_id);
@@ -73,39 +71,6 @@ class Cart extends MX_Controller {
     }
     return $session_id;
   }
-
-  // function test() {
-  //   $string = "Hello blue sky";
-  //   $this->load->module('site_security');
-  //   $encrypted_string = $this->site_security->_encrypt_string($string);
-  //   $decrypted_string = $this->site_security->_decrypt_string($encrypted_string);
-  //
-  //   echo "string is $string<hr>";
-  //   echo "encrypted string is $encrypted_string<hr>";
-  //   echo "decrypted string is $decrypted_string<hr>";
-  // }
-
-  // function test2() {
-  //   $string = "Hello blue sky";
-  //   $this->load->module('site_security');
-  //
-  //   $third_bit = $this->uri->segment(3);
-  //   if ($third_bit != '') {
-  //     $encrypted_string = $third_bit;
-  //   } else {
-  //     $encrypted_string = $this->site_security->_encrypt_string($string);
-  //   }
-  //
-  //   $decrypted_string = $this->site_security->_decrypt_string($encrypted_string);
-  //
-  //   echo "string is $string<hr>";
-  //   echo "encrypted string is $encrypted_string<hr>";
-  //   echo "decrypted string is $decrypted_string<hr>";
-  //
-  //   // create new encrypted string
-  //   $new_encrypted_string = $this->site_security->_encrypt_string($string);
-  //   echo anchor('cart/test2/'.$new_encrypted_string, 'refresh');
-  // }
 
   function submit_choice() {
     $submit = $this->input->post('submit', true);
@@ -152,17 +117,16 @@ class Cart extends MX_Controller {
   }
 
   function _draw_checkout_btn_fake($query,$lesson_query) {
-
-    if($query->num_rows() > 0 ){
-    foreach($query->result() as $row) {
-      $session_id = $row->session_id;
-    }
+    if($query->num_rows() > 0 ) {
+      foreach($query->result() as $row) {
+        $session_id = $row->session_id;
+      }
     }
     if($lesson_query->num_rows() > 0 )
     {
-    foreach($lesson_query->result() as $row) {
-      $session_id = $row->session_id;
-    }
+      foreach($lesson_query->result() as $row) {
+        $session_id = $row->session_id;
+      }
     }
 
     $data['checkout_token'] = $this->_create_checkout_token($session_id);
@@ -228,7 +192,6 @@ class Cart extends MX_Controller {
   }
 
   function _draw_add_to_cart($item_id) {
-
     // fetch the color & size options for this item;
     $submitted_color = $this->input->post('submitted_color', true);
     $submitted_size = $this->input->post('submitted_size', true);
@@ -255,8 +218,6 @@ class Cart extends MX_Controller {
     foreach ($query->result() as $row) {
       $size_options[$row->id] = $row->size;
     }
-
-
     $data['submitted_color'] = $submitted_color;
     $data['color_options'] = $color_options;
     $data['submitted_size'] = $submitted_size;
