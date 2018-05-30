@@ -476,7 +476,7 @@ class Lessons extends MX_Controller {
   function _generate_thumbnail($file_name) {
     $config['image_library'] = 'gd2';
     $config['source_image'] = './media/lesson_big_pics/'.$file_name;
-    $config['new_image'] = './media/lesson_pics/'.$file_name;
+    $config['new_image'] = './media/lesson_small_pics/'.$file_name;
     $config['maintain_ratio'] = true;
     $config['width'] = 200;
     $config['height'] = 200;

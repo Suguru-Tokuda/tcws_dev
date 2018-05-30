@@ -6,11 +6,13 @@
         $grand_total = 0;
         $this->load->module('boat_pics');
         $this->load->module('timedate');
-        if($query->num_rows() > 0){
-        foreach ($query->result() as $row) {
+        if($boat_rental_query->num_rows() > 0){
+        foreach ($boat_rental_query->result() as $row) {
           $boat_id = $row->boat_id;
           $picture_name = $this->boat_pics->get_first_picture_name_for_boat_rental_id($boat_id);
-          $sub_total = $row->boat_fee;
+          $boat_fee = $row->boat_fee;
+          $hours = $row->hours;
+          $sub_total = $row->boat_fee * $hours;
           $sub_total_desc = number_format($sub_total, 2);
           $grand_total += $sub_total;
           $start_date = $row->booking_start_date;
@@ -33,17 +35,14 @@
             </td>
             <td>
               <b>Boat Name: <?= $row->boat_name ?></b><br>
-              Rental Price: <?= $currency_symbol.$row->boat_fee ?><br>
+              Rental Price: <?= $currency_symbol.$boat_fee ?><br>
               Date: <?= $date ?><br>
               Start time: <?= $start_time ?><br>
               End Time: <?= $end_time ?> <br>
+              Hours: <?= $hours ?>
             </td>
             <td><?= $currency_symbol.$sub_total_desc ?></td>
-            <td>
-              <?php
-              echo anchor('boat_rental_basket/remove/'.$row->id, "Remove");
-              ?>
-            </td>
+            <td><?php echo anchor('boat_rental_basket/remove/'.$row->id, "Remove"); ?></td>
           </tr>
           <?php
         }
@@ -79,18 +78,14 @@
           </td>
           <td>
             <b>Lesson Name: <?= $row->lesson_name ?></b><br>
-            Lesson Price: <?= $currency_symbol.$row->lesson_fee ?><br><br>
-            Total Quantity: <?= $row->booking_qty ?><br><br>
+            Lesson Price: <?= $currency_symbol.$row->lesson_fee ?><br>
+            Quantity: <?= $row->booking_qty ?><br>
             Date: <?= $date ?><br>
             Start time: <?= $start_time ?><br>
             End Time: <?= $end_time ?> <br>
           </td>
           <td><?= $currency_symbol.$sub_total_desc ?></td>
-          <td>
-            <?php
-            echo anchor('lesson_basket/remove/'.$row->id, "Remove");
-            ?>
-          </td>
+          <td><?php echo anchor('lesson_basket/remove/'.$row->id, "Remove"); ?></td>
         </tr>
         <?php
       }
@@ -99,6 +94,7 @@
           <tr>
             <td colspan="2" style="font-weight: bold; text-align: right;">Total</td>
             <td style="font-weight: bold;"><?= $currency_symbol.number_format($grand_total, 2) ?></td>
+            <td></td>
           </tr>
         </table>
     </div>

@@ -10,7 +10,6 @@ class Cart extends MX_Controller {
   function index() {
     $session_id = $this->session->session_id;
     $shopper_id = $this->site_security->_get_user_id();
-
     $third_bit = $this->uri->segment(3);
     if ($third_bit != '') {
       // if the token isn't empty, try to get session_id from token
@@ -21,20 +20,28 @@ class Cart extends MX_Controller {
 
     if (!is_numeric($shopper_id)) {
       $shopper_id = 0;
+    } else {
+      $this->_set_shopper_id("boat_rental_basket", $shopper_id, $session_id);
+      $this->_set_shopper_id("lesson_basket", $shopper_id, $session_id);
     }
-    $table = "boat_rental_basket";
+
+    $boat_rental_table = "boat_rental_basket";
     $lesson_table = "lesson_basket";
-    //$date['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "cart";
-    $data['query'] = $this->_fetch_cart_content($session_id, $shopper_id, $table);
+    $data['boat_rental_query'] = $this->_fetch_cart_content($session_id, $shopper_id, $boat_rental_table);
     $data['lesson_query'] = $this->_fetch_lesson_cart_content($session_id, $shopper_id, $lesson_table);
-    // count the number of items in the cart
-    $total_num = $data['query']->num_rows() + $data['lesson_query']->num_rows() ;
-    $data['num_rows'] = $data['query']->num_rows();
+    $total_num = $data['boat_rental_query']->num_rows() + $data['lesson_query']->num_rows() ;
+    $data['num_rows'] = $total_num;
     $data['lesson_num_rows'] = $data['lesson_query']->num_rows();
     $data['showing_statement'] = $this->_get_showing_statement($total_num);
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
+  }
+
+
+  function _set_shopper_id($table, $shopper_id, $session_id) {
+    $mysql_query = "UPDATE $table SET shopper_id = ? WHERE session_id = ?";
+    $this->db->query($mysql_query, array($shopper_id, $session_id));
   }
 
   function _create_checkout_token($session_id) {
@@ -74,17 +81,16 @@ class Cart extends MX_Controller {
 
   function submit_choice() {
     $submit = $this->input->post('submit', true);
-
     if ($submit == "no") {
-      $checkout_token = $this->input->post('checkout_token', true);
-      redirect('cart/index/'.$checkout_token);
+      $this->session->set_userdata('refer_url', 'cart');
+      redirect('youraccount/start');
     } else if ($submit == "yes") {
+      $this->session->set_userdata('refer_url', 'cart');
       redirect('youraccount/start');
     }
   }
 
   function go_to_checkout() {
-    echo "here"; die();
     $this->load->module('site_security');
     $shopper_id = $this->site_security->_get_user_id();
     if (!is_numeric($shopper_id)) {
@@ -97,33 +103,31 @@ class Cart extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  function _attempt_draw_checkout_btn($query,$lesson_query) {
-    $data['query'] = $query;
+  function _attempt_draw_checkout_btn($boat_rental_query, $lesson_query) {
+    $data['boat_rental_query'] = $boat_rental_query;
     $data['lesson_query'] = $lesson_query;
     $this->load->module('site_security');
     $shopper_id = $this->site_security->_get_user_id();
     $third_bit = $this->uri->segment(3);
-
     if (!is_numeric($shopper_id) AND ($third_bit == '')) {
-      $this->_draw_checkout_btn_fake($query,$lesson_query);
+      $this->_draw_checkout_btn_fake($boat_rental_query, $lesson_query);
     } else {
-      $this->_draw_checkout_btn_real($query,$lesson_query);
+      $this->_draw_checkout_btn_real($boat_rental_query, $lesson_query);
     }
   }
 
-  function _draw_checkout_btn_real($query,$lesson_query) {
+  function _draw_checkout_btn_real($boat_rental_query, $lesson_query) {
     $this->load->module('paypal');
-    $this->paypal->_draw_checkout_btn($query,$lesson_query);
+    $this->paypal->_draw_checkout_btn($boat_rental_query, $lesson_query);
   }
 
-  function _draw_checkout_btn_fake($query,$lesson_query) {
-    if($query->num_rows() > 0 ) {
-      foreach($query->result() as $row) {
+  function _draw_checkout_btn_fake($boat_rental_query, $lesson_query) {
+    if($boat_rental_query->num_rows() > 0) {
+      foreach($boat_rental_query->result() as $row) {
         $session_id = $row->session_id;
       }
     }
-    if($lesson_query->num_rows() > 0 )
-    {
+    if($lesson_query->num_rows() > 0) {
       foreach($lesson_query->result() as $row) {
         $session_id = $row->session_id;
       }
@@ -133,7 +137,7 @@ class Cart extends MX_Controller {
     $this->load->view('checkout_btn_fake', $data);
   }
 
-  function _draw_cart_content($query, $lesson_query, $user_type) {
+  function _draw_cart_content($boat_rental_query, $lesson_query, $user_type) {
     // NOTE: user_type can be 'public' or 'admin'
     $this->load->module('site_settings');
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
@@ -143,7 +147,7 @@ class Cart extends MX_Controller {
     } else {
       $view_file = 'cart_contents_admin';
     }
-    $data['query'] = $query;
+    $data['boat_rental_query'] = $boat_rental_query;
     $data['lesson_query'] = $lesson_query;
     $this->load->view($view_file, $data);
   }
@@ -152,13 +156,13 @@ class Cart extends MX_Controller {
     // fetch the contents of the shopping cart
     $this->load->module($table);
     $mysql_query = "
-    SELECT sb.*, si.picture_name,si.priority
-    FROM boat_rental_basket sb LEFT JOIN boat_pics si ON sb.boat_id = si.boat_rental_id
+    SELECT b.*, p.picture_name, p.priority
+    FROM $table b LEFT JOIN boat_pics p ON b.boat_id = p.boat_rental_id
     ";
     if ($shopper_id > 0) {
-      $where_condition = " WHERE sb.shopper_id = $shopper_id and ( si.priority is null or si.priority = 1)";
+      $where_condition = " WHERE b.shopper_id = $shopper_id OR b.session_id = '$session_id' AND ( p.priority is null or p.priority = 1)";
     } else {
-      $where_condition = " WHERE sb.session_id = '$session_id' and ( si.priority is null or si.priority = 1)";
+      $where_condition = " WHERE b.session_id = '$session_id' AND ( p.priority is null or p.priority = 1)";
     }
     $mysql_query.= $where_condition;
     $query = $this->boat_rental_basket->_custom_query($mysql_query);
@@ -169,13 +173,13 @@ class Cart extends MX_Controller {
     // fetch the contents of the shopping cart
     $this->load->module($table);
     $mysql_query = "
-    SELECT sb.*, si.picture_name
-    FROM lesson_basket sb LEFT JOIN lesson_pics si ON sb.lesson_id = si.lesson_id
+    SELECT b.*, p.picture_name
+    FROM $table b LEFT JOIN lesson_pics p ON b.lesson_id = p.lesson_id
     ";
     if ($shopper_id > 0) {
-      $where_condition = " WHERE sb.shopper_id = $shopper_id and ( si.priority is null or si.priority = 1)";
+      $where_condition = " WHERE b.shopper_id = $shopper_id OR b.session_id = '$session_id' AND (p.priority is null or p.priority = 1)";
     } else {
-      $where_condition = " WHERE sb.session_id = '$session_id' and ( si.priority is null or si.priority = 1)";
+      $where_condition = " WHERE b.session_id = '$session_id' AND (p.priority is null or p.priority = 1)";
     }
     $mysql_query.= $where_condition;
     $query = $this->lesson_basket->_custom_query($mysql_query);

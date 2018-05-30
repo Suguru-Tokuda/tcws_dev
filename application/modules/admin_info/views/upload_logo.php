@@ -49,6 +49,7 @@ $form_location = base_url().'admin_info/do_upload_logo/'.$admin_id;
      </button>
      <button type="submit" name="submit" class="btn btn-default" value="cancel">Back</button>
    </div>
+ </form>
     <?php
     if (isset($logo_name)) {
       $logo_location = base_url().'media/logos/'.$logo_name;

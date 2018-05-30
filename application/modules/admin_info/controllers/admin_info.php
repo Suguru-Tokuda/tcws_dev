@@ -5,7 +5,6 @@ class Admin_info extends MX_Controller {
     parent::__construct();
     $this->load->library('session');
     $this->load->library('upload');
-    $this->load->library('image_lib');
     $this->load->module('custom_validation');
   }
 
@@ -324,13 +323,22 @@ class Admin_info extends MX_Controller {
     if ($submit == "cancel") {
       redirect('admin_info/view_admin_info/');
     } else if ($submit == "upload") {
+      $mysql_query = "SELECT * FROM admin_info WHERE id = ?";
+      $logo_name = $this->db->query($mysql_query, array($admin_id))->row()->logo_name;
+      // delete the current one
+      if ($logo_name != "") {
+        $logo_path = './media/logos/'.$logo_name;
+        if (file_exists($logo_path)) {
+          unlink($logo_path);
+        }
+      }
+
       $config['upload_path'] = './media/logos';
       $config['allowed_types'] = 'gif|jpg|png|jpeg';
       $config['max_size'] = 2048;
       $file_name = $this->site_security->generate_random_string(16);
       $config['file_name'] = $file_name;
       $this->upload->initialize($config);
-
       if (!$this->upload->do_upload('userfile')) {
         // upload failure.
         $mysql_query = "SELECT * FROM admin_info WHERE id = ?";
@@ -353,6 +361,15 @@ class Admin_info extends MX_Controller {
         $data = array('upload_data' => $this->upload->data());
         $upload_data = $data['upload_data'];
         $file_name = $upload_data['file_name'];
+
+        // resize the logo
+        $config['image_library'] = 'gd2';
+        $config['source_image'] = './media/logos/'.$file_name;
+        $config['maintain_ratio'] = true;
+        $config['width'] = 200;
+        $config['height'] = 200;
+        $this->load->library('image_lib', $config);
+        $this->image_lib->resize();
 
         // update db
         $update_statement = "UPDATE admin_info SET logo_name = ? WHERE id = ?";
@@ -450,6 +467,15 @@ class Admin_info extends MX_Controller {
         $upload_data = $data['upload_data'];
         $file_name = $upload_data['file_name'];
 
+        // resize the logo
+        $config['image_library'] = 'gd2';
+        $config['source_image'] = './media/carousel/'.$file_name;
+        $config['maintain_ratio'] = true;
+        $config['width'] = 950;
+        $config['height'] = 500;
+        $this->load->library('image_lib', $config);
+        $this->image_lib->resize();
+
         $priority_to_assign = $this->_get_greatest_carousel_priority() + 1;
         $insert_statement = "INSERT INTO carousel (picture_name, priority) VALUES (?, ?)";
         $this->db->query($insert_statement, array($file_name, $priority_to_assign));
@@ -518,6 +544,42 @@ class Admin_info extends MX_Controller {
     $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
     $this->session->set_flashdata('admin', $value);
     redirect('admin_info/upload_carousel/'.$admin_id);
+  }
+
+  function sort() {
+    $origin = $this->input->post('origin', true);
+    $dest = $this->input->post('dest', true);
+    $origin++;
+    $dest++;
+
+    if ($origin != $dest) {
+      $mysql_query = "SELECT * FROM carousel WHERE priority = ?";
+      $target = $this->db->query($mysql_query, array($origin))->row();
+
+      $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
+      $query = $this->db->query($mysql_query);
+
+      if ($origin < $dest) {
+        foreach ($query->result() as $row) {
+          if ($row->id != $target->id && $row->priority <= $dest && $row->priority >= $origin) {
+            $new_priority = $row->priority - 1;
+            $update_statement = "UPDATE carousel SET priority = ? WHERE id = ?";
+            $this->db->query($update_statement, array($new_priority, $row->id));
+          }
+        }
+      } else {
+        foreach ($query->result() as $row) {
+          if ($row->id != $target->id && $row->priority >= $dest && $row->priority <= $origin) {
+            $new_priority = $row->priority + 1;
+            $update_statement = "UPDATE carousel SET priority = ? WHERE id = ?";
+            $this->db->query($update_statement, array($new_priority, $row->id));
+          }
+        }
+      }
+
+      $update_statement = "UPDATE carousel SET priority = ? WHERE id = ?";
+      $this->db->query($update_statement, array($dest, $target->id));
+    }
   }
 
   function get($order_by) {

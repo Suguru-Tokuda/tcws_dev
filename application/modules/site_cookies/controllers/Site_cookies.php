@@ -5,34 +5,6 @@ class Site_cookies extends MX_Controller {
     parent::__construct();
   }
 
-  function test() {
-    echo anchor('site_cookies/test_set', 'Set The Cookie');
-    echo "<hr>";
-    echo anchor('site_cookies/test_destroy', 'Destroy The Cookie');
-
-    $user_id = $this->_attempt_get_id();
-    if (is_numeric($user_id)) {
-      echo "<h1>You are the $user_id</h1>";
-    }
-  }
-
-  function test_set() {
-    $user_id = 88;
-    $this->_set_cookie($user_id);
-    echo "The Cookie has now been set.<br>";
-    echo anchor('site_cookies/test', 'Get The Cookie');
-    echo "<hr>";
-    echo anchor('site_cookies/test_destroy', 'Destroy The Cookie');
-  }
-
-  function test_destroy() {
-    $this->_destroy_cookie();
-    echo "The Cookie has been destroyed.<br>";
-    echo anchor('site_cookies/test', 'Attempt to get the cookie');
-    echo "<hr>";
-    echo anchor('site_cookies/test_destroy', 'Destroy The Cookie');
-  }
-
   function _set_cookie($user_id) {
     $this->load->module('site_security');
     $this->load->module('site_settings');

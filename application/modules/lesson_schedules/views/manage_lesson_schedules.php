@@ -1,8 +1,8 @@
 <h3 class="mb"><?= $headline ?></h3>
 <div class="form-panel">
   <h4><?= $lesson_name ?></h4>
-  <a href="<?= base_url() ?>lesson_schedules/create_lesson_schedule/<?= $lesson_id ?>" ><button type="button" class="btn btn-warning">Create Schedule</button></a>
-  <a href="<?= base_url() ?>lessons/create_lesson/<?= $lesson_id ?>" ><button type="button" class="btn">Back to Lesson Management</button></a>
+  <a href="<?= base_url() ?>lesson_schedules/create_lesson_schedule/<?= $lesson_id ?>" ><button type="button" class="btn btn-primary">Create Schedule</button></a>
+  <a href="<?= base_url() ?>lessons/create_lesson/<?= $lesson_id ?>" ><button type="button" class="btn btn-info">Back to Lesson Management</button></a>
   <?php
   $num_rows = $query->num_rows();
   echo $pagination;

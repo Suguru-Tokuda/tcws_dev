@@ -208,6 +208,10 @@ class Youraccount extends MX_Controller {
       $this->session->set_userdata('user_name', $user_name);
     }
     // send the user to the private page
+    if ($this->session->has_userdata('refer_url')) {
+      $refer_url = $this->session->userdata('refer_url');
+      redirect($refer_url);
+    }
     redirect('youraccount/welcome');
   }
 
@@ -224,6 +228,10 @@ class Youraccount extends MX_Controller {
       if ($this->custom_validation->run() == true) {
         // insert a new account into DB
         $this->_process_create_account();
+        if ($this->session->has_userdata('refer_url')) {
+          $refer_url = $this->session->userdata('refer_url');
+          redirect($refer_url);
+        }
         $data['view_file'] = "account_create_success";
         $this->load->module('templates');
         $this->templates->public_bootstrap($data);
