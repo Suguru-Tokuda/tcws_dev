@@ -41,7 +41,7 @@
             <td><?= $currency_symbol.$sub_total_desc ?></td>
             <td>
               <?php
-              echo anchor('boat_basket/remove/'.$row->id, "Remove");
+              echo anchor('boat_rental_basket/remove/'.$row->id, "Remove");
               ?>
             </td>
           </tr>

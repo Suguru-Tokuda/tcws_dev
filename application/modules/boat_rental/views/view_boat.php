@@ -4,61 +4,21 @@ $(function() {
     'format': 'mm/dd/yyyy',
     'autoclose': true
   });
-
-  $('#boat_start_time').timepicker({
+  $('#boat_start_date').timepicker({
     'minTime': '06:00am',
     'maxTime': '06:00pm',
-    // 'showDuration': true
   });
-  // $('#boat_start_time').on('change', function() {
-  //   var boat_start_time = $('#boat_start_time').val();
-  //   $('#boat_end_time').timepicker({
-  //     'minTime': 0 + boat_start_time,
-  //     'maxTime': '8:00pm',
-  //     'showDuration': true
-  //   });
-  // });
-  $('#boat_end_time').timepicker({
+  $('#boat_end_date').timepicker({
     'minTime': '06:00am',
     'maxTime': '08:00pm',
-    // 'showDuration': true
   });
 });
-// $(function(e) {
-//   $('#checkAvailability').on('submit',function(){
-//     var boat_date = $('#boat_date').val();
-//     var boat_start_time = $('#boat_start_time').val();
-//     var boat_end_time = $('#boat_end_time').val();
-//     var id = "<?= nl2br($boat_rental_id)?>";
-//     $.ajax({
-//       url: "<?= base_url().'boat_rental_schedules/create_boat_schedules/'.$boat_rental_id?>",
-//       type: 'post',
-//       dataType: 'json',
-//       data:{
-//         'boat_date': boat_date,
-//         'boat_start_time': boat_start_time,
-//         'boat_end_time': boat_end_time,
-//         'boat_rental_id': id,
-//       },
-//       success: function(response){
-//         alert('===');
-//         alert(response);
-//
-//       },
-//       error: function(error) {
-//         alert(error);
-//       }
-//     });
-//   });
-// });
 </script>
-
 <?php
 if (isset($flash)) {
   echo $flash;
 }
-$form_location = base_url().'boat_rental_schedules/check_availability/'.$boat_rental_id;
-$booking_url = base_url().'boat_basket/add_to_basket';
+$form_location = base_url().'boat_rental_schedules/check_availability/';
 ?>
 <!-- Product Gallery-->
 <div class="container padding-bottom-3x mb-1">
@@ -195,21 +155,24 @@ if (isset($boat_availability_validation_msg)) {
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-4 col-form-label" for="boat_start_time" >Start time</label>
+        <label class="col-4 col-form-label" for="boat_start_date" >Start time</label>
         <div class="col-4">
-          <input class="form-control" type="text" name="boat_start_time" id="boat_start_time" value="<?= $boat_start_time ?>">
+          <input class="form-control" type="text" name="boat_start_date" id="boat_start_date" value="<?= $boat_start_date ?>">
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-4 col-form-label" for="boat_end_time">End time</label>
+        <label class="col-4 col-form-label" for="boat_end_date">End time</label>
         <div class="col-4">
-          <input class="form-control" type="text" name ="boat_end_time" id="boat_end_time" value="<?= $boat_end_time ?>">
+          <input class="form-control" type="text" name ="boat_end_date" id="boat_end_date" value="<?= $boat_end_date ?>">
         </div>
       </div>
       <div class="form-group">
         <div class="col-md-offset-3 col-md-4">
           <button class="btn btn-primary" type="submit" name="submit" id="boat_rental_id" value="submit">Book Boat</button>
         </div>
+        <input type="hidden" name="boat_name" value="<?= $boat_name ?>">
+        <input type="hidden" name="boat_fee" value="<?= $boat_rental_fee ?>" >
+        <input type="hidden" name="boat_rental_id" value="<?= $boat_rental_id ?>" >
       </form>
     </div>
   </div>

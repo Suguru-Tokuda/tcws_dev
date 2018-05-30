@@ -162,8 +162,8 @@ class Boat_rental extends MX_Controller {
     $boat_date_data = $this->get_date_from_session();
 
     $data['boat_date'] = $boat_date_data['boat_date'];
-    $data['boat_start_time'] = $boat_date_data['boat_start_time'];
-    $data['boat_end_time'] = $boat_date_data['boat_end_time'];
+    $data['boat_start_date'] = $boat_date_data['boat_start_date'];
+    $data['boat_end_date'] = $boat_date_data['boat_end_date'];
     $data['flash'] = $this->session->flashdata('boat');
     $currency_symbol = $this->site_settings->_get_currency_symbol();
     $data['boat_rental_id'] = $boat_rental_id;
@@ -189,17 +189,17 @@ class Boat_rental extends MX_Controller {
     } else {
       $data['boat_date'] = "";
     }
-    if ($this->session->has_userdata('boat_start_time')) {
-      $data['boat_start_time'] = $this->session->userdata('boat_start_time');
-      $this->session->unset_userdata('boat_start_time');
+    if ($this->session->has_userdata('boat_start_date')) {
+      $data['boat_start_date'] = $this->session->userdata('boat_start_date');
+      $this->session->unset_userdata('boat_start_date');
     } else {
-      $data['boat_start_time'] = "";
+      $data['boat_start_date'] = "";
     }
-    if ($this->session->has_userdata('boat_end_time')) {
-      $data['boat_end_time'] = $this->session->userdata('boat_end_time');
-      $this->session->unset_userdata('boat_end_time');
+    if ($this->session->has_userdata('boat_end_date')) {
+      $data['boat_end_date'] = $this->session->userdata('boat_end_date');
+      $this->session->unset_userdata('boat_end_date');
     } else {
-      $data['boat_end_time'] = "";
+      $data['boat_end_date'] = "";
     }
     return $data;
   }

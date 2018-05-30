@@ -1,12 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Mdl_boat_basket extends CI_Model {
+class Mdl_boat_rental_basket extends CI_Model {
 
   function __construct() {
     parent::__construct();
   }
 
   function get_table() {
-    $table = "boat_basket";
+    $table = "boat_rental_basket";
     return $table;
   }
 

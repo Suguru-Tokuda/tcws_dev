@@ -7,8 +7,7 @@ class Boat_rental_schedules extends MX_Controller {
     $this->load->module('custom_pagination');
   }
 
-  function view_schedules($boat_rental_id)
-  {
+  function view_schedules($boat_rental_id) {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
     $use_limit = false;
@@ -45,7 +44,8 @@ class Boat_rental_schedules extends MX_Controller {
     return $mysql_query;
   }
 
-  function check_availability($boat_rental_id) {
+  function check_availability() {
+    $boat_rental_id = $this->input->post('boat_rental_id', true);
     $this->load->module('site_security');
     if (!is_numeric($boat_rental_id)) {
       redirect('site_security/not_allowed');
@@ -57,11 +57,10 @@ class Boat_rental_schedules extends MX_Controller {
     $boat_rental = $this->boat_rental->get_where($boat_rental_id)->row();
     $boat_url = $boat_rental->boat_url;
     $submit = $this->input->post('submit', true);
-
     if ($submit == "submit") {
       $data = $this->fetch_date_from_post();
-      $boat_start_date_str = $data['boat_date'].' '.$data['boat_start_time'];
-      $boat_end_date_str = $data['boat_date'].' '.$data['boat_end_time'];
+      $boat_start_date_str = $data['boat_date'].' '.$data['boat_start_date'];
+      $boat_end_date_str = $data['boat_date'].' '.$data['boat_end_date'];
       $boat_start_date = $this->timedate->make_timestamp_from_datetime($boat_start_date_str);
       $boat_end_date = $this->timedate->make_timestamp_from_datetime($boat_end_date_str);
 
@@ -83,27 +82,12 @@ class Boat_rental_schedules extends MX_Controller {
 
       if ($has_two_hour_gap == false || $is_available == false || $is_good_order == false) {
         $this->session->set_userdata('boat_date', $data['boat_date']);
-        $this->session->set_userdata('boat_start_time', $data['boat_start_time']);
-        $this->session->set_userdata('boat_end_time', $data['boat_end_time']);
+        $this->session->set_userdata('boat_start_date', $data['boat_start_date']);
+        $this->session->set_userdata('boat_end_date', $data['boat_end_date']);
         redirect('boat_rental/view_boat/'.$boat_url);
       } else if ($has_two_hour_gap && $is_available && $is_good_order) {
-        $this->load->module('boat_basket');
-        $this->load->module('site_security');
-        $this->load->module('boat_rental');
-
-        $insert_data['session_id'] = $this->session->session_id;
-        $insert_data['boat_name'] = $boat_rental->boat_name;
-        $difference = $boat_end_date - $boat_start_date;
-        $hours= round($difference / 3600);
-        $total_fee = $boat_rental->boat_rental_fee * $hours;
-        $insert_data['boat_fee'] = $total_fee;
-        $insert_data['boat_id'] =  $boat_rental_id;
-        $insert_data['booking_start_date'] = $boat_start_date;
-        $insert_data['booking_end_date'] =  $boat_end_date;
-        $insert_data['date_added'] = time();
-        $insert_data['shopper_id'] = $this->site_security->_get_user_id();
-        $insert_data['ip_address'] = $this->input->ip_address();
-        $this->boat_basket->add_to_basket($insert_data);
+        $this->load->module('boat_rental_basket');
+        $this->boat_rental_basket->add_to_basket();
        }
     }
 
@@ -154,8 +138,8 @@ class Boat_rental_schedules extends MX_Controller {
 
   function fetch_date_from_post() {
     $data['boat_date'] = $this->input->post('boat_date', true);
-    $data['boat_start_time'] = $this->input->post('boat_start_time', true);
-    $data['boat_end_time'] = $this->input->post('boat_end_time', true);
+    $data['boat_start_date'] = $this->input->post('boat_start_date', true);
+    $data['boat_end_date'] = $this->input->post('boat_end_date', true);
     return $data;
   }
 

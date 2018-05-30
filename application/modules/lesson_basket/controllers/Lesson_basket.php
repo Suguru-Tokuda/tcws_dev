@@ -79,7 +79,6 @@ class Lesson_basket extends MX_Controller {
     $data['shopper_id'] = $shopper_id;
     $data['ip_address'] = $this->input->ip_address();
     return $data;
-
   }
 
   function get($order_by) {
