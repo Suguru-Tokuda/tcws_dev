@@ -89,4 +89,10 @@ class Site_security extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
+  function not_found() {
+    $data['view_file'] = 'not_found';
+    $this->load->module('templates');
+    $this->templates->public_bootstrap($data);
+  }
+
 }

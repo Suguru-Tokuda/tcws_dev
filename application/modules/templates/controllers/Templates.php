@@ -56,8 +56,4 @@ class Templates extends MX_Controller {
     $this->load->view('admin', $data);
   }
 
-  function show_fake_bootstrap() {
-    $this->load->view('fake_bootstrap');
-  }
-
 }
