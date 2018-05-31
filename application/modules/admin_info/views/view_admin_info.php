@@ -1,5 +1,5 @@
-<h1>Admin Information</h1>
 <div class="form-panel">
+  <h2>Admin Information</h2>
   <?php
   if (isset($flash)) {
     echo $flash;

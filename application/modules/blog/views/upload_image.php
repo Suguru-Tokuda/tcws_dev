@@ -48,7 +48,7 @@ img#blankImg {
         </div>
         <div class="form-actions">
           <button type="submit" name="submit" class="btn btn-primary" value="upload">Upload</button>
-          <button type="submit" name="submit" class="btn" value="cancel">Back</button>
+          <button type="submit" name="submit" class="btn btn-default" value="cancel">Back</button>
         </div>
     </form>
 
@@ -65,7 +65,7 @@ img#blankImg {
           $picture_location = base_url()."media/blog_big_pics/".$row->picture_name;
           $priority = $row->priority;
           ?>
-          <li style="width: 250px;" id="<?= $row->id?>">
+          <li style="width: 250px; background-color: white;" id="<?= $row->id?>">
             <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px">
             <?php echo anchor($delete_image_url, 'Remove'); ?>
           </li>

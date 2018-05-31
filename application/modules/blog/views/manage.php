@@ -18,7 +18,7 @@
               <table class="table table-bordered table-striped table-condensed">
             <thead>
               <tr>
-                <th class="col-sm-1">Thumnail</th>
+                <th class="col-sm-1">Thumbnail</th>
                 <th class="col-sm-1">Date Published</th>
                 <th class="col-sm-1">Author</th>
                 <th class="col-sm-3">Blog URL</th>

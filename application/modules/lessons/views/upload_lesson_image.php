@@ -75,11 +75,9 @@ if ($num_rows > 0) {
       $picture_location = base_url()."media/lesson_big_pics/".$row->picture_name;
       $priority = $row->priority;
       ?>
-      <li style="width: 250px;" id="<?= $row->id?>">
+      <li style="width: 250px; background-color: white;" id="<?= $row->id?>">
           <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px">
-          <?php
-          echo anchor(base_url().'lessons/delete_image/'.$lesson_id.'/'.$row->id, 'Remove');
-          ?>
+          <?php echo anchor(base_url().'lessons/delete_image/'.$lesson_id.'/'.$row->id, 'Remove'); ?>
       </li>
       <?php
     }

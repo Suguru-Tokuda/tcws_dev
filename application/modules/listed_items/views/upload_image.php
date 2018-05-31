@@ -21,7 +21,6 @@ img#blankImg {
   max-width: 20%;
 }
 </style>
-
 <?php
 $item_url = $this->uri->segment(3);
 $form_location = base_url().'listed_items/do_upload/'.$item_url;

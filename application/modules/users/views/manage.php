@@ -16,7 +16,7 @@ $create_account_url = base_url()."users/create";
         <table class="table table-striped table-bordered bootstrap-datatable datatable">
           <thead>
             <tr>
-              <th>Usename</th>
+              <th>Username</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Date Created</th>
