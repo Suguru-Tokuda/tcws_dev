@@ -23,9 +23,9 @@ if(is_numeric($boat_rental_id))
   <?php
   if (!empty($boat_rental_id)) {
     ?>
-    <a href="<?= base_url() ?>boat_rental_schedules/view_schedules/<?= $boat_rental_id ?>" ><button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i>&nbsp;&nbsp;View Schedule</button></a>
-    <a href="<?= base_url() ?>boat_rental/upload_boat_image/<?= $boat_rental_id ?>" ><button type="button" class="btn btn-primary"><i class="fa fa-camera"></i>&nbsp;&nbsp;Manage Images</button></a>
-    <a href="<?= base_url() ?>boat_rental/view_boat/<?= $boat_url ?>" ><button type="button" class="btn btn-info"><i class="fa fa-laptop"></i>&nbsp;&nbsp;View Boats On Main Page</button></a>
+    <a href="<?= base_url() ?>boat_rental/view_boat/<?= $boat_url ?>" ><button type="button" class="btn btn-warning"><i class="fa fa-external-link"></i>&nbsp;&nbsp;View Boats On Main Page</button></a>
+    <a href="<?= base_url() ?>boat_rental_schedules/view_schedules/<?= $boat_rental_id ?>" ><button type="button" class="btn btn-success"><i class="fa fa-calendar"></i>&nbsp;&nbsp;View Schedule</button></a>
+    <a href="<?= base_url() ?>boat_rental/upload_boat_image/<?= $boat_rental_id ?>" ><button type="button" class="btn btn-primary"><i class="fa fa-image"></i>&nbsp;&nbsp;Manage Images</button></a>
     <a href="<?= base_url() ?>boat_rental/deleteconf/<?= $boat_rental_id ?>" ><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Delete Boat</button></a>
     <a href="<?= base_url() ?>boat_rental/manage_boat_rental" ><button type="button" class="btn btn-default">Back to All Boats</button></a>
     <p style="margin-top: 20px;"></p>

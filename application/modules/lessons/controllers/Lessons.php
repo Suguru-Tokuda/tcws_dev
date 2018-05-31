@@ -366,6 +366,7 @@ class Lessons extends MX_Controller {
 
     $mysql_query = "SELECT * FROM lesson_pics WHERE lesson_id = $lesson_id ORDER BY priority";
     $query = $this->_custom_query($mysql_query);
+    $data['sort_this'] = true;
     $data['query'] = $query;
     $data['lesson_id'] = $lesson_id;
     $data['num_rows'] = $query->num_rows(); // number of pictures that an item has
@@ -375,6 +376,18 @@ class Lessons extends MX_Controller {
     $data['sort_this'] = true;
     $this->load->module('templates');
     $this->templates->admin($data);
+  }
+
+  function sort() {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+    $number = $this->input->post('number', true);
+
+    for ($i = 1; $i <= $number; $i++) {
+      $id = $_POST['order'.$i];
+      $update_statement = "UPDATE lesson_pics SET priority = ? WHERE id = ?";
+      $this->db->query($update_statement, array($i, $id));
+    }
   }
 
   function do_upload($lesson_id) {

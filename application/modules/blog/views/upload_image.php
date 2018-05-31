@@ -1,13 +1,28 @@
+<style>
+#file {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  cursor: pointer;
+}
+div.uploadBtn {
+  width: 115px;
+  height: 40px;
+  background: url('https://lh6.googleusercontent.com/-dqTIJRTqEAQ/UJaofTQm3hI/AAAAAAAABHo/w7ruR1SOIsA/s157/upload.png');
+  position: relative;
+  background-size: 100%;
+  cursor: pointer;
+}
+.imageUploadedOrNot {
+  display: none;
+}
+img#blankImg {
+  max-width: 20%;
+}
+</style>
 <div class="form-panel">
-  <h1><?= $headline ?></h1>
-  <div class="row-fluid sortable">
-    <div class="box span12">
-      <div class="box-header" data-original-title>
-        <div class="box-icon">
-          <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-          <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
-        </div>
-      </div>
+  <h2><?= $headline ?></h2>
       <?php
       if (isset($flash)) {
         echo $flash;
@@ -18,25 +33,23 @@
         }
       }
       ?>
+      <div class="imageUploadedOrNot">
+        <h5>Preview:</h5>
+        <img src="#" id="blankImg">
+      </div>
       <?php
       // This line adds attributes into a form. No need to put <form...> manually
       $attributes = array('class' => 'form-horizontal', 'id' => 'myform');
-      echo form_open_multipart('blog/do_upload/'.$blog_id, $attributes);
+      echo form_open_multipart('blog/do_upload/'.$blog_id);
       ?>
-      <!-- <form class="form-horizontal"> -->
-      <p style="margin-top: 24px;">Please choose a file from your computer and then press "Upload".</p>
-      <fieldset>
-        <div class="control-group" style="height: 200px;">
-          <label class="control-label" for="fileInput">File input</label>
-          <div class="controls">
-            <input type="file" class="input-file uniform_on" name="userfile" id="fileInput">
-          </div>
+        <div class="form-group">
+          <label class="control-label">Image</label>
+            <div class="uploadBtn"><input type="file" class="input-file uniform_on" name="userfile" id="file"></div>
         </div>
         <div class="form-actions">
           <button type="submit" name="submit" class="btn btn-primary" value="upload">Upload</button>
           <button type="submit" name="submit" class="btn" value="cancel">Back</button>
         </div>
-      </fieldset>
     </form>
 
     <?php
@@ -54,19 +67,13 @@
           ?>
           <li style="width: 250px;" id="<?= $row->id?>">
             <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px">
-            <?php
-            echo anchor($delete_image_url, 'Remove');
-            ?>
+            <?php echo anchor($delete_image_url, 'Remove'); ?>
           </li>
-          <?php
-        }
-        ?>
+          <?php } ?>
       </ul>
       <?php
     }
     ?>
-  </div>
-</div>
 </div>
 <script>
 $(function() {

@@ -17,17 +17,17 @@ if (isset($admin->company_name)) {
   $company_name = "";
 }
 if (isset($admin->facebook_link)) {
-  $facebook_link = $admin->facebook_link;
+  $facebook_link = prep_url($admin->facebook_link);
 } else {
   $facebook_link = "";
 }
 if (isset($admin->twitter_link)) {
-  $twitter_link = $admin->twitter_link;
+  $twitter_link = prep_url($admin->twitter_link);
 } else {
   $twitter_link = "";
 }
 if (isset($admin->instagram_link)) {
-  $instagram_link = $admin->instagram_link;
+  $instagram_link = prep_url($admin->instagram_link);
 } else {
   $instagram_link = "";
 }

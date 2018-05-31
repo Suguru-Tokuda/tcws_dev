@@ -10,6 +10,14 @@ class Templates extends MX_Controller {
     $this->admin($data);
   }
 
+  function _draw_top_nav_bar() {
+    $mysql_query = "SELECT * FROM admin_info WHERE id = 1";
+    $admin = $this->db->query($mysql_query)->row();
+    $logo_name = $admin->logo_name;
+    $data['logo_path'] = base_url().'/media/logos/'.$logo_name;
+    $this->load->view('top_nav', $data);
+  }
+
   function _draw_breadcrumbs($data) {
     // NOTE: for this to work, data must contain;
     // template, current_page_title, breadcrumbs_array

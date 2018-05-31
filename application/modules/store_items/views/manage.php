@@ -22,7 +22,7 @@ $create_item_url = base_url()."store_items/create";
               <th>Price</th>
               <th>Was Price</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th class="col-sm-3">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -30,6 +30,7 @@ $create_item_url = base_url()."store_items/create";
             foreach($query->result() as $row) {
               $edit_item_url = base_url()."store_items/create/".$row->id;
               $view_item_url = base_url()."store_items/view_item/".$row->item_url;
+              $item_image_url = base_url()."store_items/upload_image/".$row->id;
               $user_id = $row->user_id;
               if ($user_id == 0) {
                 $user_name = "Admin";
@@ -61,11 +62,14 @@ $create_item_url = base_url()."store_items/create";
                   <span class="label label-<?= $status_label ?>"><?= $status_desc ?></span>
                 </td>
                 <td class="center">
-                  <a class="btn btn-success" href="<?= $view_item_url ?>">
-                    <i class="fa fa-laptop"></i>&nbsp;&nbsp;View
+                  <a class="btn btn-warning" href="<?= $view_item_url ?>">
+                    <i class="fa fa-external-link"></i>&nbsp;&nbsp;View
                   </a>
                   <a class="btn btn-info" href="<?= $edit_item_url ?>">
                     <i class="fa fas fa-edit"></i>&nbsp;&nbsp;Edit
+                  </a>
+                  <a class="btn btn-primary" href="<?= $item_image_url ?>">
+                    <i class="fa fa-image"></i>&nbsp;&nbsp;Images
                   </a>
                 </td>
               </tr>

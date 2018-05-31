@@ -40,7 +40,7 @@ $form_location = base_url().'boat_rental/do_upload/'.$boat_rental_id;
   if ($num_rows < 5) {
     ?>
     <div class="imageUploadedOrNot">
-      <h5>Here's the display of your image: </h5>
+      <h5>Preview: </h5>
       <img src="#" id="blankImg">
     </div>
     <?php echo form_open_multipart($form_location);?>
@@ -50,7 +50,7 @@ $form_location = base_url().'boat_rental/do_upload/'.$boat_rental_id;
     </div>
     <div class="form-action">
       <button type="submit" name="submit" class="btn btn-primary" value="upload">Upload</button>
-      <button type="submit" name="submit" class="btn" value="cancel">Back</button>
+      <button type="submit" name="submit" class="btn btn-default" value="cancel">Back</button>
     </div>
   </form>
   <?php
@@ -76,10 +76,8 @@ if ($num_rows > 0) {
       $priority = $row->priority;
       ?>
       <li style="width: 250px;" id="<?= $row->id?>">
-          <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px;">
-          <?php
-          echo anchor(base_url().'boat_rental/delete_image/'.$boat_rental_id.'/'.$row->id, 'Remove');
-          ?>
+          <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" style="width: 200px; background-color: white;">
+          <?php echo anchor(base_url().'boat_rental/delete_image/'.$boat_rental_id.'/'.$row->id, 'Remove'); ?>
       </li>
       <?php
     }

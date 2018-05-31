@@ -1,13 +1,11 @@
-<h1><?= $headline ?></h1>
+<h2><?= $headline ?></h2>
 <?php
-
+$cancel_link = base_url().'/store_items/manage';
 if (isset($flash)) {
   echo $flash;
 }
 // This section appears only there is an update_id
 if (is_numeric($update_id)) { ?>
-  <div class="row mt">
-    <div class="col-lg-12">
       <div class="form-panel">
         <h4 class="mb"><i class="fa fas fa-edit"></i> Item Options</h4>
         <?php
@@ -15,20 +13,12 @@ if (is_numeric($update_id)) { ?>
         if ($update_id != "") {
           ?>
           <div class="box-content">
-            <a href="<?= base_url() ?>store_items/upload_image/<?= $update_id ?>" ><button type="button" class="btn btn-primary"><i class="fa fa-camera"></i>&nbsp;&nbsp;Manage Images</button></a>
+            <a href="<?= base_url() ?>store_items/upload_image/<?= $update_id ?>" ><button type="button" class="btn btn-primary"><i class="fa fa-image"></i>&nbsp;&nbsp;Manage Images</button></a>
             <a href="<?= base_url() ?>store_items/deleteconf/<?= $update_id ?>" ><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Delete Item</button></a>
             <a href="<?= base_url() ?>store_items/view_item/<?= $item_url?>" ><button type="button" class="btn btn-default"><i class="fa fa-laptop"></i>&nbsp;&nbsp;View Item In Main</button></a>
           </div>
-          <?php
-        }
-        ?>
-      </div>
-    </div>
-    <?php
-  }
-  ?>
-  <div class="col-lg-12">
-    <div class="form-panel">
+          <?php } ?>
+  <?php } ?>
       <?php
       if (isset($validation_errors)) {
         echo $validation_errors;
@@ -40,7 +30,6 @@ if (is_numeric($update_id)) { ?>
         $form_location = base_url()."store_items/create/".$update_id
         ?>
         <form class="form-horizontal style-form" method="post" action="<?= $form_location ?>">
-          <fieldset>
             <div class="form-group">
               <label class="col-sm-2 control-label" for="typeahead">Item Title </label>
               <div class="col-sm-5">
@@ -125,18 +114,14 @@ if (is_numeric($update_id)) { ?>
               <div class="form-group hidden-phone">
                 <label class="col-sm-2 col-sm-2 control-label" for="textarea2">Item Description</label>
                 <div class="col-sm-5">
-                  <textarea class="form-control" id="textarea2" rows="5" name="item_description" required><?php echo $item_description; ?></textarea>
+                  <textarea class="form-control" id="textarea2" rows="5" name="item_description" required><?= $item_description ?></textarea>
                 </div>
               </div>
 
-              <div class="form-actions">
+              <div class="form-actions col-sm-offset-2">
                 <button type="submit" class="btn btn-primary" name="submit" value="submit">Submit</button>
-                <?php
-                $cancel_link = base_url().'/store_items/manage';
-                 ?>
                 <a class="btn btn-default" href="<?= $cancel_link; ?>">Cancel</a>
               </div>
-            </fieldset>
           </form>
         </div>
       </div>

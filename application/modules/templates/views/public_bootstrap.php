@@ -39,7 +39,8 @@
   <?php
   include('top_bar.php');
   include('mobile_menu.php');
-  include('top_nav.php');
+  echo Modules::run('templates/_draw_top_nav_bar');
+  // include('top_nav.php');
   ?>
   <!-- Off-Canvas Wrapper-->
   <div class="offcanvas-wrapper">

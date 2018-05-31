@@ -19,6 +19,7 @@ $view_lessons_link = base_url().'lessons/view_lessons/'.$pagination_limit_for_le
 $view_boat_rental_link = base_url().'boat_rental/view_boat_rental/'.$pagination_limit_for_boat_rental;
 $community_link = base_url().'blog/view_blogs/'.$pagination_limit_for_blog;
 
+// logo
 $second_bit = $this->uri->segment(1);
 ?>
 <header class="navbar navbar-sticky">
@@ -35,7 +36,10 @@ $second_bit = $this->uri->segment(1);
       <a class="offcanvas-toggle menu-toggle" href="#mobile-menu" data-toggle="offcanvas"></a>
 
       <!-- Site Logo-->
-      <!-- <a class="site-logo" href="<?= base_url() ?>"><img src="#" alt="TWC"></a> -->
+      <?php if (isset($logo_path)){ ?>
+        <a class="site-logo" href="<?= base_url() ?>"><img src="<?= $logo_path ?>" alt="site_logo"></a>
+      <?php } ?>
+
     </div>
   </div>
 

@@ -40,7 +40,7 @@ $form_location = base_url().'lessons/do_upload/'.$lesson_id;
   if ($num_rows < 5) {
     ?>
     <div class="imageUploadedOrNot">
-      <h5>Here's the display of your image: </h5>
+      <h5>Preview:</h5>
       <img src="#" id="blankImg">
     </div>
     <?php echo form_open_multipart($form_location);?>
@@ -50,7 +50,7 @@ $form_location = base_url().'lessons/do_upload/'.$lesson_id;
     </div>
     <div class="form-action">
       <button type="submit" name="submit" class="btn btn-primary" value="upload">Upload</button>
-      <button type="submit" name="submit" class="btn" value="cancel">Back</button>
+      <button type="submit" name="submit" class="btn btn-default" value="cancel">Back</button>
     </div>
   </form>
   <?php
@@ -89,3 +89,15 @@ if ($num_rows > 0) {
 }
 ?>
 </div>
+<script>
+$(function() {
+  $("#file").change(function() {
+    var reader = new FileReader();
+    reader.onload = function(image) {
+      $('.imageUploadedOrNot').show(0);
+      $('#blankImg').attr('src', image.target.result);
+    }
+    reader.readAsDataURL(this.files[0]); // this refers to $('#file')
+  });
+});
+</script>

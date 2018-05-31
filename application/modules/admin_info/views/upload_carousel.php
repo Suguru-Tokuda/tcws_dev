@@ -83,37 +83,4 @@ $(function() {
     reader.readAsDataURL(this.files[0]); // this refers to $('#file')
   });
 });
-var origin = '';
-var dest = '';
-$(document).ready(function() {
-  $( "#sortlist" ).sortable( { // looks for the ID called "sortlist"
-  start: function(event, ui) {
-    origin = ui.item.index();
-  },
-  stop: function(event, ui) {
-    dest = ui.item.index();
-    saveCarouselOrderChange(origin, dest);
-  } // saveChanges() fires up when sorting happens.
-});
-$( "#sortlist" ).disableSelection();
-});
-
-function saveCarouselOrderChange(origin, dest) {
-  $dataString = "origin=" + origin;
-  $dataString += "&dest=" + dest;
-  $.ajax({
-    data: $dataString,
-    success: function(data) {
-      console.log(data);
-    },
-    error: function(response) {
-      console.log(response);
-    },
-    processData: false,
-    dataType: "text",
-    cache: false,
-    type: "POST",
-    url: '<?= base_url(); ?>admin_info/sort'
-  });
-}
 </script>

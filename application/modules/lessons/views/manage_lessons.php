@@ -27,7 +27,7 @@
             <th>Fee</th>
             <th>Schedules</ht>
             <th>Status</th>
-            <th>Actions</th>
+            <th class="col-sm-4">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -37,6 +37,7 @@
             $edit_lesson_url = base_url()."lessons/create_lesson/".$row->id;
             $view_lesson_url = base_url()."lessons/view_lesson/".$row->lesson_url;
             $lesson_schedules_url = base_url()."lesson_schedules/manage_lesson_schedules/".$row->id;
+            $lesson_images_url = base_url()."lessons/upload_lesson_image/".$row->id;
             $id = $row->id;
             $lesson_name = $row->lesson_name;
             $lesson_capacity = $row->lesson_capacity;
@@ -63,14 +64,17 @@
                <span class="label label-<?=$status_label ?>"><?= $status_desc ?></span>
              </td>
              <td class="center">
-               <a class="btn btn-success" href="<?= $view_lesson_url ?>">
+               <a class="btn btn-warning" href="<?= $view_lesson_url ?>">
                  <i class="fa fa-external-link"></i>&nbsp;&nbsp;View
                </a>
                <a class="btn btn-info" href="<?= $edit_lesson_url ?>">
                  <i class="fa fa-edit"></i>&nbsp;&nbsp;Edit
                </a>
-               <a class="btn btn-danger" href="<?= $lesson_schedules_url ?>">
+               <a class="btn btn-success" href="<?= $lesson_schedules_url ?>">
                  <i class="fa fa-calendar"></i>&nbsp;&nbsp;Schedules
+               </a>
+               <a class="btn btn-primary" href="<?= $lesson_images_url ?>">
+                 <i class="fa fa-image"></i>&nbsp;&nbsp;Lesson Images
                </a>
              </td>
            </tr>

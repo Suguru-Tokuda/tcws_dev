@@ -5,9 +5,7 @@ if (isset($flash)) {
 }
 $create_boat_url = base_url()."boat_rental/create_boat";
 ?>
-
 <a href="<?= $create_boat_url ?>"<button class="btn btn-primary" type="submit">Add New boat_rental</button></a>
-
 <div class="row-fluid sortable">
   <div class="box span12">
     <div class="green-panel" data-original-title>
@@ -25,7 +23,7 @@ $create_boat_url = base_url()."boat_rental/create_boat";
             <th>Capacity</th>
             <th>Fee</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th class="col-sm-3">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +32,7 @@ $create_boat_url = base_url()."boat_rental/create_boat";
           foreach($query->result() as $row) {
             $edit_boat_url = base_url()."boat_rental/create_boat/".$row->id;
             $view_boat_url = base_url()."boat_rental/view_boat/".$row->boat_url;
+            $boat_image_url = base_url()."boat_rental/upload_boat_image/".$row->id;
             $id = $row->id;
             $boat_name = $row->boat_name;
             $boat_capacity = $row->boat_capacity;
@@ -57,11 +56,14 @@ $create_boat_url = base_url()."boat_rental/create_boat";
                 <span class="label label-<?=$status_label ?>"><?= $status_desc ?></span>
               </td>
               <td class="center">
-                <a class="btn btn-success" href="<?= $view_boat_url ?>">
+                <a class="btn btn-warning" href="<?= $view_boat_url ?>">
                   <i class="fa fa-external-link"></i>&nbsp;&nbsp;View
                 </a>
                 <a class="btn btn-info" href="<?= $edit_boat_url ?>">
                   <i class="fa fa-edit"></i>&nbsp;&nbsp;Edit
+                </a>
+                <a class="btn btn-primary" href="<?= $boat_image_url ?>">
+                  <i class="fa fa-image"></i>&nbsp;&nbsp;Images
                 </a>
               </td>
             </tr>

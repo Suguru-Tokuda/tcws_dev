@@ -366,8 +366,7 @@ class Admin_info extends MX_Controller {
         $config['image_library'] = 'gd2';
         $config['source_image'] = './media/logos/'.$file_name;
         $config['maintain_ratio'] = true;
-        $config['width'] = 200;
-        $config['height'] = 200;
+        $config['height'] = 88;
         $this->load->library('image_lib', $config);
         $this->image_lib->resize();
 
@@ -422,6 +421,7 @@ class Admin_info extends MX_Controller {
 
     $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
     $query =$this->db->query($mysql_query);
+    $data['sort_this'] = true;
     $data['query'] = $query;
     $data['headline'] = "Carousel Pictures";
     $data['admin_id'] = $admin_id;
@@ -547,38 +547,14 @@ class Admin_info extends MX_Controller {
   }
 
   function sort() {
-    $origin = $this->input->post('origin', true);
-    $dest = $this->input->post('dest', true);
-    $origin++;
-    $dest++;
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+    $number = $this->input->post('number', true);
 
-    if ($origin != $dest) {
-      $mysql_query = "SELECT * FROM carousel WHERE priority = ?";
-      $target = $this->db->query($mysql_query, array($origin))->row();
-
-      $mysql_query = "SELECT * FROM carousel ORDER BY priority ASC";
-      $query = $this->db->query($mysql_query);
-
-      if ($origin < $dest) {
-        foreach ($query->result() as $row) {
-          if ($row->id != $target->id && $row->priority <= $dest && $row->priority >= $origin) {
-            $new_priority = $row->priority - 1;
-            $update_statement = "UPDATE carousel SET priority = ? WHERE id = ?";
-            $this->db->query($update_statement, array($new_priority, $row->id));
-          }
-        }
-      } else {
-        foreach ($query->result() as $row) {
-          if ($row->id != $target->id && $row->priority >= $dest && $row->priority <= $origin) {
-            $new_priority = $row->priority + 1;
-            $update_statement = "UPDATE carousel SET priority = ? WHERE id = ?";
-            $this->db->query($update_statement, array($new_priority, $row->id));
-          }
-        }
-      }
-
+    for ($i = 1; $i <= $number; $i++) {
+      $id = $_POST['order'.$i];
       $update_statement = "UPDATE carousel SET priority = ? WHERE id = ?";
-      $this->db->query($update_statement, array($dest, $target->id));
+      $this->db->query($update_statement, array($i, $id));
     }
   }
 

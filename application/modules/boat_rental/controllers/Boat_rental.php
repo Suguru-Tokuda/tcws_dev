@@ -390,13 +390,12 @@ class Boat_rental extends MX_Controller {
   function upload_boat_image($boat_rental_id) {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
-
     if (!is_numeric($boat_rental_id)) {
       redirect('site_security/not_allowed');
     }
-
     $mysql_query = "SELECT * FROM boat_pics WHERE boat_rental_id = $boat_rental_id ORDER BY priority";
     $query = $this->_custom_query($mysql_query);
+    $data['sort_this'] = true;
     $data['query'] = $query;
     $data['boat_rental_id'] = $boat_rental_id;
     $data['num_rows'] = $query->num_rows(); // number of pictures that an item has
@@ -406,6 +405,18 @@ class Boat_rental extends MX_Controller {
     $data['sort_this'] = true;
     $this->load->module('templates');
     $this->templates->admin($data);
+  }
+
+  function sort() {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+    $number = $this->input->post('number', true);
+
+    for ($i = 1; $i <= $number; $i++) {
+      $id = $_POST['order'.$i];
+      $update_statement = "UPDATE boat_pics SET priority = ? WHERE id = ?";
+      $this->db->query($update_statement, array($i, $id));
+    }
   }
 
   function do_upload($boat_rental_id) {
@@ -470,7 +481,7 @@ class Boat_rental extends MX_Controller {
     $this->load->module('boat_pics');
 
     $boat_rental_id = $this->uri->segment(3);
-    $boat_small_pic_id = $this->uri->segment(4);
+    $boat_pic_id = $this->uri->segment(4);
     $this->site_security->_make_sure_is_admin();
 
     $query = $this->boat_pics->get_where_custom('boat_rental_id', $boat_rental_id);

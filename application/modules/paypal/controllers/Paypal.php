@@ -44,11 +44,6 @@ class Paypal extends MX_Controller {
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
     curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
-    // In wamp-like environments that do not come bundled with root authority certificates,
-    // please download 'cacert.pem' from "https://curl.haxx.se/docs/caextract.html" and set
-    // the directory path of the certificate as shown below:
-    // curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__) . '/cacert.pem');
-    // error_log("Got " . curl_error($ch) . " when processing IPN data");
     if ( !($res = curl_exec($ch)) ) {
       curl_close($ch);
       exit;
@@ -62,7 +57,7 @@ class Paypal extends MX_Controller {
       $data['date_created'] = time();
       // makes an array of data retrieved from paypal
       foreach($_POST as $key => $value) {
-        if($key=='custom') {
+        if($key == 'custom') {
           $session_id = $this->site_security->_decrypt_string($value);
           $value = $session_id;
         }
@@ -71,16 +66,17 @@ class Paypal extends MX_Controller {
 
       $data['posted_information'] = serialize($posted_information);
       $this->_insert($data);
-      $this->update_details($session_id);
+      $this->update_booking_tables($session_id);
     } else if (strcmp ($res, "INVALID") == 0) {
       // IPN invalid, log for manual investigation
     }
   }
 
-  function update_details($session_id) {
+  function update_booking_tables($session_id) {
     $this->load->module('site_security');
     $table = "boat_rental_basket";
     $lesson_table = "lesson_basket";
+
     $boat_rental_basket_query = "SELECT * FROM boat_rental_basket WHERE session_id = '$session_id'";
     $lesson_basket_query = "SELECT * FROM lesson_basket WHERE session_id = '$session_id'";
 

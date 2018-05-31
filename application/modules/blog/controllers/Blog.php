@@ -230,15 +230,27 @@ class Blog extends MX_Controller {
     // security
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
-
+    $data['sort_this'] = true;
     $data['query'] = $query;
     $data['num_rows'] = $query->num_rows();
-    $data['headline'] = "Manage Image";
+    $data['headline'] = "Manage Blog Image";
     $data['blog_id'] = $blog_id;
     $date['flash'] = $this->session->flashdata('blog');
     $data['view_file'] = "upload_image";
     $this->load->module('templates');
     $this->templates->admin($data);
+  }
+
+  function sort() {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+    $number = $this->input->post('number', true);
+
+    for ($i = 1; $i <= $number; $i++) {
+      $id = $_POST['order'.$i];
+      $update_statement = "UPDATE blog_pics SET priority = ? WHERE id = ?";
+      $this->db->query($update_statement, array($i, $id));
+    }
   }
 
   function do_upload($blog_id) {

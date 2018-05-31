@@ -13,7 +13,7 @@ if (isset($flash)) {
   <fieldset>
     <div class="control-group" style="height: 200px;">
       <button type="submit" name="submit" class="btn btn-danger" value="delete">Yes - Delete boat</button>
-      <button type="submit" name="submit" class="btn" value="cancel">Cancel</button>
+      <button type="submit" name="submit" class="btn btn-default" value="cancel">Cancel</button>
     </div>
   </fieldset>
 </div>
