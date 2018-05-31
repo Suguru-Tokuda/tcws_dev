@@ -20,9 +20,6 @@ class Cart extends MX_Controller {
 
     if (!is_numeric($shopper_id)) {
       $shopper_id = 0;
-    } else {
-      $this->_set_shopper_id("boat_rental_basket", $shopper_id, $session_id);
-      $this->_set_shopper_id("lesson_basket", $shopper_id, $session_id);
     }
 
     $boat_rental_table = "boat_rental_basket";
@@ -36,12 +33,6 @@ class Cart extends MX_Controller {
     $data['showing_statement'] = $this->_get_showing_statement($total_num);
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
-  }
-
-
-  function _set_shopper_id($table, $shopper_id, $session_id) {
-    $mysql_query = "UPDATE $table SET shopper_id = ? WHERE session_id = ?";
-    $this->db->query($mysql_query, array($shopper_id, $session_id));
   }
 
   function _create_checkout_token($session_id) {

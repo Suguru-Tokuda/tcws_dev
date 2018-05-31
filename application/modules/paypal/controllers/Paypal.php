@@ -75,17 +75,16 @@ class Paypal extends MX_Controller {
     } else if (strcmp ($res, "INVALID") == 0) {
       // IPN invalid, log for manual investigation
     }
-
   }
 
   function update_details($session_id) {
     $this->load->module('site_security');
     $table = "boat_rental_basket";
     $lesson_table = "lesson_basket";
-    $mysql_query = "SELECT * FROM boat_rental_basket WHERE session_id = '$session_id'";
-    $mysql_query1 = "SELECT * FROM lesson_basket WHERE session_id = '$session_id'";
+    $boat_rental_basket_query = "SELECT * FROM boat_rental_basket WHERE session_id = '$session_id'";
+    $lesson_basket_query = "SELECT * FROM lesson_basket WHERE session_id = '$session_id'";
 
-    $query = $this->_custom_query($mysql_query1);
+    $query = $this->_custom_query($boat_rental_basket_query);
     $this->load->module('lesson_bookings');
     foreach($query->result() as $row) {
       $data['lesson_schedule_id'] = $row->schedule_id;
@@ -93,7 +92,7 @@ class Paypal extends MX_Controller {
       $data['lesson_booking_qty'] = $row->booking_qty;
       $this->lesson_bookings->_insert($data);
     }
-    $query = $this->_custom_query($mysql_query);
+    $query = $this->_custom_query($lesson_basket_query);
     $this->load->module('boat_rental_schedules');
     foreach($query->result() as $row) {
       $data['boat_rental_id'] = $row->boat_id;
@@ -104,23 +103,19 @@ class Paypal extends MX_Controller {
     }
     $this->_delete_lesson_basket_content($session_id);
     $this->_delete_boat_rental_basket_content($session_id);
-
   }
 
   function _delete_lesson_basket_content($session_id) {
-    // fetch the contents of the shopping cart
     $this->load->module('lesson_basket');
-    $mysql_query = "
-    DELETE FROM lesson_basket WHERE session_id = $session_id";
-    $query = $this->lesson_basket->_custom_query($mysql_query);
+    $mysql_query = "DELETE FROM lesson_basket WHERE session_id = ?";
+    $this->db->query($mysql_query, array($session_id));
   }
 
   function _delete_boat_rental_basket_content($session_id) {
-    // fetch the contents of the shopping cart
     $this->load->module('boat_rental_basket');
-    $mysql_query = "
-    DELETE FROM boat_rental_basket WHERE session_id = $session_id";
-    $query = $this->boat_rental_basket->_custom_query($mysql_query);
+    $mysql_query = "DELETE FROM boat_rental_basket WHERE session_id = ?";
+    $this->db->query($mysql_query, array($session_id));
+
   }
 
   function _is_on_test_mode() {
@@ -227,7 +222,7 @@ class Paypal extends MX_Controller {
         $this->load->model('mdl_paypal');
         $this->mdl_paypal->_delete($id);
       }
-      
+
       function count_where($column, $value) {
         $this->load->model('mdl_paypal');
         $count = $this->mdl_paypal->count_where($column, $value);
@@ -246,4 +241,4 @@ class Paypal extends MX_Controller {
         return $query;
       }
 
-    }
+}

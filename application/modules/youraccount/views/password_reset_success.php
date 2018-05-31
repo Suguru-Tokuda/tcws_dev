@@ -1,7 +1,7 @@
 <?php
 $login_location = base_url()."youraccount/login";
 ?>
-<div class="container">
+<div class="container padding-bottom-3x mb-2" style="margin-bottom: 200px;">
   <h2>Password Reset Success</h2>
-  <h3>Login from <a href="<?= $login_location ?>">here</a></h3>
+  <p>Login from <a href="<?= $login_location ?>">here</a></p>
 </div>

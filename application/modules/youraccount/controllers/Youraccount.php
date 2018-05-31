@@ -179,18 +179,21 @@ class Youraccount extends MX_Controller {
     return $this->site_security->_verify_hash($password, $hashed_password);
   }
 
-  function forgot_password() {
+  function recover_password() {
     $submit = $this->input->post('submit', true);
     if ($submit == "submit") {
       // process the form
       $email = $this->input->post('email', true);
       $this->custom_validation->set_rules('email', 'Email', 'valid_email|email_exists_to_login');
-      if ($this->custom_validation->run() == true) {
-        if ( $this->send_email_custom($email) == true) {
-          $this->success_email();
+      if ($this->custom_validation->run()) {
+        if ($this->do_send_password_recovery_email($email)) {
+          $this->recovery_password_sent();
         } else {
-          redirect('youraccount/recover_password');
+          $this->custom_validation->add_validation_error("There was an error with sending a password recovery email.");
+          redirect('youraccount/show_password_recovery');
         }
+      } else {
+        redirect('youraccount/show_password_recovery');
       }
     }
   }
@@ -208,11 +211,36 @@ class Youraccount extends MX_Controller {
       $this->session->set_userdata('user_name', $user_name);
     }
     // send the user to the private page
-    if ($this->session->has_userdata('refer_url')) {
-      $refer_url = $this->session->userdata('refer_url');
-      redirect($refer_url);
-    }
+    $this->_attemp_cart_divert($user_id);
     redirect('youraccount/welcome');
+  }
+
+  function _attemp_cart_divert($user_id) {
+    $customer_session_id = $this->session->session_id;
+    $has_updated = false;
+
+    $mysql_query = "SELECT * FROM boat_rental_basket WHERE session_id = ? AND shopper_id = ?";
+    $query = $this->db->query($mysql_query, array($customer_session_id, 0));
+    $num_rows = $query->num_rows();
+    if ($num_rows > 0) {
+      $mysql_query = "UPDATE boat_rental_basket SET shopper_id = ? WHERE session_id = ?";
+      $this->db->query($mysql_query, array($user_id, $customer_session_id));
+      $has_updated = true;
+    }
+
+    $mysql_query = "SELECT * FROM lesson_basket WHERE session_id = ? AND shopper_id = ?";
+    $query = $this->db->query($mysql_query, array($customer_session_id, 0));
+    $num_rows = $query->num_rows();
+    if ($num_rows > 0) {
+      $mysql_query = "UPDATE lesson_basket SET shopper_id = ? WHERE session_id = ?";
+      $this->db->query($mysql_query, array($user_id, $customer_session_id));
+      $has_updated = true;
+    }
+
+    if ($has_updated) {
+      redirect('cart');
+    }
+
   }
 
   function submit() {
@@ -228,10 +256,10 @@ class Youraccount extends MX_Controller {
       if ($this->custom_validation->run() == true) {
         // insert a new account into DB
         $this->_process_create_account();
-        if ($this->session->has_userdata('refer_url')) {
-          $refer_url = $this->session->userdata('refer_url');
-          redirect($refer_url);
-        }
+
+        // send welcome email
+        $this->load->module('custom_email');
+
         $data['view_file'] = "account_create_success";
         $this->load->module('templates');
         $this->templates->public_bootstrap($data);
@@ -241,7 +269,7 @@ class Youraccount extends MX_Controller {
     }
   }
 
-  function recover_password() {
+  function show_password_recovery() {
     $data['view_file'] = "account_password_recovery";
     if ($this->custom_validation->has_validation_errors()) {
       $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
@@ -250,8 +278,8 @@ class Youraccount extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  function success_email(){
-    $data['view_file'] = "success_email";
+  function recovery_password_sent(){
+    $data['view_file'] = "recovery_password_sent";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
@@ -270,6 +298,15 @@ class Youraccount extends MX_Controller {
     $insert_data['password'] = $this->site_security->_hash_string($password);
     $insert_data['date_made'] = time();
     $this->users->_insert($insert_data);
+    $this->_send_welcome_email($insert_data['email'], $insert_data['first_name']);
+  }
+
+  function _send_welcome_email($email, $first_name) {
+    $data['to'] = $email;
+    $data['subject'] = "Your account has been created: Twincity Water Sports";
+    $data['message'] = "Dear $first_name, <br><br>Your account has been created. Please login from the link below:<br><br><a href='http://twincitywatersports.com/youraccount/start'>http://twincitywatersports.com/youraccount/start</a><br><br><b>Twincity Water Sports Inc.</b>";
+    $this->load->module('custom_email');
+    $this->custom_email->_send_email($data);
   }
 
   function _process_update_account($user_id) {
@@ -419,6 +456,7 @@ class Youraccount extends MX_Controller {
     $value2 = $str;
     $query = $this->users->get_with_double_condition($col1, $value1, $col2, $value2);
     $num_rows = $query->num_rows();
+
     if ($num_rows < 1) {
       $this->custom_validation->set_message('user_name', $error_msg);
       return false;
@@ -428,89 +466,87 @@ class Youraccount extends MX_Controller {
       foreach ($query->result() as $row) {
         $userEmail = $row->email;
       }
-      if ($this->send_email_custom($userEmail) == false)
-      {
+      if ($this->do_send_password_recovery_email($userEmail) == false) {
         return false;
-      }
-      else{
+      } else{
         return true;
       }
     }
   }
 
-  function send_email_custom($userEmail){
+  // send an email to the user to recover his or her password
+  function do_send_password_recovery_email($email){
     $this->load->module('site_security');
-    $genString = $this->site_security->generate_random_string(32);
-    $email_data['to'] = $userEmail;
-    $email_data['subject'] = "Forgot Password Recovery";
-    $emailBody = "<div>" . "Hello" . ",<br><br><p>Click this link to recover your password<br><a href='".base_url()."reset_password/?email=".$userEmail."&genString=".$genString."'>"."Click Here"."</a><br><br></p>Regards,<br> Admin.</div>";
-    $email_data['message'] = $emailBody;
-    if($this->custom_email->_custom_email_intiate($email_data) == false) {
-      return false;
-    } else {
-      $this->update_genString($userEmail,$genString);
+    $ran_str = $this->site_security->generate_random_string(32);
+    $password_reset_url = base_url()."youraccount/reset_password/".$ran_str;
+    $data['to'] = $email;
+    $data['subject'] = "Password Recovery";
+    $email_body = "Click this link to recover your password:<br><br><a href='".$password_reset_url."'>".$password_reset_url."</a><br><br></p>Sincerely yours,<br><b>Twincity Water Sports Inc.</b></div>";
+    $data['message'] = $email_body;
+    if($this->custom_email->_send_email($data)) {
+      $this->set_random_string($ran_str, $email);
       return true;
+    } else {
+      return false;
     }
   }
 
-  function update_genString($userEmail,$genString){
-    $data['genString'] = $genString;
-    $this->users->_update_email($userEmail,$data);
+  // this function update a user row and inserts a random string to vaildate to reset password
+  function set_random_string($ran_str, $email){
+    $update_statement = "UPDATE users SET ran_str = ? WHERE email = ?";
+    $this->db->query($update_statement, array($ran_str, $email));
   }
 
-  function reset_password(){
-    $data['view_file'] = "reset_password";
-    $this->load->module('templates');
-    $this->templates->public_bootstrap($data);
+  function reset_password($ran_str){
+    if ($this->_verify_email_ran_str($ran_str)) {
+      $data['view_file'] = "reset_password";
+      if ($this->custom_validation->has_validation_errors()) {
+        $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
+      }
+      $mysql_query = "SELECT * FROM users WHERE ran_str = ?";
+      $data['email'] = $this->db->query($mysql_query, array($ran_str))->row()->email;
+      $data['ran_str'] = $ran_str;
+      $this->load->module('templates');
+      $this->templates->public_bootstrap($data);
+    } else {
+      redirect('site_security/not_allowed');
+    }
   }
 
-  function update_password() {
+  function _verify_email_ran_str($ran_str) {
+    $mysql_query = "SELECT * FROM users WHERE ran_str = ?";
+    $num_rows = $this->db->query($mysql_query, array($ran_str))->num_rows();
+    return $num_rows > 0;
+  }
+
+  // takes password and confirm password to update the password
+  function do_reset_password() {
     $submit = $this->input->post('submit', true);
-
     if ($submit == "submit") {
       // process the form
-      $this->custom_validation->set_rules('signUpPassword', 'Password', 'min_length[7]|max_length[35]');
-      $this->custom_validation->set_rules('signUpconfirmPassword', 'Confirm Password', 'matches[signUpPassword]');
+      $this->custom_validation->set_rules('password', 'Password', 'min_length[7]|max_length[35]');
+      $this->custom_validation->set_rules('confirm_password', 'Confirm Password', 'matches[password]');
       if ($this->custom_validation->run() == true) {
         // update password
-        if ($this->_process_update_password() == true)
-        {
+          $this->_process_reset_password();
           $data['view_file'] = "password_reset_success";
           $this->load->module('templates');
           $this->templates->public_bootstrap($data);
-        }
-        else{
-          $error_message = "Gen Id Missing Something wrong";
-          $this->recover_password();
-        }
-      }
-      else{
-        $this->reset_password();
+      } else {
+        $ran_str = $this->input->post('ran_str', true);
+        $this->reset_password($ran_str);
       }
     }
   }
 
-  function _process_update_password() {
-    $this->load->module('users');
+  function _process_reset_password() {
+    $this->load->module('site_security');
     $email = $this->input->post('email', true);
-    $genString = $this->input->post('genString', true);
+    $ran_str = null;
     $password = $this->input->post('password', true);
-    $col1 = 'email';
-    $value1 = $this->input->post('email', true);
-    $col2 = 'genString';
-    $value2 = $this->input->post('genString', true);
-    $query = $this->users->get_with_double_and($col1, $value1, $col2, $value2);
-    $num_rows = $query->num_rows();
-    if ($num_rows < 1) {
-      return false;
-    }
-    else{
-      $this->load->module('site_security');
-      $data['password'] = $this->site_security->_hash_string($password);
-      $this->users-> _update_email($email,$data);
-      $data['genString'] = NULL;
-      $this->users-> _update_email($email,$data);
-      return true;
-    }
+    $hashed_password = $this->site_security->_hash_string($password);
+
+    $update_statement = "UPDATE users SET password = ?, ran_str = ? WHERE email = ?";
+    $this->db->query($update_statement, array($hashed_password, $ran_str, $email));
   }
 }
