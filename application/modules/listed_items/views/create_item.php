@@ -24,10 +24,10 @@ if (is_numeric($item_id)) {
           </div>
         </div>
         <div class="box-content">
-          <a href="<?= base_url() ?>listed_items/upload_image/<?= $item_url ?>" ><button type="button" class="btn btn-primary">Manage Images</button></a>
-          <a href="<?= base_url() ?>listed_items/deleteconf/<?= $item_url ?>" ><button type="button" class="btn btn-danger">Delete Item</button></a>
-          <a href="<?= base_url() ?>store_items/view_item/<?= $item_url?>" ><button type="button" class="btn btn-success">View Item In Shop</button></a>
-          <a class="btn btn-secondary" href="<?= $cancel_link; ?>">Back</a>
+          <a href="<?= base_url() ?>listed_items/upload_image/<?= $item_url ?>" ><button type="button" class="btn btn-primary"><i class="icon-image"></i>&nbsp;&nbsp;Manage Images</button></a>
+          <a href="<?= base_url() ?>listed_items/deleteconf/<?= $item_url ?>" ><button type="button" class="btn btn-danger"><i class="icon-cross"></i>&nbsp;&nbsp;Delete Item</button></a>
+          <a href="<?= base_url() ?>store_items/view_item/<?= $item_url?>" ><button type="button" class="btn btn-success"><i class="icon-open"></i>&nbsp;&nbsp;View Item In Shop</button></a>
+          <a class="btn btn-secondary" href="<?= $cancel_link; ?>"><i class="icon-arrow-left"></i>&nbsp;&nbsp;Back</a>
         </div>
       </div>
     </div>

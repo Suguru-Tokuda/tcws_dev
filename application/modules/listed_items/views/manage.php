@@ -18,7 +18,7 @@ $create_item_url = base_url()."listed_items/create_item";
       <?php echo Modules::run('youraccount/_draw_account_navbar'); ?>
     </div>
     <div class="col-sm-9">
-      <a href="<?= $create_item_url ?>"><button class="btn btn-primary" type="submit">Add New Item</button></a>
+      <a href="<?= $create_item_url ?>"><button class="btn btn-primary" type="submit"><i class="icon-ribbon"></i>&nbsp;&nbsp;Add New Item</button></a>
       <?php
       $num_rows = $query->num_rows();
       echo $pagination;
@@ -91,7 +91,7 @@ $create_item_url = base_url()."listed_items/create_item";
                     </td>
                     <td class="span1" width="15%;" style="text-align: center; padding: 50px 0;">
                       <a class="btn btn-info" href="<?= $view_item_url ?>">
-                        <i class="fa fa-laptop" aria-hidden="true"></i> View
+                        <i class="fa fa-external-link" aria-hidden="true"></i> View
                       </a>
                       <a class="btn btn-success" href="<?= $edit_item_url ?>">
                         <i class="fa fa-edit" aria-hidden="true"></i> Edit
