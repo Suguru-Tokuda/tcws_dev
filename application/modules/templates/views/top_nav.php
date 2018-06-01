@@ -15,8 +15,11 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
 // site links
 $browse_for_sale_link = base_url().'store_items/view_all_items/'.$pagination_limit_for_items;
 $post_item_link = base_url().'listed_items/create_item';
+$my_items_link = base_url().'listed_items/manage';
 $view_lessons_link = base_url().'lessons/view_lessons/'.$pagination_limit_for_lessons;
+$my_lessons_link = base_url().'lessons/view_my_lessons';
 $view_boat_rental_link = base_url().'boat_rental/view_boat_rental/'.$pagination_limit_for_boat_rental;
+$my_rental_boats_link = base_url().'boat_rental/view_my_rental_boats';
 $community_link = base_url().'blog/view_blogs/'.$pagination_limit_for_blog;
 
 // logo
@@ -54,6 +57,7 @@ $second_bit = $this->uri->segment(1);
         if ($user_id != "") {
           ?>
           <li><a href="<?= $post_item_link ?>">Post for Sale</a></li>
+          <li><a href="<?= $my_items_link ?>">My Items</a></li>
           <?php
         }
         ?>
@@ -62,11 +66,25 @@ $second_bit = $this->uri->segment(1);
     <li class="<?php if ($second_bit === "lessons") { echo 'active';} ?>"><a href="<?= $view_lessons_link ?>"><span>Wakeboard Lessons</span></a>
       <ul class="sub-menu">
         <li><a href="<?= $view_lessons_link ?>">View Lessons</a></li>
+        <?php
+        if ($user_id != "") {
+          ?>
+          <li><a href="<?= $my_lessons_link ?>">My Lessons</a></li>
+          <?php
+        }
+           ?>
       </ul>
     </li>
     <li class="<?php if ($second_bit === "boat_rental") { echo 'active';} ?>"><a href="<?= $view_boat_rental_link ?>"><span>Boat Renting</span></a>
       <ul class="sub-menu">
         <li><a href="<?= $view_boat_rental_link ?>">View Rental Boats</a></li>
+        <?php
+        if ($user_id != "") {
+          ?>
+          <li><a href="<?= $my_rental_boats_link ?>">My Rental Boats</a></li>
+          <?php
+        }
+           ?>
       </ul>
     </li>
     <li class="<?php if ($second_bit === "blog") { echo 'active';} ?>"><a href="<?= $community_link ?>"><span>Community</span></a>

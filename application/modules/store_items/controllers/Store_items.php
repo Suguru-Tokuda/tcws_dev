@@ -467,8 +467,16 @@ class Store_items extends MX_Controller {
 
         $file_ext = $upload_data['file_ext'];
         $file_name = $file_name.$file_ext;
-        // $file_name = $upload_data['file_name'];
+        $file_name = $upload_data['file_name'];
         $this->_genrate_thumbnail($file_name);
+
+        // resize the picture
+        $config['image_library'] = 'gd2';
+        $config['source_image'] = './media/item_big_pics/'.$file_name;
+        $config['maintain_ratio'] = true;
+        $config['width'] = 500;
+        $this->load->library('image_lib', $config);
+        $this->image_lib->resize();
 
         //update the database
         $priority = $this->_get_priority($item_id);

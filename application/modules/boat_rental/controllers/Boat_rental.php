@@ -459,6 +459,14 @@ class Boat_rental extends MX_Controller {
         $file_name = $upload_data['file_name'];
         $this->_generate_thumbnail($file_name);
 
+        // resize the picture
+        $config['image_library'] = 'gd2';
+        $config['source_image'] = './media/boat_rental_big_pics/'.$file_name;
+        $config['maintain_ratio'] = true;
+        $config['width'] = 500;
+        $this->load->library('image_lib', $config);
+        $this->image_lib->resize();
+
         // insert into db
         $priority = $this->_get_pictures_priority($boat_rental_id);
         $insert_statement = "INSERT INTO boat_pics (boat_rental_id, picture_name, priority) VALUES ($boat_rental_id, '$file_name', $priority)";

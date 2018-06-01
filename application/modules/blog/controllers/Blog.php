@@ -303,6 +303,14 @@ class Blog extends MX_Controller {
         $file_name = $upload_data['file_name'];
         $this->_genrate_thumbnail($file_name);
 
+        // resize the picture
+        $config['image_library'] = 'gd2';
+        $config['source_image'] = './media/blog_big_pics/'.$file_name;
+        $config['maintain_ratio'] = true;
+        $config['width'] = 500;
+        $this->load->library('image_lib', $config);
+        $this->image_lib->resize();
+
         $update_data['picture'] = $file_name;
         $priority = $this->blog_pics->_get_pictures_priority($blog_id);
         $insert_statement = "INSERT INTO blog_pics (blog_id, picture_name, priority) VALUES ($blog_id, '$file_name', $priority)";

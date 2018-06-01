@@ -431,6 +431,14 @@ class Lessons extends MX_Controller {
         $file_name = $upload_data['file_name'];
         $this->_generate_thumbnail($file_name);
 
+        // resize the picture
+        $config['image_library'] = 'gd2';
+        $config['source_image'] = './media/lesson_big_pics/'.$file_name;
+        $config['maintain_ratio'] = true;
+        $config['width'] = 500;
+        $this->load->library('image_lib', $config);
+        $this->image_lib->resize();
+
         // insert into db
         $priority = $this->_get_pictures_priority($lesson_id);
         $insert_statement = "INSERT INTO lesson_pics (lesson_id, picture_name, priority) VALUES ($lesson_id, '$file_name', $priority)";

@@ -33,7 +33,7 @@ class Listed_items extends MX_Controller {
       $number = $this->input->post('number', true);
       $insert_statement = "INSERT INTO item_pics (picture_name) VALUES (?)";
       $this->db->query($insert_statement, array($number));
-      
+
       for ($i = 1; $i <= $number; $i++) {
         $small_pic_id = $_POST['order'.$i];
         $data['priority'] = $i;
@@ -191,6 +191,14 @@ class Listed_items extends MX_Controller {
 
           $file_name = $upload_data['file_name'];
           $this->_generate_thumbnail($file_name);
+
+          // resize the picture
+          $config['image_library'] = 'gd2';
+          $config['source_image'] = './media/item_big_pics/'.$file_name;
+          $config['maintain_ratio'] = true;
+          $config['width'] = 500;
+          $this->load->library('image_lib', $config);
+          $this->image_lib->resize();
 
           //update the database
           $priority = $this->_get_priority($item_id);

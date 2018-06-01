@@ -66,7 +66,7 @@ $form_location = base_url().'lessons/do_upload/'.$lesson_id;
 if ($num_rows > 0) {
   ?>
   <h5>Uploaded Pictures</h5>
-  <p><?= $num_rows ?> pictures for the lesson (max 5 pictures) - <strong>You can drag and change the order</strong></p>
+  <p><?= $num_rows ?> pictures for the lesson (max 5 pictures & max size: 2,048KB) - <strong>You can drag and change the order</strong></p>
   <ul id="sortlist" class="list-group" style="margin-top: 30px; list-style: none;">
     <?php
     $this->load->module('lessons');

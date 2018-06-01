@@ -35,12 +35,12 @@ $user_name = $this->session->userdata('user_name');
                 <h6 class="user-name"><?= $user_name?></h6><span class="text-xs text-muted"></span>
               </div>
             </li>
-            <li><a href="<?= base_url() ?>listed_items/manage"><span class="glyphicon glyphicon-tasks"></span> My Items</a></li>
-            <li><a href="<?= base_url() ?>lessons/view_my_lessons"><span class="glyphicon glyphicon-tasks"></span> My Booked Lessons</a></li>
-            <li><a href="<?= base_url() ?>boat_rental/view_my_rental_boats"><span class="glyphicon glyphicon-tasks"></span> My Booked Rental Boats</a></li>
-            <li><a href="<?= base_url() ?>youraccount/manage_account"><span class="glyphicon glyphicon-file"></span> Manage Profile</a></li>
+            <li><a href="<?= base_url() ?>listed_items/manage"><i class="icon-bag"></i> My Items</a></li>
+            <li><a href="<?= base_url() ?>lessons/view_my_lessons"><i class="icon-tag"></i> My Booked Lessons</a></li>
+            <li><a href="<?= base_url() ?>boat_rental/view_my_rental_boats"><i class="icon-anchor"></i> My Booked Rental Boats</a></li>
+            <li><a href="<?= base_url() ?>youraccount/manage_account"><i class="icon-head"></i> Manage Profile</a></li>
             <li class="sub-menu-separator"></li>
-            <li><a href="<?= base_url() ?>youraccount/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a><li>
+            <li><a href="<?= base_url() ?>youraccount/logout"><i class="icon-lock"></i> Logout</a><li>
             </ul>
             <?php
           }
