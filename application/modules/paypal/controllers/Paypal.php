@@ -66,52 +66,11 @@ class Paypal extends MX_Controller {
 
       $data['posted_information'] = serialize($posted_information);
       $this->_insert($data);
-      $this->update_booking_tables($session_id);
+      $this->load->module('store_orders');
+      $this->store_orders->process_orders($session_id);
     } else if (strcmp ($res, "INVALID") == 0) {
       // IPN invalid, log for manual investigation
     }
-  }
-
-  function update_booking_tables($session_id) {
-    $this->load->module('site_security');
-    $table = "boat_rental_basket";
-    $lesson_table = "lesson_basket";
-
-    $boat_rental_basket_query = "SELECT * FROM boat_rental_basket WHERE session_id = '$session_id'";
-    $lesson_basket_query = "SELECT * FROM lesson_basket WHERE session_id = '$session_id'";
-
-    $query = $this->_custom_query($boat_rental_basket_query);
-    $this->load->module('lesson_bookings');
-    foreach($query->result() as $row) {
-      $data['lesson_schedule_id'] = $row->schedule_id;
-      $data['user_id'] = $row->shopper_id;
-      $data['lesson_booking_qty'] = $row->booking_qty;
-      $this->lesson_bookings->_insert($data);
-    }
-    $query = $this->_custom_query($lesson_basket_query);
-    $this->load->module('boat_rental_schedules');
-    foreach($query->result() as $row) {
-      $data['boat_rental_id'] = $row->boat_id;
-      $data['user_id'] = $row->shopper_id;
-      $data['boat_start_date'] = $row->booking_start_date;
-      $data['boat_end_date'] = $row->booking_end_date;
-      $this->boat_rental_schedules->_insert($data);
-    }
-    $this->_delete_lesson_basket_content($session_id);
-    $this->_delete_boat_rental_basket_content($session_id);
-  }
-
-  function _delete_lesson_basket_content($session_id) {
-    $this->load->module('lesson_basket');
-    $mysql_query = "DELETE FROM lesson_basket WHERE session_id = ?";
-    $this->db->query($mysql_query, array($session_id));
-  }
-
-  function _delete_boat_rental_basket_content($session_id) {
-    $this->load->module('boat_rental_basket');
-    $mysql_query = "DELETE FROM boat_rental_basket WHERE session_id = ?";
-    $this->db->query($mysql_query, array($session_id));
-
   }
 
   function _is_on_test_mode() {
@@ -130,111 +89,112 @@ class Paypal extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  function _draw_checkout_btn($query,$lesson_query) {
+  function _draw_checkout_btn($boat_rental_query, $lesson_query) {
     $this->load->module('site_settings');
     $this->load->module('site_security');
 
-    if($query->num_rows() > 0 ){
-      foreach($query->result() as $row) {
+    if($boat_rental_query->num_rows() > 0 ) {
+      foreach ($boat_rental_query->result() as $row) {
         $session_id = $row->session_id;
       }
     }
-    if($lesson_query->num_rows() > 0 )
-    {
-      foreach($lesson_query->result() as $row) {
+
+    if($lesson_query->num_rows() > 0 ) {
+      foreach ($lesson_query->result() as $row) {
         $session_id = $row->session_id;
       }
     }
 
     $on_test_mode = $this->_is_on_test_mode();
+
     if ($on_test_mode == true) {
-      $data['form_location'] = "https://www.sandbox.paypal.com/cgi_bin/webscr";
-      } else {
+        $data['form_location'] = "https://www.sandbox.paypal.com/cgi_bin/webscr";
+    } else {
         $data['form_location'] = "https://www.paypal.com/cgi_bin/webscr";
-        }
+    }
 
-        // the data is sent to paypal
-        $data['return'] = base_url().'paypal/thankyou';
-        $data['cancel_return'] = base_url().'paypal/cancel';
-        $data['custom'] = $this->site_security->_encrypt_string($session_id);
-        $data['paypal_email'] = $this->site_settings->_get_paypal_email();
-        $data['currency_code'] = $this->site_settings->_get_currency_code();
-        $data['query'] = $query;
-        $data['lesson_query;'] = $lesson_query;
-        $this->load->view('checkout_btn', $data);
-      }
+    // the data is sent to paypal
+    $data['return'] = base_url().'paypal/thankyou';
+    $data['cancel_return'] = base_url().'paypal/cancel';
+    $data['custom'] = $this->site_security->_encrypt_string($session_id);
+    $data['paypal_email'] = $this->site_settings->_get_paypal_email();
+    $data['currency_code'] = $this->site_settings->_get_currency_code();
+    $data['boat_rental_query'] = $boat_rental_query;
+    $data['lesson_query;'] = $lesson_query;
+    $this->load->view('checkout_btn', $data);
+  }
 
-      function get($order_by) {
-        $this->load->model('mdl_paypal');
-        $query = $this->mdl_paypal->get($order_by);
-        return $query;
-      }
+  function get($order_by) {
+    $this->load->model('mdl_paypal');
+    $query = $this->mdl_paypal->get($order_by);
+    return $query;
+  }
 
-      function get_with_limit($limit, $offset, $order_by) {
-        if ((!is_numeric($limit)) || (!is_numeric($offset))) {
-          die('Non-numeric variable!');
-        }
+  function get_with_limit($limit, $offset, $order_by) {
+    if ((!is_numeric($limit)) || (!is_numeric($offset))) {
+      die('Non-numeric variable!');
+    }
 
-        $this->load->model('mdl_paypal');
-        $query = $this->mdl_paypal->get_with_limit($limit, $offset, $order_by);
-        return $query;
-      }
+    $this->load->model('mdl_paypal');
+    $query = $this->mdl_paypal->get_with_limit($limit, $offset, $order_by);
+    return $query;
+  }
 
-      function get_where($id) {
-        if (!is_numeric($id)) {
-          die('Non-numeric variable!');
-        }
+  function get_where($id) {
+    if (!is_numeric($id)) {
+      die('Non-numeric variable!');
+    }
 
-        $this->load->model('mdl_paypal');
-        $query = $this->mdl_paypal->get_where($id);
-        return $query;
-      }
+    $this->load->model('mdl_paypal');
+    $query = $this->mdl_paypal->get_where($id);
+    return $query;
+  }
 
-      function get_where_custom($col, $value) {
-        $this->load->model('mdl_paypal');
-        $query = $this->mdl_paypal->get_where_custom($col, $value);
-        return $query;
-      }
+  function get_where_custom($col, $value) {
+    $this->load->model('mdl_paypal');
+    $query = $this->mdl_paypal->get_where_custom($col, $value);
+    return $query;
+  }
 
-      function _insert($data) {
-        $this->load->model('mdl_paypal');
-        $this->mdl_paypal->_insert($data);
-      }
+  function _insert($data) {
+    $this->load->model('mdl_paypal');
+    $this->mdl_paypal->_insert($data);
+  }
 
-      function _update($id, $data) {
-        if (!is_numeric($id)) {
-          die('Non-numeric variable!');
-        }
+  function _update($id, $data) {
+    if (!is_numeric($id)) {
+      die('Non-numeric variable!');
+    }
 
-        $this->load->model('mdl_paypal');
-        $this->mdl_paypal->_update($id, $data);
-      }
+    $this->load->model('mdl_paypal');
+    $this->mdl_paypal->_update($id, $data);
+  }
 
-      function _delete($id) {
-        if (!is_numeric($id)) {
-          die('Non-numeric variable!');
-        }
+  function _delete($id) {
+    if (!is_numeric($id)) {
+      die('Non-numeric variable!');
+    }
 
-        $this->load->model('mdl_paypal');
-        $this->mdl_paypal->_delete($id);
-      }
+    $this->load->model('mdl_paypal');
+    $this->mdl_paypal->_delete($id);
+  }
 
-      function count_where($column, $value) {
-        $this->load->model('mdl_paypal');
-        $count = $this->mdl_paypal->count_where($column, $value);
-        return $count;
-      }
+  function count_where($column, $value) {
+    $this->load->model('mdl_paypal');
+    $count = $this->mdl_paypal->count_where($column, $value);
+    return $count;
+  }
 
-      function get_max() {
-        $this->load->model('mdl_paypal');
-        $max_id = $this->mdl_paypal->get_max();
-        return $max_id;
-      }
+  function get_max() {
+    $this->load->model('mdl_paypal');
+    $max_id = $this->mdl_paypal->get_max();
+    return $max_id;
+  }
 
-      function _custom_query($mysql_query) {
-        $this->load->model('mdl_paypal');
-        $query = $this->mdl_paypal->_custom_query($mysql_query);
-        return $query;
-      }
+  function _custom_query($mysql_query) {
+    $this->load->model('mdl_paypal');
+    $query = $this->mdl_paypal->_custom_query($mysql_query);
+    return $query;
+  }
 
 }
