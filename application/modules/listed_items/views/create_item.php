@@ -1,4 +1,5 @@
 <?php
+$cancel_link = base_url().'/listed_items/manage';
 if (is_numeric($item_id)) {
   $item_url = $this->uri->segment(3);
   $form_location = base_url().'listed_items/create_item/'.$item_url;
@@ -6,7 +7,7 @@ if (is_numeric($item_id)) {
   $form_location = base_url().'listed_items/create_item';
 }
 ?>
-<div class="container">
+<div class="container padding-bottom-3x mb-1">
   <h2><?= $headline ?></h2>
   <?php
   if (isset($flash)) {
@@ -25,14 +26,14 @@ if (is_numeric($item_id)) {
         <div class="box-content">
           <a href="<?= base_url() ?>listed_items/upload_image/<?= $item_url ?>" ><button type="button" class="btn btn-primary">Manage Images</button></a>
           <a href="<?= base_url() ?>listed_items/deleteconf/<?= $item_url ?>" ><button type="button" class="btn btn-danger">Delete Item</button></a>
-          <a href="<?= base_url() ?>store_items/view/<?= $item_url?>" ><button type="button" class="btn btn-secondary">View Item In Shop</button></a>
+          <a href="<?= base_url() ?>store_items/view_item/<?= $item_url?>" ><button type="button" class="btn btn-success">View Item In Shop</button></a>
+          <a class="btn btn-secondary" href="<?= $cancel_link; ?>">Back</a>
         </div>
       </div>
     </div>
     <?php
   }
   ?>
-
   <form class="form-horizontal" action="<?= $form_location ?>" method="post">
     <fieldset>
       <!-- Form Name -->
@@ -149,7 +150,7 @@ if (is_numeric($item_id)) {
         <?php
         $cancel_link = base_url().'/listed_items/manage';
          ?>
-         <a class="btn btn-default" href="<?= $cancel_link; ?>">Cancel</a>
+         <a class="btn btn-secondary" href="<?= $cancel_link; ?>">Cancel</a>
       </div>
     </div>
 

@@ -50,7 +50,7 @@ $form_location = base_url().'listed_items/do_upload/'.$item_url;
         if ($num_rows < 5) { // shows if the item has only less than 5 pictures
           ?>
           <div class="imageUploadedOrNot">
-            <h3>Here's the display of your image: </h3>
+            <h3>Preview: </h3>
             <img src="#" id="blankImg">
           </div>
           <?php echo form_open_multipart('listed_items/do_upload/'.$item_url);?>
@@ -60,7 +60,7 @@ $form_location = base_url().'listed_items/do_upload/'.$item_url;
           </div>
           <div class="form-actions">
             <button type="submit" name="submit" class="btn btn-primary" value="upload">Upload</button>
-            <button type="submit" name="submit" class="btn" value="cancel">Cancel</button>
+            <button type="submit" name="submit" class="btn btn-secondary" value="cancel">Cancel</button>
           </div>
         </form>
       </div>
@@ -91,17 +91,11 @@ $form_location = base_url().'listed_items/do_upload/'.$item_url;
           <li class="sort col-md-3" style="height: 200px; margin-bottom: 100px;" id="<?= $row->id?>">
             <!-- <p><?= $priority ?>/<?= $num_rows ?> </p> -->
             <img src="<?= $picture_location ?>" title="<?= $row->picture_name ?>" class="img-responsive">
-            <?php
-            echo anchor(base_url().'listed_items/delete_image/'.$item_url.'/'.$row->id, 'Remove');
-            ?>
+            <?php echo anchor(base_url().'listed_items/delete_image/'.$item_url.'/'.$row->id, 'Remove'); ?>
           </li>
-          <?php
-        }
-        ?>
+          <?php } ?>
       </ul>
-      <?php
-    }
-    ?>
+      <?php } ?>
   </div>
 </div>
 </div>

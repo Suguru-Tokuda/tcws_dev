@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container padding-bottom-3x mb-1">
   <h2><?= $headline ?></h2>
   <?php
   if (isset($flash)) {
@@ -24,10 +24,11 @@
         <filedset>
           <div class="control-group" style="height: 200px;">
             <button type="submit" name="submit" class="btn btn-danger" value="delete">Yes - Delete Item</button>
-            <button type="submit" name="submit" value="cancel" class="btn">Cancel</button>
+            <button type="submit" name="submit" value="cancel" class="btn btn-secondary">Cancel</button>
           </fieldset>
         </form>
       </div>
     </div>
   </div>
+</div>
 </div>

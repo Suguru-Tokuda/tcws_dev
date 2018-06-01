@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <link rel="icon" href="<?php echo base_url(); ?>/favicon.ico">
   <title><?php
   $page_url = $this->uri->segment(1);
@@ -17,12 +16,10 @@
   ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="<?php echo base_url(); ?>assets/css/unishop.vendor.min.css" rel="stylesheet">
-
   <link href="<?php echo base_url(); ?>assets/css/vendor.min.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/card.min.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/bootstrap-datepicker.css" rel="stylesheet">
   <link href="<?php echo base_url(); ?>assets/css/jquery.timepicker.css" rel="stylesheet">
-
   <link id="mainStyles" rel="stylesheet" media-"screen" href="<?php echo base_url(); ?>assets/css/unishop.custom.min.css">
   <script src="<?php echo base_url(); ?>assets/js/unishop.vendor.header.js"></script>
 </head>
@@ -32,7 +29,7 @@
   // isseet = determines if the value is NOT NULL
   if (isset($sort_this)) {
     // Whenever there is a change in sorting, this gets kicked on.
-    require_once('sort_pictures_code.php');
+    require_once('sort_this_code.php');
   }
   ?>
   <!-- Navbar-->

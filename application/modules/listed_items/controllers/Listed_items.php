@@ -31,6 +31,9 @@ class Listed_items extends MX_Controller {
       $this->site_security->_make_sure_logged_in();
 
       $number = $this->input->post('number', true);
+      $insert_statement = "INSERT INTO item_pics (picture_name) VALUES (?)";
+      $this->db->query($insert_statement, array($number));
+      
       for ($i = 1; $i <= $number; $i++) {
         $small_pic_id = $_POST['order'.$i];
         $data['priority'] = $i;
@@ -134,6 +137,7 @@ class Listed_items extends MX_Controller {
 
       $mysql_query = "SELECT * FROM item_pics WHERE item_id = $item_id ORDER BY priority ASC";
       $query = $this->_custom_query($mysql_query);
+      $data['sort_this'] = true;
       $data['query'] = $query;
       $data['num_rows'] = $query->num_rows(); // number of pictures that an item has
       $data['headline'] = "Manage Image";
