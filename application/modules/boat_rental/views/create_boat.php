@@ -75,9 +75,7 @@ if(is_numeric($boat_rental_id))
     </div>
 
 
-    <?php
-    if (is_numeric($boat_rental_id)) {
-      ?>
+    <?php if (is_numeric($boat_rental_id)) { ?>
       <div class="form-group">
         <label class="col-sm-2 control-label">Status</label>
         <div class="col-md-2">
@@ -85,7 +83,7 @@ if(is_numeric($boat_rental_id))
           if (!isset($status)) {
             $status = '';
           }
-          $additional_dd_code = 'class="form-control" id="status"';
+          $additional_dd_code = 'class="form-control" id="status" required';
           $options = array(
             '' => 'Please select...',
             '1' => 'Active',
@@ -95,28 +93,22 @@ if(is_numeric($boat_rental_id))
           ?>
         </div>
       </div>
-      <?php
-    }
-    ?>
+    <?php } else { ?>
+      <input type="hidden" name="status" value="1">
+      <?php } ?>
     <div class="form-group">
       <div class="col-md-offset-3 col-md-4">
         <button name="submit" value="submit" class="btn btn-primary">
-          <?php
-          if (!empty($boat_rental_id)) {
-            ?>
+          <?php if (!empty($boat_rental_id)) { ?>
             Update
-            <?php
-          } else {
-            ?>
+            <?php } else { ?>
             Proceeds
-            <?php
-          }
-          ?>
+            <?php } ?>
         </button>
         <?php
         $cancel_link = base_url().'/boat_rental/manage_boat_rental';
          ?>
-        <a href="<?= $cancel_link; ?>" class="btn btn-default">Cancel</a>
+        <a href="<?= $cancel_link; ?>" class="btn btn-default">Back</a>
       </div>
     </div>
   </form>

@@ -81,7 +81,7 @@
       <li class="sub-menu">
         <a href="<?= base_url() ?>admin_info/view_admin_info">
           <i class="fa fa-home"></i>
-          <span>My Info</span>
+          <span>Admin</span>
         </a>
       </li>
     </ul>

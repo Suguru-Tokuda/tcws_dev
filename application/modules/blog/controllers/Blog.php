@@ -76,7 +76,6 @@ class Blog extends MX_Controller {
 
     $data['blog_id'] = $query->row()->id;
     $data['blog_title'] = $query->row()->blog_title;
-    $data['blog_keywords'] = $query->row()->blog_keywords;
     $data['blog_description'] = $query->row()->blog_description;
     $data['blog_content'] = $query->row()->blog_content;
     $data['date_published'] = $this->timedate->get_date($query->row()->date_published, 'datepicker_us');
@@ -484,7 +483,6 @@ class Blog extends MX_Controller {
   // get data from POST method
   function fetch_data_from_post() {
     $data['blog_title'] = $this->input->post('blog_title', true);
-    $data['blog_keywords'] = $this->input->post('blog_keywords', true);
     $data['blog_description'] = $this->input->post('blog_description', true);
     $data['blog_content'] = $this->input->post('blog_content', true);
     $data['date_published'] = $this->input->post('date_published', true);
@@ -504,7 +502,6 @@ class Blog extends MX_Controller {
     foreach($query->result() as $row) {
       $data['blog_title'] = $row->blog_title;
       $data['blog_url'] = $row->blog_url;
-      $data['blog_keywords'] = $row->blog_keywords;
       $data['blog_content'] = $row->blog_content;
       $data['blog_description'] = $row->blog_description;
       $data['date_published'] = $row->date_published;

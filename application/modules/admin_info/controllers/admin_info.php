@@ -47,9 +47,15 @@ class Admin_info extends MX_Controller {
       $this->custom_validation->set_rules('last_name', 'Last Name', 'min_length[3]');
       $this->custom_validation->set_rules('phone', 'Phone', 'numeric');
       $this->custom_validation->set_rules('email', 'Email', 'valid_email');
-      $this->custom_validation->set_rules('facebook_link', 'Facebook Link', 'min_length[5]');
-      $this->custom_validation->set_rules('twitter_link', 'Twitter Link', 'min_length[5]');
-      $this->custom_validation->set_rules('instagram_link', 'Instagram Link', 'min_length[5]');
+      if (!empty($this->input->post('facebook_link', true))) {
+        $this->custom_validation->set_rules('facebook_link', 'Facebook Link', 'min_length[5]');
+      }
+      if (!empty($this->input->post('twitter_link', true))) {
+        $this->custom_validation->set_rules('twitter_link', 'Twitter Link', 'min_length[5]');
+      }
+      if (!empty($this->input->post('instagram_link', true))) {
+        $this->custom_validation->set_rules('instagram_link', 'Instagram Link', 'min_length[5]');
+      }
       $this->custom_validation->set_rules('company_name', 'Company Name', 'min_length[3]');
       $this->custom_validation->set_rules('address', 'Address', 'min_length[5]');
       $this->custom_validation->set_rules('city', 'City', 'min_length[3]');

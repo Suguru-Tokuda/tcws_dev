@@ -439,18 +439,10 @@ class Listed_items extends MX_Controller {
     }
 
     function _process_delete($item_id) {
-      // attempt to delete item colors
-      $this->load->module("store_item_colors");
-      $this->store_item_colors->_delete_for_item($item_id);
-      // attempt to delete item sizes
-      $this->load->module("store_item_sizes");
-      $this->store_item_sizes->_delete_for_item($item_id);
       // attempt to delete item big & small pics
-
       $data = $this->fetch_data_from_db($item_id);
 
       $this->load->module('item_pics');
-      $this->load->module('big_pics');
       $small_pic_ids = $this->item_pics->get_small_pic_ids_by_item_id($item_id);
 
       foreach ($small_pic_ids as $key => $value) {

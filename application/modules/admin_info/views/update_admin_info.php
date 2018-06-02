@@ -47,23 +47,23 @@ if (is_numeric($admin_id)) {
     </div>
 
     <div class="form-group">
-      <label class="col-sm-2 control-label">Facebook Link</label>
+      <label class="col-sm-2 control-label">Facebook Link (Optional)</label>
       <div class="col-sm-3">
-        <input type="text" class="form-control" name="facebook_link" value="<?= $facebook_link ?>" required>
+        <input type="text" class="form-control" name="facebook_link" value="<?= $facebook_link ?>">
       </div>
     </div>
 
     <div class="form-group">
-      <label class="col-sm-2 control-label">Twitter Link</label>
+      <label class="col-sm-2 control-label">Twitter Link (Optional)</label>
       <div class="col-sm-3">
-        <input type="text" class="form-control" name="twitter_link" value="<?= $twitter_link ?>" required>
+        <input type="text" class="form-control" name="twitter_link" value="<?= $twitter_link ?>">
       </div>
     </div>
 
     <div class="form-group">
-      <label class="col-sm-2 control-label">Instagram Link</label>
+      <label class="col-sm-2 control-label">Instagram Link (Optional)</label>
       <div class="col-sm-3">
-        <input type="text" class="form-control" name="instagram_link" value="<?= $instagram_link ?>" required>
+        <input type="text" class="form-control" name="instagram_link" value="<?= $instagram_link ?>">
       </div>
     </div>
 
@@ -109,7 +109,7 @@ if (is_numeric($admin_id)) {
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-4">
         <button name="submit" type ="submit" value="submit" class="btn btn-primary">Save</button>
-        <button name="submit" value="cancel" class="btn btn-default">Cancel</button>
+        <button name="submit" value="cancel" class="btn btn-default">Back</button>
       </div>
     </div>
   </form>

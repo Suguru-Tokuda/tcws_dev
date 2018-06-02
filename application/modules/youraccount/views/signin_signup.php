@@ -26,15 +26,14 @@ if ($first_bit == "youraccount") {
         </div>
         <div class="d-flex flex-wrap justify-content-between padding-bottom-1x">
           <div class="custom-control custom-checkbox">
-            <?php
-            if ($first_bit == "youraccount") {
-              ?>
+            <?php if ($first_bit == "youraccount") { ?>
               <input class="custom-control-input" type="checkbox" id="remember" value="remember" name="remember">
               <label class="custom-control-label" for="remember">Remember me</label>
-              <?php
-            }
-            ?>
-          </div><a class="navi-link" href="<?= $password_recovery_location ?>">Forgot password?</a>
+            <?php } ?>
+          </div>
+          <?php if ($first_bit != "dvilsf") { ?>
+            <a class="navi-link" href="<?= $password_recovery_location ?>">Forgot password?</a>
+          <?php } ?>
         </div>
         <div class="text-center text-sm-right">
           <button class="btn btn-primary margin-bottom-none" name="submit" value="submit" type="submit">Sign In</button>

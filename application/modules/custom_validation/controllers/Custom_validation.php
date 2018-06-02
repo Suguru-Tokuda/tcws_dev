@@ -24,13 +24,14 @@ class Custom_validation extends MX_Controller {
       $post_name = $this->validation_list[$i][0];
       $value_to_test = $this->input->post($post_name, true);
       $name_to_show = $this->validation_list[$i][1];
+      $check_list = array();
       if (strpos($this->validation_list[$i][2], "|")) {
         $check_list = explode("|", $this->validation_list[$i][2]);
       } else {
         $check_list[0] = $this->validation_list[$i][2];
       }
 
-      foreach($check_list as $check) {
+      foreach ($check_list as $check) {
         $check_for_min_length = strpos($check, "min_length");
         $check_for_max_length = strpos($check, "max_length");
         $check_for_matches = strpos($check, "matches");
