@@ -1,14 +1,12 @@
 <?php
-class Custom_pagination extends MX_Controller
-{
+class Custom_pagination extends MX_Controller {
 
   function __construct() {
     parent::__construct();
     $this->load->library('pagination');
   }
 
-  function _generate_pagination($data)
-  {
+  function _generate_pagination($data) {
     //NOTE: for this to work, data must contain:
     //$template, $target_base_url, $total_rows, $offset_segment, $limit
     $template = $data['template'];
@@ -79,8 +77,7 @@ class Custom_pagination extends MX_Controller
     return $showing_statement;
   }
 
-  function get_settings_for_public_bootstrap()
-  {
+  function get_settings_for_public_bootstrap() {
     $settings['num_links'] = 6;
 
     $settings['full_tag_open'] = '<nav aria-label="Page navigation"><ul class="pagination">';
@@ -140,8 +137,7 @@ class Custom_pagination extends MX_Controller
     return $settings;
   }
 
-  function _get_settings_for_some_template()
-  {
+  function _get_settings_for_some_template() {
     $settings['num_links'] = '';
 
     $settings['full_tag_open'] = '';

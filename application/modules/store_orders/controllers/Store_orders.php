@@ -21,8 +21,9 @@ class Store_orders extends MX_Controller {
       $lesson_schedule_id = $row->schedule_id;
       $user_id = $row->shopper_id;
       $lesson_booking_qty = $row->booking_qty;
-      $insert_statement = "INSERT INTO lesson_bookings (lesson_schedule_id, user_id, lesson_booking_qty, session_id) VALUES (?, ?, ?, ?)";
-      $this->db->query($insert_statement, array($lesson_schedule_id, $user_id, $lesson_booking_qty, $session_id));
+      $lesson_fee = $row->lesson_fee;
+      $insert_statement = "INSERT INTO lesson_bookings (lesson_schedule_id, user_id, lesson_booking_qty, lesson_fee, session_id) VALUES (?, ?, ?, ?, ?)";
+      $this->db->query($insert_statement, array($lesson_schedule_id, $user_id, $lesson_booking_qty, $lesson_fee, $session_id));
     }
 
     $query = $this->db->query($boat_rental_basket_query);
@@ -32,9 +33,10 @@ class Store_orders extends MX_Controller {
       $user_id = $row->shopper_id;
       $boat_start_date = $row->booking_start_date;
       $boat_end_date = $row->booking_end_date;
-
-      $insert_statement = "INSERT INTO boat_rental_schedules (boat_rental_id, user_id, boat_start_date, boat_end_date, session_id) VALUES (?, ?, ?, ?, ?)";
-      $this->db->query($insert_statement, array($boat_rental_id, $user_id, $boat_start_date, $boat_end_date, $session_id));
+      $boat_fee = $row->boat_fee;
+      $hours = $row->hours;
+      $insert_statement = "INSERT INTO boat_rental_schedules (boat_rental_id, user_id, boat_fee, hours, boat_start_date, boat_end_date, session_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+      $this->db->query($insert_statement, array($boat_rental_id, $user_id, $boat_fee, $hours, $boat_start_date, $boat_end_date, $session_id));
     }
     $this->_delete_lesson_basket_content($session_id);
     $this->_delete_boat_rental_basket_content($session_id);

@@ -42,13 +42,47 @@ class Users extends MX_Controller {
     return $customer_id;
   }
 
+  function search() {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+    $use_limit = false;
+    $keyword = trim($this->input->post('search_keyword', true));
+    $keyword = $this->site_security->_clean_string($keyword);
+    $mysql_query = $this->_get_mysql_query_for_manage_users_with_keyword($use_limit, $keyword);
+    $query = $this->_custom_query($mysql_query);
+    $total_users = $query->num_rows();
+
+    $use_limit = true;
+    $mysql_query = $this->_get_mysql_query_for_manage_users_with_keyword($use_limit, $keyword);
+    $query = $this->_custom_query($mysql_query);
+
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_users;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_pagination_limit();
+    $showing_statement_data['limit'] = $this->get_pagination_limit("main");
+    $showing_statement_data['offset'] = $this->_get_pagination_offset();
+    $showing_statement_data['total_rows'] = $total_users;
+
+    $data['search_keyword'] = $keyword;
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+    $data['query'] =  $query;
+    // create a view file. Putting a php (html) into the admin template.
+    $data['view_module'] = "users";
+    // store_Accounts.php
+    $data['view_file'] = "manage"; // manage.php
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
   function manage() {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
     // gettinf flash data
     $data['flash'] = $this->session->flashdata('user');
-
+    $data['search_keyword'] = $this->input->post('search_keyword');
     // getting data from DB
     // this means order by last_name
     $use_limit = false;
@@ -82,6 +116,16 @@ class Users extends MX_Controller {
 
   function _get_mysql_query_for_manage_users($use_limit) {
     $mysql_query = "SELECT * FROM users ORDER BY last_name";
+    if ($use_limit == true) {
+      $limit = $this->get_pagination_limit("main");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
+  }
+
+  function _get_mysql_query_for_manage_users_with_keyword($use_limit, $keyword) {
+    $mysql_query = "SELECT * FROM users WHERE user_name LIKE '%$keyword%' OR first_name LIKE '%$keyword%' OR last_name LIKE '%$keyword%' OR email LIKE '%$keyword%'  ORDER BY last_name";
     if ($use_limit == true) {
       $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();

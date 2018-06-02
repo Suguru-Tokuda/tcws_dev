@@ -542,7 +542,7 @@ class Youraccount extends MX_Controller {
   function _process_reset_password() {
     $this->load->module('site_security');
     $email = $this->input->post('email', true);
-    $ran_str = null;
+    $ran_str = "";
     $password = $this->input->post('password', true);
     $hashed_password = $this->site_security->_hash_string($password);
 

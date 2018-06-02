@@ -1,4 +1,4 @@
-<h1>Manage Boats</h1>
+<h2>Manage Boats</h2>
 <?php
 if (isset($flash)) {
   echo $flash;
@@ -9,7 +9,7 @@ $create_boat_url = base_url()."boat_rental/create_boat";
 <div class="row-fluid sortable">
   <div class="box span12">
     <div class="green-panel" data-original-title>
-      <h2><i class="fa fa-tag "></i>boat_rental</h2>
+      <h2><i class="fa fa-anchor "></i>&nbsp;&nbsp;Boat Rental</h2>
     </div>
     <div class="box-content">
       <table class="table table-striped table-bordered bootstrap-datatable datatable">
@@ -23,7 +23,7 @@ $create_boat_url = base_url()."boat_rental/create_boat";
             <th>Capacity</th>
             <th>Fee</th>
             <th>Status</th>
-            <th class="col-sm-3">Actions</th>
+            <th class="col-sm-4">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -33,6 +33,7 @@ $create_boat_url = base_url()."boat_rental/create_boat";
             $edit_boat_url = base_url()."boat_rental/create_boat/".$row->id;
             $view_boat_url = base_url()."boat_rental/view_boat/".$row->boat_url;
             $boat_image_url = base_url()."boat_rental/upload_boat_image/".$row->id;
+            $boat_members_url = base_url()."boat_rental/view_members/".$row->id;
             $id = $row->id;
             $boat_name = $row->boat_name;
             $boat_capacity = $row->boat_capacity;
@@ -64,6 +65,9 @@ $create_boat_url = base_url()."boat_rental/create_boat";
                 </a>
                 <a class="btn btn-primary" href="<?= $boat_image_url ?>">
                   <i class="fa fa-image"></i>&nbsp;&nbsp;Images
+                </a>
+                <a class="btn btn-success" href="<?= $boat_members_url ?>">
+                  <i class="fa fa-users"></i>&nbsp;&nbsp;Booked Members
                 </a>
               </td>
             </tr>

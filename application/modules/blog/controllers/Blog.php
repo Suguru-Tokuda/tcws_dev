@@ -18,7 +18,7 @@ class Blog extends MX_Controller {
     $mysql_query = $this->_get_mysql_query_for_blogs($use_limit);
     $pagination_data['template'] = "unishop";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
-    $pagination_data['total_rows'] = $query->num_rows();
+    $pagination_data['total_rows'] = $total_blogs;
     $pagination_data['offset_segment'] = 4;
     $pagination_data['limit'] = $this->get_pagination_limit("main");
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);

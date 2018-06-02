@@ -10,6 +10,45 @@ class Boat_rental extends MX_Controller {
     $this->load->library('image_lib');
   }
 
+  function view_members($boat_rental_id) {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+    $use_limit = false;
+    $mysql_query = $this->_generate_mysql_query_for_view_members($use_limit, $boat_rental_id);
+    $query = $this->_custom_query($mysql_query);
+    $total_members = $query->num_rows();
+
+    $use_limit = true;
+    $mysql_query = $this->_generate_mysql_query_for_view_members($use_limit, $boat_rental_id);
+    $query = $this->_custom_query($mysql_query);
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_members;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_pagination_limit("admin");
+    $mysql_query = "SELECT boat_name FROM boat_rental WHERE id = ?";
+    $boat_name = $this->db->query($mysql_query, array($boat_rental_id))->row()->boat_name;
+
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+    $data['query'] = $query;
+    $data['boat_rental_id'] = $boat_rental_id;
+    $data['boat_name'] = $boat_name;
+    $data['headline'] = "View Members";
+    $data['view_file'] = "view_members";
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function _generate_mysql_query_for_view_members($use_limit, $boat_rental_id) {
+    $mysql_query = "SELECT * FROM boat_rental_schedules brs JOIN users u ON brs.user_id = u.id WHERE brs.boat_rental_id = $boat_rental_id ORDER BY brs.boat_start_date";
+    if ($use_limit) {
+      $limit = $this->get_pagination_limit("admin");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query .= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
+  }
+
   function view_my_rental_boats() {
     $this->load->module('site_security');
     $this->load->module('site_settings');

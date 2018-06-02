@@ -80,16 +80,19 @@ class Store_items extends MX_Controller {
   }
 
   function _get_mysql_query_for_search_items_by_keywords($searchKeywords, $use_limit) {
+    $this->load->module('site_security');
+    $first_keyword = $this->site_security->_clean_string($searchKeywords[0]);
     $mysql_query = "
     SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price
     FROM store_items si
     LEFT JOIN item_pics sp ON si.id = sp.item_id
-    WHERE item_title LIKE '$searchKeywords[0]'
-    OR item_description LIKE '$searchKeywords[0] AND status = 1'"
+    WHERE item_title LIKE '%$first_keyword%'
+    OR item_description LIKE '%$first_keyword%' AND status = 1"
     ;
     if (sizeOf($searchKeywords) > 1) {
       for ($i = 1; $i < sizeOf($searchKeywords); $i++) {
-        $mysql_query.= " OR item_title LIKE '$searchKeywords[$i]' OR item_description LIKE '$searchKeywords[$i]'";
+        $keyword = $this->site_security->_clean_string($searchKeywords[$i]);
+        $mysql_query.= " OR item_title LIKE '$keyword' OR item_description LIKE '$keyword'";
       }
     }
     if ($use_limit == true) {

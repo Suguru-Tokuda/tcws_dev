@@ -73,6 +73,11 @@ class Site_security extends MX_Controller {
     return $result; // TRUE or FALSE
   }
 
+  function _clean_string($str) {
+    $string = str_replace(' ', '-', $str); // Replaces all spaces with hyphens.
+    return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+  }
+
   function _make_sure_is_admin() {
     $is_admin = $this->session->userdata('is_admin');
     // $is_admin = $this->session->userdata('is_admin');

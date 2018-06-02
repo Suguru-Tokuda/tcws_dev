@@ -7,7 +7,7 @@
   $num_rows = $query->num_rows();
   echo $pagination;
   ?>
-  <table class="table">
+  <table class="table table-striped table-bordered bootstrap-datatable datatable" style="margin-top: 20px;">
     <thead>
       <tr>
         <th>Lesson Date</th>
@@ -19,9 +19,9 @@
     </thead>
     <tbody>
       <?php
+      $this->load->module('lesson_bookings');
+      $this->load->module('timedate');
       foreach($query->result() as $row) {
-        $this->load->module('lesson_bookings');
-        $this->load->module('timedate');
         $view_users_url = base_url().'lesson_schedules/view_booked_users/'.$lesson_id.'/'.$row->id;
         $edit_lesson_schedule_url = base_url()."lesson_schedules/create_lesson_schedule/".$lesson_id.'/'.$row->id;
         $lesson_schedule_id = $row->id;

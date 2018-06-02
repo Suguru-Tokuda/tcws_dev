@@ -11,9 +11,35 @@ class Lesson_schedules extends MX_Controller {
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $mysql_query = "SELECT u.first_name, u.last_name, u.email FROM users u JOIN lesson_bookings lb ON u.id = lb.user_id WHERE lb.lesson_schedule_id = $lesson_schedule_id";
+    $use_limit = false;
+    $mysql_query = $this->_get_mysql_query_for_booked_users($lesson_id, $lesson_schedule_id, $use_limit);
     $query = $this->_custom_query($mysql_query);
+    $total_users = $query->num_rows();
 
+    $use_limit = true;
+    $mysql_query = $this->_get_mysql_query_for_booked_users($lesson_id, $lesson_schedule_id, $use_limit);
+    // echo $mysql_query; die();
+    $query = $this->_custom_query($mysql_query);
+    $pagination_data['template'] = "public_bootstrap";
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $total_users;
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_pagination_limit("admin");
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $mysql_query = "SELECT lesson_schedules.*, lessons.lesson_name FROM lesson_schedules JOIN lessons ON lesson_schedules.lesson_id = lessons.id  WHERE lesson_schedules.id = ?";
+    $lesson_schedule_query = $this->db->query($mysql_query, array($lesson_schedule_id));
+
+    $this->load->module('timedate');
+    $schedule = $lesson_schedule_query->row();
+    $lesson_date = $this->timedate->get_date($lesson_schedule_query->row()->lesson_start_date, "datepicker_us");
+    $start_time = $this->timedate->get_time($schedule->lesson_start_date);
+    $end_time = $this->timedate->get_time($schedule->lesson_end_date);
+    $data['lesson_name'] = $schedule->lesson_name;
+    $data['lesson_date'] = $lesson_date;
+    $data['start_time'] = $start_time;
+    $data['end_time'] = $end_time;
+    $data['lesson_schedule_query'] = $lesson_schedule_query;
     $data['query'] = $query;
     $data['lesson_id'] = $lesson_id;
     $data['view_file'] = "view_booked_users";
@@ -21,6 +47,16 @@ class Lesson_schedules extends MX_Controller {
     $data['num_of_users'] = $query->num_rows();
     $this->load->module('templates');
     $this->templates->admin($data);
+  }
+
+  function _get_mysql_query_for_booked_users($lesson_id, $lesson_schedule_id, $use_limit) {
+    $mysql_query = "SELECT u.first_name, u.last_name, u.email, lb.lesson_fee, lb.lesson_booking_qty FROM users u JOIN lesson_bookings lb ON u.id = lb.user_id WHERE lb.lesson_schedule_id = $lesson_schedule_id";
+    if ($use_limit) {
+      $limit = $this->get_pagination_limit("main");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query .= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
   }
 
   // shows all the schedules in a table
@@ -40,7 +76,7 @@ class Lesson_schedules extends MX_Controller {
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
     $pagination_data['total_rows'] = $total_lesson_schedules;
     $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_pagination_limit();
+    $pagination_data['limit'] = $this->get_pagination_limit("admin");
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['headline'] = "Manage Schedules";
@@ -159,13 +195,16 @@ class Lesson_schedules extends MX_Controller {
   }
 
   // beginning of pagination methods
-  function get_pagination_limit() {
+  function get_pagination_limit($location) {
+    if ($location == "main")
+    $limit = 6;
+    else if ($location == "admin")
     $limit = 20;
     return $limit;
   }
 
   function _get_pagination_offset() {
-    $offset = $this->uri->segment(4);
+    $offset = $this->uri->segment(5);
     if (!is_numeric($offset)) {
       $offset = 0;
     }
