@@ -1,11 +1,11 @@
 <?php
 $url_segment = $this->uri->segment(2);
 $view_active_boats_url = base_url().'boat_rental/view_my_rental_boats';
-$view_all_boats_url = base_url().'boat_rental/view_all_rental_boats';
+$view_all_boats_url = base_url().'boat_rental/view_my_rental_boats_all';
 if ($url_segment == "view_my_rental_boats") {
   $view_css_class = "btn btn-primary";
   $view_all_class = "btn btn-outline-primary";
-} else if ($url_segment == "view_all_rental_boats") {
+} else if ($url_segment == "view_my_rental_boats_all") {
   $view_css_class = "btn btn-outline-primary";
   $view_all_class = "btn btn-primary";
 }

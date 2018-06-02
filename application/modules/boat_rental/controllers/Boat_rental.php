@@ -39,7 +39,7 @@ class Boat_rental extends MX_Controller {
     $this->templates->public_bootstrap($data);
   }
 
-  function view_all_rental_boats() {
+  function view_my_rental_boats_all() {
     $this->load->module('site_security');
     $this->load->module('site_settings');
     $this->site_security->_make_sure_logged_in();
