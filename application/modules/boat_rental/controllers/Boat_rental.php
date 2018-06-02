@@ -110,7 +110,7 @@ class Boat_rental extends MX_Controller {
   }
 
   function _get_mysql_query_for_boat_rental($use_limit) {
-    $mysql_query = "SELECT DISTINCT * FROM boat_rental ORDER BY boat_name";
+    $mysql_query = "SELECT DISTINCT * FROM boat_rental WHERE status = 1 ORDER BY boat_name";
     if ($use_limit == true) {
       $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();
