@@ -85,6 +85,28 @@ if (isset($flash)) {
           </div>
         </div>
 
+        <?php if (is_numeric($blog_id)) { ?>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Status</label>
+          <div class="col-md-2">
+            <?php if (!isset($status)) {
+              $status = '';
+            }
+            $additional_dd_code = 'colass="form-control" id="status" required';
+            $options = array(
+              '' => 'Please select...',
+              '1' => 'Active',
+              '0' => 'Inactive'
+            );
+            echo form_dropdown('status', $options, $status, $additional_dd_code);
+             ?>
+          </div>
+        </div>
+
+      <?php } else { ?>
+        <input type="hidden" name="status" value="1">
+      <?php } ?>
+
         <div class="form-group">
           <label class="col-sm-2 col-sm-2 control-label"></label>
           <div class="col-sm-4">

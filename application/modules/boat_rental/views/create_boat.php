@@ -96,6 +96,7 @@ if(is_numeric($boat_rental_id))
     <?php } else { ?>
       <input type="hidden" name="status" value="1">
       <?php } ?>
+      
     <div class="form-group">
       <div class="col-md-offset-3 col-md-4">
         <button name="submit" value="submit" class="btn btn-primary">

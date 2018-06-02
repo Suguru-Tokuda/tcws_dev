@@ -30,7 +30,7 @@ class Blog extends MX_Controller {
   }
 
   function _get_mysql_query_for_blogs($use_limit) {
-    $mysql_query = "SELECT DISTINCT * FROM blog ORDER BY date_published DESC";
+    $mysql_query = "SELECT DISTINCT * FROM blog WHERE status = 1 ORDER BY date_published DESC";
     if ($use_limit == true) {
       $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();
@@ -129,7 +129,6 @@ class Blog extends MX_Controller {
     } else if ($submit == "Submit") {
       // process the form
       $this->custom_validation->set_rules('blog_title', 'Blog Title', 'max_length[250]'); // callback is for checking if the item already exists
-
       if ($this->custom_validation->run() == true) {
         // get the variables and assign into $data variable
         $data = $this->fetch_data_from_post();
@@ -487,7 +486,7 @@ class Blog extends MX_Controller {
     $data['blog_content'] = $this->input->post('blog_content', true);
     $data['date_published'] = $this->input->post('date_published', true);
     $data['author'] = $this->input->post('author', true);
-    $daa['picture'] = $this->input->post('picture', true);
+    $data['status'] = $this->input->post('status', true);
     return $data;
   }
 
@@ -506,6 +505,7 @@ class Blog extends MX_Controller {
       $data['blog_description'] = $row->blog_description;
       $data['date_published'] = $row->date_published;
       $data['author'] = $row->author;
+      $data['status'] = $row->status;
     }
     if (!isset($data)) {
       $data = "";

@@ -19,10 +19,11 @@
             <thead>
               <tr>
                 <th class="col-sm-1">Thumbnail</th>
+                <th class="col-sm-2">Blog Title</th>
                 <th class="col-sm-1">Date Published</th>
                 <th class="col-sm-1">Author</th>
                 <th class="col-sm-3">Blog URL</th>
-                <th class="col-sm-2">Blog Headline</th>
+                <th class="col-sm-1">Status</th>
                 <th class="col-sm-2" >Actions</th>
               </tr>
             </thead>
@@ -37,16 +38,27 @@
                 $blog_title = $row->blog_title;
                 $picture_name = $this->blog_pics->get_first_picture_name_by_blog_id($row->id);
                 $date_published = $this->timedate->get_date($row->date_published, 'datepicker_us');
+                $status = $row->status;
+                $status_string = "";
+                if ($status == 1) {
+                  $status_label = "success";
+                  $status_desc = "Active";
+                } else {
+                  $status_label = "default";
+                  $status_desc = "Inactive";
+                }
                 ?>
                 <tr>
                   <td><img src="<?= base_url() ?>media/blog_small_pics/<?= $picture_name ?>" alt="<?= $blog_title ?>"></td>
+                  <td class="center"><?= $row->blog_title ?></td>
                   <td><?= $date_published ?></td>
                   <td><?= $row->author ?></td>
                   <td>
-                    <a href="<?= $view_blog_url ?>">
-                    <?= $view_blog_url ?>
-                  </a></td>
-                  <td class="center"><?= $row->blog_title ?></td>
+                    <a href="<?= $view_blog_url ?>"><?= $view_blog_url ?></a>
+                  </td>
+                  <td>
+                    <span class="label label-<?= $status_label ?>"><?= $status_desc ?></span>
+                  </td>
                   <td class="center">
                     <a class="btn btn-warning" href="<?= $view_blog_url ?>">
                       <i class="fa fa-external-link"></i>&nbsp;&nbsp; View
@@ -59,9 +71,7 @@
                     </a>
                   </td>
                 </tr>
-                <?php
-              }
-              ?>
+                <?php } ?>
             </tbody>
           </table>
         </div>
