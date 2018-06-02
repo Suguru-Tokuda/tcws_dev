@@ -34,11 +34,12 @@
                 $edit_blog_url = base_url()."blog/create/".$row->id;
                 $view_blog_url = base_url()."blog/view_blog/".$row->blog_url;
                 $blog_image_url = base_url()."blog/upload_image/".$row->id;
+                $blog_title = $row->blog_title;
                 $picture_name = $this->blog_pics->get_first_picture_name_by_blog_id($row->id);
                 $date_published = $this->timedate->get_date($row->date_published, 'datepicker_us');
                 ?>
                 <tr>
-                  <td><img src="<?= base_url() ?>media/blog_small_pics/<?= $picture_name ?>" alt="<?= $picture_name ?>"></td>
+                  <td><img src="<?= base_url() ?>media/blog_small_pics/<?= $picture_name ?>" alt="<?= $blog_title ?>"></td>
                   <td><?= $date_published ?></td>
                   <td><?= $row->author ?></td>
                   <td>

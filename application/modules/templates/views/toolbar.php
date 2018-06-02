@@ -9,18 +9,12 @@ $user_name = $this->session->userdata('user_name');
   <div class="inner" >
     <div class="tools">
       <div class="account">
-        <!-- <a href="#"></a><i class="icon-head"></i> -->
         <a href="
-        <?php if ($user_id == "") {
-          ?>
+        <?php if ($user_id == "") { ?>
           <?= $signin_signup_url ?>
-          <?php
-        } else {
-        ?>
+          <?php } else { ?>
         <?= $my_page_url ?>
-        <?php
-      }
-         ?>
+        <?php } ?>
         "></a><i class="icon-head"></i>
         <ul class="toolbar-dropdown">
           <?php

@@ -41,12 +41,12 @@ if (isset($admin->instagram_link)) {
           <?php
           if ($phone != "") {
             ?>
-            <p class="text-white">Phone: <?= $phone ?></p>
+            <p ><a class="navi-link-light" href="tel:<?= $phone ?>"><i class="fa fa-phone"></i>&nbsp;&nbsp;<?= $phone ?></a></p>
             <?php
           }
           if ($email != "") {
             ?>
-            <p><a class="navi-link-light" href="mailto:<?= $email ?>"><?= $email ?></a></p>
+            <p><a class="navi-link-light" href="mailto:<?= $email ?>"><i class="icon-mail"></i>&nbsp;&nbsp;<?= $email ?></a></p>
             <?php
           }
           if ($facebook_link != "") {
@@ -82,9 +82,7 @@ if (isset($admin->instagram_link)) {
           </ul>
         </section>
       </div>
-      <?php
-      if ($user_id == 0) {
-        ?>
+      <?php if ($user_id == 0) { ?>
         <div class="col-lg-3 col-md-6">
           <section class="widget widget-links widget-light-skin">
             <h3 class="widget-title">Account</h3>
@@ -93,16 +91,7 @@ if (isset($admin->instagram_link)) {
             </ul>
           </section>
         </div>
-        <!-- <div class="col-lg-3 col-md-6">
-          <section class="widget widget-links widget-light-skin">
-            <h3 class="widget-title">Internal</h3>
-            <ul>
-              <li><a href="<?= base_url()?>dvilsf">Admin</a></li>
-            </ul>
-          </div> -->
-          <?php
-        }
-        ?>
+      <?php } ?>
       </div>
       <?php
       if ($company_name != "") {

@@ -1,15 +1,15 @@
-<div class="page_title">
+<div class="page-title">
   <div class="container">
     <div class="column">
       <h1>Community Board</h1>
     </div>
   </div>
 </div>
-
 <div class="container padding-bottom-3x mb-1">
   <div class="row justify-content-center">
     <div class="col-lg-10">
       <?= $pagination ?>
+      <div style="margin-top: 20px;"></div>
       <?php
       $this->load->module('blog_pics');
       $this->load->module('timedate');
@@ -20,7 +20,12 @@
         $blog_url = base_url()."blog/view_blog/".$row->blog_url;
         $date_published = $this->timedate->get_date($row->date_published, "datepicker_us");
         $author = $row->author;
-        $picture_name = $this->blog_pics->get_where_custom("blog_id", $blog_id)->row(0)->picture_name;
+        $picture_query = $this->blog_pics->get_where_custom("blog_id", $blog_id);
+        if ($picture_query->num_rows() > 0) {
+          $picture_name = $picture_query->row(0)->picture_name;
+        } else {
+          $picture_name = "";
+        }
         $picture_src = base_url().'media/blog_small_pics/'.$picture_name;
         ?>
         <div class="product-card product-list"><a class="product-thumb" href="<?= $blog_url ?>">
@@ -35,10 +40,8 @@
             </div>
           </div>
         </div>
-
-        <?php
-      }
-      ?>
+        <?php } ?>
+        <?= $pagination ?>
     </div>
   </div>
 </div>

@@ -5,7 +5,7 @@
     </div>
   </div>
 </div>
-<div class="container">
+<div class="container padding-bottom-3x mb-1">
   <div class="col-xl-9 col-lg-8 order-lg-2">
     <!-- Products Grid-->
     <div class="isotope-grid cols-3 mb-2" style="position: relative; height: 1340px;">

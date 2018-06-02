@@ -45,7 +45,7 @@ if (isset($admin->instagram_link)) {
     if ($phone != "") {
       ?>
       <a class="hidden-md-down" href="tel:<?= $phone ?>">
-        <i class="icon-bell"></i>&nbsp; <?= $phone ?>
+        <i class="fa fa-phone"></i>&nbsp; <?= $phone ?>
       </a>
       <?php
     }
