@@ -17,24 +17,24 @@ class Templates extends MX_Controller {
     $user_name = $this->session->userdata('user_name');
     $bag_count = 0;
 
-    $mysql_query = "SELECT COUNT(DISTINCT session_id) AS count FROM boat_rental_basket WHERE session_id = ?";
+    $mysql_query = "SELECT DISTINCT * FROM boat_rental_basket WHERE session_id = ?";
     if (!empty($user_id)) {
       $mysql_query .= " OR shopper_id = ?";
       $query = $this->db->query($mysql_query, array($session_id, $user_id));
-      $bag_count += $query->row()->count;
+      $bag_count += $query->num_rows();
     } else {
       $query = $this->db->query($mysql_query, array($session_id));
-      $bag_count += $query->row()->count;
+      $bag_count += $query->num_rows();
     }
 
-    $mysql_query = "SELECT COUNT(DISTINCT session_id) AS count FROM lesson_basket WHERE session_id = ?";
+    $mysql_query = "SELECT DISTINCT * FROM lesson_basket WHERE session_id = ?";
     if (!empty($user_id)) {
       $mysql_query .= " OR shopper_id = ?";
       $query = $this->db->query($mysql_query, array($session_id, $user_id));
-      $bag_count += $query->row()->count;
+      $bag_count += $query->num_rows();
     } else {
       $query = $this->db->query($mysql_query, array($session_id));
-      $bag_count += $query->row()->count;
+      $bag_count += $query->num_rows();
     }
 
     $data['bag_count'] = $bag_count;

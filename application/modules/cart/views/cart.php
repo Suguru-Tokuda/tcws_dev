@@ -1,6 +1,9 @@
 <div class="container padding-bottom-3x mb-1">
   <h1>Your Booking Cart</h1>
   <?php
+  if (isset($delete_alerts)) {
+    echo $delete_alerts;
+  }
   if ($num_rows < 1) {
     echo "<p style='margin-bottom: 400px;'>You currently have no items in your shopping basket.</p>";
   } else {

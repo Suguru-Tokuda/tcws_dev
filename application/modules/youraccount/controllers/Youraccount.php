@@ -46,6 +46,9 @@ class Youraccount extends MX_Controller {
     $user_id = $this->site_security->_get_user_id();
 
     $data = $this->fetch_data_from_db($user_id);
+    $data['current_password'] = $this->input->post('current_password', true);
+    $data['new_password'] = $this->input->post('new_password', true);
+    $data['confirm_new_password'] = $this->input->post('confirm_new_password', true);
     if ($this->custom_validation->has_validation_errors()) {
       $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
@@ -73,13 +76,13 @@ class Youraccount extends MX_Controller {
 
       // Checks if the username is unique only the value is different from the original.
       if ($input_user_name != $user_data['user_name']) {
-        $this->custom_validation->set_rules('user_name', 'Username', 'min_length[5]|max_length[60]|callback_user_name_existence_check');
+        $this->custom_validation->set_rules('user_name', 'Username', 'min_length[5]|max_length[60]|user_exists_to_register');
       } else {
         $this->custom_validation->set_rules('user_name', 'Username', 'min_length[5]|max_length[60]');
       }
       // Checks if the email is unique only the value is different from the original.
       if ($input_email != $user_data['email']) {
-        $this->custom_validation->set_rules('email', 'Email', 'valid_email|max_length[120]');
+        $this->custom_validation->set_rules('email', 'Email', 'valid_email|max_length[120]|email_exists_to_register');
       } else {
         $this->custom_validation->set_rules('email', 'Email', 'max_length[120]');
       }
@@ -312,9 +315,10 @@ class Youraccount extends MX_Controller {
   function _process_update_account($user_id) {
     $this->load->module('users');
     $data['first_name'] = $this->input->post('first_name', true);
-    $data['last_name'] = $this->input->post('first_name', true);
-    $data['user_name'] = $this->input->post('first_name', true);
+    $data['last_name'] = $this->input->post('last_name', true);
+    $data['user_name'] = $this->input->post('user_name', true);
     $data['email'] = $this->input->post('email', true);
+    $this->users->_update($user_id, $data);
   }
 
   function start() {
@@ -347,8 +351,8 @@ class Youraccount extends MX_Controller {
   }
 
   function fetch_data_from_db($user_id) {
-    $this->load->module('users');
-    $query = $this->users->get_where($user_id);
+    $mysql_query = "SELECT * FROM users WHERE id = ?";
+    $query = $this->db->query($mysql_query, array($user_id));
     $result = $query->row();
     $data['first_name'] = $result->first_name;
     $data['last_name'] = $result->last_name;

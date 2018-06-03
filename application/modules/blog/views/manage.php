@@ -21,7 +21,7 @@ $create_blog_url = base_url()."blog/create";
           <th class="col-sm-1">Author</th>
           <th class="col-sm-3">Blog URL</th>
           <th class="col-sm-1">Status</th>
-          <th class="col-sm-2" >Actions</th>
+          <th class="col-sm-3" >Actions</th>
         </tr>
       </thead>
       <tbody>

@@ -25,12 +25,23 @@ class Cart extends MX_Controller {
     $boat_rental_table = "boat_rental_basket";
     $lesson_table = "lesson_basket";
     $data['view_file'] = "cart";
-    $data['boat_rental_query'] = $this->_fetch_cart_content($session_id, $shopper_id, $boat_rental_table);
+    $data['boat_rental_query'] = $this->_fetch_boat_rental_cart_content($session_id, $shopper_id, $boat_rental_table);
     $data['lesson_query'] = $this->_fetch_lesson_cart_content($session_id, $shopper_id, $lesson_table);
     $total_num = $data['boat_rental_query']->num_rows() + $data['lesson_query']->num_rows() ;
     $data['num_rows'] = $total_num;
     $data['lesson_num_rows'] = $data['lesson_query']->num_rows();
     $data['showing_statement'] = $this->_get_showing_statement($total_num);
+
+    if ($this->session->has_userdata('overdue_items')) {
+      $overdue_items = $this->session->userdata('overdue_items');
+      $delete_alerts = '<div class="alert alert-warning alert-dismissible fade show text-center margin-bottom-1x"><span class="alert-close" data-dismiss="alert"></span><i class="icon-bell"></i>&nbsp;&nbsp;<strong>Items below have been removed due to overdue or number of availabilities</strong>';
+      foreach ($overdue_items as $value) {
+        $delete_alerts .= "<br/>$value";
+      }
+      $delete_alerts .= "</div>";
+      $this->session->unset_userdata('overdue_items');
+      $data['delete_alerts'] = $delete_alerts;
+    }
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
@@ -100,7 +111,7 @@ class Cart extends MX_Controller {
     $this->load->module('site_security');
     $shopper_id = $this->site_security->_get_user_id();
     $third_bit = $this->uri->segment(3);
-    if (!is_numeric($shopper_id) AND ($third_bit == '')) {
+    if (!is_numeric($shopper_id) && ($third_bit == '')) {
       $this->_draw_checkout_btn_fake($boat_rental_query, $lesson_query);
     } else {
       $this->_draw_checkout_btn_real($boat_rental_query, $lesson_query);
@@ -143,7 +154,40 @@ class Cart extends MX_Controller {
     $this->load->view($view_file, $data);
   }
 
-  function _fetch_cart_content($session_id, $shopper_id, $table) {
+  function _fetch_boat_rental_cart_content($session_id, $shopper_id, $table) {
+    // get contents which are overdue
+    $current_time = time();
+    $mysql_query = "SELECT * FROM $table WHERE booking_start_date < ?";
+    $overdue_query = "";
+    if ($shopper_id > 0) {
+      $mysql_query .= " AND (session_id = ? OR shopper_id = ?)";
+      $overdue_query = $this->db->query($mysql_query, array($current_time, $session_id, $shopper_id));
+    } else {
+      $mysql_query .= " AND session_id = ?";
+      $overdue_query = $this->db->query($mysql_query, array($current_time, $session_id));
+    }
+
+    // delete all the overdue items
+    if ($overdue_query->num_rows() > 0) {
+      if ($this->session->has_userdata('overdue_items')) {
+        $overdue_items = $this->session->userdata('overdue_items');
+      } else {
+        $overdue_items = array();
+      }
+      $this->load->module('timedate');
+      foreach ($overdue_query->result() as $row) {
+        $date = $this->timedate->get_date($row->booking_start_date, "datepicker_us");
+        $start_time = $this->timedate->get_time($row->booking_start_date);
+        $end_time = $this->timedate->get_time($row->booking_end_date);
+        // push a string into the array
+        array_push($overdue_items, $row->boat_name.' for '.$date.': '.$start_time.' - '.$end_time.' because the date has passed.');
+        $delete_statement = "DELETE FROM $table WHERE id = ?";
+        $this->db->query($delete_statement, array($row->id));
+      }
+      // put the array into the session.
+      $this->session->set_userdata('overdue_items', $overdue_items);
+    }
+
     // fetch the contents of the shopping cart
     $this->load->module($table);
     $mysql_query = "
@@ -160,6 +204,39 @@ class Cart extends MX_Controller {
   }
 
   function _fetch_lesson_cart_content($session_id, $shopper_id, $table) {
+    // get contents which are overdue
+    $current_time = time();
+    $mysql_query = "SELECT * FROM $table WHERE lesson_start_date < ?";
+    $overdue_query = "";
+    if ($shopper_id > 0) {
+      $mysql_query .= " AND (session_id = ? OR shopper_id = ?)";
+      $overdue_query = $this->db->query($mysql_query, array($current_time, $session_id, $shopper_id));
+    } else {
+      $mysql_query .= " AND session_id = ?";
+      $overdue_query = $this->db->query($mysql_query, array($current_time, $session_id));
+    }
+
+    // delete all the overdue items
+    if ($overdue_query->num_rows() > 0) {
+      if ($this->session->has_userdata('overdue_items')) {
+        $overdue_items = $this->session->userdata('overdue_items');
+      } else {
+        $overdue_items = array();
+      }
+      $this->load->module('timedate');
+      foreach ($overdue_query->result() as $row) {
+        $date = $this->timedate->get_date($row->booking_start_date, "datepicker_us");
+        $start_time = $this->timedate->get_time($row->booking_start_date);
+        $end_time = $this->timedate->get_time($row->booking_end_date);
+        // push a string into the array
+        array_push($overdue_items, $row->boat_name.' for '.$data.': '.$start_time.' - '.$end_time.' because the date has passed.');
+        $delete_statement = "DELETE FROM $table WHERE id = ?";
+        $this->db->query($delete_statement, array($row->id));
+      }
+      // put the array into the session.
+      $this->session->set_userdata('overdue_items', $overdue_items);
+    }
+
     // fetch the contents of the shopping cart
     $this->load->module($table);
     $mysql_query = "
@@ -171,6 +248,42 @@ class Cart extends MX_Controller {
       $where_condition = " WHERE session_id = '$session_id'";
     }
     $mysql_query.= $where_condition;
+
+    $query = $this->db->query($mysql_query);
+
+    if ($query->num_rows() > 0) {
+      $this->load->module('timedate');
+
+
+      foreach ($query->result() as $row) {
+        $lesson_id = $row->lesson_id;
+        $lesson_schedule_id = $row->schedule_id;
+        $booking_qty = $row->booking_qty;
+        // get capacity of the lesson
+        $lesson_query = "SELECT lesson_capacity FROM lessons WHERE id = ?";
+        $lesson_capacity = $this->db->query($lesson_query, array($lesson_id))->row()->lesson_capacity;
+        $lesson_bookings_query = "SELECT SUM(lesson_booking_qty) AS total_bookings FROM lesson_bookings WHERE lesson_schedule_id = ?";
+        $total_bookings = $this->db->query($lesson_bookings_query, array($lesson_schedule_id))->row()->total_bookings;
+
+        // if booking_qty is less than capacity - total_bookings, delete the row
+        if ($booking_qty > ($lesson_capacity - $total_bookings)) {
+          if ($this->session->has_userdata('overdue_items')) {
+            $overdue_items = $this->session->userdata('overdue_items');
+          } else {
+            $overdue_items = array();
+          }
+          $date = $this->timedate->get_date($row->lesson_start_date, "datepicker_us");
+          $start_time = $this->timedate->get_time($row->lesson_start_date);
+          $end_time = $this->timedate->get_time($row->lesson_end_date);
+          array_push($overdue_items, $row->lesson_name.' for '.$date.': '.$start_time.' - '.$end_time.' deleted for booking quantity exceeds the availability.');
+          $delete_statement = "DELETE FROM $table WHERE id = ?";
+          $this->db->query($delete_statement, array($row->id));
+          $this->session->set_userdata('overdue_items', $overdue_items);
+        }
+      }
+
+    }
+
     $query = $this->lesson_basket->_custom_query($mysql_query);
     return $query;
   }

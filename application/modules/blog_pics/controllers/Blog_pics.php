@@ -18,7 +18,7 @@ class Blog_pics extends MX_Controller {
     return $priority;
   }
 
-  function get_first_picture_name_by_blog_id($blog_id) {
+  function get_first_picture_name($blog_id) {
     $mysql = "SELECT * FROM blog_pics WHERE blog_id = $blog_id AND priority = 1";
     $query = $this->db->query($mysql);
     if ($query->num_rows() > 0)
