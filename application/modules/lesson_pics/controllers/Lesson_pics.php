@@ -5,10 +5,10 @@ class Lesson_pics extends MX_Controller {
     parent::__construct();
   }
 
-  function get_picture_name_by_lesson_pic_id_for_lesson_id($lesson_id) {
+  function get_first_picture_name($lesson_id) {
     $mysql_query = "SELECT picture_name FROM lesson_pics WHERE lesson_id = $lesson_id AND priority = 1";
     $query = $this->_custom_query($mysql_query);
-    if ($query->num_rows() < 0) {
+    if ($query->num_rows() > 0) {
       $picture_name = $query->row()->picture_name;
     } else {
       $picture_name = "";

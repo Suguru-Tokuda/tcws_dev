@@ -10,6 +10,40 @@ class Templates extends MX_Controller {
     $this->admin($data);
   }
 
+  function _draw_toolbar() {
+    $this->load->module('site_security');
+    $user_id = $this->site_security->_get_user_id();
+    $session_id = $this->session->session_id;
+    $user_name = $this->session->userdata('user_name');
+    $bag_count = 0;
+
+    $mysql_query = "SELECT COUNT(DISTINCT session_id) AS count FROM boat_rental_basket WHERE session_id = ?";
+    if (!empty($user_id)) {
+      $mysql_query .= " OR shopper_id = ?";
+      $query = $this->db->query($mysql_query, array($session_id, $user_id));
+      $bag_count += $query->row()->count;
+    } else {
+      $query = $this->db->query($mysql_query, array($session_id));
+      $bag_count += $query->row()->count;
+    }
+
+    $mysql_query = "SELECT COUNT(DISTINCT session_id) AS count FROM lesson_basket WHERE session_id = ?";
+    if (!empty($user_id)) {
+      $mysql_query .= " OR shopper_id = ?";
+      $query = $this->db->query($mysql_query, array($session_id, $user_id));
+      $bag_count += $query->row()->count;
+    } else {
+      $query = $this->db->query($mysql_query, array($session_id));
+      $bag_count += $query->row()->count;
+    }
+
+    $data['bag_count'] = $bag_count;
+    $data['user_id'] = $user_id;
+    $data['session_id'] = $session_id;
+    $data['user_name'] = $user_name;
+    $this->load->view('toolbar', $data);
+  }
+
   function _draw_top_nav_bar() {
     $mysql_query = "SELECT * FROM admin_info WHERE id = 1";
     $admin = $this->db->query($mysql_query)->row();

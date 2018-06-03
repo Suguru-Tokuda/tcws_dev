@@ -10,7 +10,7 @@ echo form_hidden('cancel_return', $cancel_return);
 
 $count = 0;
 if ($boat_rental_query->num_rows() > 0){
-  foreach ($query->result() as $row) {
+  foreach ($boat_rental_query->result() as $row) {
     $count++;
     $item_title = $row->boat_name;
     $price = $row->boat_fee * $row->hours;
