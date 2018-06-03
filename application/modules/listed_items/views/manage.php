@@ -1,7 +1,4 @@
 <?php
-if (isset($flash)) {
-  echo $flash;
-}
 $create_item_url = base_url()."listed_items/create_item";
 ?>
 <div class="page-title">
@@ -11,8 +8,12 @@ $create_item_url = base_url()."listed_items/create_item";
     </div>
   </div>
 </div>
-
 <div class="container padding-bottom-3x mb-2">
+  <?php
+  if (isset($flash)) {
+    echo $flash;
+  }
+   ?>
   <div class="row">
     <div class="col-sm-3">
       <?php echo Modules::run('youraccount/_draw_account_navbar'); ?>

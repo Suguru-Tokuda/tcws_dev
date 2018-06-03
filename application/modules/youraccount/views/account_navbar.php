@@ -1,10 +1,18 @@
 <?php
 $this->load->module('youraccount');
+$this->load->module('store_items');
+$this->load->module('boat_rental');
+$this->load->module('lessons');
+$this->load->module('blog');
 $url_segment = $this->uri->segment(1);
 $url_segment2 = $this->uri->segment(2);
-$items_url = base_url().'listed_items/manage';
-$lessons_url = base_url().'lessons/view_my_lessons';
-$boats_url = base_url().'boat_rental/view_my_rental_boats';
+$pagination_limit_for_items = $this->store_items->get_pagination_limit("main");
+$pagination_limit_for_boat_rental = $this->boat_rental->get_pagination_limit("main");
+$pagination_limit_for_lessons = $this->lessons->get_pagination_limit("main");
+
+$items_url = base_url().'listed_items/manage/'.$pagination_limit_for_items;
+$lessons_url = base_url().'lessons/view_my_lessons/'.$pagination_limit_for_lessons;
+$boats_url = base_url().'boat_rental/view_my_rental_boats/'.$pagination_limit_for_lessons;
 $manage_profile_url = base_url().'youraccount/manage_account';
 $logout_url = base_url().'youraccount/logout';
  ?>

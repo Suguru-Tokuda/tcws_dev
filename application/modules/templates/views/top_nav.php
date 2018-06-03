@@ -14,12 +14,12 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
 
 // site links
 $browse_for_sale_link = base_url().'store_items/view_all_items/'.$pagination_limit_for_items;
-$post_item_link = base_url().'listed_items/create_item';
-$my_items_link = base_url().'listed_items/manage';
+$post_item_link = base_url().'listed_items/create_item/';
+$my_items_link = base_url().'listed_items/manage/'.$pagination_limit_for_items;
 $view_lessons_link = base_url().'lessons/view_lessons/'.$pagination_limit_for_lessons;
-$my_lessons_link = base_url().'lessons/view_my_lessons';
+$my_lessons_link = base_url().'lessons/view_my_lessons/'.$pagination_limit_for_lessons;
 $view_boat_rental_link = base_url().'boat_rental/view_boat_rental/'.$pagination_limit_for_boat_rental;
-$my_rental_boats_link = base_url().'boat_rental/view_my_rental_boats';
+$my_rental_boats_link = base_url().'boat_rental/view_my_rental_boats/'.$pagination_limit_for_boat_rental;
 $community_link = base_url().'blog/view_blogs/'.$pagination_limit_for_blog;
 
 // logo
