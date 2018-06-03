@@ -92,7 +92,7 @@ $update_password_location = base_url().'youraccount/update_password';
 
           <div class="form-group">
             <div class="col-md-4">
-              <button class="btn btn-primary" type="submit" value="submit">Update Password</button>
+              <button class="btn btn-primary" type="submit" value="submit" name="submit">Update Password</button>
             </div>
           </div>
         </fieldset>

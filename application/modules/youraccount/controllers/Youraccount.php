@@ -52,7 +52,7 @@ class Youraccount extends MX_Controller {
     if ($this->custom_validation->has_validation_errors()) {
       $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('account');
     $data['view_file'] = "manage_account";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
@@ -91,12 +91,51 @@ class Youraccount extends MX_Controller {
         $this->_process_update_account($user_id);
         $flash_msg = "Account Information was successfully updated";
         $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
-        $this->session->set_flashdata('item', $value);
+        $this->session->set_flashdata('account', $value);
         redirect('youraccount/manage_account');
       } else {
         redirect('youraccount/manage_account');
       }
     }
+  }
+
+  function update_password() {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_logged_in();
+    $submit = $this->input->post('submit', true);
+
+    if ($submit == "submit") {
+      $user_id = $this->site_security->_get_user_id();
+      $user_data = $this->fetch_data_from_db($user_id);
+      $current_password = $this->input->post('current_password');
+      if (!$this->site_security->_verify_hash($current_password, $user_data['password'])) {
+        $this->custom_validation->add_validation_error("Current password does not match.");
+        redirect('youraccount/manage_account');
+      }
+
+      $this->custom_validation->set_rules('new_password', 'New password', 'min_length[7]|max_length[35]');
+      $this->custom_validation->set_rules('confirm_new_password', 'Confirm password', 'matches[new_password]');
+      if ($this->custom_validation->run()) {
+        $this->_process_update_password();
+        $flash_msg = "Password was successfully updated";
+        $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('account', $value);
+        redirect('youraccount/manage_account');
+      } else {
+        redirect('youraccount/manage_account');
+      }
+    }
+  }
+
+  function _process_update_password() {
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_logged_in();
+    $user_id = $this->site_security->_get_user_id();
+    $password = $this->input->post('new_password', true);
+    $hashed_password = $this->site_security->_hash_string($password);
+
+    $update_statement = "UPDATE users SET password = ? WHERE id = ?";
+    $this->db->query($update_statement, array($hashed_password, $user_id));
   }
 
   function logout() {
@@ -109,7 +148,7 @@ class Youraccount extends MX_Controller {
   function welcome() {
     $this->load->module('site_security');
     $this->site_security->_make_sure_logged_in();
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('account');
     redirect('youraccount/view_account');
     // redirect('listed_items/manage');
   }
@@ -323,7 +362,7 @@ class Youraccount extends MX_Controller {
 
   function start() {
     $data = $this->fetch_data_from_post();
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('account');
     $data['view_module'] = "youraccount";
     $data['view_file'] = "signin_signup";
     if ($this->custom_validation->has_validation_errors()) {
