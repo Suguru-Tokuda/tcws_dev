@@ -58,16 +58,16 @@ class Store_items extends MX_Controller {
   function search_items_by_keywords() {
     $this->load->module('site_settings');
     $submit = $this->input->post('submit', true);
-    $searchKeywords = $this->input->post('searchKeywords', true);
-    $searchKeywords = trim($searchKeywords);
-    $searchKeywords = explode(" ", $searchKeywords);
+    $search_keywords = $this->input->post('search_keywords', true);
+    $search_keywords = trim($search_keywords);
+    $search_keywords = explode(" ", $search_keywords);
 
     if ($submit == "submit") {
       $use_limit = false;
-      $mysql_query = $this->_get_mysql_query_for_search_items_by_keywords($searchKeywords, $use_limit);
+      $mysql_query = $this->_get_mysql_query_for_search_items_by_keywords($search_keywords, $use_limit);
       $query = $this->_custom_query($mysql_query);
       $keywords = "";
-      foreach($searchKeywords as $value) {
+      foreach($search_keywords as $value) {
         $keywords.= $value." ";
       }
       $data['query'] = $query;
@@ -79,19 +79,52 @@ class Store_items extends MX_Controller {
     }
   }
 
-  function _get_mysql_query_for_search_items_by_keywords($searchKeywords, $use_limit) {
+  function search() {
     $this->load->module('site_security');
-    $first_keyword = $this->site_security->_clean_string($searchKeywords[0]);
+    $this->site_security->_make_sure_is_admin();
+    $this->load->module('site_settings');
+    $submit = $this->input->post('submit', true);
+
+    $search_keywords = $this->input->post('search_keywords', true);
+    $data['search_keywords'] = $search_keywords;
+    $search_keywords = trim($search_keywords);
+    $search_keywords = explode(" ", $search_keywords);
+
+    $use_limit = false;
+    $mysql_query = $this->_get_mysql_query_for_search_items_by_keywords($search_keywords, $use_limit);
+    $query = $this->_custom_query($mysql_query);
+    $total_items = $query->num_rows();
+
+    // $pagination_data['template'] = "public_bootstrap";
+    // $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    // $pagination_data['total_rows'] = $total_items;
+    // $pagination_data['offset_segment'] = 4;
+    // $pagination_data['limit'] = $this->get_pagination_limit("admin");
+
+    // $use_limit = true;
+    // $mysql_query = $this->_get_mysql_query_for_search_items_by_keywords($search_keywords, $use_limit);
+    // $query = $this->_custom_query($mysql_query);
+    // $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $data['query'] = $query;
+    $data['view_file'] = "manage";
+    $this->load->module('templates');
+    $this->templates->admin($data);
+  }
+
+  function _get_mysql_query_for_search_items_by_keywords($search_keywords, $use_limit) {
+    $this->load->module('site_security');
+    $first_keyword = $this->site_security->_clean_string($search_keywords[0]);
     $mysql_query = "
-    SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price
+    SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, si.user_id, si.status
     FROM store_items si
     LEFT JOIN item_pics sp ON si.id = sp.item_id
     WHERE item_title LIKE '%$first_keyword%'
     OR item_description LIKE '%$first_keyword%' AND status = 1"
     ;
-    if (sizeOf($searchKeywords) > 1) {
-      for ($i = 1; $i < sizeOf($searchKeywords); $i++) {
-        $keyword = $this->site_security->_clean_string($searchKeywords[$i]);
+    if (sizeOf($search_keywords) > 1) {
+      for ($i = 1; $i < sizeOf($search_keywords); $i++) {
+        $keyword = $this->site_security->_clean_string($search_keywords[$i]);
         $mysql_query.= " OR item_title LIKE '$keyword' OR item_description LIKE '$keyword'";
       }
     }
@@ -650,6 +683,7 @@ class Store_items extends MX_Controller {
 
     // gettinf flash data
     $data['flash'] = $this->session->flashdata('item');
+    $data['search_keywords'] = $this->input->post('search_keywords', true);
     // getting data from DB
     // this means order by item_title
     $use_limit = false;
@@ -677,7 +711,7 @@ class Store_items extends MX_Controller {
   }
 
   function _generate_mysql_query_for_manage_store_items($use_limit) {
-    $mysql_query = "SELECT si.*, sa.user_name  FROM store_items si
+    $mysql_query = "SELECT si.*, sa.user_name FROM store_items si
     LEFT JOIN users sa ON si.user_id = sa.id
     ";
     if ($use_limit == true) {

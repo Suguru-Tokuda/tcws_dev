@@ -27,7 +27,7 @@ $second_bit = $this->uri->segment(1);
 ?>
 <header class="navbar navbar-sticky">
   <form class="site-search" action="<?= $search_form_location ?>" method="post">
-    <input type="text" name="searchKeywords" placeholder="Type to search...">
+    <input type="text" name="search_keywords" placeholder="Type to search...">
     <div class="search-tools"><span class="clear-search">Clear</span><span class="close-search"><i class="icon-cross"></i></span></div>
     <button class="btn btn-default" name="submit" type="submit" value="submit"><i class="glyphicon glyphicon-search"></i></button>
   </form>

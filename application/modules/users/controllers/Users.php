@@ -93,7 +93,6 @@ class Users extends MX_Controller {
     $use_limit = true;
     $mysql_query = $this->_get_mysql_query_for_manage_users($use_limit);
     $query = $this->_custom_query($mysql_query);
-    $total_users = $query->num_rows();
 
     $pagination_data['template'] = "public_bootstrap";
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();

@@ -4,7 +4,7 @@ if (isset($flash)) {
   echo $flash;
 }
 $create_account_url = base_url()."users/create";
-$search_form = base_url()."users/search";
+$search_form_location = base_url()."users/search";
 ?><p style="margin-top: 30px;">
   <a href="<?= $create_account_url ?>"><button class="btn btn-primary" type="submit">Add New Account</button></a>
 
@@ -12,7 +12,8 @@ $search_form = base_url()."users/search";
     <h2><i class="fa fas fa-briefcase"></i><span class="break"></span>Members</h2>
   </div>
   <div class="form-panel">
-    <form class="form-horizontal" method="post" action="<?= $search_form ?>">
+    <?= $pagination ?>
+    <form class="form-horizontal" method="post" action="<?= $search_form_location ?>">
       <div class="form-group">
         <div class="col-sm-2">
           <input class="form-control" type="text" name="search_keyword" value="<?= $search_keyword ?>" placeholder="search">

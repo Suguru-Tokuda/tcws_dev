@@ -1,4 +1,4 @@
-  <h1>Manage Lessons</h1>
+  <h2>Manage Lessons</h2>
   <?php
   if (isset($flash)) {
     echo $flash;
@@ -8,12 +8,10 @@
 
     <a href="<?= $create_lesson_url ?>"<button class="btn btn-primary" type="submit">Add New Lessons</button></a>
 
-    <div class="row-fluid sortable">
-      <div class="box span12">
         <div class="green-panel" data-original-title>
           <h2><i class="fa fa-tag "></i>Lessons</h2>
         </div>
-        <div class="box-content">
+        <div class="form-panel">
           <table class="table table-striped table-bordered bootstrap-datatable datatable">
             <thead>
               <?php
@@ -84,5 +82,3 @@
         </tbody>
       </table>
     </div>
-  </div>
-</div>

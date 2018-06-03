@@ -16,16 +16,10 @@ $this->uri->segment(3);
     <?php
   }
   ?>
-  <div class="row-fluid sortable">
-    <div class="box span12">
-      <div class="green-panel" data-original-title>
-        <h2><i class="fa fas-list"></i>Exisiting Categories</h2>
-      </div>
-
-      <div class="box-content">
-        <?php
-        echo Modules::run('store_categories/_draw_sortable_list', $parent_cat_id);
-         ?>
-      </div>
-    </div>
+  <div class="green-panel" data-original-title>
+    <h2><i class="fa fas-list"></i>Exisiting Categories</h2>
   </div>
+
+  <?php
+  echo Modules::run('store_categories/_draw_sortable_list', $parent_cat_id);
+  ?>

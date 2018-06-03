@@ -80,7 +80,7 @@ if (is_numeric($update_id)) { ?>
             <?php
             $cancel_link = base_url().'users/manage';
              ?>
-             <a href="<?= $cancel_link ?>" class="btn btn-default">Cancel</a>
+             <a href="<?= $cancel_link ?>" class="btn btn-default">Back</a>
           </div>
         </fieldset>
       </form>
