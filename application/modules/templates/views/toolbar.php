@@ -1,9 +1,6 @@
 <?php
-$this->load->module('site_security');
-$user_id = $this->site_security->_get_user_id();
 $signin_signup_url = base_url()."youraccount/start";
 $my_page_url = base_url()."youraccount/view_account";
-$user_name = $this->session->userdata('user_name');
 ?>
 <div class="toolbar">
   <div class="inner" >
@@ -12,8 +9,8 @@ $user_name = $this->session->userdata('user_name');
         <a href="
         <?php if ($user_id == "") { ?>
           <?= $signin_signup_url ?>
-          <?php } else { ?>
-        <?= $my_page_url ?>
+        <?php } else { ?>
+          <?= $my_page_url ?>
         <?php } ?>
         "></a><i class="icon-head"></i>
         <ul class="toolbar-dropdown">
@@ -40,8 +37,16 @@ $user_name = $this->session->userdata('user_name');
           }
           ?>
         </div>
-        <div class="account"><a href="<?= base_url() ?>cart"></a><i class="icon-bag"></i></div>
-        <div class="search"><i class="icon-search"></i></div>
+        <div class="cart">
+          <a href="<?= base_url() ?>cart"></a>
+          <i class="icon-bag"></i>
+          <?php if ($bag_count > 0) {
+            echo '<span class="count">'.$bag_count.'</span>';
+          } ?>
+        </div>
+        <div class="search">
+          <i class="icon-search"></i>
+        </div>
       </div>
     </div>
   </div>

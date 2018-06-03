@@ -147,13 +147,12 @@ class Cart extends MX_Controller {
     // fetch the contents of the shopping cart
     $this->load->module($table);
     $mysql_query = "
-    SELECT b.*, p.picture_name, p.priority
-    FROM $table b LEFT JOIN boat_pics p ON b.boat_id = p.boat_rental_id
+    SELECT * FROM $table
     ";
     if ($shopper_id > 0) {
-      $where_condition = " WHERE b.shopper_id = $shopper_id OR b.session_id = '$session_id' AND ( p.priority is null or p.priority = 1)";
+      $where_condition = " WHERE shopper_id = $shopper_id OR session_id = '$session_id'";
     } else {
-      $where_condition = " WHERE b.session_id = '$session_id' AND ( p.priority is null or p.priority = 1)";
+      $where_condition = " WHERE session_id = '$session_id'";
     }
     $mysql_query.= $where_condition;
     $query = $this->boat_rental_basket->_custom_query($mysql_query);
@@ -164,13 +163,12 @@ class Cart extends MX_Controller {
     // fetch the contents of the shopping cart
     $this->load->module($table);
     $mysql_query = "
-    SELECT b.*, p.picture_name
-    FROM $table b LEFT JOIN lesson_pics p ON b.lesson_id = p.lesson_id
+    SELECT * FROM $table
     ";
     if ($shopper_id > 0) {
-      $where_condition = " WHERE b.shopper_id = $shopper_id OR b.session_id = '$session_id' AND (p.priority is null or p.priority = 1)";
+      $where_condition = " WHERE shopper_id = $shopper_id OR session_id = '$session_id'";
     } else {
-      $where_condition = " WHERE b.session_id = '$session_id' AND (p.priority is null or p.priority = 1)";
+      $where_condition = " WHERE session_id = '$session_id'";
     }
     $mysql_query.= $where_condition;
     $query = $this->lesson_basket->_custom_query($mysql_query);

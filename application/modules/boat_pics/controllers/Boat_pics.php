@@ -5,7 +5,7 @@ class Boat_pics extends MX_Controller {
     parent::__construct();
   }
 
-  function get_first_picture_name_for_boat_rental_id($boat_rental_id) {
+  function get_first_picture_name($boat_rental_id) {
     $mysql_query = "SELECT * FROM boat_pics WHERE boat_rental_id = $boat_rental_id AND priority = 1";
     $query = $this->_custom_query($mysql_query);
     if ($query->num_rows() == 0) {
@@ -16,16 +16,16 @@ class Boat_pics extends MX_Controller {
     return $picture_name;
   }
 
-  function get_first_picture_name($id) {
-    $mysql_query = "SELECT * FROM boat_pics WHERE id = $id AND priority = 1";
-    $query = $this->_custom_query($mysql_query);
-    if ($query->num_rows() == 0) {
-      $picture_name = "";
-    } else {
-      $picture_name = $query->row()->picture_name;
-    }
-    return $picture_name;
-  }
+  // function get_first_picture_name($id) {
+  //   $mysql_query = "SELECT * FROM boat_pics WHERE id = $id AND priority = 1";
+  //   $query = $this->_custom_query($mysql_query);
+  //   if ($query->num_rows() == 0) {
+  //     $picture_name = "";
+  //   } else {
+  //     $picture_name = $query->row()->picture_name;
+  //   }
+  //   return $picture_name;
+  // }
 
   function get_picture_name_by_boat_pic_id($id) {
     $query = $this->get_where($id);
