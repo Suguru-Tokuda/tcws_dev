@@ -124,7 +124,7 @@ class Users extends MX_Controller {
   }
 
   function _get_mysql_query_for_manage_users_with_keyword($use_limit, $keyword) {
-    $mysql_query = "SELECT * FROM users WHERE user_name LIKE '%$keyword%' OR first_name LIKE '%$keyword%' OR last_name LIKE '%$keyword%' OR email LIKE '%$keyword%'  ORDER BY last_name";
+    $mysql_query = "SELECT * FROM users WHERE user_name LIKE '%$keyword%' OR first_name LIKE '%$keyword%' OR last_name LIKE '%$keyword%' OR email LIKE '%$keyword%' OR id LIKE '%$keyword%' ORDER BY last_name";
     if ($use_limit == true) {
       $limit = $this->get_pagination_limit("main");
       $offset = $this->_get_pagination_offset();

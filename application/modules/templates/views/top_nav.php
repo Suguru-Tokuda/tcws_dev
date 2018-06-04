@@ -39,7 +39,7 @@ $second_bit = $this->uri->segment(1);
       <a class="offcanvas-toggle menu-toggle" href="#mobile-menu" data-toggle="offcanvas"></a>
 
       <!-- Site Logo-->
-      <?php if (isset($logo_path)){ ?>
+      <?php if ($logo_path !== ""){ ?>
         <a class="site-logo" href="<?= base_url() ?>"><img src="<?= $logo_path ?>" alt="site_logo"></a>
       <?php } ?>
 

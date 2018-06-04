@@ -91,20 +91,9 @@ class Store_items extends MX_Controller {
     $search_keywords = explode(" ", $search_keywords);
 
     $use_limit = false;
-    $mysql_query = $this->_get_mysql_query_for_search_items_by_keywords($search_keywords, $use_limit);
+    $mysql_query = $this->_get_mysql_query_for_search_items_by_keywords_in_admin($search_keywords, $use_limit);
     $query = $this->_custom_query($mysql_query);
     $total_items = $query->num_rows();
-
-    // $pagination_data['template'] = "public_bootstrap";
-    // $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
-    // $pagination_data['total_rows'] = $total_items;
-    // $pagination_data['offset_segment'] = 4;
-    // $pagination_data['limit'] = $this->get_pagination_limit("admin");
-
-    // $use_limit = true;
-    // $mysql_query = $this->_get_mysql_query_for_search_items_by_keywords($search_keywords, $use_limit);
-    // $query = $this->_custom_query($mysql_query);
-    // $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
 
     $data['query'] = $query;
     $data['view_file'] = "manage";
@@ -122,6 +111,31 @@ class Store_items extends MX_Controller {
     WHERE item_title LIKE '%$first_keyword%'
     OR item_description LIKE '%$first_keyword%' AND status = 1"
     ;
+    if (sizeOf($search_keywords) > 1) {
+      for ($i = 1; $i < sizeOf($search_keywords); $i++) {
+        $keyword = $this->site_security->_clean_string($search_keywords[$i]);
+        $mysql_query.= " OR item_title LIKE '$keyword' OR item_description LIKE '$keyword'";
+      }
+    }
+    if ($use_limit == true) {
+      $limit = $this->get_pagination_limit("main");
+      $offset = $this->_get_pagination_offset();
+      $mysql_query.= " LIMIT ".$offset.", ".$limit;
+    }
+    return $mysql_query;
+  }
+
+  function _get_mysql_query_for_search_items_by_keywords_in_admin($search_keywords, $use_limit) {
+    $this->load->module('site_security');
+    $first_keyword = $this->site_security->_clean_string($search_keywords[0]);
+    $mysql_query = "
+    SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, si.user_id, si.status
+    FROM store_items si
+    LEFT JOIN item_pics sp ON si.id = sp.item_id
+    WHERE item_title LIKE '%$first_keyword%'
+    OR item_description LIKE '%$first_keyword%'
+    OR user_id LIKE '%$first_keyword%'
+    AND status = 1";
     if (sizeOf($search_keywords) > 1) {
       for ($i = 1; $i < sizeOf($search_keywords); $i++) {
         $keyword = $this->site_security->_clean_string($search_keywords[$i]);

@@ -200,6 +200,12 @@ class Cart extends MX_Controller {
     }
     $mysql_query.= $where_condition;
     $query = $this->boat_rental_basket->_custom_query($mysql_query);
+
+    // update the table and set session id to the same one
+    foreach ($query->result() as $row) {
+      $update_statement = "UPDATE $table SET session_id = ? WHERE id = ?";
+      $this->db->query($update_statement, array($session_id, $row->id));
+    }
     return $query;
   }
 
@@ -254,7 +260,6 @@ class Cart extends MX_Controller {
     if ($query->num_rows() > 0) {
       $this->load->module('timedate');
 
-
       foreach ($query->result() as $row) {
         $lesson_id = $row->lesson_id;
         $lesson_schedule_id = $row->schedule_id;
@@ -283,8 +288,12 @@ class Cart extends MX_Controller {
       }
 
     }
-
     $query = $this->lesson_basket->_custom_query($mysql_query);
+    // update the table and set session id to the same one
+    foreach ($query->result() as $row) {
+      $update_statement = "UPDATE $table SET session_id = ? WHERE id = ?";
+      $this->db->query($update_statement, array($session_id, $row->id));
+    }
     return $query;
   }
 

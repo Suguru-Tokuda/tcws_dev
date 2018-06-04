@@ -15,8 +15,8 @@ $search_form_location = base_url()."users/search";
     <?= $pagination ?>
     <form class="form-horizontal" method="post" action="<?= $search_form_location ?>">
       <div class="form-group">
-        <div class="col-sm-2">
-          <input class="form-control" type="text" name="search_keyword" value="<?= $search_keyword ?>" placeholder="search">
+        <div class="col-sm-3">
+          <input class="form-control" type="text" name="search_keyword" value="<?= $search_keyword ?>" placeholder="Username, Name, Email, or ID">
         </div>
         <div class="col-sm-offset-1">
           <button type="submit" name="submit" class="btn btn-primary">Search</button>

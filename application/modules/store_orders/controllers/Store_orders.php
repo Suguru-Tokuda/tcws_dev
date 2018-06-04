@@ -9,11 +9,9 @@ class Store_orders extends MX_Controller {
   // this function looks for items in boat_rental_baskets and lesson_basket for the session_id
   function process_orders($session_id) {
     $this->load->module('site_security');
-    $table = "boat_rental_basket";
-    $lesson_table = "lesson_basket";
 
-    $boat_rental_basket_query = "SELECT * FROM boat_rental_basket WHERE session_id = '$session_id'";
     $lesson_basket_query = "SELECT * FROM lesson_basket WHERE session_id = '$session_id'";
+    $boat_rental_basket_query = "SELECT * FROM boat_rental_basket WHERE session_id = '$session_id'";
 
     $query = $this->db->query($lesson_basket_query);
 
@@ -31,10 +29,10 @@ class Store_orders extends MX_Controller {
     foreach ($query->result() as $row) {
       $boat_rental_id = $row->boat_id;
       $user_id = $row->shopper_id;
-      $boat_start_date = $row->booking_start_date;
-      $boat_end_date = $row->booking_end_date;
       $boat_fee = $row->boat_fee;
       $hours = $row->hours;
+      $boat_start_date = $row->booking_start_date;
+      $boat_end_date = $row->booking_end_date;
       $insert_statement = "INSERT INTO boat_rental_schedules (boat_rental_id, user_id, boat_fee, hours, boat_start_date, boat_end_date, session_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
       $this->db->query($insert_statement, array($boat_rental_id, $user_id, $boat_fee, $hours, $boat_start_date, $boat_end_date, $session_id));
     }

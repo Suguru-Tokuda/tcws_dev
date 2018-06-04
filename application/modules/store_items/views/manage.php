@@ -18,7 +18,7 @@ $search_form_location = base_url()."store_items/search";
   <form class="form-horizontal" method="post" action="<?= $search_form_location ?>">
     <div class="form-group">
       <div class="col-sm-2">
-        <input class="form-control" type="text" name="search_keywords" value="<?= $search_keywords ?>" placeholder="search">
+        <input class="form-control" type="text" name="search_keywords" value="<?= $search_keywords ?>" placeholder="Title, Description, or User ID">
       </div>
       <div class="col-sm-offset-1">
         <button type="submit" name="submit" class="btn btn-primary">Search</button>
