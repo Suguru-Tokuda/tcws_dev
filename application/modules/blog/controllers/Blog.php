@@ -128,7 +128,10 @@ class Blog extends MX_Controller {
       redirect('blog/manage');
     } else if ($submit == "Submit") {
       // process the form
-      $this->custom_validation->set_rules('blog_title', 'Blog Title', 'max_length[250]'); // callback is for checking if the item already exists
+      $this->custom_validation->set_rules('blog_title', 'Title', 'max_length[250]');
+      $this->custom_validation->set_rules('blog_description', 'Description', 'max_length[250]');
+      $this->custom_validation->set_rules('blog_content', 'Content', 'max_length[250]');
+      $this->custom_validation->set_rules('author', 'Author', 'min_length[3]|max_length[60]');
       if ($this->custom_validation->run() == true) {
         // get the variables and assign into $data variable
         $data = $this->fetch_data_from_post();
