@@ -309,8 +309,9 @@ class Listed_items extends MX_Controller {
       } else if ($submit == "submit") {
         $status = $this->input->post('status', true);
         // do validation
-        $this->custom_validation->set_rules('item_title', 'Item Title', 'max_length[240]');
-        $this->custom_validation->set_rules('item_price', 'Item Price', 'numeric');
+        $this->custom_validation->set_rules('item_title', 'Title', 'max_length[240]');
+        $this->custom_validation->set_rules('item_price', 'Price', 'numeric');
+        $this->custom_validation->set_rules('item_description', 'Description', 'max_length[240]');
 
         if ($this->custom_validation->run() == true) {
           // get info from the post

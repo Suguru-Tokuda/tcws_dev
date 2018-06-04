@@ -43,24 +43,24 @@ class Admin_info extends MX_Controller {
       redirect('admin_info/view_admin_info');
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
-      $this->custom_validation->set_rules('first_name', 'First Name', 'min_length[3]');
-      $this->custom_validation->set_rules('last_name', 'Last Name', 'min_length[3]');
-      $this->custom_validation->set_rules('phone', 'Phone', 'numeric');
-      $this->custom_validation->set_rules('email', 'Email', 'valid_email');
+      $this->custom_validation->set_rules('first_name', 'First Name', 'min_length[3]|max_length[60]');
+      $this->custom_validation->set_rules('last_name', 'Last Name', 'min_length[3]|max_length[60]');
+      $this->custom_validation->set_rules('phone', 'Phone', 'numeric|max_length[30]');
+      $this->custom_validation->set_rules('email', 'Email', 'valid_email|max_length[65]');
       if ($this->input->post('facebook_link', true) !== "") {
-        $this->custom_validation->set_rules('facebook_link', 'Facebook Link', 'min_length[5]');
+        $this->custom_validation->set_rules('facebook_link', 'Facebook Link', 'min_length[5]|max_length[500]');
       }
       if ($this->input->post('twitter_link', true) !== "") {
-        $this->custom_validation->set_rules('twitter_link', 'Twitter Link', 'min_length[5]');
+        $this->custom_validation->set_rules('twitter_link', 'Twitter Link', 'min_length[5]|max_length[500]');
       }
       if ($this->input->post('instagram_link', true) !== "") {
-        $this->custom_validation->set_rules('instagram_link', 'Instagram Link', 'min_length[5]');
+        $this->custom_validation->set_rules('instagram_link', 'Instagram Link', 'min_length[5]|max_length[500]');
       }
-      $this->custom_validation->set_rules('company_name', 'Company Name', 'min_length[3]');
-      $this->custom_validation->set_rules('address', 'Address', 'min_length[5]');
-      $this->custom_validation->set_rules('city', 'City', 'min_length[3]');
+      $this->custom_validation->set_rules('company_name', 'Company Name', 'min_length[3]|max_length[65]');
+      $this->custom_validation->set_rules('address', 'Address', 'min_length[5]|max_length[250]');
+      $this->custom_validation->set_rules('city', 'City', 'min_length[3]|max_length[60]');
       $this->custom_validation->set_rules('state', 'State', 'min_length[2]');
-      $this->custom_validation->set_rules('description', 'Description', 'min_length[10]');
+      $this->custom_validation->set_rules('description', 'Description', 'min_length[10]|max_length[500]');
 
       if ($this->custom_validation->run()) {
         $data = $this->fetch_data_from_post();
@@ -131,8 +131,8 @@ class Admin_info extends MX_Controller {
   function do_update_password($admin_id) {
     $this->load->module('site_security');
 
-    $this->custom_validation->set_rules('current_password', 'Current Password', 'min_length[8]');
-    $this->custom_validation->set_rules('new_password', 'New Password', 'min_length[8]');
+    $this->custom_validation->set_rules('current_password', 'Current Password', 'min_length[8]|max_length[30]');
+    $this->custom_validation->set_rules('new_password', 'New Password', 'min_length[8]|max_length[30]');
     $this->custom_validation->set_rules('confirm_new_password', 'Confirm New Password', 'matches[new_password]');
 
     if ($this->custom_validation->run()) {

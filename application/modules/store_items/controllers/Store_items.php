@@ -747,12 +747,12 @@ class Store_items extends MX_Controller {
       redirect('store_items/manage');
     } else if ($submit == "submit") {
       // process the form
-      $this->custom_validation->set_rules('item_title', 'Item Title', 'max_length[240]'); // callback is for checking if the item already exists
+      $this->custom_validation->set_rules('item_title', 'Item Title', 'max_length[240]');
       $this->custom_validation->set_rules('item_price', 'Item Price', 'numeric');
       if ($this->input->post('was_price') != "") {
         $this->custom_validation->set_rules('was_price', 'Was Price', 'numeric');
       }
-      // $this->custom_validation->set_rules('status', 'Status', 'required|numeric');
+      $this->custom_validation->set_rules('item_description', 'Description', 'max_length[240]');
       if ($this->custom_validation->run() == true) {
         // get the variables and assign into $data variable
         $data = $this->fetch_data_from_post();

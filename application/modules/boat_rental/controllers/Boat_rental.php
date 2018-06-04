@@ -297,11 +297,11 @@ class Boat_rental extends MX_Controller {
     } else if ($submit == "submit") {
       $input_data = $this->fetch_data_from_post();
       $status = $this->input->post('status', true);
-      $this->custom_validation->set_rules('boat_name', 'Boat Name', 'max_length[240]');
+      $this->custom_validation->set_rules('boat_name', 'Boat Name', 'max_length[60]');
       $this->custom_validation->set_rules('boat_description', 'Boat Description', 'max_length[240]');
       $this->custom_validation->set_rules('boat_capacity','Boat Capacity','numeric');
       $this->custom_validation->set_rules('boat_rental_fee', 'Boat Fee', 'numeric');
-      $this->custom_validation->set_rules('year_made', 'Year Made', 'max_length[240]|numeric');
+      $this->custom_validation->set_rules('year_made', 'Year Made', 'max_length[4]|numeric');
       $this->custom_validation->set_rules('make', 'Make', 'max_length[20]');
       if (isset($boat_rental_id)) {
         $this->custom_validation->set_rules('status', 'Status', 'required');
