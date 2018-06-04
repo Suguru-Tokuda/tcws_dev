@@ -373,19 +373,19 @@ class Youraccount extends MX_Controller {
   }
 
   function fetch_data_from_post() {
-    $data['loginEmail'] = $this->input->post('loginEmail', true);
+    $data['loginEmail'] = strip_tags($this->input->post('loginEmail', true));
     // $data['userId'] = $this->input->post('userId', true);
-    $data['loginPassword'] = $this->input->post('loginPassword', true);
+    $data['loginPassword'] = strip_tags($this->input->post('loginPassword', true));
     $data['remember'] = $this->input->post('remember', true);
 
-    $data['signupFirstName'] = $this->input->post('signupFirstName', true);
-    $data['signupLastName'] = $this->input->post('signupLastName', true);
-    $data['signupUserName'] = $this->input->post('signupUserName', true);
-    $data['signUpEmail'] = $this->input->post('signUpEmail', true);
-    $data['signupUserName'] = $this->input->post('signupUserName', true);
-    $data['signUpEmail'] = $this->input->post('signUpEmail', true);
-    $data['signUpPassword'] = $this->input->post('signUpPassword', true);
-    $data['signUpconfirmPassword'] = $this->input->post('signUpconfirmPassword', true);
+    $data['signupFirstName'] = strip_tags($this->input->post('signupFirstName', true));
+    $data['signupLastName'] = strip_tags($this->input->post('signupLastName', true));
+    $data['signupUserName'] = strip_tags($this->input->post('signupUserName', true));
+    $data['signUpEmail'] = strip_tags($this->input->post('signUpEmail', true));
+    $data['signupUserName'] = strip_tags($this->input->post('signupUserName', true));
+    $data['signUpEmail'] = strip_tags($this->input->post('signUpEmail', true));
+    $data['signUpPassword'] = strip_tags($this->input->post('signUpPassword', true));
+    $data['signUpconfirmPassword'] = strip_tags($this->input->post('signUpconfirmPassword', true));
     return $data;
   }
 

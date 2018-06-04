@@ -854,12 +854,12 @@ class Store_items extends MX_Controller {
 
   // get data from POST method
   function fetch_data_from_post() {
-    $data['item_title'] = $this->input->post('item_title', true);
-    $data['item_price'] = $this->input->post('item_price', true);
-    $data['was_price'] = $this->input->post('was_price', true);
-    $data['item_description'] = $this->input->post('item_description', true);
+    $data['item_title'] = strip_tags($this->input->post('item_title', true));
+    $data['item_price'] = strip_tags($this->input->post('item_price', true));
+    $data['was_price'] = strip_tags($this->input->post('was_price', true));
+    $data['item_description'] = strip_tags($this->input->post('item_description', true));
     $data['categories'] = $this->input->post('categories[]', true);
-    $data['city'] = $this->input->post('city', true);
+    $data['city'] = strip_tags($this->input->post('city', true));
     $data['status'] = $this->input->post('status', true);
     $this->load->module('site_settings');
     $states = $this->site_settings->_get_states_dropdown();

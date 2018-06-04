@@ -178,8 +178,10 @@ class Blog extends MX_Controller {
       $data['headline'] = "Update Blog Details";
     }
 
+
     if ($data['date_published'] > 0) {
       // it must be a unix timestamp, so convert to datepicker format
+      $data['date_published'] = $this->timedate->make_timestamp_from_datepicker_us($data['date_published']);
       $data['date_published'] = $this->timedate->get_date($data['date_published'], 'datepicker_us');
     }
 
@@ -484,11 +486,11 @@ class Blog extends MX_Controller {
 
   // get data from POST method
   function fetch_data_from_post() {
-    $data['blog_title'] = $this->input->post('blog_title', true);
-    $data['blog_description'] = $this->input->post('blog_description', true);
-    $data['blog_content'] = $this->input->post('blog_content', true);
+    $data['blog_title'] = strip_tags($this->input->post('blog_title', true));
+    $data['blog_description'] = strip_tags($this->input->post('blog_description', true));
+    $data['blog_content'] = strip_tags($this->input->post('blog_content', true));
     $data['date_published'] = $this->input->post('date_published', true);
-    $data['author'] = $this->input->post('author', true);
+    $data['author'] = strip_tags($this->input->post('author', true));
     $data['status'] = $this->input->post('status', true);
     return $data;
   }

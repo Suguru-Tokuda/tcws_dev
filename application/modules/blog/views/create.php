@@ -1,8 +1,6 @@
 <h1><?= $headline ?></h1>
 <?php
-if (isset($validation_errors)) {
-  echo $validation_errors;
-}
+
 if (isset($flash)) {
   echo $flash;
 }
@@ -15,7 +13,7 @@ if (isset($flash)) {
           <div class="form-panel">
             <h4 class="mb"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Blog Options </h4>
 
-            // Check if the item has an image. Upload image icon appears only there is NO image.
+            <!-- Check if the item has an image. Upload image icon appears only there is NO image. -->
             <?php if ($blog_id > 2) { ?>
               <a href="<?= base_url() ?>blog/upload_image/<?= $blog_id ?>"><button type="button"class="btn btn-warning"><i class="fa fa-camera"></i>&nbsp;&nbsp;Manage Images</button></a>
               <a href="<?= base_url() ?>blog/upload_video/<?= $blog_id ?>"><button type="button"class="btn btn-success"><i class="fa fa-video-camera"></i>&nbsp;&nbsp;Manage Video</button></a>
@@ -29,6 +27,9 @@ if (isset($flash)) {
     <div class="form-panel">
       <h4 class="mb"><i class="fa fas fa-edit"></i>&nbsp;&nbsp;Blog Entry Details</h4>
       <?php
+      if (isset($validation_errors)) {
+        echo $validation_errors;
+      }
       $form_location = base_url()."blog/create/".$blog_id;
       ?>
       <form class="form-horizontal" method="post" action="<?= $form_location ?>">

@@ -596,12 +596,12 @@ class Boat_rental extends MX_Controller {
   }
 
   function fetch_data_from_post() {
-    $data['boat_name'] = $this->input->post('boat_name', true);
-    $data['boat_description'] = $this->input->post('boat_description', true);
-    $data['boat_capacity'] = $this->input->post('boat_capacity', true);
-    $data['boat_rental_fee'] = $this->input->post('boat_rental_fee', true);
-    $data['year_made'] = $this->input->post('year_made', true);
-    $data['make'] = $this->input->post('make', true);
+    $data['boat_name'] = strip_tags($this->input->post('boat_name', true));
+    $data['boat_description'] = strip_tags($this->input->post('boat_description', true));
+    $data['boat_capacity'] = strip_tags($this->input->post('boat_capacity', true));
+    $data['boat_rental_fee'] = strip_tags($this->input->post('boat_rental_fee', true));
+    $data['year_made'] = strip_tags($this->input->post('year_made', true));
+    $data['make'] = strip_tags($this->input->post('make', true));
     $data['status'] = $this->input->post('status', true);
     $this->load->module('site_settings');
 

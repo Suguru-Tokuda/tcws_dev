@@ -512,9 +512,9 @@ class Listed_items extends MX_Controller {
     }
 
     function fetch_data_from_post() {
-      $data['item_title'] = $this->input->post('item_title', true);
-      $data['item_price'] = $this->input->post('item_price', true);
-      $data['item_description'] = $this->input->post('item_description', true);
+      $data['item_title'] = strip_tags($this->input->post('item_title', true));
+      $data['item_price'] = strip_tags($this->input->post('item_price', true));
+      $data['item_description'] = strip_tags($this->input->post('item_description', true));
       $data['categories'] = $this->input->post('categories[]', true);
       $data['city'] = $this->input->post('city', true);
       $data['status'] = $this->input->post('status', true);

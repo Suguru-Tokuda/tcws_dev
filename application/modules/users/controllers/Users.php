@@ -296,12 +296,12 @@ class Users extends MX_Controller {
 
   // get data from POST method
   function fetch_data_from_post() {
-    $data['user_name'] = $this->input->post('user_name', true);
-    $data['first_name'] = $this->input->post('first_name', true);
-    $data['last_name'] = $this->input->post('last_name', true);
-    $data['email'] = $this->input->post('email', true);
-    $data['password'] = $this->input->post('password', true);
-    $data['confirm_password'] = $this->input->post('confirm_password', true);
+    $data['user_name'] = strip_tags($this->input->post('user_name', true));
+    $data['first_name'] = strip_tags($this->input->post('first_name', true));
+    $data['last_name'] = strip_tags($this->input->post('last_name', true));
+    $data['email'] = strip_tags($this->input->post('email', true));
+    $data['password'] = strip_tags($this->input->post('password', true));
+    $data['confirm_password'] = strip_tags($this->input->post('confirm_password', true));
     return $data;
   }
 

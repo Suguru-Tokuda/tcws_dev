@@ -528,11 +528,11 @@ class Lessons extends MX_Controller {
   }
 
   function fetch_data_from_post() {
-    $data['lesson_name'] = $this->input->post('lesson_name', true);
-    $data['lesson_description'] = $this->input->post('lesson_description', true);
+    $data['lesson_name'] = strip_tags($this->input->post('lesson_name', true));
+    $data['lesson_description'] = strip_tags($this->input->post('lesson_description', true));
     $data['lesson_capacity'] = $this->input->post('lesson_capacity', true);
     $data['lesson_fee'] = $this->input->post('lesson_fee', true);
-    $data['address'] = $this->input->post('address', true);
+    $data['address'] = strip_tags($this->input->post('address', true));
     $data['city'] = $this->input->post('city', true);
     $this->load->module('site_settings');
     $states = $this->site_settings->_get_states_dropdown();
