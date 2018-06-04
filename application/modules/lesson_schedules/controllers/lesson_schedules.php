@@ -6,6 +6,7 @@ class Lesson_schedules extends MX_Controller {
     $this->load->module('custom_pagination');
     $this->load->module('custom_validation');
   }
+  
 
   function view_booked_users($lesson_id, $lesson_schedule_id) {
     $this->load->module('site_security');
