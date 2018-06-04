@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 02, 2018 at 07:27 PM
+-- Generation Time: Jun 04, 2018 at 05:54 AM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.3
 
@@ -189,7 +189,8 @@ CREATE TABLE `boat_rental_basket` (
 
 INSERT INTO `boat_rental_basket` (`id`, `session_id`, `boat_name`, `boat_fee`, `boat_id`, `booking_start_date`, `booking_end_date`, `hours`, `date_added`, `shopper_id`, `ip_address`) VALUES
 (2, '124e3cc6ff32226da227a54d9d00209adc6568eb', 'Boat 2', '66.00', 5, 1524888000, 1524895200, NULL, 1525031737, 0, '::1'),
-(3, 'ccfce9b40f148e9094c29b1f716adeb1f25e96fd', 'Boat 2', '66.00', 5, 1524888000, 1524895200, NULL, 1525032288, 0, '::1');
+(3, 'ccfce9b40f148e9094c29b1f716adeb1f25e96fd', 'Boat 2', '66.00', 5, 1524888000, 1524895200, NULL, 1525032288, 0, '::1'),
+(7, 'c6db2385743a4e043505472951438c00f7edc932', 'My Boat', '21.00', 3, 1429823600, 1529834400, 3, 1528051386, 0, '::1');
 
 -- --------------------------------------------------------
 
@@ -199,6 +200,8 @@ INSERT INTO `boat_rental_basket` (`id`, `session_id`, `boat_name`, `boat_fee`, `
 
 CREATE TABLE `boat_rental_schedules` (
   `id` int(11) NOT NULL,
+  `boat_fee` decimal(7,2) NOT NULL,
+  `hours` int(11) NOT NULL,
   `boat_rental_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `boat_start_date` int(8) NOT NULL,
@@ -210,10 +213,10 @@ CREATE TABLE `boat_rental_schedules` (
 -- Dumping data for table `boat_rental_schedules`
 --
 
-INSERT INTO `boat_rental_schedules` (`id`, `boat_rental_id`, `user_id`, `boat_start_date`, `boat_end_date`, `session_id`) VALUES
-(10, 3, 7, 1524924000, 1524931200, ''),
-(11, 3, 7, 1524902400, 1524909600, ''),
-(12, 3, 7, 1524916800, 1524924000, '');
+INSERT INTO `boat_rental_schedules` (`id`, `boat_fee`, `hours`, `boat_rental_id`, `user_id`, `boat_start_date`, `boat_end_date`, `session_id`) VALUES
+(10, '0.00', 0, 3, 7, 1524924000, 1524931200, ''),
+(11, '0.00', 0, 3, 7, 1524902400, 1524909600, ''),
+(12, '0.00', 0, 3, 7, 1524916800, 1524924000, '');
 
 -- --------------------------------------------------------
 
@@ -254,7 +257,20 @@ CREATE TABLE `ci_sessions` (
 --
 
 INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
-('c279d4feb80701ea8ee13a98498cb671651da162', '::1', 1527960389, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532373935393936363b69735f61646d696e7c733a313a2231223b);
+('c6db2385743a4e043505472951438c00f7edc932', '::1', 1528051463, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383035313436333b69735f61646d696e7c733a313a2231223b),
+('bda6e08b8e02a31b44ef389c72e3aabb2b5815c7', '::1', 1528052571, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383035323537313b69735f61646d696e7c733a313a2231223b757365725f69647c733a313a2237223b757365725f6e616d657c733a373a2273746f6b756461223b),
+('323452d9771f51e127615779d99f8910b8ac9d0f', '::1', 1528053481, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383035333438313b69735f61646d696e7c733a313a2231223b757365725f69647c733a313a2237223b757365725f6e616d657c733a373a2273746f6b756461223b),
+('c6ae211dc5269f7e9c0938b2e25977218e807e67', '::1', 1528054456, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383035343435363b69735f61646d696e7c733a313a2231223b757365725f69647c733a313a2237223b757365725f6e616d657c733a373a2273746f6b756461223b6974656d7c733a39353a223c64697620636c6173733d22616c65727420616c6572742d7375636365737320726f6c653d22616c657274223e4163636f756e7420496e666f726d6174696f6e20776173207375636365737366756c6c7920757064617465643c2f6469763e223b5f5f63695f766172737c613a313a7b733a343a226974656d223b733a333a226f6c64223b7d),
+('6307934119ba697005ddd1c62330720863ace827', '::1', 1528055377, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383035353337373b69735f61646d696e7c733a313a2231223b757365725f6e616d657c733a373a2273746f6b756461223b757365725f69647c733a313a2237223b6974656d7c733a39353a223c64697620636c6173733d22616c65727420616c6572742d7375636365737320726f6c653d22616c657274223e4163636f756e7420496e666f726d6174696f6e20776173207375636365737366756c6c7920757064617465643c2f6469763e223b5f5f63695f766172737c613a313a7b733a343a226974656d223b733a333a226f6c64223b7d),
+('47707b85b74efb0c9c3b2f64730efdb95c981350', '::1', 1528055854, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383035353835343b757365725f69647c733a313a2237223b757365725f6e616d657c733a373a2273746f6b756461223b),
+('6ead5baed75cdb921e54436add3ae18bb3d5bd7e', '::1', 1528057752, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383035373735323b69735f61646d696e7c733a313a2231223b757365725f6e616d657c733a373a2273746f6b756461223b757365725f69647c733a313a2237223b6974656d7c733a39353a223c64697620636c6173733d22616c65727420616c6572742d7375636365737320726f6c653d22616c657274223e4163636f756e7420496e666f726d6174696f6e20776173207375636365737366756c6c7920757064617465643c2f6469763e223b5f5f63695f766172737c613a313a7b733a343a226974656d223b733a333a226f6c64223b7d),
+('121251c5b79fbc1f64a7549b43c068f66ee29d5d', '::1', 1528057134, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383035373133343b757365725f69647c733a313a2237223b757365725f6e616d657c733a373a2273746f6b756461223b),
+('c0d6d6272e558f4f27c8a7b05e43feec3dcc0f6a', '::1', 1528057741, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383035373133343b757365725f6e616d657c733a373a2273746f6b756461223b),
+('08b4c3f459636fc22f9e10e968d34272145e7415', '::1', 1528057867, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383035373735323b69735f61646d696e7c733a313a2231223b757365725f6e616d657c733a373a2273746f6b756461223b757365725f69647c733a313a2237223b),
+('515166c956e2cbcc2ef90fecc345a51370ab76d9', '::1', 1528076301, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383037363330313b757365725f69647c733a313a2237223b757365725f6e616d657c733a373a2273746f6b756461223b),
+('257a0f8525a5fdc333078b7a83234c98c8a5b40f', '::1', 1528076751, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383037363330313b757365725f69647c733a313a2237223b757365725f6e616d657c733a373a2273746f6b756461223b),
+('833aa2ae308704575ea0ef5c9825c49b40a93d54', '::1', 1528082614, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383038323530313b),
+('34376362170f701f2f3f7470f14fe375cd1723f2', '::1', 1528083852, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532383038333734373b757365725f69647c733a313a2237223b757365725f6e616d657c733a373a2273746f6b756461223b);
 
 -- --------------------------------------------------------
 
@@ -374,7 +390,11 @@ INSERT INTO `lesson_basket` (`id`, `session_id`, `lesson_name`, `lesson_fee`, `l
 (9, 'a75c60dca7a61ac538bb2a876fb81ac4c5aa7bb1', 'Lesson 1', '50.00', 4, 16, 1524921840, 1524921840, 1, 1524670411, 0, '::1'),
 (10, '93b99adba0920c87e43f4c5c2527e8be2cf44024', 'Lesson 1', '50.00', 4, 19, 1525440240, 1525440240, 1, 1524670602, 0, '::1'),
 (11, '8c153e6f1cad295c87fc0e4ecae8b39594a38e61', 'Lesson 1', '50.00', 4, 10, 1525093200, 1525100400, 1, 1524673417, 0, '::1'),
-(14, 'a8e57e40e709b50fd05ba16bc0a745e9e39e7c15', 'Lesson 1', '50.00', 4, 10, 1525093200, 1525100400, 1, 1525018317, 0, '::1');
+(14, 'a8e57e40e709b50fd05ba16bc0a745e9e39e7c15', 'Lesson 1', '50.00', 4, 10, 1525093200, 1525100400, 1, 1525018317, 0, '::1'),
+(15, '26dea79623b9cae03c3b81b969a35d1255806623', 'new lesson', '0.01', 6, 8, 1530451680, 1530451680, 4, 1528037538, 0, '::1'),
+(16, '26dea79623b9cae03c3b81b969a35d1255806623', 'new lesson', '0.01', 6, 4, 1530624480, 1530624480, 5, 1528037550, 0, '::1'),
+(19, '89ee043b3e144eb8be0f039f6fd4bf7a025d43f2', 'new lesson', '0.01', 6, 1, 1528549200, 1528560000, 1, 1528044159, 0, '::1'),
+(20, '34376362170f701f2f3f7470f14fe375cd1723f2', 'new lesson', '0.01', 6, 1, 1528549200, 1528560000, 1, 1528083756, 7, '::1');
 
 -- --------------------------------------------------------
 
@@ -384,6 +404,7 @@ INSERT INTO `lesson_basket` (`id`, `session_id`, `lesson_name`, `lesson_fee`, `l
 
 CREATE TABLE `lesson_bookings` (
   `id` int(11) NOT NULL,
+  `lesson_fee` decimal(7,2) NOT NULL,
   `lesson_schedule_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `lesson_booking_qty` int(11) NOT NULL,
@@ -394,12 +415,12 @@ CREATE TABLE `lesson_bookings` (
 -- Dumping data for table `lesson_bookings`
 --
 
-INSERT INTO `lesson_bookings` (`id`, `lesson_schedule_id`, `user_id`, `lesson_booking_qty`, `session_id`) VALUES
-(1, 10, 7, 3, ''),
-(2, 11, 7, 3, ''),
-(3, 12, 7, 3, ''),
-(4, 13, 7, 3, ''),
-(5, 1, 7, 1, 'c535644ce8a0fa260c9b5984bbfe4f52c7a8bb6c');
+INSERT INTO `lesson_bookings` (`id`, `lesson_fee`, `lesson_schedule_id`, `user_id`, `lesson_booking_qty`, `session_id`) VALUES
+(1, '0.00', 10, 7, 3, ''),
+(2, '0.00', 11, 7, 3, ''),
+(3, '0.00', 12, 7, 3, ''),
+(4, '0.00', 13, 7, 3, ''),
+(5, '0.00', 1, 7, 1, 'c535644ce8a0fa260c9b5984bbfe4f52c7a8bb6c');
 
 -- --------------------------------------------------------
 
@@ -447,7 +468,15 @@ CREATE TABLE `lesson_schedules` (
 --
 
 INSERT INTO `lesson_schedules` (`id`, `lesson_id`, `lesson_start_date`, `lesson_end_date`) VALUES
-(1, 6, 1528549200, 1528560000);
+(1, 6, 1528549200, 1528560000),
+(2, 6, 1530278880, 1530278880),
+(3, 6, 1530797280, 1530797280),
+(4, 6, 1530624480, 1530624480),
+(5, 6, 1530538080, 1530538080),
+(6, 6, 1530278880, 1530278880),
+(7, 6, 1530106080, 1530106080),
+(8, 6, 1530451680, 1530451680),
+(9, 6, 1531920480, 1531920480);
 
 -- --------------------------------------------------------
 
@@ -460,6 +489,14 @@ CREATE TABLE `paypal` (
   `date_created` int(11) NOT NULL,
   `posted_information` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `paypal`
+--
+
+INSERT INTO `paypal` (`id`, `date_created`, `posted_information`) VALUES
+(1, 0, 'suguru'),
+(2, 0, 'tokuda');
 
 -- --------------------------------------------------------
 
@@ -530,7 +567,6 @@ CREATE TABLE `store_cat_assign` (
 
 INSERT INTO `store_cat_assign` (`id`, `cat_id`, `item_id`) VALUES
 (47, 17, 36),
-(48, 17, 37),
 (49, 17, 38),
 (50, 17, 39),
 (51, 17, 40),
@@ -542,7 +578,8 @@ INSERT INTO `store_cat_assign` (`id`, `cat_id`, `item_id`) VALUES
 (59, 17, 48),
 (60, 15, 49),
 (61, 15, 51),
-(64, 17, 47);
+(64, 17, 47),
+(65, 17, 37);
 
 -- --------------------------------------------------------
 
@@ -570,7 +607,7 @@ CREATE TABLE `store_items` (
 
 INSERT INTO `store_items` (`id`, `user_id`, `item_title`, `item_url`, `item_price`, `item_description`, `city`, `state`, `was_price`, `status`, `date_made`) VALUES
 (36, 0, 'Wakeboard', 'Wakeboard', '300.00', '                                                      An awesome wakeboard.                                                ', 'Normal', 'IL', '0.00', 1, 1505255180),
-(37, 7, 'Wakeboard', 'WakeboardMzvWE9', '250.00', 'A wakeboard', 'Normal', 'IL', '0.00', 1, 1505257041),
+(37, 7, 'Wakeboard', 'WakeboardMzvWE9', '250.00', 'A wakeboard', 'Normal', 'IL', '0.00', 0, 1505257041),
 (38, 7, 'Wakeboard', 'WakeboardX4upZa', '400.00', 'Wakeboard', 'Normal', 'IL', '0.00', 1, 1522350856),
 (39, 7, 'Wakeboard 2', 'Wakeboard-2uHC4Br', '500.00', 'Wakeboard 2', 'Bloomington', 'IL', '0.00', 1, 1522355935),
 (40, 0, 'Board', 'BoardkBk5yc', '200.00', 'Desc', 'Normal', 'IL', '0.00', 1, 1524601843),
@@ -608,7 +645,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `email`, `date_made`, `password`, `last_login`, `ran_str`) VALUES
-(7, 'stokuda', 'Suguru', 'Tokuda', 'stokuda@ilstu.edu', 1523543686, '$2y$11$1jYxu3Y4CX4NgECCh/wbzO6dydE3KmERXuoufhCQCAMUa0CJjZHyG', 1527913712, NULL),
+(7, 'stokuda', 'Suguru', 'Tokuda', 'stokuda@ilstu.edu', 1523543686, '$2y$11$qPUDbqImeezkuMkVSMBUuebMDt8Jp4zbzfAJSPQA8lpDVggL2esSW', 1528083803, ''),
 (8, 'suguru', 'Suguru', 'Tokuda', 'suguru@gmail.com', 1524495032, '$2y$11$fji.3rov3dQGg..m9y.hKeTY/Ewzv4nsarpAgR6Oqut1JACEFa1fi', 1524495120, NULL),
 (10, 'stokuda12', 'Suguru', 'Tokuda', 'suguru.tokuda@gmail.com', 1527737322, '$2y$11$H.D22I1R/4NzPUOUd4F1wOuJqk6aVll7dPW4D8Wj5ftio8eJewXum', 0, NULL);
 
@@ -820,7 +857,7 @@ ALTER TABLE `boat_rental`
 -- AUTO_INCREMENT for table `boat_rental_basket`
 --
 ALTER TABLE `boat_rental_basket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `boat_rental_schedules`
@@ -850,13 +887,13 @@ ALTER TABLE `item_pics`
 -- AUTO_INCREMENT for table `lessons`
 --
 ALTER TABLE `lessons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `lesson_basket`
 --
 ALTER TABLE `lesson_basket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `lesson_bookings`
@@ -874,13 +911,13 @@ ALTER TABLE `lesson_pics`
 -- AUTO_INCREMENT for table `lesson_schedules`
 --
 ALTER TABLE `lesson_schedules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `paypal`
 --
 ALTER TABLE `paypal`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `site_cookies`
@@ -898,13 +935,13 @@ ALTER TABLE `store_categories`
 -- AUTO_INCREMENT for table `store_cat_assign`
 --
 ALTER TABLE `store_cat_assign`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `store_items`
 --
 ALTER TABLE `store_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `users`
