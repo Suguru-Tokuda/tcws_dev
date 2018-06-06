@@ -32,6 +32,7 @@ $create_blog_url = base_url()."blog/create";
           $edit_blog_url = base_url()."blog/create/".$row->id;
           $view_blog_url = base_url()."blog/view_blog/".$row->blog_url;
           $blog_image_url = base_url()."blog/upload_image/".$row->id;
+          $blog_video_url = base_url()."blog/upload_video/".$row->id;
           $blog_title = $row->blog_title;
           $picture_name = $this->blog_pics->get_first_picture_name($row->id);
           $date_published = $this->timedate->get_date($row->date_published, 'datepicker_us');
@@ -57,14 +58,14 @@ $create_blog_url = base_url()."blog/create";
               <span class="label label-<?= $status_label ?>"><?= $status_desc ?></span>
             </td>
             <td class="center">
-              <a class="btn btn-warning" href="<?= $view_blog_url ?>">
-                <i class="fa fa-external-link"></i>&nbsp;&nbsp; View
-              </a>
               <a class="btn btn-info" href="<?= $edit_blog_url ?>">
                 <i class="fa fas fa-edit"></i>&nbsp;&nbsp; Edit
               </a>
               <a class="btn btn-primary" href="<?= $blog_image_url ?>">
                 <i class="fa fa-image"></i>&nbsp;&nbsp;Image
+              </a>
+              <a class="btn btn-success" href="<?= $blog_video_url ?>">
+                <i class="fa fa-video-camera"></i>&nbsp;&nbsp;Video
               </a>
             </td>
           </tr>

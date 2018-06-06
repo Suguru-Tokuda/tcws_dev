@@ -385,10 +385,9 @@ class Boat_rental extends MX_Controller {
       redirect('boat_rental/create_boat/'.$boat_rental_id);
     } else if ($submit == "delete") {
       $this->load->module('boat_rental_schedules');
-      $query = $this->boat_rental_schedules->get_where_custom("boat_rental_id",$boat_rental_id);
-      if($query->num_rows()>0)
-      {
-        $flash_msg ="The boat cannot be deleted.";
+      $query = $this->boat_rental_schedules->get_where_custom("boat_rental_id", $boat_rental_id);
+      if($query->num_rows() > 0) {
+        $flash_msg ="The boat cannot be deleted because someone has booked for this boat already.";
         $value = '<div class="alert alert-warning role="alert">'.$flash_msg.'</div>';
         $this->session->set_flashdata('boat', $value);
         redirect('boat_rental/manage_boat_rental');
@@ -564,8 +563,8 @@ class Boat_rental extends MX_Controller {
 
   function _generate_thumbnail($file_name) {
     $config['image_library'] = 'gd2';
-    $config['source_image'] = './boat_big_pics/'.$file_name;
-    $config['new_image'] = './boat_pics/'.$file_name;
+    $config['source_image'] = './media/boat_rental_big_pics/'.$file_name;
+    $config['new_image'] = './media/boat_rental_small_pics/'.$file_name;
     $config['maintain_ratio'] = true;
     $config['width'] = 200;
     $config['height'] = 200;

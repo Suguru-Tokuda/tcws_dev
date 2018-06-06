@@ -7,7 +7,6 @@ class Custom_validation extends MX_Controller {
 
   function __construct() {
     parent::__construct();
-    $this->load->library('session');
   }
 
   // $post_name is the name to get value from post
@@ -154,7 +153,7 @@ class Custom_validation extends MX_Controller {
 
   function _check_user_exists($user_name) {
     $this->load->module('users');
-    $query = $this->users->get_where_custom('user_name', $user_name);
+    $query = $this->users->get_where_custom('user_name', strtolower($user_name));
     if ($query->num_rows() > 0) {
       return true;
     } else {
@@ -172,7 +171,7 @@ class Custom_validation extends MX_Controller {
 
   function _check_email_exists($email) {
     $this->load->module('users');
-    $query = $this->users->get_where_custom('email', $email);
+    $query = $this->users->get_where_custom('email', strtolower($email));
     if ($query->num_rows() > 0) {
       return true;
     } else {

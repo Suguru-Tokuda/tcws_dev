@@ -85,7 +85,7 @@ class Lesson_schedules extends MX_Controller {
     $data['lesson_capacity'] = $lesson_capacity;
     $data['query'] = $query;
     $data['view_file'] = "manage_lesson_schedules";
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('lesson_schedule');
     $this->load->module('templates');
     $this->templates->admin($data);
   }
@@ -113,7 +113,7 @@ class Lesson_schedules extends MX_Controller {
           $this->_update($lesson_schedule_id, $data);
           $flash_msg = "The schedule was successfully updated.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-          $this->session->set_flashdata('item', $value);
+          $this->session->set_flashdata('lesson_schedule', $value);
           redirect("lesson_schedules/create_lesson_schedule/".$lesson_id."/".$lesson_schedule_id);
         } else {
           // insert
@@ -122,7 +122,7 @@ class Lesson_schedules extends MX_Controller {
           $this->_insert($data);
           $flash_msg = "The schedule was successfully added.";
           $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-          $this->session->set_flashdata('item', $value);
+          $this->session->set_flashdata('lesson_schedule', $value);
           redirect('lesson_schedules/manage_lesson_schedules/'.$lesson_id);
         }
       }
@@ -144,7 +144,7 @@ class Lesson_schedules extends MX_Controller {
     $data['lesson_id'] = $lesson_id;
     $data['lesson_schedule_id'] = $lesson_schedule_id;
     $data['view_file'] = "create_lesson_schedule";
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('lesson_schedule');
     if ($this->custom_validation->has_validation_errors()) {
       $data['validation_errors'] = $this->custom_validation->get_validation_errors('<p style="color: red; margin-bottom: 0px;">', '</p>');
     }
@@ -163,7 +163,7 @@ class Lesson_schedules extends MX_Controller {
     $data['lesson_schedule_id'] = $lesson_schedule_id;
     $data['headline'] = "Delete Lesson Schedule";
 
-    $data['flash'] = $this->session->flashdata('item');
+    $data['flash'] = $this->session->flashdata('lesson_schedule');
     $data['view_file'] = "lesson_schedule_deleteconf";
     $this->load->module('templates');
     $this->templates->admin($data);
@@ -182,11 +182,20 @@ class Lesson_schedules extends MX_Controller {
     if ($submit == "cancel") {
       redirect('lesson_schedules/create_lesson_schedule/'.$lesson_id.'/'.$lesson_schedule_id);
     } else if ($submit == "delete") {
-      $this->_process_delete_lesson_schedule($lesson_schedule_id);
-      $flash_msg = "The schedule was successfully deleted.";
-      $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
-      $this->session->set_flashdata('item', $value);
-      redirect('lesson_schedules/manage_lesson_schedules/'.$lesson_id);
+      $mysql_query = "SELECT * FROM lesson_bookings WHERE lesson_schedule_id = ?";
+      $query = $this->db->query($mysql_query, array($lesson_schedule_id));
+      if ($query->num_rows() > 0) {
+        $flash_msg = "The schedule cannot be deleted because someone has booked it already";
+        $value = '<div class="alert alert-warning role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('lesson_schedule', $value);
+        redirect('lesson_schedules/manage_lesson_schedules/'.$lesson_id);
+      } else {
+        $this->_process_delete_lesson_schedule($lesson_schedule_id);
+        $flash_msg = "The schedule was successfully deleted.";
+        $value = '<div class="alert alert-success role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('lesson_schedule', $value);
+        redirect('lesson_schedules/manage_lesson_schedules/'.$lesson_id);
+      }
     }
   }
 

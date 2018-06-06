@@ -29,7 +29,7 @@ $search_form_location = base_url()."store_items/search";
     <thead>
       <tr>
         <th>Item Title</th>
-        <th>User ID</th>
+        <th>Username</th>
         <th>Price</th>
         <th>Was Price</th>
         <th>Status</th>

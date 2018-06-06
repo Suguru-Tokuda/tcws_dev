@@ -20,6 +20,7 @@ if (isset($flash)) {
               <a href="<?= base_url() ?>blog/deleteconf/<?= $blog_id ?>" ><button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i>&nbsp;&nbsp;Delete Blog Entry</button></a>
               <?php } ?>
             <a href="<?= base_url().'blog/view_blog/'.$blog_url ?>" ><button type="button" class="btn btn-info"><i class="fa fa-laptop"></i>&nbsp;&nbsp;View Blog Entry In Main Page</button></a>
+            <a href="<?= base_url().'blog/manage' ?>" ><button type="button" class="btn btn-default">Back</button></a>
           </div>
         </div>
       </div>

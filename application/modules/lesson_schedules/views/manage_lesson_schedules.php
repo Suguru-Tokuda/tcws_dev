@@ -1,4 +1,8 @@
 <h3 class="mb"><?= $headline ?></h3>
+<?php
+  if (isset($flash))
+    echo $flash;
+ ?>
 <div class="form-panel">
   <h4><?= $lesson_name ?></h4>
   <a href="<?= base_url() ?>lesson_schedules/create_lesson_schedule/<?= $lesson_id ?>" ><button type="button" class="btn btn-primary">Create Schedule</button></a>

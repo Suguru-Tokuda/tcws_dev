@@ -114,7 +114,7 @@ class Store_items extends MX_Controller {
     if (sizeOf($search_keywords) > 1) {
       for ($i = 1; $i < sizeOf($search_keywords); $i++) {
         $keyword = $this->site_security->_clean_string($search_keywords[$i]);
-        $mysql_query.= " OR item_title LIKE '$keyword' OR item_description LIKE '$keyword'";
+        $mysql_query.= " OR item_title LIKE '%$keyword%' OR item_description LIKE '%$keyword%'";
       }
     }
     if ($use_limit == true) {
@@ -128,18 +128,22 @@ class Store_items extends MX_Controller {
   function _get_mysql_query_for_search_items_by_keywords_in_admin($search_keywords, $use_limit) {
     $this->load->module('site_security');
     $first_keyword = $this->site_security->_clean_string($search_keywords[0]);
+    if (strcasecmp($first_keyword, "admin") === 0)
+      $first_keyword = 0;
     $mysql_query = "
-    SELECT si.id, si.item_url, si.item_price, si.item_title, si.was_price, si.user_id, si.status
+    SELECT si.id, si.item_url, si.item_description, si.item_price, si.item_title, si.was_price, si.user_id, si.status
     FROM store_items si
-    LEFT JOIN item_pics sp ON si.id = sp.item_id
-    WHERE item_title LIKE '%$first_keyword%'
-    OR item_description LIKE '%$first_keyword%'
-    OR user_id LIKE '%$first_keyword%'
-    AND status = 1";
+    LEFT JOIN users u ON si.user_id = u.id
+    WHERE si.item_title LIKE '%$first_keyword%'
+    OR si.item_description LIKE '%$first_keyword%'
+    OR u.user_name LIKE '%$first_keyword%'
+    OR si.user_id LIKE '%$first_keyword%'";
     if (sizeOf($search_keywords) > 1) {
       for ($i = 1; $i < sizeOf($search_keywords); $i++) {
         $keyword = $this->site_security->_clean_string($search_keywords[$i]);
-        $mysql_query.= " OR item_title LIKE '$keyword' OR item_description LIKE '$keyword'";
+        if (strcasecmp($first_keyword, "admin") === 0)
+          $keyword = 0;
+        $mysql_query.= " OR si.item_title LIKE '%$keyword%' OR si.item_description LIKE '%$keyword%' OR u.user_name LIKE '%$keyword%' or si.user_id LIKE '%$keyword%'";
       }
     }
     if ($use_limit == true) {
