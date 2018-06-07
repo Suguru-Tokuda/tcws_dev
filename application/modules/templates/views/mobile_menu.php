@@ -59,7 +59,7 @@ $community_link = base_url().'blog/view_blogs/'.$pagination_limit_for_blog;
               <?php
               if ($user_id > 0) {
                 ?>
-                <li><a href="<?= $my_lessons_link ?>">Your Lessons</a></li>
+                <li><a href="<?= $my_lessons_link ?>">My Lessons</a></li>
                 <?php
               }
               ?>
