@@ -114,6 +114,10 @@ if (isset($flash)) {
       echo $validation_errors;
     }
     ?>
+
+    <?php
+    if ($schedule_query->num_rows() > 0) {
+     ?>
     <?= $pagination ?>
     <div class="table-responsive">
       <table class="table table-striped">
@@ -177,6 +181,14 @@ if (isset($flash)) {
                   </tbody>
                 </table>
               </div>
+              <?php
+            } else {
+               ?>
+               <p class="text-center">Currently no schedules available for this lesson.</p>
+               <?php
+             }
+                ?>
+
             </div>
           </div>
           <!-- Photoswipe container-->

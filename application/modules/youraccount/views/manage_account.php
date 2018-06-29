@@ -23,7 +23,8 @@ $update_password_location = base_url().'youraccount/update_password';
       <?php echo Modules::run('youraccount/_draw_account_navbar'); ?>
     </div>
     <div class="col-sm-4">
-      <form class="login-box" action="<?= $update_form_location ?>" method="post">
+      <h5>Account Info</h5>
+      <form action="<?= $update_form_location ?>" method="post">
         <fieldset>
           <!-- Text input-->
           <div class="form-group">
@@ -66,8 +67,10 @@ $update_password_location = base_url().'youraccount/update_password';
         </fieldset>
       </form>
     </div>
+
     <div class="col-sm-4">
-      <form class="login-box" action="<?= $update_password_location ?>" method="post">
+      <h5>Password</h5>
+      <form action="<?= $update_password_location ?>" method="post">
         <fieldset>
           <div class="form-group">
             <label class="col-md-12 control-label">Current Password</label>
