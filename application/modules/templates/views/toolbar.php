@@ -27,8 +27,8 @@ $my_page_url = base_url()."youraccount/view_account";
               </div>
             </li>
             <li><a href="<?= base_url() ?>listed_items/manage"><i class="icon-bag"></i> My Items</a></li>
-            <li><a href="<?= base_url() ?>lessons/view_my_lessons"><i class="icon-tag"></i> My Booked Lessons</a></li>
-            <li><a href="<?= base_url() ?>boat_rental/view_my_rental_boats"><i class="icon-anchor"></i> My Booked Rental Boats</a></li>
+            <li><a href="<?= base_url() ?>lessons/view_your_lessons"><i class="icon-tag"></i> My Booked Lessons</a></li>
+            <li><a href="<?= base_url() ?>boat_rental/view_your_rental_boats"><i class="icon-anchor"></i> My Booked Rental Boats</a></li>
             <li><a href="<?= base_url() ?>youraccount/manage_account"><i class="icon-head"></i> Manage Profile</a></li>
             <li class="sub-menu-separator"></li>
             <li><a href="<?= base_url() ?>youraccount/logout"><i class="icon-lock"></i> Logout</a><li>

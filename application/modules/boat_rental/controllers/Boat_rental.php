@@ -49,7 +49,7 @@ class Boat_rental extends MX_Controller {
     return $mysql_query;
   }
 
-  function view_my_rental_boats() {
+  function view_your_rental_boats() {
     $this->load->module('site_security');
     $this->load->module('site_settings');
     $this->site_security->_make_sure_logged_in();
@@ -57,7 +57,7 @@ class Boat_rental extends MX_Controller {
     $user_id = $this->site_security->_get_user_id();
     $use_limit = false;
     $get_all = false;
-    $mysql_query = $this->_get_mysql_query_for_view_my_rental_boats($user_id, $use_limit, $get_all);
+    $mysql_query = $this->_get_mysql_query_for_view_your_rental_boats($user_id, $use_limit, $get_all);
     $query = $this->_custom_query($mysql_query);
     $total_rental_boats = $query->num_rows();
 
@@ -68,17 +68,17 @@ class Boat_rental extends MX_Controller {
     $pagination_data['limit'] = $this->get_pagination_limit("admin");
 
     $use_limit = true;
-    $mysql_query = $this->_get_mysql_query_for_view_my_rental_boats($user_id, $use_limit, $get_all);
+    $mysql_query = $this->_get_mysql_query_for_view_your_rental_boats($user_id, $use_limit, $get_all);
     $query = $this->_custom_query($mysql_query);
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $query;
-    $data['view_file'] = "view_my_rental_boats";
+    $data['view_file'] = "view_your_rental_boats";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
 
-  function view_my_rental_boats_all() {
+  function view_your_rental_boats_all() {
     $this->load->module('site_security');
     $this->load->module('site_settings');
     $this->site_security->_make_sure_logged_in();
@@ -86,7 +86,7 @@ class Boat_rental extends MX_Controller {
     $user_id = $this->site_security->_get_user_id();
     $use_limit = false;
     $get_all = true;
-    $mysql_query = $this->_get_mysql_query_for_view_my_rental_boats($user_id, $use_limit, $get_all);
+    $mysql_query = $this->_get_mysql_query_for_view_your_rental_boats($user_id, $use_limit, $get_all);
     $query = $this->_custom_query($mysql_query);
     $total_rental_boats = $query->num_rows();
 
@@ -97,17 +97,17 @@ class Boat_rental extends MX_Controller {
     $pagination_data['limit'] = $this->get_pagination_limit("admin");
 
     $use_limit = true;
-    $mysql_query = $this->_get_mysql_query_for_view_my_rental_boats($user_id, $use_limit, $get_all);
+    $mysql_query = $this->_get_mysql_query_for_view_your_rental_boats($user_id, $use_limit, $get_all);
     $query = $this->_custom_query($mysql_query);
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $query;
-    $data['view_file'] = "view_my_rental_boats";
+    $data['view_file'] = "view_your_rental_boats";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
 
-  function _get_mysql_query_for_view_my_rental_boats($user_id, $use_limit, $get_all) {
+  function _get_mysql_query_for_view_your_rental_boats($user_id, $use_limit, $get_all) {
     $current_time = time();
     $mysql_query = "
     SELECT br.id, br.boat_name, br.year_made, br.boat_rental_fee, br.boat_url, br.make, brs.boat_start_date, brs.boat_end_date

@@ -15,11 +15,11 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
 // site links
 $browse_for_sale_link = base_url().'store_items/view_all_items/'.$pagination_limit_for_items;
 $post_item_link = base_url().'listed_items/create_item';
-$my_items_link = base_url().'listed_items/manage';
+$your_items_link = base_url().'listed_items/manage';
 $view_lessons_link = base_url().'lessons/view_lessons/'.$pagination_limit_for_lessons;
-$my_lessons_link = base_url().'lessons/view_my_lessons';
+$your_lessons_link = base_url().'lessons/view_your_lessons';
 $view_boat_rental_link = base_url().'boat_rental/view_boat_rental/'.$pagination_limit_for_boat_rental;
-$my_rental_boats_link = base_url().'boat_rental/view_my_rental_boats';
+$your_rental_boats_link = base_url().'boat_rental/view_your_rental_boats';
 $community_link = base_url().'blog/view_blogs/'.$pagination_limit_for_blog;
  ?>
 
@@ -47,7 +47,7 @@ $community_link = base_url().'blog/view_blogs/'.$pagination_limit_for_blog;
               if ($user_id > 0) {
                 ?>
                 <li><a href="<?= $post_item_link ?>">Post Items</a></li>
-                <li><a href="<?= $my_items_link ?>">My Items</a></li>
+                <li><a href="<?= $your_items_link ?>">Your Items</a></li>
                 <?php
               }
               ?>
@@ -59,7 +59,7 @@ $community_link = base_url().'blog/view_blogs/'.$pagination_limit_for_blog;
               <?php
               if ($user_id > 0) {
                 ?>
-                <li><a href="<?= $my_lessons_link ?>">My Lessons</a></li>
+                <li><a href="<?= $your_lessons_link ?>">Your Lessons</a></li>
                 <?php
               }
               ?>
@@ -71,7 +71,7 @@ $community_link = base_url().'blog/view_blogs/'.$pagination_limit_for_blog;
               <?php
               if ($user_id > 0) {
                 ?>
-                <li><a href="<?= $my_rental_boats_link ?>">My Rental Boats</a></li>
+                <li><a href="<?= $your_rental_boats_link ?>">Your Rental Boats</a></li>
                 <?php
               }
               ?>
@@ -86,9 +86,9 @@ $community_link = base_url().'blog/view_blogs/'.$pagination_limit_for_blog;
            ?>
           <li class="has-children"><span><a href="#"><?= $user_name ?></a><span class="sub-menu-toggle"></span></span>
             <ul class="offcanvas-submenu">
-              <li><a href="<?= base_url() ?>listed_items/manage"><span class="glyphicon glyphicon-tasks"></span> My Items</a></li>
-              <li><a href="<?= base_url() ?>lessons/view_my_lessons"><span class="glyphicon glyphicon-tasks"></span> My Lessons</a></li>
-              <li><a href="<?= base_url() ?>boat_rental/view_my_rental_boats"><span class="glyphicon glyphicon-tasks"></span> My Rental Boats</a></li>
+              <li><a href="<?= base_url() ?>listed_items/manage"><span class="glyphicon glyphicon-tasks"></span> your Items</a></li>
+              <li><a href="<?= base_url() ?>lessons/view_your_lessons"><span class="glyphicon glyphicon-tasks"></span> your Lessons</a></li>
+              <li><a href="<?= base_url() ?>boat_rental/view_your_rental_boats"><span class="glyphicon glyphicon-tasks"></span> your Rental Boats</a></li>
               <li><a href="<?= base_url() ?>youraccount/manage_account"><span class="glyphicon glyphicon-file"></span> Manage Account</a></li>
               <li class="divider"></li>
               <li><a href="<?= base_url() ?>youraccount/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a><li>

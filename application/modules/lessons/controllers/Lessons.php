@@ -10,7 +10,7 @@ class Lessons extends MX_Controller {
     $this->load->library('image_lib');
   }
 
-  function view_my_lessons() {
+  function view_your_lessons() {
     $this->load->module('site_security');
     $this->load->module('site_settings');
     $this->site_security->_make_sure_logged_in();
@@ -18,7 +18,7 @@ class Lessons extends MX_Controller {
     $user_id = $this->site_security->_get_user_id();
     $use_limit = false;
     $get_all = false;
-    $mysql_query = $this->_get_mysql_query_for_view_my_lessons($user_id, $use_limit, $get_all);
+    $mysql_query = $this->_get_mysql_query_for_view_your_lessons($user_id, $use_limit, $get_all);
     $query = $this->_custom_query($mysql_query);
     $total_lessons = $query->num_rows();
 
@@ -29,12 +29,12 @@ class Lessons extends MX_Controller {
     $pagination_data['limit'] = $this->get_pagination_limit("admin");
 
     $use_limit = true;
-    $mysql_query = $this->_get_mysql_query_for_view_my_lessons($user_id, $use_limit, $get_all);
+    $mysql_query = $this->_get_mysql_query_for_view_your_lessons($user_id, $use_limit, $get_all);
     $query = $this->_custom_query($mysql_query);
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $query;
-    $data['view_file'] = "view_my_lessons";
+    $data['view_file'] = "view_your_lessons";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
@@ -47,7 +47,7 @@ class Lessons extends MX_Controller {
     $user_id = $this->site_security->_get_user_id();
     $use_limit = false;
     $get_all = true;
-    $mysql_query = $this->_get_mysql_query_for_view_my_lessons($user_id, $use_limit, $get_all);
+    $mysql_query = $this->_get_mysql_query_for_view_your_lessons($user_id, $use_limit, $get_all);
     $query = $this->_custom_query($mysql_query);
     $total_lessons = $query->num_rows();
 
@@ -58,17 +58,17 @@ class Lessons extends MX_Controller {
     $pagination_data['limit'] = $this->get_pagination_limit("admin");
 
     $use_limit = true;
-    $mysql_query = $this->_get_mysql_query_for_view_my_lessons($user_id, $use_limit, $get_all);
+    $mysql_query = $this->_get_mysql_query_for_view_your_lessons($user_id, $use_limit, $get_all);
     $query = $this->_custom_query($mysql_query);
     $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
     $data['currency_symbol'] = $this->site_settings->_get_currency_symbol();
     $data['query'] = $query;
-    $data['view_file'] = "view_my_lessons";
+    $data['view_file'] = "view_your_lessons";
     $this->load->module('templates');
     $this->templates->public_bootstrap($data);
   }
 
-  function _get_mysql_query_for_view_my_lessons($user_id, $use_limit, $get_all) {
+  function _get_mysql_query_for_view_your_lessons($user_id, $use_limit, $get_all) {
     $current_time = time();
     $mysql_query = "
     SELECT l.lesson_name, l.lesson_url, l.id AS lesson_id, l.lesson_fee, lb.lesson_booking_qty, ls.lesson_start_date, ls.lesson_end_date

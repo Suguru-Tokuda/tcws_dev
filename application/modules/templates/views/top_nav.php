@@ -15,11 +15,11 @@ $search_form_location = base_url()."store_items/search_items_by_keywords";
 // site links
 $browse_for_sale_link = base_url().'store_items/view_all_items/'.$pagination_limit_for_items;
 $post_item_link = base_url().'listed_items/create_item/';
-$my_items_link = base_url().'listed_items/manage/'.$pagination_limit_for_items;
+$your_items_link = base_url().'listed_items/manage/'.$pagination_limit_for_items;
 $view_lessons_link = base_url().'lessons/view_lessons/'.$pagination_limit_for_lessons;
-$my_lessons_link = base_url().'lessons/view_my_lessons/'.$pagination_limit_for_lessons;
+$your_lessons_link = base_url().'lessons/view_your_lessons/'.$pagination_limit_for_lessons;
 $view_boat_rental_link = base_url().'boat_rental/view_boat_rental/'.$pagination_limit_for_boat_rental;
-$my_rental_boats_link = base_url().'boat_rental/view_my_rental_boats/'.$pagination_limit_for_boat_rental;
+$your_rental_boats_link = base_url().'boat_rental/view_your_rental_boats/'.$pagination_limit_for_boat_rental;
 $community_link = base_url().'blog/view_blogs/'.$pagination_limit_for_blog;
 
 // logo
@@ -57,7 +57,7 @@ $second_bit = $this->uri->segment(1);
           if ($user_id != "") {
             ?>
             <li><a href="<?= $post_item_link ?>">Post for Sale</a></li>
-            <li><a href="<?= $my_items_link ?>">My Items</a></li>
+            <li><a href="<?= $your_items_link ?>">Your Items</a></li>
             <?php
           }
           ?>
@@ -69,7 +69,7 @@ $second_bit = $this->uri->segment(1);
           <?php
           if ($user_id != "") {
             ?>
-            <li><a href="<?= $my_lessons_link ?>">My Lessons</a></li>
+            <li><a href="<?= $your_lessons_link ?>">Your Lessons</a></li>
             <?php
           }
           ?>
@@ -81,7 +81,7 @@ $second_bit = $this->uri->segment(1);
           <?php
           if ($user_id != "") {
             ?>
-            <li><a href="<?= $my_rental_boats_link ?>">My Rental Boats</a></li>
+            <li><a href="<?= $your_rental_boats_link ?>">Your Rental Boats</a></li>
             <?php
           }
           ?>

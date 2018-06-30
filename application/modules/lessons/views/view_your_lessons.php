@@ -1,8 +1,8 @@
 <?php
 $url_segment = $this->uri->segment(2);
-$view_active_lessons_url = base_url().'lessons/view_my_lessons';
+$view_active_lessons_url = base_url().'lessons/view_your_lessons';
 $view_all_lessons_url = base_url().'lessons/view_all_lessons';
-if ($url_segment == "view_my_lessons") {
+if ($url_segment == "view_your_lessons") {
   $view_css_class = "btn btn-primary";
   $view_all_class = "btn btn-outline-primary";
 } else {
@@ -13,7 +13,7 @@ if ($url_segment == "view_my_lessons") {
 <div class="page-title">
   <div class="container">
     <div class="column">
-      <h1>My Lessons</h1>
+      <h1>Your Lessons</h1>
     </div>
   </div>
 </div>
